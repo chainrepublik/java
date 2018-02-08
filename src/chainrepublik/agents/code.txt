@@ -1,0 +1,9 @@
+Agent 
+{ 
+    var a=1; 
+    
+    function init() 
+    { 
+       print (CRYPTO.digest("dfdvfvfdvd", "SHA256"));
+    } 
+}

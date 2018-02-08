@@ -1,0 +1,131 @@
+
+package chainrepublik.network.packets.companies;
+
+import chainrepublik.kernel.UTILS;
+import chainrepublik.network.packets.CPayload;
+import chainrepublik.network.packets.blocks.CBlockPayload;
+import java.sql.ResultSet;
+
+public class CUpdateCompanyPayload extends CPayload
+{
+    // Company ID
+    long comID;
+    
+    // Name
+    String name;
+    
+    // Description
+    String desc; 
+    
+    // Pic
+    String pic;
+    
+    // Sealed
+    String sealed;
+    
+    public CUpdateCompanyPayload(String adr,
+                                 long comID, 
+                                 String name, 
+                                 String desc, 
+                                 String pic, 
+                                 String sealed) throws Exception
+    {
+        // Superclass
+	super(adr);
+        
+        // Company ID
+        this.comID=comID;
+        
+        // Name
+        this.name=name;
+    
+        // Description
+        this.desc=desc; 
+    
+        // Pic
+        this.pic=pic;
+        
+        // Sealed
+        this.sealed=sealed;
+        
+        // Hash
+ 	hash=UTILS.BASIC.hash(this.getHash()+
+                              this.comID+
+ 			      this.name+
+                              this.desc+
+ 			      this.pic+
+                              this.sealed);
+           
+        // Sign
+        this.sign();
+    }
+    
+    
+    public void check(CBlockPayload block) throws Exception
+   {
+   	// Super class
+   	super.check(block);
+        
+        // Name
+        if (!UTILS.BASIC.isTitle(this.name))
+            throw new Exception("Invalid name, CUpdateCompanyPayload.java, 65");
+        
+        // Description
+        if (!UTILS.BASIC.isDesc(this.desc))
+            throw new Exception("Invalid description, CUpdateCompanyPayload.java, 69");
+        
+        // Sealed
+        if (!this.sealed.equals("YES") && 
+            !this.sealed.equals("NO"))
+            throw new Exception("Invalid seal value, CUpdateCompanyPayload.java, 74");
+        
+        // Pic
+        if (!this.pic.equals(""))
+            if (!UTILS.BASIC.isPic(this.pic))
+                throw new Exception("Invalid pic, CUpdateCompanyPayload.java, 74");
+        
+        // Companu exist ?
+        ResultSet rs=UTILS.DB.executeQuery("SELECT * "
+                                           + "FROM companies "
+                                          + "WHERE adr='"+this.target_adr+"' "
+                                            + "AND comID='"+this.comID+"' "
+                                            + "AND sealed='NO'");
+        
+        // Has data ?
+        if (!UTILS.DB.hasData(rs))
+             throw new Exception("Invalid company ID, CUpdateCompanyPayload.java, 74");
+        
+        // Seal ?
+        if (this.sealed.equals("YES"))
+            if (!rs.getString("tip").equals("ID_COM_AUTONOMUS"))
+                throw new Exception("Invalid company type, CUpdateCompanyPayload.java, 86"); 
+        
+        // Hash
+ 	String h=UTILS.BASIC.hash(this.getHash()+
+                                  this.comID+
+ 			          this.name+
+                                  this.desc+
+ 			          this.pic+
+                                  this.sealed);
+        
+        // Hash match ?
+        if (!h.equals(this.hash))
+            throw new Exception("Invalid hash, CUpdateCompanyPayload.java, 113");
+   }
+    
+    public void commit(CBlockPayload block) throws Exception
+    {
+       // Superclass
+       super.commit(block);
+       
+       // Update
+       UTILS.DB.executeUpdate("UPDATE companies "
+                               + "SET name='"+UTILS.BASIC.base64_encode(this.name)+"', "
+                                   + "description='"+UTILS.BASIC.base64_encode(this.desc)+"', "
+                                   + "pic='"+UTILS.BASIC.base64_encode(this.pic)+"', "
+                                   + "sealed='"+this.sealed+"', "
+                                   + "block='"+this.block+"' "
+                             + "WHERE comID='"+this.comID+"'");
+    }
+    
+}
