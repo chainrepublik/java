@@ -146,7 +146,7 @@ public class CAddAttrPayload extends CPayload
         throw new Exception("Invalid attribute - CAddAttrPayload.java");
         
         // Has attribute ?
-        if (UTILS.BASIC.hasAttr(this.target_adr, this.attr))
+        if (UTILS.BASIC.hasAttr(this.target_adr, this.attr, this.s1))
            throw new Exception("Already has this attribute - CAddAttrPayload.java");
         
         // Days

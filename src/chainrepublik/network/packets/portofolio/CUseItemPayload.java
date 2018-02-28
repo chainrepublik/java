@@ -44,7 +44,8 @@ public class CUseItemPayload extends CPayload
         ResultSet rs=UTILS.DB.executeQuery("SELECT * "
                                            + "FROM stocuri "
                                           + "WHERE stocID='"+this.itemID+"' "
-                                            + "AND adr='"+this.target_adr+"'");
+                                            + "AND (adr='"+this.target_adr+"' OR rented_to='"+this.target_adr+"') "
+                                            + "AND qty=1");
         
         // Has data ?
         if (!UTILS.DB.hasData(rs))
@@ -54,7 +55,8 @@ public class CUseItemPayload extends CPayload
         rs.next();
         
         // Already rented ?
-        if (!rs.getString("rented_to").equals(""))
+        if (!rs.getString("rented_to").equals("") && 
+            !rs.getString("rented_to").equals(this.target_adr))
             throw new Exception("This item is rented, CUseItemPayload.java, 102");
         
         // Item can be used ?

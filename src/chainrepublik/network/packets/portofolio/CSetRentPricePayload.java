@@ -44,7 +44,7 @@ public class CSetRentPricePayload extends CPayload
        this.checkEnergy();
         
         // Registered
-        if (UTILS.BASIC.isRegistered(this.target_adr))
+        if (!UTILS.BASIC.isRegistered(this.target_adr))
             throw new Exception("Target address is not registered, CRentPayload.java, 102");
         
         // Item ID
@@ -57,11 +57,14 @@ public class CSetRentPricePayload extends CPayload
                                           + "WHERE stocID='"+this.itemID+"' "
                                             + "AND adr='"+this.target_adr+"' "
                                             + "AND qty>=1 "
-                                            + "AND expire>"+(this.block+1440));
+                                            + "AND expires>"+(this.block+1440));
         
         // Has data ?
         if (!UTILS.DB.hasData(rs))
            throw new Exception("Invalid itemID, CRentPayload.java, 102");
+        
+        // Next
+        rs.next();
         
         // Can rent ?
         if (!UTILS.BASIC.canRent(this.target_adr, rs.getString("tip")))
@@ -74,7 +77,7 @@ public class CSetRentPricePayload extends CPayload
         
         // Hash match ?
         if (!h.equals(this.hash))
-           throw new Exception("This item is rented, CRentPayload.java, 102");
+           throw new Exception("Invalid hash, CRentPayload.java, 102");
     }
     
     public void commit(CBlockPayload block) throws Exception

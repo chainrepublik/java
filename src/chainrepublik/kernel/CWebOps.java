@@ -11,6 +11,7 @@ import chainrepublik.network.packets.ads.*;
 import chainrepublik.network.packets.assets.*;
 import chainrepublik.network.packets.assets.reg_mkts.*;
 import chainrepublik.network.packets.companies.*;
+import chainrepublik.network.packets.market.CRentPacket;
 import chainrepublik.network.packets.mes.*;
 import chainrepublik.network.packets.misc.*;
 import chainrepublik.network.packets.portofolio.*;
@@ -127,6 +128,18 @@ public class CWebOps
                         
                                     UTILS.NETWORK.broadcast(packet);
                                }
+                               
+                               // Welcome gift ?
+                               if (UTILS.ACC.getBalance(UTILS.STATUS.node_adr, "ID_GIFT")>1)
+                               {
+                                    // New packet
+                                    CGiftPacket packet=new CGiftPacket(UTILS.STATUS.node_adr, 
+                                                                       UTILS.STATUS.node_adr, 
+                                                                       adr);
+                       
+                                    // Broadcast
+                                    UTILS.NETWORK.broadcast(packet);
+                               }
                            }
                        }
                   }
@@ -138,6 +151,18 @@ public class CWebOps
                        CConsumeItemPacket packet=new CConsumeItemPacket(rs.getString("fee_adr"),
                                                                         rs.getString("target_adr"),
                                                                         rs.getLong("par_1"));
+                       
+                       // Broadcast
+                       UTILS.NETWORK.broadcast(packet);
+                   }
+                   
+                   // Gift
+                   if (op.equals("ID_GIFT"))
+                   {
+                       // New packet
+                       CGiftPacket packet=new CGiftPacket(rs.getString("fee_adr"),
+                                                          rs.getString("target_adr"),
+                                                          rs.getString("par_1"));
                        
                        // Broadcast
                        UTILS.NETWORK.broadcast(packet);
@@ -295,6 +320,15 @@ public class CWebOps
                                                           rs.getString("target_adr"), 
                                                           rs.getLong("par_1"), 
                                                           rs.getLong("par_2"));
+                       UTILS.NETWORK.broadcast(packet);
+                   }
+                   
+                   if (op.equals("ID_WTH_FUNDS"))
+                   {
+                       CWthFundsPacket packet=new CWthFundsPacket(rs.getString("fee_adr"), 
+                                                                  rs.getString("target_adr"), 
+                                                                  rs.getLong("par_1"), 
+                                                                  rs.getDouble("par_2"));
                        UTILS.NETWORK.broadcast(packet);
                    }
                    
@@ -556,6 +590,43 @@ public class CWebOps
                        UTILS.NETWORK.broadcast(packet);
                    }
                    
+                   // Set rent price
+                   if (op.equals("ID_SET_RENT_PRICE"))
+                   {
+                       CSetRentPricePacket packet=new CSetRentPricePacket(rs.getString("fee_adr"),
+                                                                          rs.getString("target_adr"),
+		                                                          rs.getLong("par_1"),
+                                                                          rs.getDouble("par_2"));
+                       
+                       UTILS.NETWORK.broadcast(packet);
+                   }
+                   
+                   
+                   // Rent item
+                   if (op.equals("ID_RENT_ITEM"))
+                   {
+                       CRentPacket packet=new CRentPacket(rs.getString("fee_adr"),
+                                                          rs.getString("target_adr"),
+		                                          rs.getLong("par_1"),
+                                                          rs.getLong("days"));
+                       
+                       UTILS.NETWORK.broadcast(packet);
+                   }
+                   
+                   // Update Company
+                   if (op.equals("ID_UPDATE_COMPANY"))
+                   {
+                       CUpdateCompanyPacket packet=new CUpdateCompanyPacket(rs.getString("fee_adr"),
+                                                                            rs.getString("target_adr"),
+                                                                            rs.getLong("par_1"),
+		                                                            rs.getString("par_2"),
+                                                                            rs.getString("par_3"),
+                                                                            rs.getString("par_4"));
+                       
+                       UTILS.NETWORK.broadcast(packet);
+                   }
+                   
+                   
                    // Update profile
                    if (op.equals("ID_UPDATE_PROFILE"))
                    {
@@ -578,15 +649,22 @@ public class CWebOps
                    }
                    
                    
+                   // Unfollow
+                   if (op.equals("ID_DONATE_ITEM"))
+                   {
+                       CDonateItemPacket packet=new CDonateItemPacket(rs.getString("fee_adr"),
+                                                                      rs.getString("target_adr"),
+		                                                      rs.getLong("par_1"),
+                                                                      rs.getString("par_2"));
+                       
+                       UTILS.NETWORK.broadcast(packet);
+                   }
+                   
                    // New Company
                     if (op.equals("ID_NEW_COMPANY"))
                     {
-                        // Load free address
-                        String adr=UTILS.BASIC.getFreeAdr(rs.getLong("userID"));
-                        
-                        // No address found
-                        if (adr.equals(""))
-                        adr=UTILS.WALLET.newAddress(rs.getLong("userID"), 
+                        // Address
+                        String adr=UTILS.WALLET.newAddress(rs.getLong("userID"), 
                                                     rs.getString("par_3")+" company address");
                         
                         

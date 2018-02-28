@@ -878,7 +878,7 @@ public class CRewards
             case "ID_POL_PARTY" : name="political parties reward"; break;
         }
         
-        // Patment
+        // Payment
         UTILS.ACC.newTrans(adr, 
                            "default",
                            amount, 
@@ -888,6 +888,16 @@ public class CRewards
                            0,
                            UTILS.BASIC.hash(String.valueOf(this.block)), 
                            this.block);
+        
+        // Tax
+        if (!reward.equals("ID_COU_AREA") && 
+            !reward.equals("ID_COU_ENERGY"))
+             UTILS.ACC.bugTax(adr, 
+                              "ID_REWARDS_TAX", 
+                              amount, 
+                              "",
+                              UTILS.BASIC.hash(String.valueOf(this.block)), 
+                              this.block);
         
         // Log
         UTILS.DB.executeUpdate("INSERT INTO rewards "

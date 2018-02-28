@@ -27,9 +27,7 @@ public class CCompanies extends CTable
 				 	            + "symbol VARCHAR(10) NOT NULL DEFAULT '', "
 				    	            + "description VARCHAR(1000) NOT NULL DEFAULT '',"
                                                     + "expires BIGINT NOT NULL DEFAULT 0,"
-                                                    + "pic VARCHAR(500) NOT NULL DEFAULT '',"
-                                                    + "code VARCHAR(10000) NOT NULL DEFAULT '',"
-                                                    + "sealed VARCHAR(10) NOT NULL DEFAULT 'ID_NO')");
+                                                    + "code VARCHAR(10000) NOT NULL DEFAULT '')");
 	
            // Indexes
 	   UTILS.DB.executeUpdate("CREATE INDEX companies_adr ON companies(adr)");

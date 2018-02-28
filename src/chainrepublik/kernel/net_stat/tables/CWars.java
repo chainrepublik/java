@@ -29,6 +29,7 @@ public class CWars extends CTable
                                                     + "block BIGINT(20) DEFAULT NULL)");
             
             // Indexes
+            UTILS.DB.executeUpdate("CREATE UNIQUE INDEX wars_warID ON wars(warID)");
             UTILS.DB.executeUpdate("CREATE INDEX wars_attacker ON wars(attacker)");
             UTILS.DB.executeUpdate("CREATE INDEX wars_defender ON wars(defender)");
             UTILS.DB.executeUpdate("CREATE INDEX wars_block ON wars(block)");

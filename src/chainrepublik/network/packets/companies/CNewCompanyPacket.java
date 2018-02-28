@@ -38,7 +38,7 @@ public class CNewCompanyPacket extends CBroadcastPacket
 	this.payload=UTILS.SERIAL.serialize(dec_payload);
 					
         // Network fee
-	CFeePayload fee=new CFeePayload(fee_adr,  days*0.1, "Company incorporation network fee");
+	CFeePayload fee=new CFeePayload(fee_adr,  days*0.2, "Company incorporation network fee");
 	this.fee_payload=UTILS.SERIAL.serialize(fee);
 			   
 	// Sign packet

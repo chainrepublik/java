@@ -21,7 +21,7 @@ public class CStatus
     
     public CStatus() throws Exception
     {
-        load();
+        load(true);
     }
     
     public void setEngineStatus(String status) throws Exception
@@ -36,10 +36,11 @@ public class CStatus
         UTILS.DB.executeUpdate("UPDATE web_sys_data SET status='"+status+"'");
     }
     
-    public void load() throws Exception
+    public void load(boolean force_load) throws Exception
     {
         // Every 10 seconds
-        if (UTILS.BASIC.tstamp()%10!=0)
+        if (!force_load)
+          if (UTILS.BASIC.tstamp()%10!=0)
             return;
         
         // Load 

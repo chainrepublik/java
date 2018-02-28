@@ -34,7 +34,8 @@ public class CTransPool
                     throw new Exception("Invalid hash - CTransPool.java, 36");
                 
                 // Currency
-                if (!UTILS.BASIC.isCur(cur))
+                if (!UTILS.BASIC.isCur(cur) && 
+                    !UTILS.BASIC.isProd(cur))
                     throw new Exception("Invalid currency - CTransPool.java, 40");
                 
                 // Hash exist ?
@@ -75,7 +76,8 @@ public class CTransPool
                     throw new Exception("Invalid source address - CTransPool.java, 77");
                 
                 // Currency
-                if (!UTILS.BASIC.isCur(cur))
+                if (!UTILS.BASIC.isCur(cur) && 
+                    !UTILS.BASIC.isProd(cur))
                     throw new Exception("Invalid currency - CTransPool.java, 81");
                 
 		String q="SELECT SUM(amount) AS total "

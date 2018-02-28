@@ -242,17 +242,8 @@ public class CBlockPacket extends CPacket
        // Delegates
        UTILS.DELEGATES.refresh(block);
        
-       // Workplaces
-       UTILS.CRONS.checkWorkplaces(block);
-       
-       // Energy
-       UTILS.CRONS.checkEnergy(block);
-       
-       // Wine
-       UTILS.CRONS.checkWine();
-       
        // Travelers
-       UTILS.CRONS.checkTravelers(block);
+       UTILS.CRONS.runBlockCrons(block);
        
        // Cleanup
        UTILS.TABLES.expired(block);

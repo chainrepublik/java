@@ -54,6 +54,9 @@ public class CWthFundsPayload extends CPayload
         com_rs.next();
         
         // Amount
+        this.amount=UTILS.BASIC.round(this.amount, 4);
+        
+        // Amount
         if (this.amount<0.01)
             throw new Exception("Invalid amount - CWthFundsPayload.java, 68");
         

@@ -31,6 +31,7 @@ public class CTweetsFollow extends CTable
             // Indexes
             UTILS.DB.executeUpdate("CREATE INDEX tweets_follow_adr ON tweets_follow(adr)");
             UTILS.DB.executeUpdate("CREATE INDEX tweets_follow_follows ON tweets_follow(follows)");
+            UTILS.DB.executeUpdate("CREATE UNIQUE INDEX tweets_follow_adr_follows ON tweets_follow(adr, follows)");
             UTILS.DB.executeUpdate("CREATE INDEX tweets_follow_block ON tweets_follow(block)");
             UTILS.DB.executeUpdate("CREATE INDEX tweets_follow_expires ON tweets_follow(expires)");
             

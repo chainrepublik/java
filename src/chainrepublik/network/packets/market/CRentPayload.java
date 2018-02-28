@@ -41,7 +41,7 @@ public class CRentPayload extends CPayload
    	super.check(block);
         
          // Registered
-        if (UTILS.BASIC.isRegistered(this.target_adr))
+        if (!UTILS.BASIC.isRegistered(this.target_adr))
             throw new Exception("Target address is not registered, CRentPayload.java, 102");
         
         // Days
@@ -58,7 +58,7 @@ public class CRentPayload extends CPayload
                                           + "WHERE stocID='"+this.itemID+"' "
                                             + "AND adr<>'"+this.target_adr+"' "
                                             + "AND qty>=1 "
-                                            + "AND expire>"+(this.block+1440)+" "
+                                            + "AND expires>"+(this.block+1440)+" "
                                             + "AND rented_expires=0 "
                                             + "AND rent_price>0 "
                                             + "AND in_use=0");
@@ -66,6 +66,13 @@ public class CRentPayload extends CPayload
         // Has data ?
         if (!UTILS.DB.hasData(rs))
            throw new Exception("Invalid itemID, CRentPayload.java, 102");
+        
+        // Next
+        rs.next();
+        
+        // Can rent
+        if (!UTILS.BASIC.canRent(this.target_adr, rs.getString("tip")))
+           throw new Exception("Item can't be rented, CRentPayload.java, 102");
         
         // Price
         double price=rs.getDouble("rent_price")*days;
@@ -100,14 +107,29 @@ public class CRentPayload extends CPayload
          // Superclass
          super.commit(block);
          
+         // Load item data
+         ResultSet rs=UTILS.DB.executeQuery("SELECT * "
+                                            + "FROM stocuri "
+                                           + "WHERE stocID='"+this.itemID+"'");
+         
+         // Next
+         rs.next();
+         
          // Set item as rented
          UTILS.DB.executeUpdate("UPDATE stocuri "
-                                 + "SET sale_price=0, "
-                                     + "sale_qty=0, "
-                                     + "rented_to='"+this.target_adr+"', "
-                                     + "rent_expires='"+(this.block+this.days*1440)+"', "
-                                     + "in_use='"+this.block+"' "
+                                 + "SET rented_to='"+this.target_adr+"', "
+                                     + "rented_expires='"+(this.block+this.days*1440)+"', "
+                                     + "in_use=0 "
                                + "WHERE stocID='"+this.itemID+"'");
+         
+         // Insert rent process
+         UTILS.DB.executeUpdate("INSERT INTO rent_contracts "
+                                      + "SET stocID='"+this.itemID+"', "
+                                          + "from_adr='"+rs.getString("adr")+"', "
+                                          + "to_adr='"+this.target_adr+"', "
+                                          + "price='"+rs.getDouble("rent_price")+"', "
+                                          + "expires='"+(this.block+this.days*1440)+"', "
+                                          + "block='"+this.block+"'");
          
          // Clear trans
          UTILS.ACC.clearTrans(this.hash, "ID_ALL", this.block);

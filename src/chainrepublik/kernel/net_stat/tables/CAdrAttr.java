@@ -43,8 +43,8 @@ public class CAdrAttr extends CTable
                                                   + "expires BIGINT NOT NULL DEFAULT 0)");
 	
             // Indexes 
-            UTILS.DB.executeUpdate("CREATE UNIQUE INDEX adr_attr_adr ON adr_attr(adr)");
-            UTILS.DB.executeUpdate("CREATE UNIQUE INDEX adr_attr_attr ON adr_attr(attr)");
+            UTILS.DB.executeUpdate("CREATE INDEX adr_attr_adr ON adr_attr(adr)");
+            UTILS.DB.executeUpdate("CREATE INDEX adr_attr_attr ON adr_attr(attr)");
 	    UTILS.DB.executeUpdate("CREATE INDEX adr_attr_expires ON adr_attr(expires)");
             
             // Confirm

@@ -108,7 +108,7 @@ public class CCrons
                                + "WHERE energy>=1");
      }
      
-     public void checkWine() throws Exception
+     public void checkWine(long block) throws Exception
      {
          // Increase wine energy
          UTILS.DB.executeUpdate("UPDATE stocuri "
@@ -128,13 +128,53 @@ public class CCrons
                                  + "AND travel>0");
      }
      
-     public void checkRented() throws Exception
+     public void checkPolInf(long block) throws Exception
      {
+         if (block%1440==0)
+         {
+             UTILS.DB.executeUpdate("UPDATE adr "
+                                 + "SET pol_inf=pol_inf-pol_inf*0.01"
+                               + "WHERE pol_inf>=1");
+             
+             UTILS.DB.executeUpdate("UPDATE adr "
+                                     + "SET pol_inf=0 "
+                                   + "WHERE pol_inf<1");
+         }
      }
      
-     public void runBlockCrons()
+     public void checkWarPoints(long block) throws Exception
      {
+         if (block%1440==0)
+         {
+            UTILS.DB.executeUpdate("UPDATE adr "
+                                    + "SET war_points=war_points-war_points*0.01"
+                                  + "WHERE war_points>=1");
          
+            UTILS.DB.executeUpdate("UPDATE adr "
+                                    + "SET war_points=0 "
+                                  + "WHERE war_points<1");
+         }
+     }
+     
+     public void runBlockCrons(long block) throws Exception
+     {
+         // energy
+         this.checkEnergy(block);
+         
+         // Check travelers
+         this.checkTravelers(block);
+         
+         // Check wine
+         this.checkWine(block);
+         
+         // check workplaces
+         this.checkWorkplaces(block);
+         
+         // Political influence
+         this.checkPolInf(block);
+         
+         // War points
+         this.checkWarPoints(block);
      }
      
      class RemindTask extends TimerTask 
@@ -155,7 +195,7 @@ public class CCrons
                setStatus();
                
                // Setup
-               UTILS.STATUS.load();
+               UTILS.STATUS.load(false);
               
            }
            catch (Exception ex)

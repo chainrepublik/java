@@ -25,7 +25,7 @@ public class CNewWorkplacePacket extends CBroadcastPacket
 	this.payload=UTILS.SERIAL.serialize(dec_payload);
 					
         // Network fee
-	CFeePayload fee=new CFeePayload(fee_adr,  days*0.01, "New workplace network fee");
+	CFeePayload fee=new CFeePayload(fee_adr,  days*0.1, "New workplace network fee");
 	this.fee_payload=UTILS.SERIAL.serialize(fee);
 			   
 	// Sign packet

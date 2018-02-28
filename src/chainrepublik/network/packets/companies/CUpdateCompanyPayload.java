@@ -20,15 +20,12 @@ public class CUpdateCompanyPayload extends CPayload
     // Pic
     String pic;
     
-    // Sealed
-    String sealed;
     
     public CUpdateCompanyPayload(String adr,
                                  long comID, 
                                  String name, 
                                  String desc, 
-                                 String pic, 
-                                 String sealed) throws Exception
+                                 String pic) throws Exception
     {
         // Superclass
 	super(adr);
@@ -45,16 +42,12 @@ public class CUpdateCompanyPayload extends CPayload
         // Pic
         this.pic=pic;
         
-        // Sealed
-        this.sealed=sealed;
-        
-        // Hash
+         // Hash
  	hash=UTILS.BASIC.hash(this.getHash()+
                               this.comID+
  			      this.name+
                               this.desc+
- 			      this.pic+
-                              this.sealed);
+ 			      this.pic);
            
         // Sign
         this.sign();
@@ -74,11 +67,6 @@ public class CUpdateCompanyPayload extends CPayload
         if (!UTILS.BASIC.isDesc(this.desc))
             throw new Exception("Invalid description, CUpdateCompanyPayload.java, 69");
         
-        // Sealed
-        if (!this.sealed.equals("YES") && 
-            !this.sealed.equals("NO"))
-            throw new Exception("Invalid seal value, CUpdateCompanyPayload.java, 74");
-        
         // Pic
         if (!this.pic.equals(""))
             if (!UTILS.BASIC.isPic(this.pic))
@@ -88,25 +76,18 @@ public class CUpdateCompanyPayload extends CPayload
         ResultSet rs=UTILS.DB.executeQuery("SELECT * "
                                            + "FROM companies "
                                           + "WHERE adr='"+this.target_adr+"' "
-                                            + "AND comID='"+this.comID+"' "
-                                            + "AND sealed='NO'");
+                                            + "AND comID='"+this.comID+"'");
         
         // Has data ?
         if (!UTILS.DB.hasData(rs))
              throw new Exception("Invalid company ID, CUpdateCompanyPayload.java, 74");
         
-        // Seal ?
-        if (this.sealed.equals("YES"))
-            if (!rs.getString("tip").equals("ID_COM_AUTONOMUS"))
-                throw new Exception("Invalid company type, CUpdateCompanyPayload.java, 86"); 
-        
-        // Hash
+         // Hash
  	String h=UTILS.BASIC.hash(this.getHash()+
                                   this.comID+
  			          this.name+
                                   this.desc+
- 			          this.pic+
-                                  this.sealed);
+ 			          this.pic);
         
         // Hash match ?
         if (!h.equals(this.hash))
@@ -121,11 +102,13 @@ public class CUpdateCompanyPayload extends CPayload
        // Update
        UTILS.DB.executeUpdate("UPDATE companies "
                                + "SET name='"+UTILS.BASIC.base64_encode(this.name)+"', "
-                                   + "description='"+UTILS.BASIC.base64_encode(this.desc)+"', "
-                                   + "pic='"+UTILS.BASIC.base64_encode(this.pic)+"', "
-                                   + "sealed='"+this.sealed+"', "
-                                   + "block='"+this.block+"' "
+                                   + "description='"+UTILS.BASIC.base64_encode(this.desc)+"' "
                              + "WHERE comID='"+this.comID+"'");
+       
+       // Update address
+       UTILS.DB.executeUpdate("UPDATE adr "
+                               + "SET pic='"+UTILS.BASIC.base64_encode(this.pic)+"' "
+                             + "WHERE adr='"+UTILS.BASIC.getComAdr(this.comID)+"'");
     }
     
 }

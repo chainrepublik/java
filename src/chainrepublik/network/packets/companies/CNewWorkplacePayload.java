@@ -48,7 +48,7 @@ public class CNewWorkplacePayload extends CPayload
    	super.check(block);
         
         // Company address
-        if (!UTILS.BASIC.isCompanyAdr(comID, this.target_adr))
+        if (!UTILS.BASIC.isComAdr(comID, this.target_adr))
            throw new Exception("Invalid company address, CNewWorkplacePayload.java, 52");
         
         // Workplace ID

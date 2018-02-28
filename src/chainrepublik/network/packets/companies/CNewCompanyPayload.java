@@ -45,7 +45,7 @@ public class CNewCompanyPayload extends CPayload
     long days;
     
     // ID's
-    long ID1, ID2, ID3, ID4, ID5, ID6, ID7, ID8, ID9, ID10;         
+    long stocID;         
                                       
     public CNewCompanyPayload(String adr, 
                               String type, 
@@ -89,24 +89,15 @@ public class CNewCompanyPayload extends CPayload
         
         // Asset mkt ID
         this.assetMktID=UTILS.BASIC.getID();
+        
+        // Stoc ID
+        this.stocID=UTILS.BASIC.getID();
     
         // Days
         this.days=days;
         
         // Shareholder adr
         this.shareholder_adr=shareholder_adr;
-        
-        // IDs
-        this.ID1=UTILS.BASIC.getID();
-        this.ID2=UTILS.BASIC.getID();
-        this.ID3=UTILS.BASIC.getID();
-        this.ID4=UTILS.BASIC.getID();
-        this.ID5=UTILS.BASIC.getID();
-        this.ID6=UTILS.BASIC.getID();
-        this.ID7=UTILS.BASIC.getID();
-        this.ID8=UTILS.BASIC.getID();
-        this.ID9=UTILS.BASIC.getID();
-        this.ID10=UTILS.BASIC.getID();
         
         // Hash
  	hash=UTILS.BASIC.hash(this.getHash()+
@@ -121,17 +112,8 @@ public class CNewCompanyPayload extends CPayload
                                  this.workplaceID+
                                  this.assetID+
                                  this.assetMktID+
- 			         this.days+
-                                 this.ID1+
-                                 this.ID2+
-                                 this.ID3+
-                                 this.ID4+
-                                 this.ID5+
-                                 this.ID6+
-                                 this.ID7+
-                                 this.ID8+
-                                 this.ID9+
-                                 this.ID10);
+ 			         this.stocID+
+                                 this.days);
            
         // Sign
         this.sign();
@@ -189,49 +171,16 @@ public class CNewCompanyPayload extends CPayload
             throw new Exception("Invalid country, CNewCompanyPayload.java, 147");
         
         // Days
-        if (this.days<90)
+        if (this.days<30)
            throw new Exception("Invalid days, CNewCompanyPayload.java, 151");
         
         // IDs exist ?
         if (UTILS.BASIC.isID(this.comID) || 
             UTILS.BASIC.isID(this.workplaceID) || 
             UTILS.BASIC.isID(this.assetID) || 
-            UTILS.BASIC.isID(this.assetMktID) || 
-            UTILS.BASIC.isID(this.ID1) || 
-            UTILS.BASIC.isID(this.ID2) || 
-            UTILS.BASIC.isID(this.ID3) || 
-            UTILS.BASIC.isID(this.ID4) || 
-            UTILS.BASIC.isID(this.ID5) || 
-            UTILS.BASIC.isID(this.ID6) || 
-            UTILS.BASIC.isID(this.ID7) || 
-            UTILS.BASIC.isID(this.ID8) || 
-            UTILS.BASIC.isID(this.ID9) ||
-            UTILS.BASIC.isID(this.ID10))
+            UTILS.BASIC.isID(this.assetMktID) ||
+            UTILS.BASIC.isID(this.stocID))
         throw new Exception("Invalid ID, CNewCompanyPayload.java, 101");
-        
-        // Add to array
-        ArrayList ar=new ArrayList();
-        ar.add(this.comID);
-        ar.add(this.workplaceID);
-        ar.add(this.assetID);
-        ar.add(this.assetMktID);
-        ar.add(this.ID1);
-        ar.add(this.ID1);
-        ar.add(this.ID2);
-        ar.add(this.ID3);
-        ar.add(this.ID4);
-        ar.add(this.ID5);
-        ar.add(this.ID6);
-        ar.add(this.ID7);
-        ar.add(this.ID8);
-        ar.add(this.ID9);
-        ar.add(this.ID10);
-        
-        // Find duplicates
-        for (int a=0; a<=12; a++)
-            for (int b=a+1; b<=13; b++)
-                if (ar.get(a)==ar.get(b))
-                    throw new Exception("Invalid IDs, CNewCompanyPayload.java, 101");
         
         // Hash
  	String h=UTILS.BASIC.hash(this.getHash()+
@@ -246,63 +195,13 @@ public class CNewCompanyPayload extends CPayload
                                  this.workplaceID+
                                  this.assetID+
                                  this.assetMktID+
- 			         this.days+
-                                 this.ID1+
-                                 this.ID2+
-                                 this.ID3+
-                                 this.ID4+
-                                 this.ID5+
-                                 this.ID6+
-                                 this.ID7+
-                                 this.ID8+
-                                 this.ID9+
-                                 this.ID10);
+                                 this.stocID+
+ 			         this.days);
         
         // Hash match ?
         if (!h.equals(this.hash))
             throw new Exception("Invalid hash, CNewCompanyPayload.java, 113");
    }
-    
-    public long getID(int index)
-    {
-       long ret=0;
-        
-       switch (index)
-       {
-           // ID 1
-           case 1 : ret=ID1; break;
-           
-           // ID 2
-           case 2 : ret=ID2; break;
-           
-           // ID 3
-           case 3 : ret=ID3; break;
-           
-           // ID 4
-           case 4 : ret=ID4; break;
-           
-           // ID 5
-           case 5 : ret=ID5; break;
-           
-           // ID 6
-           case 6 : ret=ID6; break;
-           
-            // ID 7
-           case 7 : ret=ID7; break;
-           
-           // ID 8
-           case 8 : ret=ID8; break;
-           
-           // ID 9
-           case 9 : ret=ID9; break;
-
-           // ID 10
-           case 10 : ret=ID10; break;
-       }
-       
-       // Return
-       return ret;
-    }
     
     public void commit(CBlockPayload block) throws Exception
     {
@@ -323,25 +222,45 @@ public class CNewCompanyPayload extends CPayload
        ResultSet rs=UTILS.DB.executeQuery("SELECT * "
                                           + "FROM com_prods "
                                          + "WHERE com_type='"+this.type+"' "
-                                           + "AND (type='ID_RAW' "
-                                                + "OR type='ID_FINITE')");
+                                           + "AND type='ID_RAW'");
        
        // Index
-       int i=0;
+       long lastID=this.stocID;
        
        // Insert product
        while (rs.next())
        {
-           // Index
-           i++;
-           
            // Insert
            UTILS.DB.executeUpdate("INSERT INTO stocuri "
                                         + "SET adr='"+this.target_adr+"', "
-                                            + "stocID='"+this.getID(i)+"', "
+                                            + "stocID='"+lastID+"', "
                                             + "tip='"+rs.getString("prod")+"', "
-                                            + "expires=0");
+                                            + "expires=0, "
+                                            + "block='"+this.block+"'");
+           
+           // Index
+           lastID=lastID+1;
        }
+       
+       // Tools company ?
+       if (this.type.equals("ID_COM_TOOLS"))
+           UTILS.DB.executeUpdate("INSERT INTO stocuri "
+                                        + "SET adr='"+this.target_adr+"', "
+                                            + "stocID='"+(lastID+1)+"', "
+                                            + "tip='ID_TOOLS_PROD_TOOLS', "
+                                            + "expires=0, "
+                                            + "qty=1, "
+                                            + "block='"+this.block+"'");
+       
+       // Construction company ?
+       if (this.type.equals("ID_BUILD_COM_CONSTRUCTION"))
+           UTILS.DB.executeUpdate("INSERT INTO stocuri "
+                                        + "SET adr='"+this.target_adr+"', "
+                                            + "stocID='"+(lastID+1)+"', "
+                                            + "tip='ID_BUILD_COM_CONSTRUCTION', "
+                                            + "expires=0, "
+                                            + "qty=1, "
+                                            + "block='"+this.block+"'");
        
        
        // Create share asset

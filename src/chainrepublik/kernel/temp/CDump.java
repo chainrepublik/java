@@ -110,13 +110,68 @@ public class CDump
                                                                   + "net_energy='"+rs.getDouble("net_energy")+"', "
                                                                   + "damage='"+rs.getLong("damage")+"' \");");
     }
+  
+    public void populateAssetsMkts() throws Exception
+    {
+        ResultSet rs=UTILS.DB.executeQuery("SELECT * "
+                                           + "FROM tipuri_companii");
+        
+        while (rs.next())
+        {
+            // Insert tools
+            UTILS.DB.executeUpdate("INSERT INTO assets_mkts "
+                                         + "SET adr='default', "
+                                             + "mktID='"+UTILS.BASIC.getID()+"', "
+                                             + "asset='"+rs.getString("utilaje")+"', "
+                                             + "cur='CRC', "
+                                             + "name='"+rs.getString("name")+" Production Tools', "
+                                             + "description='"+rs.getString("name")+" Production Tools', "
+                                             + "decimals=0, "
+                                             + "expires=0, "
+                                             + "ask=1, "
+                                             + "bid=0");
+            
+            // Insert building
+            UTILS.DB.executeUpdate("INSERT INTO assets_mkts "
+                                         + "SET adr='default', "
+                                             + "mktID='"+UTILS.BASIC.getID()+"', "
+                                             + "asset='"+rs.getString("cladire")+"', "
+                                             + "cur='CRC', "
+                                             + "name='"+rs.getString("name")+" Building', "
+                                             + "description='"+rs.getString("name")+" Building', "
+                                             + "decimals=0, "
+                                             + "expires=0, "
+                                             + "ask=1, "
+                                             + "bid=0");
+        }
+        
+        // Tipuri_produse
+        rs=UTILS.DB.executeQuery("SELECT * "
+                                 + "FROM tipuri_produse "
+                                + "WHERE prod NOT LIKE '%TOOLS_PROD%' "
+                                  + "AND prod NOT LIKE '%BUILD_COM%'");
+        
+        
+        while (rs.next())
+            UTILS.DB.executeUpdate("INSERT INTO assets_mkts "
+                                         + "SET adr='default', "
+                                             + "mktID='"+UTILS.BASIC.getID()+"', "
+                                             + "asset='"+rs.getString("prod")+"', "
+                                             + "cur='CRC', "
+                                             + "name='"+rs.getString("name")+" Market', "
+                                             + "description='"+rs.getString("name")+" Market', "
+                                             + "decimals=0, "
+                                             + "expires=0, "
+                                             + "ask=1, "
+                                             + "bid=0");
+    }
     
-    public void test() throws Exception
+    public void populateAssetsMktsPos() throws Exception
     {
         ResultSet rs=UTILS.DB.executeQuery("SELECT * "
                                            + "FROM assets_mkts "
-                                          + "WHERE asset "
-                                           + "LIKE '%BUILD_COM%'");
+                                          + "WHERE (asset "
+                                           + "LIKE '%BUILD_COM%' OR asset LIKE '%TOOLS_PROD%')");
         
         while (rs.next())
             UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos "
@@ -126,7 +181,6 @@ public class CDump
                                              + "qty='100', "
                                              + "price='1', "
                                              + "orderID='"+UTILS.BASIC.getID()+"', "
-                                             + "expires=0, "
-                                             + "block=0");
+                                             + "expires=0");
     }
 }

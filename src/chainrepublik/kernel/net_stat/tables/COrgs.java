@@ -28,7 +28,7 @@ public class COrgs  extends CTable
                                                     + "description VARCHAR(1000) NOT NULL DEFAULT '')");
            
            // Indexes
-           UTILS.DB.executeUpdate("CREATE INDEX orgs_orgID ON orgs(orgID)");
+           UTILS.DB.executeUpdate("CREATE UNIQUE INDEX orgs_orgID ON orgs(orgID)");
            UTILS.DB.executeUpdate("CREATE INDEX orgs_adr ON orgs(adr)");
            UTILS.DB.executeUpdate("CREATE INDEX orgs_type ON orgs(type)");
            UTILS.DB.executeUpdate("CREATE INDEX orgs_country ON orgs(country)");

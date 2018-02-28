@@ -38,7 +38,7 @@ public class CLaws extends CTable
                 UTILS.DB.executeUpdate("CREATE INDEX laws_adr ON laws(adr)");
                 UTILS.DB.executeUpdate("CREATE INDEX laws_status ON laws(status)");
                 UTILS.DB.executeUpdate("CREATE INDEX laws_country ON laws(country)");
-                UTILS.DB.executeUpdate("CREATE INDEX laws_lawID ON laws(lawID)");
+                UTILS.DB.executeUpdate("CREATE UNIQUE INDEX laws_lawID ON laws(lawID)");
                 UTILS.DB.executeUpdate("CREATE INDEX laws_block ON laws(block)");
                 
                 // Confirm

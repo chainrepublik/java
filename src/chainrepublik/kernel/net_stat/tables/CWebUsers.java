@@ -38,7 +38,11 @@ public class CWebUsers extends CTable
                                                              +"unread_events BIGINT NOT NULL DEFAULT 0, "
                                                              +"unread_mes BIGINT NOT NULL DEFAULT 0, "
                                                              +"unread_ref BIGINT NOT NULL DEFAULT 0, "
-                                                             +"unread_trans BIGINT NOT NULL DEFAULT 0)");
+                                                             +"unread_trans BIGINT NOT NULL DEFAULT 0, "
+                                                             +"refID BIGINT NOT NULL DEFAULT 0, "
+                                                             +"year BIGINT NOT NULL DEFAULT 0, "
+                                                             + "month BIGINT NOT NULL DEFAULT 0, "
+                                                             + "day BIGINT NOT NULL DEFAULT 0)");
              
             // Indexes
             UTILS.DB.executeUpdate("CREATE INDEX web_users_user ON web_users(user)");

@@ -37,7 +37,7 @@ public class COrgsProps  extends CTable
            
            // Indexes
            UTILS.DB.executeUpdate("CREATE INDEX orgs_props_orgID ON orgs_props(orgID)");
-           UTILS.DB.executeUpdate("CREATE INDEX orgs_props_propID ON orgs_props(propID)");
+           UTILS.DB.executeUpdate("CREATE UNIQUE INDEX orgs_props_propID ON orgs_props(propID)");
            UTILS.DB.executeUpdate("CREATE INDEX orgs_props_status ON orgs_props(status)");
            UTILS.DB.executeUpdate("CREATE INDEX orgs_props_block ON orgs_props(block)");
            UTILS.DB.executeUpdate("CREATE INDEX orgs_adr ON orgs_props(adr)");

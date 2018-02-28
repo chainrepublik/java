@@ -39,6 +39,9 @@ public class CSysStats extends CTable
                                                          + "avg_pol_inf BIGINT(11) NOT NULL DEFAULT 0, "
                                                          + "total_pol_end BIGINT(11) NOT NULL DEFAULT 0, "
                                                          + "avg_pol_end BIGINT(11) NOT NULL DEFAULT 0)");
+            
+            // Populate
+            this.populate();
            
             // Confirm
             System.out.println("Done.");

@@ -41,12 +41,8 @@ public class CDonateItemPayload extends CPayload
    	// Super class
    	super.check(block);
         
-         // Check energy
-       this.checkEnergy();
-        
-        // Registered
-        if (UTILS.BASIC.isRegistered(this.target_adr))
-            throw new Exception("Target address is not registered, CDonateItemPayload.java, 102");
+        // Check energy
+        this.checkEnergy();
         
         // Receiver same as sender
         if (this.rec_adr.equals(this.target_adr))
@@ -67,13 +63,17 @@ public class CDonateItemPayload extends CPayload
         if (!UTILS.DB.hasData(rs))
            throw new Exception("Invalid itemID, CDonateItemPayload.java, 102");
         
-        // Can receive ?
-        if (!UTILS.BASIC.canBuy(this.rec_adr, rs.getString("tip"), 1, block))
+        // Next
+        rs.next();
+        
+        // Energy product ?
+        if (!UTILS.BASIC.isEnergyProd(rs.getString("tip")))
            throw new Exception("Item can't be donated, CDonateItemPayload.java, 102");
         
-        // Not a company address
-        if (UTILS.BASIC.isCompanyAdr(this.target_adr))
-            throw new Exception("Companies can't donate items, CDonateItemPayload.java, 102");
+        // Citizen address
+        if (!UTILS.BASIC.isCitAdr(this.target_adr) || 
+            !UTILS.BASIC.isCitAdr(this.rec_adr))
+        throw new Exception("Only citizens can donate / receive donations, CDonateItemPayload.java, 102");
         
         // Check hash
         String h=UTILS.BASIC.hash(this.getHash()+
@@ -92,10 +92,13 @@ public class CDonateItemPayload extends CPayload
          
          // Set item as rented
          UTILS.DB.executeUpdate("UPDATE stocuri "
-                                 + "SET adr='"+this.target_adr+"' "
+                                 + "SET adr='"+this.rec_adr+"', "
+                                     + "in_use=0 "
                                + "WHERE stocID='"+this.itemID+"'");
          
-         // Position type
-        UTILS.ACC.clearTrans(hash, "ID_ALL", this.block);
+         // Event
+         UTILS.BASIC.newEvent(this.rec_adr, 
+                              "You have received a donation from "+UTILS.BASIC.getAdrData(this.target_adr, "name")+". Check your inventory.", 
+                              this.block);
     }
 }

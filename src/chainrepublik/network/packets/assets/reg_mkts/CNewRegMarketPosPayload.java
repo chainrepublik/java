@@ -89,6 +89,10 @@ public class CNewRegMarketPosPayload extends CPayload
          // Super class
    	  super.check(block);
           
+          // Registered ?
+          if (!UTILS.BASIC.isRegistered(this.target_adr))
+             throw new Exception("Address not registered - CNewRegMarketPosPayload.java");
+          
         // Check marketID
         ResultSet rs=UTILS.DB.executeQuery("SELECT * "
                                            + "FROM assets_mkts "
@@ -159,7 +163,9 @@ public class CNewRegMarketPosPayload extends CPayload
         if (this.tip.equals("ID_SELL"))
         {
             // Can sell ?
-            if (!UTILS.BASIC.canSell(this.target_adr, asset))
+            if (!UTILS.BASIC.canSell(this.target_adr, asset) && 
+                asset.length()!=5 && 
+                asset.length()!=6)
                 throw new Exception("Address is not allowed to sell this product - CNewRegMarketPosPayload.java");
                 
             // Asset balance
@@ -213,6 +219,16 @@ public class CNewRegMarketPosPayload extends CPayload
                                               "New short position on market "+rs.getString("mktID"), 
                                               "", 
                                               0,
+                                              this.hash, 
+                                              this.block);
+                         
+                         // Income tax ?
+                         if (cur.equals("CRC") && 
+                             UTILS.BASIC.isProd(asset))
+                             UTILS.ACC.bugTax(this.target_adr, 
+                                              "ID_SALE_TAX", 
+                                              qty*rs.getDouble("price"), 
+                                              asset,
                                               this.hash, 
                                               this.block);
                          
@@ -278,6 +294,16 @@ public class CNewRegMarketPosPayload extends CPayload
                                                  0,
                                                  this.hash, 
                                                  this.block);
+                         
+                         // Income tax ?
+                         if (cur.equals("CRC") && 
+                             UTILS.BASIC.isProd(asset))
+                             UTILS.ACC.bugTax(rs.getString("adr"), 
+                                              "ID_SALE_TAX", 
+                                              qty*rs.getDouble("price"), 
+                                              asset,
+                                              this.hash, 
+                                              this.block);
                       
                          // Receive assets
                          UTILS.ACC.newTrans(this.target_adr,
@@ -309,8 +335,10 @@ public class CNewRegMarketPosPayload extends CPayload
                                      this.block);
                 
                 // Can buy ?
-                if (!UTILS.BASIC.canBuy(this.target_adr, asset, this.qty, block))
-                    throw new Exception("Address is not allowed to sell this product - CNewRegMarketPosPayload.java");
+                if (!UTILS.BASIC.canBuy(this.target_adr, asset, this.qty, block) &&
+                    asset.length()!=5 && 
+                    asset.length()!=6)
+                throw new Exception("Address is not allowed to sell this product - CNewRegMarketPosPayload.java");
             }
             
         
@@ -387,9 +415,8 @@ public class CNewRegMarketPosPayload extends CPayload
                             
                             // Update
                             UTILS.DB.executeUpdate("UPDATE assets_mkts_pos "
-                                                    + "SET qty=qty-"+qty+", "
-                                                        + "block='"+this.block+"' "
-                                                  + "WHERE orderID='"+rs.getLong("orderID")+"'");
+                                                    + "SET qty=qty-"+qty
+                                                 + " WHERE orderID='"+rs.getLong("orderID")+"'");
                          }
                          
                          // Remain
@@ -398,12 +425,12 @@ public class CNewRegMarketPosPayload extends CPayload
                          // Insert order
                          UTILS.DB.executeUpdate("INSERT INTO assets_mkts_trades "
                                                       + "SET mktID='"+this.mktID+"', "
-                                         + "orderID='"+this.orderID+"', "
-                                         + "buyer='"+this.target_adr+"', "
-                                         + "seller='"+rs.getString("adr")+"', "
-                                         + "qty='"+qty+"', "
-                                         + "price='"+rs.getDouble("price")+"', "
-                                         + "block='"+this.block+"'");
+                                                          + "orderID='"+this.orderID+"', "
+                                                          + "buyer='"+this.target_adr+"', "
+                                                          + "seller='"+rs.getString("adr")+"', "
+                                                          + "qty='"+qty+"', "
+                                                          + "price='"+rs.getDouble("price")+"', "
+                                                          + "block='"+this.block+"'");
                       }
                    }
                 }
@@ -446,9 +473,8 @@ public class CNewRegMarketPosPayload extends CPayload
                             
                             // Update
                             UTILS.DB.executeUpdate("UPDATE assets_mkts_pos "
-                                                    + "SET qty=qty-"+qty+", "
-                                                        + "block='"+this.block+"' "
-                                                  + "WHERE orderID='"+rs.getLong("orderID")+"'");
+                                                    + "SET qty=qty-"+qty
+                                                  + " WHERE orderID='"+rs.getLong("orderID")+"'");
                          }
                          
                          // Remain
@@ -456,13 +482,13 @@ public class CNewRegMarketPosPayload extends CPayload
                          
                          // Insert order
                          UTILS.DB.executeUpdate("INSERT INTO assets_mkts_trades "
-                                     + "SET mktID='"+this.mktID+"', "
-                                         + "orderID='"+this.orderID+"', "
-                                         + "buyer='"+this.target_adr+"', "
-                                         + "seller='"+rs.getString("adr")+"', "
-                                         + "qty='"+qty+"', "
-                                         + "price='"+rs.getDouble("price")+"', "
-                                         + "block='"+this.block+"'");
+                                                      + "SET mktID='"+this.mktID+"', "
+                                                          + "orderID='"+this.orderID+"', "
+                                                          + "buyer='"+this.target_adr+"', "
+                                                          + "seller='"+rs.getString("adr")+"', "
+                                                          + "qty='"+qty+"', "
+                                                          + "price='"+rs.getDouble("price")+"', "
+                                                          + "block='"+this.block+"'");
                       }
                    }
                 }
@@ -498,8 +524,7 @@ public class CNewRegMarketPosPayload extends CPayload
                                                  + "qty='"+remain+"', "
                                                  + "price='"+UTILS.FORMAT_8.format(this.price)+"', "
                                                  + "orderID='"+this.orderID+"', "
-                                                 + "expires='"+(this.block+(this.days*1440))+"', "
-                                                 + "block='"+this.block+"'");
+                                                 + "expires='"+(this.block+(this.days*1440))+"'");
         }
         
         // As / bid

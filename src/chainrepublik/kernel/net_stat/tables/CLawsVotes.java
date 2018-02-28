@@ -30,6 +30,7 @@ public class CLawsVotes extends CTable
             UTILS.DB.executeUpdate("CREATE INDEX laws_votes_lawID ON laws_votes(lawID)");
             UTILS.DB.executeUpdate("CREATE INDEX laws_votes_type ON laws_votes(type)");
             UTILS.DB.executeUpdate("CREATE INDEX laws_votes_block ON laws_votes(block)");
+            UTILS.DB.executeUpdate("CREATE INDEX laws_votes_adr_lawID ON laws_votes(adr, lawID)");
             
             // Confirm
             System.out.println("Done.");

@@ -2,6 +2,7 @@ package chainrepublik.kernel.net_stat.tables;
 
 import chainrepublik.kernel.UTILS;
 import chainrepublik.kernel.net_stat.CTable;
+import java.sql.ResultSet;
 
 public class CTaxes extends CTable
 {
@@ -34,6 +35,9 @@ public class CTaxes extends CTable
             UTILS.DB.executeUpdate("CREATE INDEX taxes_op ON taxes(op)"); 
             UTILS.DB.executeUpdate("CREATE INDEX taxes_block ON taxes(block)"); 
             
+            // Populate
+            this.populate();
+            
             // Confirm
             System.out.println("Done.");
         }
@@ -43,6 +47,55 @@ public class CTaxes extends CTable
     {
        // Load checkpoint
        loadCheckpoint(chk_hash);
+    }
+    
+    public void populate() throws Exception
+    {
+        // Load countries
+        ResultSet rs_cou=UTILS.DB.executeQuery("SELECT * FROM countries");
+        
+        // Insert salary and rent tax
+        while (rs_cou.next())
+        {
+           UTILS.DB.executeUpdate("INSERT INTO taxes "
+                                        + "SET cou='"+rs_cou.getString("code")+"', "
+                                            + "tax='ID_SALARY_TAX', "
+                                            + "value=10, "
+                                            + "block=0");
+           
+           UTILS.DB.executeUpdate("INSERT INTO taxes "
+                                        + "SET cou='"+rs_cou.getString("code")+"', "
+                                            + "tax='ID_RENT_TAX', "
+                                            + "value=10, "
+                                            + "block=0");
+           
+           UTILS.DB.executeUpdate("INSERT INTO taxes "
+                                        + "SET cou='"+rs_cou.getString("code")+"', "
+                                            + "tax='ID_REWARDS_TAX', "
+                                            + "value=10, "
+                                            + "block=0");
+        }
+        
+        // Reload countries
+        rs_cou=UTILS.DB.executeQuery("SELECT * FROM countries");
+        
+        // Insert taxes
+        while (rs_cou.next())
+        {
+            // Load products
+            ResultSet rs_prod=UTILS.DB.executeQuery("SELECT * FROM tipuri_produse");
+        
+            // Sale tax
+            while (rs_prod.next())
+            {
+                UTILS.DB.executeUpdate("INSERT INTO taxes "
+                                             + "SET cou='"+rs_cou.getString("code")+"', "
+                                                 + "tax='ID_SALE_TAX', "
+                                                 + "prod='"+rs_prod.getString("prod")+"', "
+                                                 + "value=5, "
+                                                 + "block=0");
+            }
+        }
     }
     
 }

@@ -145,13 +145,14 @@ public class CAdrRegisterPayload extends CPayload
        UTILS.DB.executeUpdate("INSERT INTO adr "
                                          + "SET adr='"+this.target_adr+"', "
    	                                     + "cou='"+this.cou+"', "
+                                             + "loc='"+this.cou+"', "
    	    	                             + "name='"+this.name+"', "
                                              + "description='"+UTILS.BASIC.base64_encode(this.description)+"', "
    	    	                             + "ref_adr='"+this.ref_adr+"', "
    	       	                             + "node_adr='"+this.node_adr+"', "
    	    	                             + "pic='"+UTILS.BASIC.base64_encode(this.pic)+"', "
                                              + "expires='"+(this.block+this.days*1440)+"', "
-   	       	                             + "block='"+this.block+"'");
+   	       	                             + "created='"+this.block+"'");
     }
   
 }

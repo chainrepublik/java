@@ -30,7 +30,7 @@ public class CComProds extends CTable
             UTILS.DB.executeUpdate("CREATE INDEX com_prods_prod ON com_prods(prod)");
             UTILS.DB.executeUpdate("CREATE INDEX com_prods_type ON com_prods(type)");
             UTILS.DB.executeUpdate("CREATE INDEX com_prods_buy_split ON com_prods(buy_split)");
-            UTILS.DB.executeUpdate("CREATE INDEX com_prods_com_type_prod ON com_prods(com_type, prod)");
+            UTILS.DB.executeUpdate("CREATE UNIQUE INDEX com_prods_com_type_prod ON com_prods(com_type, prod)");
             
             // Populate
             if (!this.reorg)
@@ -50,6 +50,7 @@ public class CComProds extends CTable
         UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_ELECTRICITY', prod='ID_ELECTRICITY', type='ID_FINITE', buy_split='ID_NO' ");
         UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_ELECTRICITY', prod='ID_LIC_PROD_ELECTRICITY', type='ID_LIC_PROD', buy_split='ID_NO' ");
         UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_ELECTRICITY', prod='ID_TOOLS_PROD_ELECTRICITY', type='ID_TOOLS', buy_split='ID_NO' ");
+        UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_ELECTRICITY', prod='ID_BUILD_COM_ELECTRICITY', type='ID_BUILDING', buy_split='ID_NO' ");
         UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_OIL', prod='ID_BUILD_COM_OIL', type='ID_BUILDING', buy_split='ID_NO' ");
         UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_GAS', prod='ID_ELECTRICITY', type='ID_RAW', buy_split='ID_NO' ");
         UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_GAS', prod='ID_OIL', type='ID_RAW', buy_split='ID_NO' ");
@@ -364,7 +365,6 @@ public class CComProds extends CTable
         UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_CONSTRUCTION', prod='ID_HOUSE_Q1', type='ID_FINITE', buy_split='ID_NO' ");
         UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_CONSTRUCTION', prod='ID_HOUSE_Q2', type='ID_FINITE', buy_split='ID_NO' ");
         UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_CONSTRUCTION', prod='ID_HOUSE_Q3', type='ID_FINITE', buy_split='ID_NO' ");
-        UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_CONSTRUCTION', prod='ID_BUILD_COM_CONSTRUCTION', type='ID_BUILDING', buy_split='ID_NO' ");
         UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_CONSTRUCTION', prod='ID_TOOLS_PROD_CONSTRUCTION', type='ID_TOOLS', buy_split='ID_NO' ");
         UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_CONSTRUCTION', prod='ID_BUILD_COM_OIL', type='ID_FINITE', buy_split='ID_NO' ");
         UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_CONSTRUCTION', prod='ID_BUILD_COM_ELECTRICITY', type='ID_FINITE', buy_split='ID_NO' ");
@@ -452,6 +452,17 @@ public class CComProds extends CTable
         UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_PRECIOUS_METALS', prod='ID_BUILD_COM_PRECIOUS_METALS', type='ID_BUILDING', buy_split='ID_NO' ");
         UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_PRECIOUS_METALS', prod='ID_TOOLS_PROD_PRECIOUS_METALS', type='ID_TOOLS', buy_split='ID_NO' ");
         UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_PRECIOUS_METALS', prod='ID_DYNAMITE', type='ID_RAW', buy_split='ID_NO' ");
+        UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_GIFT', prod='ID_ELECTRICITY', type='ID_RAW', buy_split='ID_NO' ");
+        UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_GIFT', prod='ID_GAS', type='ID_RAW', buy_split='ID_NO' ");
+        UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_GIFT', prod='ID_MATERIAL', type='ID_RAW', buy_split='ID_NO' ");
+        UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_GIFT', prod='ID_ALCOHOOL', type='ID_RAW', buy_split='ID_NO' ");
+        UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_GIFT', prod='ID_SUGAR', type='ID_RAW', buy_split='ID_NO' ");
+        UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_GIFT', prod='ID_EGG', type='ID_RAW', buy_split='ID_NO' ");
+        UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_GIFT', prod='ID_FLOUR', type='ID_RAW', buy_split='ID_NO' ");
+        UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_GIFT', prod='ID_MILK', type='ID_RAW', buy_split='ID_NO' ");
+        UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_GIFT', prod='ID_GIFT', type='ID_FINITE', buy_split='ID_NO' ");
+        UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_GIFT', prod='ID_TOOLS_PROD_GIFTS', type='ID_TOOLS', buy_split='ID_NO' ");
+        UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_GIFT', prod='ID_BUILD_COM_GIFTS', type='ID_BUILDING', buy_split='ID_NO' ");
 
     }
 }

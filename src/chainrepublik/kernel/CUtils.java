@@ -509,7 +509,7 @@ public class CUtils
     }
     
     // Has attribute ?
-    public boolean hasAttr(String adr, String attr) throws Exception
+    public boolean hasAttr(String adr, String attr, String s1) throws Exception
     {
         // Check address
         if (!this.isAdr(adr))
@@ -524,7 +524,8 @@ public class CUtils
         ResultSet rs=UTILS.DB.executeQuery("SELECT * "
                                            + "FROM adr_attr "
                                           + "WHERE adr='"+adr+"' "
-                                            + "AND attr='"+attr+"'");
+                                            + "AND attr='"+attr+"' "
+                                            + "AND s1='"+s1+"'");
        // Has data ?
        if (UTILS.DB.hasData(rs))
            return true;
@@ -723,14 +724,34 @@ public class CUtils
         
         // Not government or citizen adr ?
         if (!this.isGovAdr(adr) && 
-            !this.isCompanyAdr(adr))
+            !this.isCompanyAdr(adr) &&
+            !this.isOrgAdr(adr) && 
+            this.isRegistered(adr))
         return true;
         
         // Not citizen address
         return false;
     }
     
-    public boolean isCompanyAdr(long comID, String adr) throws Exception
+    public boolean isOrgAdr(String adr) throws Exception
+    {
+       // Adr
+        if (!this.isAdr(adr))
+            throw new Exception("Invalid address, CUtils.java, 644");
+        
+        // Company ID
+        ResultSet rs=UTILS.DB.executeQuery("SELECT * "
+                                           + "FROM orgs "
+                                          + "WHERE adr='"+adr+"'");
+        
+        // Has data
+        if (UTILS.DB.hasData(rs))
+            return true;
+        else
+            return false;
+    }
+    
+    public boolean isComAdr(long comID, String adr) throws Exception
     {
         // Adr
         if (!this.isAdr(adr))
@@ -764,6 +785,25 @@ public class CUtils
             
             // Return
             return rs.getString("tip");
+        }
+        else throw new Exception("Can't find company ID - "+comID);
+    }
+    
+    public String getComAdr(long comID) throws Exception
+    {
+        // Company ID
+        ResultSet rs=UTILS.DB.executeQuery("SELECT * "
+                                           + "FROM companies "
+                                          + "WHERE comID='"+comID+"'");
+        
+        // Has data
+        if (UTILS.DB.hasData(rs))
+        {
+            // Next
+            rs.next();
+            
+            // Return
+            return rs.getString("adr");
         }
         else throw new Exception("Can't find company ID - "+comID);
     }
@@ -903,15 +943,28 @@ public class CUtils
             throw new Exception("Invalid address");
         
         // Column ?
-        if (!col.equals("balance") && 
-            !col.equals("energy") && 
-            !col.equals("pol_inf") && 
-            !col.equals("pol_endorsed") && 
-            !col.equals("cou") && 
-            !col.equals("pic") && 
-            !col.equals("expires") && 
+        if (!col.equals("cou") && 
             !col.equals("name") && 
-            !col.equals("loc"))
+            !col.equals("description") && 
+            !col.equals("ref_adr") && 
+            !col.equals("node_adr") && 
+            !col.equals("balance") && 
+            !col.equals("pic") && 
+            !col.equals("block") && 
+            !col.equals("pol_inf") &&
+            !col.equals("energy") &&
+            !col.equals("energy_block") &&
+            !col.equals("loc") &&
+            !col.equals("pol_endorsed") &&
+            !col.equals("created") &&
+            !col.equals("premium") &&
+            !col.equals("travel") &&
+            !col.equals("travel_cou") &&
+            !col.equals("work") &&
+            !col.equals("expires") &&
+            !col.equals("mil_unit") &&
+            !col.equals("pol_party") &&
+            !col.equals("war_points"))
         throw new Exception("Invalid data");
         
         // Load address details
@@ -919,11 +972,16 @@ public class CUtils
                                            + "FROM adr "
                                           + "WHERE adr='"+adr+"'");
         
-        // Next
-        rs.next();
+        // Has data
+        if (UTILS.DB.hasData(rs))
+        {
+           // Next
+           rs.next();
         
-        // Return
-        return rs.getString(col);
+           // Return
+           return rs.getString(col);
+        }
+        else return "";
     }
   
     public boolean canBuy(String adr, String prod, double qty, CBlockPayload block) throws Exception
@@ -1247,7 +1305,8 @@ public class CUtils
     
     public boolean isEnergyBooster(String prod)
     {
-        if (prod.equals("ID_CIG_CHURCHILL") || 
+        if (prod.equals("ID_WINE") || 
+            prod.equals("ID_CIG_CHURCHILL") || 
             prod.equals("ID_CIG_PANATELA") ||
             prod.equals("ID_CIG_TORPEDO") ||
             prod.equals("ID_CIG_CORONA") ||
@@ -1372,6 +1431,9 @@ public class CUtils
             
             // Wine
             case "ID_WINE" : e=5; break;
+            
+            // Gift
+            case "ID_GIFT" : e=10; break;
 	}
         
         // Return
@@ -1436,7 +1498,8 @@ public class CUtils
             || prod.equals("ID_CAR_Q3")
             || prod.equals("ID_HOUSE_Q1")
             || prod.equals("ID_HOUSE_Q2")
-            || prod.equals("ID_HOUSE_Q3"))
+            || prod.equals("ID_HOUSE_Q3")
+            || prod.equals("ID_GIFT"))
         return true;
         else
         return false;
@@ -1693,8 +1756,8 @@ public class CUtils
         // Load 
         ResultSet rs=UTILS.DB.executeQuery("SELECT * "
                                            + "FROM stocuri "
-                                          + "WHERE adr='"+adr+"' "
-                                            + "AND in_use>0");
+                                          + "WHERE (adr='"+adr+"' OR rented_to='"+adr+"')"
+                                            + "AND (in_use>0 || tip='ID_GIFT')");
         
         // Calculate energy
         while (rs.next())
@@ -1881,5 +1944,97 @@ public class CUtils
             return true;
         else
             return false;
+     }
+     
+     public boolean isTax(String tax) throws Exception
+     {
+         // String ID ?
+         if (!this.isStringID(tax))
+             throw new Exception ("Invalid tax, CUtils.java, line 1933");
+             
+         // Query
+         ResultSet rs=UTILS.DB.executeQuery("SELECT * "
+                                            + "FROM taxes "
+                                           + "WHERE tax='"+tax+"'");
+         
+         // Has data
+         if (UTILS.DB.hasData(rs))
+             return true;
+         else
+             return false;
+     }
+     
+     public double getTax(String cou, String tax, String prod) throws Exception
+     {
+         // Country ?
+         if (!this.isCou(cou))
+            throw new Exception ("Invalid country, CUtils.java, line 1951");
+         
+         // Tax
+         if (!this.isTax(tax))
+              throw new Exception ("Invalid tax, CUtils.java, line 1955");
+         
+         // Valid product ?
+         if (!prod.equals(""))
+           if (!this.isProd(prod))
+              throw new Exception ("Invalid product, CUtils.java, line 1959");
+             
+         // Load data
+         ResultSet rs=UTILS.DB.executeQuery("SELECT * "
+                                            + "FROM taxes "
+                                           + "WHERE cou='"+cou+"' "
+                                             + "AND tax='"+tax+"' "
+                                             + "AND prod='"+prod+"'");
+         
+         // Has data
+         if (!UTILS.DB.hasData(rs))
+             throw new Exception ("Invalid tax, CUtils.java, line 1959");
+         
+         // Next
+         rs.next();
+         
+         // Return
+         return rs.getDouble("value");
+     }
+     
+     public String getCouAdr(String cou) throws Exception
+     {
+         // Valid country ?
+         if (!this.isCountry(cou))
+              throw new Exception ("Invalid country, CUtils.java, line 1959");
+             
+         // Load data
+         ResultSet rs=UTILS.DB.executeQuery("SELECT * "
+                                            + "FROM countries "
+                                           + "WHERE code='"+cou+"'");
+         
+         // Next
+         rs.next();
+         
+         // Return
+         return rs.getString("adr");
+     }
+     
+     public boolean isSealed(String adr) throws Exception
+     {
+        // Valid address ?
+        if (!this.isAdr(adr))
+              throw new Exception ("Invalid address, CUtils.java, line 1959");
+         
+         // Load data
+         ResultSet rs=UTILS.DB.executeQuery("SELECT * "
+                                            + "FROM adr_attr "
+                                           + "WHERE adr='"+adr+"' "
+                                             + "AND attr='ID_SEALED'");
+         
+         // Has data
+         if (!UTILS.DB.hasData(rs))
+             throw new Exception ("Invalid address, CUtils.java, line 1959");
+         
+         // Has data
+         if (UTILS.DB.hasData(rs))
+             return true;
+         else
+             return false;
      }
 }

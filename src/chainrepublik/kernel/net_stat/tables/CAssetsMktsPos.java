@@ -178,6 +178,7 @@ public class CAssetsMktsPos extends CTable
         UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='2425631', tip='ID_SELL', qty='100', price='1.0', orderID='1516783377557', expires='0' ");
         UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='3445577', tip='ID_SELL', qty='100', price='1.0', orderID='1516782831388', expires='0' ");
         UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='39736138', tip='ID_SELL', qty='100', price='1.0', orderID='1516783429676', expires='0' ");
+        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1565163', tip='ID_SELL', qty='100', price='1.0', orderID='1516783429876', expires='0' ");
 
     }
     

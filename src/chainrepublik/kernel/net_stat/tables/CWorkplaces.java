@@ -20,17 +20,18 @@ public class CWorkplaces extends CTable
             
             // Create
             UTILS.DB.executeUpdate("CREATE TABLE workplaces(ID BIGINT AUTO_INCREMENT PRIMARY KEY, "
-                                                      +"workplaceID BIGINT NOT NULL DEFAULT 0, "
-                                                      +"comID BIGINT(20) NOT NULL DEFAULT 0, "
-                                                      +"expires BIGINT NOT NULL DEFAULT 0, "
-                                                      +"status VARCHAR(25) NOT NULL DEFAULT '', "
-                                                      +"wage FLOAT(20, 8) NOT NULL DEFAULT 0, "
-                                                      +"prod VARCHAR(50) NOT NULL DEFAULT '', "
-                                                      +"work_ends BIGINT NOT NULL DEFAULT 0, "
-                                                      +"block BIGINT NOT NULL DEFAULT 0)");
+                                                           +"workplaceID BIGINT NOT NULL DEFAULT 0, "
+                                                           +"comID BIGINT(20) NOT NULL DEFAULT 0, "
+                                                           +"expires BIGINT NOT NULL DEFAULT 0, "
+                                                           +"status VARCHAR(25) NOT NULL DEFAULT '', "
+                                                           +"wage FLOAT(20, 4) NOT NULL DEFAULT 0, "
+                                                           +"prod VARCHAR(50) NOT NULL DEFAULT '', "
+                                                           +"work_ends BIGINT NOT NULL DEFAULT 0, "
+                                                           +"block BIGINT NOT NULL DEFAULT 0)");
         
             // Indexes
             UTILS.DB.executeUpdate("CREATE INDEX workplaces_comID ON workplaces(comID)");
+            UTILS.DB.executeUpdate("CREATE UNIQUE INDEX workplaces_wID ON workplaces(workplaceID)");
             UTILS.DB.executeUpdate("CREATE INDEX workplaces_status ON workplaces(status)");
             UTILS.DB.executeUpdate("CREATE INDEX workplaces_prod ON workplaces(prod)");
             UTILS.DB.executeUpdate("CREATE INDEX workplaces_expires ON workplaces(expires)");

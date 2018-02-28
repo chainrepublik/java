@@ -16,6 +16,12 @@ public class CRentLicencePayload extends CPayload
     // Days
     long days;
     
+    // Prod stoc ID
+    long prod_stocID;
+    
+    // Licence stoc ID
+    long lic_stocID;
+    
     public CRentLicencePayload(String adr, 
                                long comID, 
                                String lic, 
@@ -33,11 +39,19 @@ public class CRentLicencePayload extends CPayload
         // Days
         this.days=days;
         
+        // Prod stoc ID
+        this.prod_stocID=UTILS.BASIC.getID();
+        
+        // Licence stoc ID
+        this.lic_stocID=UTILS.BASIC.getID();
+        
         // Hash
  	hash=UTILS.BASIC.hash(this.getHash()+
  			      this.comID+
  			      this.lic+
- 			      this.days);
+ 			      this.days+
+                              this.prod_stocID+
+                              this.lic_stocID);
            
         // Sign
         this.sign();
@@ -49,7 +63,7 @@ public class CRentLicencePayload extends CPayload
    	super.check(block);
         
         // Company address
-        if (!UTILS.BASIC.isCompanyAdr(comID, this.target_adr))
+        if (!UTILS.BASIC.isComAdr(comID, this.target_adr))
            throw new Exception("Invalid company ID, CRentLicencePayload.java, 53");
         
         // Licence
@@ -59,6 +73,11 @@ public class CRentLicencePayload extends CPayload
         // Already has this licence ?
         if (UTILS.BASIC.hasProd(this.target_adr, this.lic))
             throw new Exception("Company has this product already, CRentLicencePayload.java, 63");
+        
+        // Valid ID
+        if (UTILS.BASIC.isID(this.prod_stocID) || 
+            UTILS.BASIC.isID(this.lic_stocID))
+           throw new Exception("Invalid stoc ID, CRentLicencePayload.java, 72");
         
         // Company type
         ResultSet rs=UTILS.DB.executeQuery("SELECT * "
@@ -88,7 +107,9 @@ public class CRentLicencePayload extends CPayload
         String h=UTILS.BASIC.hash(this.getHash()+
  			          this.comID+
  			          this.lic+
- 			          this.days);
+ 			          this.days+
+                                  this.prod_stocID+
+                                  this.lic_stocID);
         
         // Hash match ?
         if (!h.equals(this.hash))
@@ -111,11 +132,39 @@ public class CRentLicencePayload extends CPayload
        // Superclass
        super.commit(block);
        
-       // Insert 
+       // Load licence data
+       ResultSet rs=UTILS.DB.executeQuery("SELECT * "
+                                          + "FROM tipuri_licente "
+                                         + "WHERE tip='"+this.lic+"'");
+       
+       // Next
+       rs.next();
+       
+       // Product
+       String prod=rs.getString("prod");
+       
+       // Has stoc ?
+       rs=UTILS.DB.executeQuery("SELECT * "
+                                + "FROM stocuri "
+                               + "WHERE adr='"+this.target_adr+"' "
+                                 + "AND tip='"+prod+"'");
+       
+       // Insert prod
+       if (!UTILS.DB.hasData(rs))
+       UTILS.DB.executeUpdate("INSERT INTO stocuri "
+                                    + "SET adr='"+this.target_adr+"', "
+                                        + "tip='"+prod+"', "
+                                        + "qty=0, "
+                                        + "stocID='"+this.prod_stocID+"', "
+                                        + "expires=0, "
+                                        + "block='"+this.block+"'");
+       
+       // Insert licence
        UTILS.DB.executeUpdate("INSERT INTO stocuri "
                                     + "SET adr='"+this.target_adr+"', "
                                          + "tip='"+this.lic+"', "
                                          + "qty=1, "
+                                         + "stocID='"+this.lic_stocID+"', "
                                          + "expires='"+(this.block+1440*days)+"', "
                                          + "block='"+this.block+"'");
        

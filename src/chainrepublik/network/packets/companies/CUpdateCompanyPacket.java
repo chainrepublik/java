@@ -13,8 +13,7 @@ public class CUpdateCompanyPacket extends CBroadcastPacket
                                  long comID, 
                                  String name, 
                                  String desc, 
-                                 String pic, 
-                                 String sealed) throws Exception
+                                 String pic) throws Exception
     {
         // Constructor
         super("ID_UPDATE_COM_PACKET");
@@ -24,8 +23,7 @@ public class CUpdateCompanyPacket extends CBroadcastPacket
                                                                     comID, 
                                                                     name, 
                                                                     desc, 
-                                                                    pic, 
-                                                                    sealed);
+                                                                    pic);
                               
 	// Build the payload
 	this.payload=UTILS.SERIAL.serialize(dec_payload);
@@ -68,7 +66,6 @@ public class CUpdateCompanyPacket extends CBroadcastPacket
           foot.add("Name", dec_payload.name);
           foot.add("Description", dec_payload.desc);
           foot.add("Pic", dec_payload.pic);
-          foot.add("Sealed", dec_payload.sealed);
           foot.write();
     }
 }   

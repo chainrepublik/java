@@ -91,24 +91,6 @@ public class CTransPayload extends CPayload
              if (UTILS.BASIC.isCompanyAdr(this.target_adr) && !this.dest.equals("default"))
                 throw new Exception("Source can't spend funds - CTransPayload");
              
-             // Restrcited rec
-             if (UTILS.BASIC.hasAttr(this.target_adr, "ID_RES_REC"))
-             {
-                 // Load data
-                 ResultSet rs=UTILS.DB.executeQuery("SELECT * "
-                                                    + "FROM adr_attr "
-                                                   + "WHERE adr='"+this.target_adr+"' "
-                                                     + "AND attr='ID_RES_REC'");
-                 
-                 // Next
-                 rs.next();
-                 
-                 // Check recipients
-                 if (!rs.getString("s1").equals(this.dest) &&
-                     !rs.getString("s2").equals(this.dest) &&
-                     !rs.getString("s3").equals(this.dest))
-                 throw new Exception("Source is restricted - CTransPayload");
-             }
              
              // Check dest
 	     if (!UTILS.BASIC.isAdr(this.dest))
@@ -234,9 +216,7 @@ public class CTransPayload extends CPayload
             }
        
         }
-         
-        
-         
+       
          public void commit(CBlockPayload block) throws Exception
 	 { 
              // Commit
@@ -263,26 +243,5 @@ public class CTransPayload extends CPayload
                                                         + "cur='"+this.cur+"', "
                                                         + "block='"+this.block+"'");
                 }
-                
-                if (!this.cur.equals("CRC"))
-                {
-                    // Load asset ID
-                    ResultSet rs = UTILS.DB.executeQuery("SELECT * "
-                                                         + "FROM assets "
-                                                        + "WHERE symbol='"+this.cur+"'");
-                    
-                    if (UTILS.DB.hasData(rs))
-                    {
-                       // Next
-                      rs.next();
-                      
-                      // Asset ID
-                      long assetID=rs.getLong("assetID");
-                      
-                      // Vote
-                      UTILS.BASIC.voteTarget(this.target_adr, "ID_ASSET", assetID, block.block);
-                    }
-               }
-	}
-	 
+        }
 }

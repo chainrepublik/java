@@ -188,8 +188,21 @@ public class CAcc
             // Percent
             double p=Math.abs(amount*100/stoc);
             
-            // Cost
-            return p*stoc/100;
+            // Load stocuri
+            rs=UTILS.DB.executeQuery("SELECT * "
+                                     + "FROM stocuri "
+                                    + "WHERE adr='"+adr+"' "
+                                      + "AND tip='"+prod+"'");
+            
+            if (UTILS.DB.hasData(rs))
+            {
+               // Next
+               rs.next();
+            
+               // Cost
+               return p*rs.getDouble("invested")/100;
+            }
+            else return 0;
         }
         
         
@@ -221,7 +234,7 @@ public class CAcc
             
             // Address associated address ?
             if (!adr_assoc.equals("")
-                && !adr.equals("none"))
+                && !adr_assoc.equals("none"))
               if (!UTILS.BASIC.isAdr(adr_assoc)) 
                 throw new Exception("Invalid associated address - CAcc.java, 111");
             
@@ -637,8 +650,8 @@ public class CAcc
                                  String cur,
                                  long block) throws Exception
         {
-            double balance=0;
-            double new_balance=0;
+            double balance;
+            double new_balance;
             double invested=0;
             
             // Address valid
@@ -670,8 +683,7 @@ public class CAcc
                 UTILS.DB.executeUpdate("INSERT INTO assets_owners "
                                              + "SET owner='"+adr+"', "
                                                  + "symbol='"+cur+"', "
-                                                 + "qty='0', "
-                                                 + "block='"+block+"'");
+                                                 + "qty='0'");
                          
                 // New balance
                 new_balance=amount;
@@ -690,9 +702,8 @@ public class CAcc
                       
             // Source balance update
             UTILS.DB.executeUpdate("UPDATE assets_owners "
-		                    + "SET qty="+new_balance+", "
-                                        + "block='"+block+"' "
-                                  + "WHERE owner='"+adr+"' "
+		                    + "SET qty="+new_balance
+                                  + " WHERE owner='"+adr+"' "
                                     + "AND symbol='"+cur+"'");
             
              UTILS.DB.executeUpdate("UPDATE web_users "
@@ -709,8 +720,8 @@ public class CAcc
                                  long block,
                                  String hash) throws Exception
         {
-            double balance=0;
-            double new_balance=0;
+            double balance;
+            double new_balance;
             
             // New stoc ID
             Random r=new Random();
@@ -821,7 +832,7 @@ public class CAcc
                                                       + "qty='1', "
                                                       + "invested="+(invested/amount)+", "
                                                       + "expires='"+expires+"', "
-                                                      + "stocID='"+stocID+"', "
+                                                      + "stocID='"+(stocID+a)+"', "
                                                       + "block='"+block+"'");
             }
                       
@@ -954,7 +965,9 @@ public class CAcc
                                       + "WHERE adr='"+adr+"'");
             
             // Asset ? 
-           if (!cur.equals("CRC") && cur.indexOf("_")==-1)
+           if (!cur.equals("CRC") && 
+               !cur.contains("_") &&
+                (cur.length()==5 || cur.length()==6))
                 rs=UTILS.DB.executeQuery("SELECT * "
                                          + "FROM assets_owners "
                                         + "WHERE owner='"+adr+"' "
@@ -1023,10 +1036,30 @@ public class CAcc
     public void bugTax(String adr, 
                        String tax, 
                        double income, 
+                       String prod,
                        String hash, 
-                       long block)
+                       long block) throws Exception
     {
+        // Country
+        String cou=UTILS.BASIC.getAdrData(adr, "cou");
+                             
+        // Tax 
+        double t=UTILS.BASIC.getTax(cou, tax, prod);
         
+        // Value
+        t=UTILS.BASIC.round(income*t/100, 4);
+                             
+        // Pay
+        if (t>0.0001)
+            UTILS.ACC.newTransfer(adr,
+                                  UTILS.BASIC.getCouAdr(cou), 
+                                  t,
+                                  "CRC", 
+                                  "A budget ax was paid", 
+                                  "", 
+                                  0,
+                                  hash, 
+                                  block); 
     }
     
     public void refTax(String adr, 
@@ -1036,6 +1069,7 @@ public class CAcc
     {
         
     }
+    
     
     
 }

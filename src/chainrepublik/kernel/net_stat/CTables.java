@@ -615,9 +615,6 @@ public class CTables
         // Sys stats
         this.sys_stats.create();
     
-        // Taxes
-        this.taxes.create();
-    
         // Tipuri Companii
         this.tipuri_companii.create();
     
@@ -626,6 +623,9 @@ public class CTables
     
         // Tipuri Produse
         this.tipuri_produse.create();
+        
+        // Taxes
+        this.taxes.create();
     
         // Trans
         this.trans.create();

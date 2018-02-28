@@ -43,26 +43,26 @@ public class CRentContracts extends CTable
     {
        // Load expired contracts
        ResultSet rs=UTILS.DB.executeQuery("SELECT * "
-                                          + "FROM rent_contracts "
-                                         + "WHERE expires<"+block);
-       
-       // Loop
-       while (rs.next())
-       {
-           // Remove
-           UTILS.DB.executeUpdate("DELETE FROM rent_contracts "
-                                      + "WHERE ID='"+rs.getLong("ID")+"'");
-           
-           // Update stocuri
-           UTILS.DB.executeUpdate("UPDATE stocuri "
-                                   + "SET rented_to='', "
-                                       + "rented_expires=0, "
-                                       + "in_use=0 "
-                                 + "WHERE stocID='"+rs.getLong("stocID")+"'");
-           
-           // Energy product ?
-           UTILS.BASIC.refreshEnergy(rs.getString("to_adr"));
-       }
+                                            + "FROM rent_contracts "
+                                           + "WHERE expires>0 "
+                                             + "AND expires="+block);
+         
+         // Loop
+         while (rs.next())
+         {
+             // Update stocuri
+             UTILS.DB.executeUpdate("UPDATE stocuri "
+                                     + "SET rented_to='', "
+                                         + "rented_expires=0, "
+                                         + "in_use=0 "
+                                   + "WHERE stocID='"+rs.getLong("stocID")+"'");
+             
+             // Refresh energy
+             UTILS.BASIC.refreshEnergy(rs.getString("to_adr"));
+             
+             // Event
+             UTILS.BASIC.newEvent(rs.getString("to_adr"), "One of your rent contracts has expired. Check your portofolio.", block);
+         }
     }
    
     public void reorganize(long block, String chk_hash) throws Exception
