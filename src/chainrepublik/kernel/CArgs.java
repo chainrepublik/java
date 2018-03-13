@@ -37,7 +37,7 @@ public class CArgs
                               break;
                            
              // DB User
-            case "db_user" :  UTILS.SETTINGS.db_user=val;
+            case "db_user" :  UTILS.SETTINGS.db_user=val; 
                               break;
                            
              // DB Pass
@@ -59,7 +59,7 @@ public class CArgs
             // Late op
             case "op" : this.late_op=val; break;
             
-            // Min peers
+             // Min peers
             case "min_peers" : UTILS.SETTINGS.min_peers=Integer.valueOf(val); 
                                break;
             
@@ -71,25 +71,21 @@ public class CArgs
             // Start mining
             case "start_mining" : UTILS.SETTINGS.start_mining=Boolean.valueOf(val); 
                                   break;
-                                  
-            // Sync start block
-            case "sync_start_block" : UTILS.SETTINGS.sync_start_block=Long.parseLong(val); 
-                                      break;
+              
         }
     }
     
     public void lateOp() throws Exception
     {
-        if (this.late_op.equals("reorg"))
+        if (this.late_op.equals("full_resync"))
         {
-            UTILS.NETWORK.CONSENSUS.reorganize(this.rhash);
-            System.out.println("Reorganize"); 
-        }
-        
-        if (this.late_op.equals("list_adr"))
-        {
-            UTILS.WALLET.list();
-            System.out.println("Done."); 
+            // Full resync
+            UTILS.TABLES.full_resync();
+            
+            // Message
+            System.out.println("Resync initiated. Restart the kernel without op=full_resync."); 
+            
+            // Exit
             System.exit(0);
         }
     }

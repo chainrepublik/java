@@ -86,9 +86,9 @@ public class CTipuriLicente extends CTable
         UTILS.DB.executeUpdate("INSERT INTO tipuri_licente SET tip='ID_LIC_PROD_SILVER', name='Silver Production Licence', com_type='ID_COM_PRECIOUS_METALS', price='0.1', prod='ID_SILVER' ");
         UTILS.DB.executeUpdate("INSERT INTO tipuri_licente SET tip='ID_LIC_PROD_GOLD', name='Gold Production Licence', com_type='ID_COM_PRECIOUS_METALS', price='0.1', prod='ID_GOLD' ");
         UTILS.DB.executeUpdate("INSERT INTO tipuri_licente SET tip='ID_LIC_PROD_PLATINUM', name='Platinum Production Licence', com_type='ID_COM_PRECIOUS_METALS', price='0.1', prod='ID_PLATINUM' ");
-        UTILS.DB.executeUpdate("INSERT INTO tipuri_licente SET tip='ID_LIC_PROD_SILVER_RING', name='Silver Ring Production Licence', com_type='ID_COM_JEWELRY', price='0.1', prod='ID_SILVER_RING' ");
-        UTILS.DB.executeUpdate("INSERT INTO tipuri_licente SET tip='ID_LIC_PROD_GOLD_RING', name='Gold Ring Production Licence', com_type='ID_COM_JEWELRY', price='0.1', prod='ID_GOLD_RING' ");
-        UTILS.DB.executeUpdate("INSERT INTO tipuri_licente SET tip='ID_LIC_PROD_PLATINUM_RING', name='Platinum Ring Production Licence', com_type='ID_COM_JEWELRY', price='0.1', prod='ID_PLATINUM_RING' ");
+        UTILS.DB.executeUpdate("INSERT INTO tipuri_licente SET tip='ID_LIC_PROD_SILVER_RING', name='Silver Ring Production Licence', com_type='ID_COM_JEWELRY', price='0.1', prod='ID_INEL_Q1' ");
+        UTILS.DB.executeUpdate("INSERT INTO tipuri_licente SET tip='ID_LIC_PROD_GOLD_RING', name='Gold Ring Production Licence', com_type='ID_COM_JEWELRY', price='0.1', prod='ID_INEL_Q2' ");
+        UTILS.DB.executeUpdate("INSERT INTO tipuri_licente SET tip='ID_LIC_PROD_PLATINUM_RING', name='Platinum Ring Production Licence', com_type='ID_COM_JEWELRY', price='0.1', prod='ID_INEL_Q3' ");
         UTILS.DB.executeUpdate("INSERT INTO tipuri_licente SET tip='ID_LIC_PROD_CERCEI_Q1', name='Silver Earings Production Licence', com_type='ID_COM_JEWELRY', price='0.1', prod='ID_CERCEI_Q1' ");
         UTILS.DB.executeUpdate("INSERT INTO tipuri_licente SET tip='ID_LIC_PROD_CERCEI_Q2', name='Gold Earings Production Licence', com_type='ID_COM_JEWELRY', price='0.1', prod='ID_CERCEI_Q2' ");
         UTILS.DB.executeUpdate("INSERT INTO tipuri_licente SET tip='ID_LIC_PROD_CERCEI_Q3', name='Platinum Earings Production Licence', com_type='ID_COM_JEWELRY', price='0.1', prod='ID_CERCEI_Q3' ");
@@ -303,6 +303,5 @@ public class CTipuriLicente extends CTable
         UTILS.DB.executeUpdate("INSERT INTO tipuri_licente SET tip='ID_LIC_PROD_BALLISTIC_INTER', name='Intercontinental Ballistic Missile Production Licence', com_type='ID_COM_WEAPONS', price='0.1', prod='ID_MISSILE_BALLISTIC_INTERCONTINENTAL' ");
         UTILS.DB.executeUpdate("INSERT INTO tipuri_licente SET tip='ID_LIC_PROD_TANK', name='M1 Abrams Tank Production Licence', com_type='ID_COM_WEAPONS', price='0.1', prod='ID_TANK' ");
         UTILS.DB.executeUpdate("INSERT INTO tipuri_licente SET tip='ID_LIC_PROD_GIFTS', name='Gifts Production Licence', com_type='ID_COM_GIFT', price='0.1', prod='ID_GIFT' ");
-
     }
 }

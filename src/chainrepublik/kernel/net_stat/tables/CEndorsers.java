@@ -22,6 +22,7 @@ public class CEndorsers extends CTable
                                                          + "endorser VARCHAR(250) NOT NULL DEFAULT '', "
                                                          + "endorsed VARCHAR(250) DEFAULT NULL DEFAULT '', "
                                                          + "type VARCHAR(20) DEFAULT NULL DEFAULT '', "
+                                                         + "power FLOAT(20,2) DEFAULT NULL DEFAULT 0, "
                                                          + "block BIGINT(20) DEFAULT NULL DEFAULT 0)");
             // Indexes
             UTILS.DB.executeUpdate("CREATE INDEX endorsers_endorser ON endorsers(endorser)");

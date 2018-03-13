@@ -404,29 +404,10 @@ public class CWorkPayload extends CPayload
                               "", 
                               0,
                               this.hash, 
-                              this.block);
-        
-        // Salary tax
-        UTILS.ACC.bugTax(this.target_adr, 
-                           "ID_SALARY_TAX", 
-                           sal, 
-                           "",
-                           this.hash, 
-                           this.block);
-        
-        // Degrade tools
-        UTILS.DB.executeUpdate("UPDATE stocuri "
-                                + "SET used=used+"+out_qty+" "
-                              + "WHERE adr='"+com_adr+"' "
-                                + "AND tip='"+tool+"'");
-        
-        
-        
-        // Referer tax
-        UTILS.ACC.refTax(com_adr, 
-                         sal, 
-                         this.hash, 
-                         this.block);
+                              this.block,
+                              true,
+                              "ID_SALARY_TAX",
+                              "");
         
         // Consume energy
         UTILS.ACC.newProdTrans(this.target_adr, 
@@ -717,6 +698,32 @@ public class CWorkPayload extends CPayload
          UTILS.DB.executeUpdate("UPDATE adr "
                                  + "SET work='"+this.block+this.minutes+"' "
                                + "WHERE adr='"+this.target_adr+"'");
+        
+        // Load company data
+        ResultSet com_rs=UTILS.DB.executeQuery("SELECT com.*, "
+                                                    + "tc.utilaje "
+                                               + "FROM companies AS com "
+                                               + "JOIN tipuri_companii AS tc ON tc.tip=com.tip "
+                                              + "WHERE comID='"+work_rs.getLong("comID")+"'");
+        
+        // Has data ?
+        if (!UTILS.DB.hasData(com_rs))
+            throw new Exception("Invalid workplace ID - CWorkPayload.java, 68");
+        
+        // Next
+        com_rs.next();
+        
+        // Company adr
+        String com_adr=com_rs.getString("adr");
+        
+        // Tool
+        String tool=com_rs.getString("utilaje");
+         
+         // Degrade tools
+        UTILS.DB.executeUpdate("UPDATE stocuri "
+                                + "SET used=used+"+out_qty+" "
+                              + "WHERE adr='"+com_adr+"' "
+                                + "AND tip='"+tool+"'");
          
          // Clear trans
          UTILS.ACC.clearTrans(this.hash, "ID_ALL", this.block);

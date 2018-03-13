@@ -17,7 +17,7 @@ public class CTaxes extends CTable
         if (!this.tableExist("taxes"))
         {
             // Status
-            System.out.print("Creating table "+this.name+"...");
+            System.out.print("Creating table "+this.name+" (this could take a while) ...");
             
             // Create
             UTILS.DB.executeUpdate("CREATE TABLE taxes (ID BIGINT AUTO_INCREMENT PRIMARY KEY, "
@@ -57,21 +57,31 @@ public class CTaxes extends CTable
         // Insert salary and rent tax
         while (rs_cou.next())
         {
+           // Salary tax
            UTILS.DB.executeUpdate("INSERT INTO taxes "
                                         + "SET cou='"+rs_cou.getString("code")+"', "
                                             + "tax='ID_SALARY_TAX', "
                                             + "value=10, "
                                             + "block=0");
            
+           // Rent tax
            UTILS.DB.executeUpdate("INSERT INTO taxes "
                                         + "SET cou='"+rs_cou.getString("code")+"', "
                                             + "tax='ID_RENT_TAX', "
                                             + "value=10, "
                                             + "block=0");
            
+           // Rewards tax
            UTILS.DB.executeUpdate("INSERT INTO taxes "
                                         + "SET cou='"+rs_cou.getString("code")+"', "
                                             + "tax='ID_REWARDS_TAX', "
+                                            + "value=10, "
+                                            + "block=0");
+           
+           // Dividends tax
+           UTILS.DB.executeUpdate("INSERT INTO taxes "
+                                        + "SET cou='"+rs_cou.getString("code")+"', "
+                                            + "tax='ID_DIVIDENDS_TAX', "
                                             + "value=10, "
                                             + "block=0");
         }

@@ -65,7 +65,7 @@ public class CStocuri extends CTable
                                              + "AND st.tip LIKE '%_TOOLS_PROD_%'");
          
          // Has data ?
-         if (UTILS.DB.hasData(rs))
+         while (rs.next())
              UTILS.DB.executeUpdate("DELETE FROM stocuri "
                                         + "WHERE stocID='"+rs.getLong("stocID")+"'");
          
@@ -116,7 +116,7 @@ public class CStocuri extends CTable
     public void populate() throws Exception
     {
         // Gifts
-        UTILS.DB.executeUpdate("INSERT INTO stocuri SET adr='MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEEpn9tcO9qb55dKKTCroSy6fa8mhyhChMYLdJer+WYnVR8Is9l1864vi9Z9eVXTkk3xo1ARNfY+fM0DWI0Wo7+g==', tip='ID_GIFT', qty=10000, expires=0, stocID=323222, block=0");
+        UTILS.DB.executeUpdate("INSERT INTO stocuri SET adr='MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEEpn9tcO9qb55dKKTCroSy6fa8mhyhChMYLdJer+WYnVR8Is9l1864vi9Z9eVXTkk3xo1ARNfY+fM0DWI0Wo7+g==', tip='ID_GIFT', qty=250000, expires=0, stocID=323222, block=0");
     }
 }
 

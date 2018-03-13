@@ -156,7 +156,10 @@ public class CVM
                                "", 
                                0,
                                this.trigger_hash, 
-                               this.SYSTEM.BLOCK.BLOCK);
+                               this.SYSTEM.BLOCK.BLOCK,
+                               false,
+                               "",
+                               "");
               
             // Clear
             UTILS.ACC.clearTrans(this.trigger_hash, "ID_ALL", this.SYSTEM.BLOCK.BLOCK);

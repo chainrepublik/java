@@ -32,7 +32,7 @@ public class CDB
        
 	   try 
 	   {
-	     con = DriverManager.getConnection("jdbc:mysql://localhost:3306/"+UTILS.SETTINGS.db_name+"?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
+             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/"+UTILS.SETTINGS.db_name+"?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
 					         UTILS.SETTINGS.db_user,
 					         UTILS.SETTINGS.db_pass);
                  
@@ -50,7 +50,7 @@ public class CDB
                    System.exit(0);
   	   }
      
-           this.executeUpdate("SET GLOBAL TRANSACTION ISOLATION LEVEL SERIALIZABLE");
+           this.executeUpdate("SET LOCAL TRANSACTION ISOLATION LEVEL SERIALIZABLE");
 	   System.out.println("DB initialized...");
            
    }
@@ -110,7 +110,7 @@ public class CDB
       // Size limit ?
       if (UTILS.NETWORK!=null)
       {
-         if (cons.size()>10000) 
+         if (cons.size()>25000) 
          {
             for (int a=0; a<=100; a++)
             {

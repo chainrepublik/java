@@ -120,4 +120,21 @@ public class CTable
         // Reorganizing
         this.reorg=false;
     }
+   
+   public void fullResync() throws Exception
+   {
+       // Message
+       System.out.println("Dropping tables...");
+       
+       
+       // Drop tables
+       if (!this.name.equals("actions") && 
+           !this.name.equals("my_adr") && 
+           !this.name.equals("web_users") &&
+           !this.name.equals("sys_stats"))
+        UTILS.DB.executeUpdate("DROP TABLE "+this.name);
+       
+       // Done
+       System.out.println("Done.");
+   }
 }

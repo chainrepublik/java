@@ -181,7 +181,7 @@ public class CAdr extends CTable
     public void populate() throws Exception
     {
         // Default
-        UTILS.DB.executeUpdate("INSERT INTO adr SET adr='default', balance='20000000', block='0', country='RO'");
+        UTILS.DB.executeUpdate("INSERT INTO adr SET adr='default', balance='20000000', block='0', cou='RO'");
         
         
         // Main addresses

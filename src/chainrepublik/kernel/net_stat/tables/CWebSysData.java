@@ -87,6 +87,7 @@ public class CWebSysData extends CTable
                                      + "SET status='ID_ONLINE', "
                                           + "node_adr='"+node_adr+"', "
                                           + "mining_adr='"+mining_adr+"', "
+                                          + "version='0.0.1', "
                                           + "coin_price=1");
     }
 }

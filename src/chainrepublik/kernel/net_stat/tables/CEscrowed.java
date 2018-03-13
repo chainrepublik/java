@@ -64,7 +64,10 @@ public class CEscrowed extends CTable
                                "", 
                                0,
                                UTILS.BASIC.hash(rs.getString("hash")), 
-                               block);
+                               block,
+                               false,
+                               "",
+                               "");
        
             // Clear
             UTILS.ACC.clearTrans(UTILS.BASIC.hash(rs.getString("hash")), "ID_ALL", block);

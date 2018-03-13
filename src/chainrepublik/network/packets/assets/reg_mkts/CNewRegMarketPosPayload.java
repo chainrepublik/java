@@ -4,12 +4,9 @@
 package chainrepublik.network.packets.assets.reg_mkts;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import chainrepublik.kernel.UTILS;
 import chainrepublik.network.packets.CPayload;
 import chainrepublik.network.packets.blocks.CBlockPayload;
-import chainrepublik.network.packets.trans.CTransPayload;
 
 public class CNewRegMarketPosPayload extends CPayload
 {
@@ -202,14 +199,17 @@ public class CNewRegMarketPosPayload extends CPayload
                           
                          // Transfer assets
                          UTILS.ACC.newTransfer(this.target_adr, 
-                                                 rs.getString("adr"),
-                                                 qty,
-                                                 asset, 
-                                                 "New short position on market "+rs.getString("mktID"), 
-                                                 "", 
-                                                 qty*rs.getDouble("price"),
-                                                 this.hash, 
-                                                 this.block);
+                                               rs.getString("adr"),
+                                               qty,
+                                               asset, 
+                                               "New short position on market "+rs.getString("mktID"), 
+                                               "", 
+                                               qty*rs.getDouble("price"),
+                                               this.hash, 
+                                               this.block,
+                                               false,
+                                               "",
+                                               "");
                       
                          // Receive coins
                          UTILS.ACC.newTrans(this.target_adr,
@@ -220,17 +220,10 @@ public class CNewRegMarketPosPayload extends CPayload
                                               "", 
                                               0,
                                               this.hash, 
-                                              this.block);
-                         
-                         // Income tax ?
-                         if (cur.equals("CRC") && 
-                             UTILS.BASIC.isProd(asset))
-                             UTILS.ACC.bugTax(this.target_adr, 
-                                              "ID_SALE_TAX", 
-                                              qty*rs.getDouble("price"), 
-                                              asset,
-                                              this.hash, 
-                                              this.block);
+                                              this.block,
+                                              true,
+                                              "ID_SALE_TAX",
+                                              asset);
                          
                          // Remain
                          remain=remain-qty;
@@ -248,7 +241,10 @@ public class CNewRegMarketPosPayload extends CPayload
                                      "", 
                                      0,
                                      this.hash, 
-                                     this.block);
+                                     this.block,
+                                     false,
+                                     "",
+                                     "");
         }
         else
         {
@@ -293,18 +289,12 @@ public class CNewRegMarketPosPayload extends CPayload
                                                  "", 
                                                  0,
                                                  this.hash, 
-                                                 this.block);
+                                                 this.block,
+                                                 true,
+                                                 "ID_SALE_TAX",
+                                                 asset);
                          
-                         // Income tax ?
-                         if (cur.equals("CRC") && 
-                             UTILS.BASIC.isProd(asset))
-                             UTILS.ACC.bugTax(rs.getString("adr"), 
-                                              "ID_SALE_TAX", 
-                                              qty*rs.getDouble("price"), 
-                                              asset,
-                                              this.hash, 
-                                              this.block);
-                      
+                        
                          // Receive assets
                          UTILS.ACC.newTrans(this.target_adr,
                                               "none", 
@@ -314,7 +304,10 @@ public class CNewRegMarketPosPayload extends CPayload
                                               "", 
                                               qty*rs.getDouble("price"),
                                               this.hash, 
-                                              this.block);
+                                              this.block,
+                                              false,
+                                              "",
+                                              "");
                          
                         // Remain
                         remain=remain-qty;
@@ -332,13 +325,16 @@ public class CNewRegMarketPosPayload extends CPayload
                                      "", 
                                      0,
                                      this.hash, 
-                                     this.block);
+                                     this.block,
+                                     false,
+                                     "",
+                                     "");
                 
                 // Can buy ?
                 if (!UTILS.BASIC.canBuy(this.target_adr, asset, this.qty, block) &&
                     asset.length()!=5 && 
                     asset.length()!=6)
-                throw new Exception("Address is not allowed to sell this product - CNewRegMarketPosPayload.java");
+                throw new Exception("Address is not allowed to buy this product - CNewRegMarketPosPayload.java");
             }
             
         

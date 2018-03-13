@@ -61,13 +61,15 @@ public class CRentContracts extends CTable
              UTILS.BASIC.refreshEnergy(rs.getString("to_adr"));
              
              // Event
-             UTILS.BASIC.newEvent(rs.getString("to_adr"), "One of your rent contracts has expired. Check your portofolio.", block);
+             UTILS.BASIC.newEvent(rs.getString("to_adr"), 
+                                  "One of your rent contracts has expired. Check your portofolio.", 
+                                  block);
          }
     }
    
     public void reorganize(long block, String chk_hash) throws Exception
     {
-       UTILS.DB.executeUpdate("DELETE FROM rewards "
+       UTILS.DB.executeUpdate("DELETE FROM rent_contracts "
                                   + "WHERE block>"+block);
     }
 }

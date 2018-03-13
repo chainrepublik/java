@@ -237,7 +237,7 @@ public class CSync extends Thread
                   // Increase counter
                   c++;    
                   
-                  if (c%1000==0)
+                  if (c%500==0)
                   {
                       // Insert
                       UTILS.DB.executeUpdate("INSERT INTO sync "

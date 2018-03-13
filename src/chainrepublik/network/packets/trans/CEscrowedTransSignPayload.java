@@ -114,7 +114,10 @@ public class CEscrowedTransSignPayload extends CPayload
                            escrower, 
                            0,
                            this.hash, 
-                           this.block);
+                           this.block,
+                           false,
+                           "",
+                           "");
                  
         // Return ?
         if (this.type.equals("ID_RETURN"))
@@ -126,7 +129,10 @@ public class CEscrowedTransSignPayload extends CPayload
                            escrower, 
                            0,
                            this.hash, 
-                           this.block);
+                           this.block,
+                           false,
+                           "",
+                           "");
                  
         // Close
         

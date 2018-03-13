@@ -33,7 +33,8 @@ public class CStatus
         this.status=status;
         
         // Db
-        UTILS.DB.executeUpdate("UPDATE web_sys_data SET status='"+status+"'");
+        UTILS.DB.executeUpdate("UPDATE web_sys_data "
+                                + "SET status='"+status+"'");
     }
     
     public void load(boolean force_load) throws Exception
@@ -44,7 +45,8 @@ public class CStatus
             return;
         
         // Load 
-        ResultSet rs=UTILS.DB.executeQuery("SELECT * FROM web_sys_data");
+        ResultSet rs=UTILS.DB.executeQuery("SELECT * "
+                                           + "FROM web_sys_data");
         
         // Next
         rs.next();
@@ -60,5 +62,8 @@ public class CStatus
     
         // New accounts reward
         this.new_acc_reward=rs.getDouble("new_acc_reward");
+        
+        // Version
+        this.version=rs.getString("version");
     }
 }

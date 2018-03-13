@@ -23,6 +23,9 @@ public class CRewards
        if (block%1440!=0) 
            return; 
        
+       // Total reward
+       this.total_reward=0;
+       
        // Block
        this.block=block;
            
@@ -71,7 +74,10 @@ public class CRewards
                           "", 
                           0,
                           UTILS.BASIC.hash(String.valueOf(this.block)), 
-                          this.block);
+                          this.block,
+                          false,
+                          "",
+                          "");
        
        // Clear
        UTILS.ACC.clearTrans(UTILS.BASIC.hash(String.valueOf(this.block)), "ID_ALL", this.block);
@@ -878,6 +884,10 @@ public class CRewards
             case "ID_POL_PARTY" : name="political parties reward"; break;
         }
         
+        // Has country ?
+        if (UTILS.BASIC.getAdrData(adr, "cou").equals(""))
+            return;
+        
         // Payment
         UTILS.ACC.newTrans(adr, 
                            "default",
@@ -887,17 +897,10 @@ public class CRewards
                            "", 
                            0,
                            UTILS.BASIC.hash(String.valueOf(this.block)), 
-                           this.block);
-        
-        // Tax
-        if (!reward.equals("ID_COU_AREA") && 
-            !reward.equals("ID_COU_ENERGY"))
-             UTILS.ACC.bugTax(adr, 
-                              "ID_REWARDS_TAX", 
-                              amount, 
-                              "",
-                              UTILS.BASIC.hash(String.valueOf(this.block)), 
-                              this.block);
+                           this.block,
+                           true,
+                           "ID_REWARDS_TAX",
+                           "");
         
         // Log
         UTILS.DB.executeUpdate("INSERT INTO rewards "
@@ -906,6 +909,7 @@ public class CRewards
                                     + "targetID='"+targetID+"', "
                                     + "reward='"+reward+"', "
                                     + "amount='"+amount+"', "
+                                    + "block='"+this.block+"', "
                                     + "par_f='"+par+"'");
         
         // Update totals

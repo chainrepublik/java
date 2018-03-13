@@ -18,7 +18,7 @@ public class CDump
         ResultSet rs=UTILS.DB.executeQuery("SELECT * FROM assets_mkts WHERE adr='default'");
         
         while (rs.next())
-            System.out.println("UTILS.DB.executeUpdate(\"INSERT INTO assets_mkts SET adr='"+rs.getString("adr")+"', asset='"+rs.getString("asset")+"', cur='"+rs.getString("cur")+"', name='"+rs.getString("name")+"', description='"+rs.getString("description")+"', decimals='"+rs.getString("decimals")+"', block='"+rs.getString("block")+"', expires='"+rs.getString("expires")+"', last_price='"+rs.getString("last_price")+"', ask='"+rs.getString("ask")+"', bid='"+rs.getString("bid")+"', mktID='"+rs.getString("mktID")+"'\");");
+            System.out.println("UTILS.DB.executeUpdate(\"INSERT INTO assets_mkts SET adr='"+rs.getString("adr")+"', asset='"+rs.getString("asset")+"', cur='"+rs.getString("cur")+"', name='"+rs.getString("name")+"', description='"+rs.getString("description")+"', decimals='"+rs.getString("decimals")+"', expires='"+rs.getString("expires")+"', last_price='"+rs.getString("last_price")+"', ask='"+rs.getString("ask")+"', bid='"+rs.getString("bid")+"', mktID='"+rs.getString("mktID")+"'\");");
     }
     
     public void dumpComProds() throws Exception
@@ -73,7 +73,6 @@ public class CDump
                                                                   + "tip='"+rs.getString("tip")+"', "
                                                                   + "qty='"+rs.getLong("qty")+"', "
                                                                   + "price='"+rs.getDouble("price")+"', "
-                                                                  + "block='"+rs.getLong("block")+"', "
                                                                   + "orderID='"+rs.getLong("orderID")+"', "
                                                                   + "expires='"+rs.getLong("expires")+"' \");");
     }
@@ -107,7 +106,7 @@ public class CDump
                                                                   + "capacity='"+rs.getLong("capacity")+"', "
                                                                   + "name='"+rs.getString("name")+"', "
                                                                   + "expires='"+rs.getLong("expires")+"', "
-                                                                  + "net_energy='"+rs.getDouble("net_energy")+"', "
+                                                                  + "net_cost='"+rs.getDouble("net_cost")+"', "
                                                                   + "damage='"+rs.getLong("damage")+"' \");");
     }
   
@@ -183,4 +182,5 @@ public class CDump
                                              + "orderID='"+UTILS.BASIC.getID()+"', "
                                              + "expires=0");
     }
+    
 }

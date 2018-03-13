@@ -401,7 +401,10 @@ public class CAcc
                                 String escrower, 
                                 double cost,
                                 String hash, 
-                                long block) throws Exception
+                                long block,
+                                boolean taxed,
+                                String tax,
+                                String prod) throws Exception
         {
             // ResultSet
             ResultSet rs;
@@ -453,6 +456,7 @@ public class CAcc
 		    		                  block);
             }
             
+            
             // Mine ?
 	    if (UTILS.WALLET.isMine(adr))
 	    {
@@ -483,6 +487,14 @@ public class CAcc
                                                  + "block_hash='"+UTILS.NET_STAT.actual_block_hash+"', "
                                                  + "tstamp='"+UTILS.BASIC.tstamp()+"', "
                                                  + "status='ID_PENDING'");
+            
+             if (taxed && amount>0)
+                    this.bugTax(adr, 
+                                tax, 
+                                amount, 
+                                prod, 
+                                hash, 
+                                block);
         }
         
         
@@ -494,7 +506,10 @@ public class CAcc
                              String escrower, 
                              double cost,
                              String hash, 
-                             long block) throws Exception
+                             long block,
+                             boolean taxed,
+                             String tax,
+                             String prod) throws Exception
         {
             // CRC ?
             if (cur.equals("CRC"))
@@ -506,7 +521,10 @@ public class CAcc
                                  escrower, 
                                  cost,
                                  hash, 
-                                 block);
+                                 block,
+                                 taxed,
+                                 tax,
+                                 prod);
             
             // Asset ?
             else if (UTILS.BASIC.isAsset(cur))
@@ -540,7 +558,10 @@ public class CAcc
                                 String escrower, 
                                 double cost,
                                 String hash, 
-                                long block) throws Exception
+                                long block,
+                                boolean taxed,
+                                String tax,
+                                String prod) throws Exception
         {
             // CRC ?
             if (cur.equals("CRC"))
@@ -554,7 +575,10 @@ public class CAcc
                                  escrower, 
                                  cost,
                                  hash, 
-                                 block);
+                                 block,
+                                 false,
+                                 "",
+                                 "");
                 
                 // Deposit
                 this.newCRCTrans(dest, 
@@ -565,7 +589,10 @@ public class CAcc
                                  escrower, 
                                  cost,
                                  hash, 
-                                 block);
+                                 block,
+                                 taxed,
+                                 tax,
+                                 prod);
             }
             
             // Asset ?
@@ -1040,6 +1067,15 @@ public class CAcc
                        String hash, 
                        long block) throws Exception
     {
+        // Block ?
+        if (block<20000)
+            return;
+            
+        // Product ?
+        if (!prod.equals(""))
+            if (!UTILS.BASIC.isProd(prod))
+                return;
+        
         // Country
         String cou=UTILS.BASIC.getAdrData(adr, "cou");
                              
@@ -1051,25 +1087,48 @@ public class CAcc
                              
         // Pay
         if (t>0.0001)
-            UTILS.ACC.newTransfer(adr,
-                                  UTILS.BASIC.getCouAdr(cou), 
-                                  t,
-                                  "CRC", 
-                                  "A budget ax was paid", 
-                                  "", 
-                                  0,
-                                  hash, 
-                                  block); 
+        {
+            // Insert into transactions
+            UTILS.DB.executeUpdate("INSERT INTO trans "
+                                             + "SET src='"+adr+"', "
+                                                 + "amount='"+UTILS.FORMAT_8.format(-t)+"', "
+                                                 + "cur='CRC', "
+                                                 + "hash='"+hash+"', "
+                                                 + "expl='You paid a tax to state budget', "
+                                                 + "invested='0', "
+                                                 + "block='"+block+"', "
+                                                 + "block_hash='"+UTILS.NET_STAT.actual_block_hash+"', "
+                                                 + "tstamp='"+UTILS.BASIC.tstamp()+"', "
+                                                 + "status='ID_PENDING'");
+            
+            // Insert into transactions
+            UTILS.DB.executeUpdate("INSERT INTO trans "
+                                             + "SET src='"+UTILS.BASIC.getCouAdr(cou)+"', "
+                                                 + "amount='"+UTILS.FORMAT_8.format(t)+"', "
+                                                 + "cur='CRC', "
+                                                 + "hash='"+hash+"', "
+                                                 + "expl='You received a tax', "
+                                                 + "invested='0', "
+                                                 + "block='"+block+"', "
+                                                 + "block_hash='"+UTILS.NET_STAT.actual_block_hash+"', "
+                                                 + "tstamp='"+UTILS.BASIC.tstamp()+"', "
+                                                 + "status='ID_PENDING'");
+            
+            // Mine ?
+	    if (UTILS.WALLET.isMine(adr))
+                UTILS.DB.executeUpdate("INSERT INTO trans "
+                                             + "SET src='"+adr+"', "
+                                                 + "amount='"+UTILS.FORMAT_8.format(-t)+"', "
+                                                 + "cur='CRC', "
+                                                 + "hash='"+hash+"', "
+                                                 + "expl='You paid a tax to state budget', "
+                                                 + "invested='0', "
+                                                 + "block='"+block+"', "
+                                                 + "block_hash='"+UTILS.NET_STAT.actual_block_hash+"', "
+                                                 + "tstamp='"+UTILS.BASIC.tstamp()+"', "
+                                                 + "status='ID_PENDING'");
+        }
     }
-    
-    public void refTax(String adr, 
-                       double income, 
-                       String hash, 
-                       long block)
-    {
-        
-    }
-    
     
     
 }

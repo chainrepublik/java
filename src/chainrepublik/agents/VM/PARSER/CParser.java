@@ -1865,7 +1865,10 @@ public class CParser extends testBaseVisitor
                                           "", 
                                           0, 
                                           this.VM.trigger_hash, 
-                                          this.VM.SYSTEM.BLOCK.BLOCK);
+                                          this.VM.SYSTEM.BLOCK.BLOCK,
+                                          false,
+                                          "",
+                                          "");
         
                     // Renew
                     UTILS.DB.executeUpdate("UPDATE companies "
@@ -1945,7 +1948,10 @@ public class CParser extends testBaseVisitor
                                           "", 
                                           0,
                                           this.VM.SYSTEM.BLOCK.HASH, 
-                                          this.VM.SYSTEM.BLOCK.BLOCK);
+                                          this.VM.SYSTEM.BLOCK.BLOCK,
+                                          false,
+                                          "",
+                                          "");
                 }
               }
         }
@@ -2190,7 +2196,10 @@ public class CParser extends testBaseVisitor
                                   "", 
                                   0,
                                   this.VM.trigger_hash, 
-                                  this.VM.SYSTEM.BLOCK.BLOCK);
+                                  this.VM.SYSTEM.BLOCK.BLOCK,
+                                  false,
+                                  "",
+                                  "");
                 
             // IPN
             if (UTILS.WALLET.isMine(dest))

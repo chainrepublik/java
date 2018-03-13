@@ -468,46 +468,6 @@ public class CUtils
     }
     
     
-    // Get reward amount
-    public double getReward(String target) throws Exception
-    {
-        // Load address
-        ResultSet rs=UTILS.DB.executeQuery("SELECT * "
-                                           + "FROM adr "
-                                          + "WHERE adr='default'");
-        
-        // Next
-        rs.next();
-        
-        // Undistributed
-        double unspend=rs.getDouble("balance");
-        
-        // Per day
-        double per_day=unspend/365/20;
-        
-        // Reward
-        double reward=0;
-        
-        switch (target)
-        {
-            // Posts
-            case "ID_POST" : reward=per_day*0.2; break;
-			
-	    // Comments
-	    case "ID_COM" : reward=per_day*0.1; break;
-			
-	    // Assets
-	    case "ID_ASSETS" : reward=per_day*0.05; break;
-			
-	    		
-	    // Miners
-	    case "ID_MINER" : reward=per_day*0.4/1440; break;
-        }
-        
-        // Return
-        return reward;
-    }
-    
     // Has attribute ?
     public boolean hasAttr(String adr, String attr, String s1) throws Exception
     {

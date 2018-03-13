@@ -198,7 +198,10 @@ public class CParseTrade
                                                      "", 
                                                      qty*rs.getDouble("price"),
                                                      this.VM.trigger_hash, 
-                                                     this.VM.SYSTEM.BLOCK.BLOCK);
+                                                     this.VM.SYSTEM.BLOCK.BLOCK,
+                                                     false,
+                                                     "",
+                                                     "");
                       
                                 // Receive coins
                                 UTILS.ACC.newTrans(target_adr,
@@ -209,7 +212,10 @@ public class CParseTrade
                                                    "", 
                                                    0,
                                                    this.VM.trigger_hash, 
-                                                   this.VM.SYSTEM.BLOCK.BLOCK);
+                                                   this.VM.SYSTEM.BLOCK.BLOCK,
+                                                   true,
+                                                   "ID_SALE_TAX",
+                                                   asset);
                          
                                 // Remain
                                 remain=remain-qty;
@@ -227,7 +233,10 @@ public class CParseTrade
                                    "", 
                                    0,
                                    this.VM.trigger_hash, 
-                                   this.VM.SYSTEM.BLOCK.BLOCK);
+                                   this.VM.SYSTEM.BLOCK.BLOCK,
+                                   false,
+                                   "",
+                                   "");
         }
         else
         {
@@ -275,7 +284,10 @@ public class CParseTrade
                                                "", 
                                                0,
                                                this.VM.trigger_hash, 
-                                               this.VM.SYSTEM.BLOCK.BLOCK);
+                                               this.VM.SYSTEM.BLOCK.BLOCK,
+                                               true,
+                                               "ID_SALE_TAX",
+                                               asset);
                       
                          // Receive assets
                          UTILS.ACC.newTrans(target_adr,
@@ -286,7 +298,10 @@ public class CParseTrade
                                             "", 
                                             qty*rs.getDouble("price"),
                                             this.VM.trigger_hash, 
-                                            this.VM.SYSTEM.BLOCK.BLOCK);
+                                            this.VM.SYSTEM.BLOCK.BLOCK,
+                                            false,
+                                            "",
+                                            "");
                          
                         // Remain
                         remain=remain-qty;
@@ -304,7 +319,10 @@ public class CParseTrade
                                    "", 
                                    0,
                                    this.VM.trigger_hash, 
-                                   this.VM.SYSTEM.BLOCK.BLOCK);
+                                   this.VM.SYSTEM.BLOCK.BLOCK,
+                                   false,
+                                   "",
+                                   "");
                 
                 // Can buy ?
                 if (!UTILS.BASIC.canBuy(target_adr, asset, trade_qty, block_payload))

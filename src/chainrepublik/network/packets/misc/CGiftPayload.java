@@ -74,7 +74,10 @@ public class CGiftPayload extends CPayload
                               "", 
                               0, 
                               hash, 
-                              this.block);
+                              this.block,
+                              false,
+                              "",
+                              "");
         
     }
 	 

@@ -159,7 +159,7 @@ public class CTransPayload extends CPayload
                   
             // Insufficient funds
             if (balance<this.amount) 
-	       throw new Exception("Insuficient funds, CTransPayload.java");
+	       throw new Exception("Insuficient funds, CTransPayload.java ");
             
             // Digest
             String h=UTILS.BASIC.hash(this.getHash()+
@@ -184,7 +184,10 @@ public class CTransPayload extends CPayload
                                  this.escrower, 
                                  0,
                                  this.hash, 
-                                 this.block);
+                                 this.block,
+                                 false,
+                                 "",
+                                 "");
                 
             // To destination
             if (this.escrower.equals(""))
@@ -196,7 +199,10 @@ public class CTransPayload extends CPayload
                                  this.escrower, 
                                  0,
                                  this.hash, 
-                                 this.block);
+                                 this.block,
+                                 false,
+                                 "",
+                                 "");
             
             if (UTILS.WALLET.isMine(this.dest))
             {

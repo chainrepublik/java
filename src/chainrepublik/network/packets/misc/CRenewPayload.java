@@ -238,7 +238,10 @@ public class CRenewPayload extends CPayload
                               "", 
                               0, 
                               hash, 
-                              this.block);
+                              this.block,
+                              false,
+                              "",
+                              "");
     }
 	 
     public void commit(CBlockPayload block) throws Exception

@@ -43,9 +43,66 @@ public class CCompanies extends CTable
     public void expired(long block) throws Exception
     {
         // Load expired companies
-        UTILS.DB.executeUpdate("DELETE "
-                               + "FROM companies "
-                              + "WHERE expires<="+block);
+        ResultSet rs=UTILS.DB.executeQuery("SELECT * "
+                                           + "FROM companies "
+                                          + "WHERE expires<="+block);
+        
+        if (UTILS.DB.hasData(rs))
+        {
+            while (rs.next())
+            {
+                // Company address
+                String adr=rs.getString("adr");
+                
+                // Company ID
+                long comID=rs.getLong("comID");
+                
+                // Symbol
+                String symbol=rs.getString("symbol");
+                
+                // Remove company
+                UTILS.DB.executeUpdate("DELETE FROM companies "
+                                           + "WHERE adr='"+adr+"'");
+                
+                // Remove workplaces
+                UTILS.DB.executeUpdate("DELETE FROM workplaces "
+                                           + "WHERE comID='"+comID+"'");
+                
+                // Remove stoc
+                UTILS.DB.executeUpdate("DELETE FROM stocuri "
+                                           + "WHERE adr='"+adr+"'");
+                
+                // Remove shares asset
+                UTILS.DB.executeUpdate("DELETE FROM assets "
+                                           + "WHERE symbol='"+symbol+"'");
+                
+                // Remove shares owners
+                UTILS.DB.executeUpdate("DELETE FROM assets_owners "
+                                           + "WHERE symbol='"+symbol+"'");
+                
+                
+                // Remove asset markets
+                UTILS.DB.executeUpdate("SELECT * "
+                                       + "FROM assets_mkts "
+                                      + "WHERE symbol='"+symbol+"'");
+                
+                // Has data ?
+                if (UTILS.DB.hasData(rs))
+                {
+                    // Market ID
+                    long mktID=rs.getLong("mktID");
+                    
+                    // Remove market
+                    UTILS.DB.executeUpdate("DELETE FROM assets_mkts "
+                                               + "WHERE mktID='"+mktID+"'");
+                    
+                    // Remove market orders
+                    UTILS.DB.executeUpdate("DELETE FROM assets_mkts_pos "
+                                               + "WHERE mktID='"+mktID+"'");
+                }
+                
+            }
+        }
     }
     
     public void reorganize(long block, String chk_hash) throws Exception

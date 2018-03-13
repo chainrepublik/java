@@ -80,7 +80,7 @@ public class CAdrRegisterPacket extends CBroadcastPacket
         foot.add("Pic", payload.pic);
         foot.add("Ref Address", payload.ref_adr);
         foot.add("Node Address", payload.node_adr);
-        foot.add("Pic", payload.pic);
+        foot.add("Country", payload.cou);
         foot.write();
     }
 	     

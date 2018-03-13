@@ -489,9 +489,6 @@ public class CTables
         // Blocks pool
         this.blocks_pool.create();
     
-        // Bonuses
-        this.bonuses.create();
-    
         // Checkpoints
         this.checkpoints.create();
     
@@ -626,6 +623,9 @@ public class CTables
         
         // Taxes
         this.taxes.create();
+        
+        // Bonuses
+        this.bonuses.create();
     
         // Trans
         this.trans.create();
@@ -1052,5 +1052,227 @@ public class CTables
     
         // Workplaces
         this.workplaces.expired(block);
+    }
+    
+    public void full_resync() throws Exception
+    {
+        // Actions
+        this.actions.fullResync();
+    
+        // Adata
+        this.adata.fullResync();
+    
+        // Adr
+        this.adr.fullResync();
+    
+        // Adr attr
+        this.adr_attr.fullResync();
+    
+        // Ads
+        this.ads.fullResync();
+        
+        // Agents Log
+        this.agents_log.fullResync();
+    
+        // Allow trans
+        this.allow_trans.fullResync();
+    
+        // Assets
+        this.assets.fullResync();
+    
+        // Assets mkts
+        this.assets_mkts.fullResync();
+    
+        // Assets mkts pos
+        this.assets_mkts_pos.fullResync();
+        
+        // Assets mkts trades
+        this.assets_mkts_trades.fullResync();
+    
+        // Assets owners
+        this.assets_owners.fullResync();
+    
+        // Blocks
+        this.blocks.fullResync();
+    
+        // Blocks pool
+        this.blocks_pool.fullResync();
+    
+        // Checkpoints
+        this.checkpoints.fullResync();
+    
+        // Com prods
+        this.com_prods.fullResync();
+    
+        // Comments
+        this.comments.fullResync();
+    
+        // Companies
+        this.companies.fullResync();
+    
+        // Con log
+        this.con_log.fullResync();
+    
+        // Countries
+        this.countries.fullResync();
+        
+        // Crons
+        this.crons.fullResync();
+        
+        // Cron Runs
+        this.cron_runs.fullResync();
+    
+        // Del votes
+        this.del_votes.fullResync();
+    
+        // Delegates
+        this.delegates.fullResync();
+    
+        // Delegates log
+        this.delegates_log.fullResync();
+    
+        // Dividends
+        this.dividends.fullResync();
+    
+        // Endorsers
+        this.endorsers.fullResync();
+    
+        // ErrorLog
+        this.error_log.fullResync();
+    
+        // Escrowed
+        this.escrowed.fullResync();
+    
+        // Events
+        this.events.fullResync();
+    
+        // IPN
+        this.ipn.fullResync();
+    
+        // IPNLog
+        this.ipn_log.fullResync();
+    
+        // Items Consumed
+        this.items_consumed.fullResync();
+        
+        // Ips
+        this.ips.fullResync();
+    
+        // Laws
+        this.laws.fullResync();
+    
+        // Laws Votes
+        this.laws_votes.fullResync();
+    
+        // Mes
+        this.mes.fullResync();
+    
+        // My adr
+        this.my_adr.fullResync();
+    
+        // My trans
+        this.my_trans.fullResync();
+    
+        // Net Stat
+        this.net_stat.fullResync();
+        
+        // Orgs
+        this.orgs.fullResync();
+        
+        // Orgs props
+        this.orgs_props.fullResync();
+        
+        // Orgs props votes
+        this.orgs_props_votes.fullResync();
+    
+        // Out Emails
+        this.out_req.fullResync();
+    
+        // Packets
+        this.packets.fullResync();
+    
+        // Peers
+        this.peers.fullResync();
+    
+        // Peers pool
+        this.peers_pool.fullResync();
+    
+        // Rec Packets
+        this.rec_packets.fullResync();
+    
+        // Ref stats
+        this.ref_stats.fullResync();
+    
+        // Rent contracts
+        this.rent_contracts.fullResync();
+    
+        // Rewards
+        this.rewards.fullResync();
+    
+        // Stocuri
+        this.stocuri.fullResync();
+        
+        // Status Log
+        this.status_log.fullResync();
+    
+        // Sync
+        this.sync.fullResync();
+        
+        // Sys stats
+        this.sys_stats.fullResync();
+    
+        // Tipuri Companii
+        this.tipuri_companii.fullResync();
+    
+        // Tipuri Licente
+        this.tipuri_licente.fullResync();
+    
+        // Tipuri Produse
+        this.tipuri_produse.fullResync();
+        
+        // Taxes
+        this.taxes.fullResync();
+        
+        // Bonuses
+        this.bonuses.fullResync();
+    
+        // Trans
+        this.trans.fullResync();
+    
+        // Trans Pool
+        this.trans_pool.fullResync(); 
+    
+        // Tweets
+        this.tweets.fullResync();
+    
+        // Tweets Follow
+        this.tweets_follow.fullResync();
+    
+        // Votes
+        this.votes.fullResync();
+    
+        // Votes Stats
+        this.votes_stats.fullResync();  
+    
+        // Wars
+        this.wars.fullResync();
+    
+        // Wars Fighters
+        this.wars_fighters.fullResync();
+    
+        // Web Ops
+        this.web_ops.fullResync();
+    
+        // Web Sys Data
+        this.web_sys_data.fullResync();
+    
+        // Web Users
+        this.web_users.fullResync();
+    
+        // Work Procs
+        this.work_procs.fullResync();
+    
+        // Workplaces
+        this.workplaces.fullResync();
     }
 }

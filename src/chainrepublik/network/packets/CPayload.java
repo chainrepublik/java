@@ -158,7 +158,10 @@ public class CPayload  implements java.io.Serializable
                                   "", 
                                   0, 
                                   this.hash, 
-                                  this.block);
+                                  this.block,
+                                  false,
+                                  "",
+                                  "");
            }
         }
         
@@ -183,7 +186,10 @@ public class CPayload  implements java.io.Serializable
                                   "", 
                                   0, 
                                   this.hash, 
-                                  this.block);
+                                  this.block,
+                                  false,
+                                  "",
+                                  "");
            }
         }
         

@@ -77,7 +77,10 @@ public class CCloseRegMarketPosPayload  extends CPayload
                                    "", 
                                    rs_pos.getDouble("cost"),
                                    hash, 
-                                   this.block);
+                                   this.block,
+                                   false,
+                                   "",
+                                   "");
         }
         else
         {
@@ -90,7 +93,10 @@ public class CCloseRegMarketPosPayload  extends CPayload
                                    "", 
                                    0,
                                    hash, 
-                                   this.block);
+                                   this.block,
+                                   false,
+                                   "",
+                                   "");
         }
            
         // Hash

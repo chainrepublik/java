@@ -56,7 +56,7 @@ public class main
         CDump dump=new CDump();
         //dump.test();
         //dump.populateAssetsMktsPos();
-        //dump.populateAssetsMkts();
+        //dump.dumpTipuriProduse();
       
         UTILS.MINER_UTILS=new CCPUMinerUtils();
         

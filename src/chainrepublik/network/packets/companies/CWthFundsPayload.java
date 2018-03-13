@@ -88,7 +88,6 @@ public class CWthFundsPayload extends CPayload
             // Amount
             double to_pay=rs.getDouble("qty")*per_share;
             
-            
             // Pay
             UTILS.ACC.newTransfer(com_rs.getString("adr"), 
                                   rs.getString("owner"), 
@@ -98,7 +97,10 @@ public class CWthFundsPayload extends CPayload
                                   "", 
                                   0,
                                   this.hash, 
-                                  this.block);
+                                  this.block,
+                                  true,
+                                  "ID_DIVIDENDS_TAX",
+                                  "");
         }
     }
     

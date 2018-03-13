@@ -99,7 +99,10 @@ public class CRentPayload extends CPayload
                               "", 
                               0,
                               hash, 
-                              this.block);
+                              this.block,
+                              true,
+                              "ID_RENT_TAX",
+                              "");
     }
     
     public void commit(CBlockPayload block) throws Exception

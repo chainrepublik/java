@@ -95,12 +95,23 @@ public class CAdrRegisterPayload extends CPayload
         
         // Country
         if (!UTILS.BASIC.isCountry(cou))
-             throw new Exception("Invalid name - CAdrRegisterPayload.java");
+             throw new Exception("Invalid country - CAdrRegisterPayload.java");
           
         // Name
-        if (!this.name.equals(""))
-             if (!UTILS.BASIC.isTitle(this.name))
-                throw new Exception("Invalid name - CAdrRegisterPayload.java");
+        if (!name.matches("^[0-9a-zA-Z _-]{5,30}$"))
+        {
+            System.out.println(this.name);
+	     throw new Exception("Invalid name - CAdrRegisterPayload.java");
+        }
+        
+        // Name exist ?
+        ResultSet rs=UTILS.DB.executeQuery("SELECT * "
+                                           + "FROM adr "
+                                          + "WHERE name='"+this.name+"'");
+        
+        // Has data
+        if (UTILS.DB.hasData(rs))
+            throw new Exception("Name already exist - CAdrRegisterPayload.java");
           
         // Description
         if (!this.description.equals(""))

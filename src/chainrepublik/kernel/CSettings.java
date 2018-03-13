@@ -4,6 +4,7 @@
 package chainrepublik.kernel;
 
 import java.io.*;
+import java.net.Socket;
 import java.util.*;
 import org.apache.commons.io.FileUtils;
 
@@ -48,6 +49,7 @@ public class CSettings
   // Sync start block
   public long sync_start_block=0;
   
+  
   // Settings
   Properties settings = new Properties();
   
@@ -91,7 +93,29 @@ public class CSettings
           // Close
           in.close();
       }
+      
+       // Port busy
+      this.portBusy();
   }
+  
+   public boolean portBusy() throws Exception
+   {
+        try 
+        {
+            // Connects to local
+            Socket s = new Socket("127.0.0.1", this.port);
+               
+            // Return
+            System.out.println("Port busy. Exiting !!!");
+            System.exit(0);
+        }
+        catch(Exception ex) 
+        {
+            return false;
+        }
+        
+        return false;
+    }
   
   public String getWalletPass()
   {

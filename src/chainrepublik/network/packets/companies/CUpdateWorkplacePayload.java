@@ -122,12 +122,7 @@ public class CUpdateWorkplacePayload extends CPayload
         // Building
         String build=rs.getString("prod");
         
-        // Status
-        if (!this.status.equals("ID_FREE") && 
-            !this.status.equals("ID_SUSPENDED"))
-            throw new Exception("Invalid status - CUpdateWorkplacePayload.java, 73");
-        
-        // Status active ?
+         // Status active ?
         if (this.status.equals("ID_FREE"))
         {
             // Company has funds ?

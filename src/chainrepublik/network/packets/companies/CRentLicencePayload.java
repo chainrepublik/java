@@ -124,7 +124,10 @@ public class CRentLicencePayload extends CPayload
                               "", 
                               0,
                               this.hash, 
-                              this.block);
+                              this.block,
+                              false,
+                              "",
+                              "");
    }
     
     public void commit(CBlockPayload block) throws Exception

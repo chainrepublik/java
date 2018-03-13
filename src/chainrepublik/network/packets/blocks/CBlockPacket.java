@@ -255,9 +255,11 @@ public class CBlockPacket extends CPacket
    public void payReward(String adr) throws Exception
    {
         // Reward
-        double reward=UTILS.BASIC.getReward("ID_MINER");
-     
-                                
+        double pool=UTILS.BASIC.getRewardPool("ID_MINERS");
+        
+        // Reward
+        double reward=pool/1440;
+        
         // Insert trans
         UTILS.ACC.newTransfer("default", 
                               adr,
@@ -267,7 +269,10 @@ public class CBlockPacket extends CPacket
                               "", 
                               0,
                               hash, 
-                              this.block);
+                              this.block,
+                              false,
+                              "",
+                              "");
         
         // Clear
         UTILS.ACC.clearTrans(hash, "ID_ALL", this.block);

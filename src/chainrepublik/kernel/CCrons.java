@@ -112,9 +112,11 @@ public class CCrons
      {
          // Increase wine energy
          UTILS.DB.executeUpdate("UPDATE stocuri "
-                                 + "SET energy=energy+0.0002 "
+                                 + "SET energy=energy+0.0005 "
                                + "WHERE tip='ID_WINE' "
-                                 + "AND adr<>'default'");
+                                 + "AND adr<>'default' "
+                                 + "AND qty=1 "
+                                 + "AND energy<99.9995");
      }
      
      public void checkTravelers(long block) throws Exception

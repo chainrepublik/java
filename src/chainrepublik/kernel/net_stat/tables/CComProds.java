@@ -50,7 +50,6 @@ public class CComProds extends CTable
         UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_ELECTRICITY', prod='ID_ELECTRICITY', type='ID_FINITE', buy_split='ID_NO' ");
         UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_ELECTRICITY', prod='ID_LIC_PROD_ELECTRICITY', type='ID_LIC_PROD', buy_split='ID_NO' ");
         UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_ELECTRICITY', prod='ID_TOOLS_PROD_ELECTRICITY', type='ID_TOOLS', buy_split='ID_NO' ");
-        UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_ELECTRICITY', prod='ID_BUILD_COM_ELECTRICITY', type='ID_BUILDING', buy_split='ID_NO' ");
         UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_OIL', prod='ID_BUILD_COM_OIL', type='ID_BUILDING', buy_split='ID_NO' ");
         UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_GAS', prod='ID_ELECTRICITY', type='ID_RAW', buy_split='ID_NO' ");
         UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_GAS', prod='ID_OIL', type='ID_RAW', buy_split='ID_NO' ");
@@ -463,6 +462,21 @@ public class CComProds extends CTable
         UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_GIFT', prod='ID_GIFT', type='ID_FINITE', buy_split='ID_NO' ");
         UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_GIFT', prod='ID_TOOLS_PROD_GIFTS', type='ID_TOOLS', buy_split='ID_NO' ");
         UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_GIFT', prod='ID_BUILD_COM_GIFTS', type='ID_BUILDING', buy_split='ID_NO' ");
+        UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_ELECTRICITY', prod='ID_BUILD_COM_ELECTRICITY', type='ID_BUILDING', buy_split='ID_NO' ");
+        UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_ALCOHOOL', prod='ID_SUGARCANE', type='ID_RAW', buy_split='ID_NO' ");
+        UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_DYNAMITE', prod='ID_GUNPOWDER', type='ID_RAW', buy_split='ID_NO' ");
+        UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_JEWELRY', prod='ID_INEL_Q1', type='ID_FINITE', buy_split='ID_NO' ");
+        UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_JEWELRY', prod='ID_INEL_Q2', type='ID_RAW', buy_split='ID_NO' ");
+        UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_JEWELRY', prod='ID_INEL_Q3', type='ID_FINITE', buy_split='ID_NO' ");
+        UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_TRAVEL_TICKETS', prod='ID_ELECTRICITY', type='ID_RAW', buy_split='ID_NO' ");
+        UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_TRAVEL_TICKETS', prod='ID_PAPER', type='ID_RAW', buy_split='ID_NO' ");
+        UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_TRAVEL_TICKETS', prod='ID_BUILD_COM_TRAVEL_TICKETS', type='ID_BUILDING', buy_split='ID_NO' ");
+        UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_TRAVEL_TICKETS', prod='ID_TRAVEL_TICKET_Q2', type='ID_FINITE', buy_split='ID_NO' ");
+        UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_TRAVEL_TICKETS', prod='ID_TRAVEL_TICKET_Q3', type='ID_FINITE', buy_split='ID_NO' ");
+        UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_TRAVEL_TICKETS', prod='ID_TRAVEL_TICKET_Q5', type='ID_FINITE', buy_split='ID_NO' ");
+        UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_TRAVEL_TICKETS', prod='ID_TRAVEL_TICKET_Q1', type='ID_FINITE', buy_split='ID_NO' ");
+        UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_TRAVEL_TICKETS', prod='ID_TRAVEL_TICKET_Q4', type='ID_FINITE', buy_split='ID_NO' ");
+        UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_TRAVEL_TICKETS', prod='ID_TOOLS_PROD_TRAVEL_TICKETS', type='ID_TOOLS', buy_split='ID_NO' ");
 
     }
 }

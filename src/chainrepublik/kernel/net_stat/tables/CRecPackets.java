@@ -39,7 +39,7 @@ public class CRecPackets extends CTable
     
     public void expired(long block) throws Exception
    {
-       UTILS.DB.executeUpdate("DELETE FROM rewards "
-                                  + "WHERE block<"+(block-1440));
+       UTILS.DB.executeUpdate("DELETE FROM rec_packets "
+                                  + "WHERE tstamp<"+(UTILS.BASIC.tstamp()-1440));
    }
 }
