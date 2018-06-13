@@ -182,6 +182,10 @@ public class CNewCompanyPayload extends CPayload
             UTILS.BASIC.isID(this.stocID))
         throw new Exception("Invalid ID, CNewCompanyPayload.java, 101");
         
+        // Name exist ?
+        if (UTILS.BASIC.isName(symbol))
+            throw new Exception("Invalid symbol, CNewCompanyPayload.java, 101");
+        
         // Hash
  	String h=UTILS.BASIC.hash(this.getHash()+
  			         this.type+

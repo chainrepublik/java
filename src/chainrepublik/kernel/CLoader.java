@@ -2,20 +2,13 @@
 // Contact : vcris@gmx.com
 
 package chainrepublik.kernel;
-
-
-
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -82,50 +75,46 @@ public class CLoader extends Thread
 	
 	 public void run()
 	 {	 
-		 
-		 try 
-		 {
-			 if (this.params.size()>0)
-			 {
-                             // CRC enabled ?
-                             if (!pass.equals("")) this.addParam("crc", UTILS.BASIC.hash(this.params_str+this.params_str));
+	    try 
+            {
+	        if (this.params.size()>0)
+	        {
+                    // CRC enabled ?
+                    if (!pass.equals("")) 
+                        this.addParam("crc", UTILS.BASIC.hash(this.params_str+this.params_str));
                            
-                             
-                            // String builder     
-                            StringBuilder postData = new StringBuilder();
+                    // String builder     
+                    StringBuilder postData = new StringBuilder();
 		             
-                             // Load params
-                             for (Map.Entry<String,String> param : params.entrySet()) 
-		             {
-		                if (postData.length() != 0) postData.append('&');
-		                postData.append(URLEncoder.encode(param.getKey(), "UTF-8"));
-		                postData.append('=');
-		                postData.append(URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8"));
-		              }
+                    // Load params
+                    for (Map.Entry<String,String> param : params.entrySet()) 
+		    {
+		        if (postData.length() != 0) postData.append('&');
+		        postData.append(URLEncoder.encode(param.getKey(), "UTF-8"));
+		        postData.append('=');
+		        postData.append(URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8"));
+		    }
 		    
-		          byte[] postDataBytes = postData.toString().getBytes("UTF-8");
-                          HttpURLConnection conn = (HttpURLConnection)url.openConnection();
-		          conn.setRequestMethod("POST");
-		          conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-		          conn.setRequestProperty("Content-Length", String.valueOf(postDataBytes.length));
-		          conn.setDoOutput(true);
-		          conn.getOutputStream().write(postDataBytes);
+		    byte[] postDataBytes = postData.toString().getBytes("UTF-8");
+                    HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+		    conn.setRequestMethod("POST");
+		    conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+		    conn.setRequestProperty("Content-Length", String.valueOf(postDataBytes.length));
+		    conn.setDoOutput(true);
+		    conn.getOutputStream().write(postDataBytes);
 		       
-		          BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));  
-			     while ((line = in.readLine()) != null) data=data+line;
-			 }
-			 else
-			 {
+		    BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));  
+	            while ((line = in.readLine()) != null) data=data+line;
+	        }
+	        else
+		{
 		            br = new BufferedReader(new InputStreamReader(url.openStream()));
 		            while ((line = br.readLine()) != null) data=data+line;
-			 }
-		 } 
-		 catch (Exception ex) 
-		 {
+	        }
+            } 
+	    catch (Exception ex) 
+	    {
 		    System.out.println(ex.getMessage()+", CLoader.java - Line 128");
-		 }
-		 
-		 
-		 
-	 }
+	    }
+	}
 }

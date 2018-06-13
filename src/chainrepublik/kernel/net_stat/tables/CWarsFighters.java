@@ -45,7 +45,14 @@ public class CWarsFighters extends CTable
     
     public void reorganize(long block, String chk_hash) throws Exception
     {
+       // Meesage
+       System.out.println("Reorganizing wars_fighters...");
+        
+       // Delete
        UTILS.DB.executeUpdate("DELETE FROM wars_fighters "
                                   + "WHERE block>"+block);
+       
+       // Meesage
+       System.out.println("Done");
     }
 }

@@ -50,8 +50,15 @@ public class CAssetsMktsTrades extends CTable
     
     public void reorganize(long block, String chk_hash) throws Exception
     {
+        // Meesage
+        System.out.println("Reorganizing assets_mkts_trades...");
+        
         // Remove
-        UTILS.DB.executeUpdate("DELETE FROM assets_mkts_trades WHERE block>"+block);
+        UTILS.DB.executeUpdate("DELETE FROM assets_mkts_trades "
+                                   + "WHERE block>"+block);
+        
+        // Meesage
+        System.out.print("Done");
     }
 }
 

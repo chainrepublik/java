@@ -69,8 +69,15 @@ public class CRentContracts extends CTable
    
     public void reorganize(long block, String chk_hash) throws Exception
     {
+       // Meesage
+       System.out.println("Reorganizing rent_contracts...");
+        
+       // Delete
        UTILS.DB.executeUpdate("DELETE FROM rent_contracts "
                                   + "WHERE block>"+block);
+       
+       // Meesage
+       System.out.print("Done");
     }
 }
 

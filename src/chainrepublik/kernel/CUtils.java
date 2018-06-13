@@ -11,6 +11,8 @@ import java.util.regex.Pattern;
 
 public class CUtils 
 {
+    public long time;
+    
 	public CUtils() 
 	{
 		// TODO Auto-generated constructor stub
@@ -181,7 +183,7 @@ public class CUtils
         // Domain name valid ?
         public boolean isDomain(String domain) throws Exception
         {
-	    if (!domain.matches("^[0-9a-z]{2,30}$"))
+	    if (!domain.matches("^[0-9a-zA-Z]{2,30}$"))
 	       return false;
 	    else 
 	       return true;
@@ -342,6 +344,10 @@ public class CUtils
         // Is ID ?
         public boolean isID(long ID) throws Exception
         {
+            // Valid ID
+            if (ID<0)
+                throw new Exception("Invalid ID, CUtils.java, 349");
+            
             // Search tweets
             ResultSet rs=UTILS.DB.executeQuery("SELECT * "
                                                + "FROM tweets "
@@ -396,6 +402,24 @@ public class CUtils
             if (UTILS.DB.hasData(rs)) 
                 return true;
             
+            // Orgs
+            rs=UTILS.DB.executeQuery("SELECT * "
+                                     + "FROM orgs "
+                                    + "WHERE orgID='"+ID+"'");
+        
+            // Has data ?
+            if (UTILS.DB.hasData(rs)) 
+                return true;
+            
+            // Orgs Props
+            rs=UTILS.DB.executeQuery("SELECT * "
+                                     + "FROM orgs_props "
+                                    + "WHERE propID='"+ID+"'");
+        
+            // Has data ?
+            if (UTILS.DB.hasData(rs)) 
+                return true;
+            
             // Stocuri
             rs=UTILS.DB.executeQuery("SELECT * "
                                      + "FROM stocuri "
@@ -425,7 +449,9 @@ public class CUtils
        if (!target_type.equals("ID_TWEET") && 
            !target_type.equals("ID_COM") &&
            !target_type.equals("ID_ASSET") &&
-           !target_type.equals("ID_ASSET_MKT"))
+           !target_type.equals("ID_ASSET_MKT") && 
+           !target_type.equals("ID_PROP") && 
+           !target_type.equals("ID_LAW"))
         return false;
        
        // Result
@@ -456,6 +482,18 @@ public class CUtils
             case "ID_ASSET_MKT" : rs=UTILS.DB.executeQuery("SELECT * "
                                                            + "FROM assets_mkts "
                                                           + "WHERE mktID='"+targetID+"'");
+                                  break;  
+                                  
+            // Party Proposal
+            case "ID_PROP" : rs=UTILS.DB.executeQuery("SELECT * "
+                                                      + "FROM orgs_props "
+                                                     + "WHERE propID='"+targetID+"'");
+                                  break;  
+                                  
+            // Law
+            case "ID_LAW" : rs=UTILS.DB.executeQuery("SELECT * "
+                                                     + "FROM laws "
+                                                    + "WHERE lawID='"+targetID+"'");
                                   break;  
        }
              
@@ -583,6 +621,24 @@ public class CUtils
         }
         
         return true;
+    }
+    
+    public boolean isName(String name) throws Exception 
+    {
+        // Valid domain name ?
+        if (!this.isDomain(name))
+            throw new Exception("Invalid name - CUtils.java "); 
+        
+        // Name exist ?
+        ResultSet rs=UTILS.DB.executeQuery("SELECT * "
+                                           + "FROM adr "
+                                          + "WHERE name='"+name+"'");
+        
+        // Has data ?
+        if (UTILS.DB.hasData(rs))
+            return true;
+        else
+            return false;
     }
     
     // Is base64 encoded string ?
@@ -889,8 +945,11 @@ public class CUtils
                                           + "WHERE pol_endorsed>"+rs_adr.getDouble("pol_endorsed")+" "
                                             + "AND cou='"+rs_adr.getString("cou")+"'");
         
+        // Next 
+        rs.next();
+        
         // Able to vote ?
-        if (rs.getLong("total")>20)
+        if (rs.getLong("total")>24)
            return false;
         else
             return true;
@@ -1505,7 +1564,8 @@ public class CUtils
             || prod.equals("ID_CAR_Q3")
             || prod.equals("ID_HOUSE_Q1")
             || prod.equals("ID_HOUSE_Q2")
-            || prod.equals("ID_HOUSE_Q3"))
+            || prod.equals("ID_HOUSE_Q3")
+            || prod.equals("ID_GIFT"))
         return true;
         else
         return false;
@@ -1589,7 +1649,7 @@ public class CUtils
         long amount=0;
         
         // Daily reward
-        long daily=Math.round(u*0.05/365);
+        long daily=Math.round(u*0.01/365);
         
         // Reward type
         switch (reward)
@@ -1915,7 +1975,8 @@ public class CUtils
          // Query
          ResultSet rs=UTILS.DB.executeQuery("SELECT * "
                                             + "FROM taxes "
-                                           + "WHERE tax='"+tax+"'");
+                                           + "WHERE tax='"+tax+"' "
+                                           + "LIMIT 0,1");
          
          // Has data
          if (UTILS.DB.hasData(rs))
@@ -1996,5 +2057,172 @@ public class CUtils
              return true;
          else
              return false;
+     }
+     
+     public void startTimer()
+     {
+         this.time=System.currentTimeMillis();
+     }
+     
+     public void checkpoint()
+     {
+         System.out.println(System.currentTimeMillis()-this.time+" miliseconds");
+         this.time=System.currentTimeMillis();
+     }
+     
+     public double getBudget(String cou, String cur) throws Exception
+     {
+         // Country address
+         String cou_adr=UTILS.BASIC.getCouAdr(cou);
+         
+         // Balance
+         double balance=UTILS.ACC.getBalance(cou_adr, cur);
+         
+         // Return
+         return balance;
+     }
+     
+     public boolean isPrivate(String cou) throws Exception
+     {
+         // Valid symbol ?
+         if (!this.isCountry(cou))
+             throw new Exception ("Invalid country, CUtils.java, line 1959");
+         
+         // Load country data
+         ResultSet rs=UTILS.DB.executeQuery("SELECT * "
+                                            + "FROM countries "
+                                           + "WHERE cou='"+cou+"'");
+         
+         // Next
+         rs.next();
+         
+         // Private ?
+         if (rs.getString("private").equals("YES"))
+             return true;
+         else
+             return false;
+     }
+     
+     public boolean isCountryOwner(String adr, String cou) throws Exception
+     {
+         // Valid address ?
+         if (!this.isAdr(adr))
+              throw new Exception ("Invalid address, CUtils.java, line 1959");
+         
+         // Valid country ?
+         if (!this.isCountry(cou))
+              throw new Exception ("Invalid address, CUtils.java, line 1959");
+         
+         // Load country data
+         ResultSet rs=UTILS.DB.executeQuery("SELECT * "
+                                            + "FROM countries "
+                                           + "WHERE code='"+cou+"'");
+         
+         // Next
+         rs.next();
+         
+         // Private ?
+         if (rs.getString("owner").equals(adr))
+             return true;
+         else
+             return false;
+     }
+     
+     public boolean isCongressActive(String cou) throws Exception
+     {
+        // Number of citizens minim 100 
+        ResultSet rs=UTILS.DB.executeQuery("SELECT COUNT(*) AS total "
+                                           + "FROM adr "
+                                          + "WHERE cou='"+cou+"'");
+        
+        // Next
+        rs.next();
+        
+        // Total
+        long total_cit=rs.getLong("total");
+        
+        // Min 2500 pol inf 
+        rs=UTILS.DB.executeQuery("SELECT SUM(pol_inf) AS total "
+                                 + "FROM adr "
+                                + "WHERE cou='"+cou+"'");
+        
+        // Next
+        rs.next();
+        
+        // Total
+        long total_pol_inf=rs.getLong("total");
+         
+        // Number of endorsed addressess min 25
+        rs=UTILS.DB.executeQuery("SELECT COUNT(*) AS total "
+                                 + "FROM adr "
+                                + "WHERE pol_endorsed>0 "
+                                  + "AND cou='"+cou+"'");
+        
+        // Next
+        rs.next();
+        
+        // Total
+        long total_endorsed=rs.getLong("total");
+        
+        // Return
+        if (total_cit>100 && 
+            total_pol_inf>10000 && 
+            total_endorsed>25)
+        return true;
+        else
+        return false;
+     }
+     
+     public double getBonus(String cou, String bonus, String prod) throws Exception
+     {
+         // Valid country ?
+         if (!this.isCountry(cou))
+             throw new Exception ("Invalid country, CUtils.java, line 2180");
+         
+         // Valid bonus
+         if (!this.isStringID(bonus))
+             throw new Exception ("Invalid bonus, CUtils.java, line 2184");
+         
+         // Load bonus
+         ResultSet rs=UTILS.DB.executeQuery("SELECT * "
+                                            + "FROM bonuses "
+                                           + "WHERE bonus='"+bonus+"' "
+                                             + "AND cou='"+cou+"' "
+                                             + "AND prod='"+prod+"'");
+         
+         if (!UTILS.DB.hasData(rs))
+            throw new Exception ("Invalid bonus, CUtils.java, line 2191");
+             
+         // Next
+         rs.next();
+         
+         // Return
+         return rs.getDouble("amount");
+     }
+     
+     public double getTax(String cou, String tax) throws Exception
+     {
+         // Valid country ?
+         if (!this.isCountry(cou))
+             throw new Exception ("Invalid country, CUtils.java, line 2180");
+         
+         // Valid bonus
+         if (!this.isStringID(tax))
+             throw new Exception ("Invalid tax, CUtils.java, line 2184");
+         
+         // Load bonus
+         ResultSet rs=UTILS.DB.executeQuery("SELECT * "
+                                            + "FROM taxes "
+                                           + "WHERE bonus='"+tax+"' "
+                                             + "AND cou='"+cou+"'");
+         
+         if (!UTILS.DB.hasData(rs))
+            throw new Exception ("Invalid tax, CUtils.java, line 2191");
+             
+         // Next
+         rs.next();
+         
+         // Return
+         return rs.getDouble("value");
      }
 }

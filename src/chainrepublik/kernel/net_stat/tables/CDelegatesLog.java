@@ -24,17 +24,30 @@ public class CDelegatesLog extends CTable
                                                             + "block BIGINT(20) NOT NULL DEFAULT '0')");
             
             // Indexes
-            UTILS.DB.executeUpdate("CREATE INDEX delegates_delegate ON delegates(delegate)");
-            UTILS.DB.executeUpdate("CREATE INDEX delegates_block ON delegates(block)");
+            UTILS.DB.executeUpdate("CREATE INDEX delegates_log_delegate ON delegates_log(delegate)");
+            UTILS.DB.executeUpdate("CREATE INDEX delegates_log_block ON delegates_log(block)");
             
             // Confirm
             System.out.println("Done.");
         }
    }
    
-   public void reorganize(long block, String chk_hash) throws Exception
+   public void expired(long block) throws Exception
     {
-       // Load checkpoint
-       loadCheckpoint(chk_hash);
+       UTILS.DB.executeUpdate("DELETE FROM delegates_log "
+                                  + "WHERE block<"+(block-1440));
     }
+   
+   public void reorganize(long block, String chk_hash) throws Exception
+   {
+       // Meesage
+       System.out.println("Reorganizing delegates_log...");
+        
+       // Load checkpoint
+       UTILS.DB.executeUpdate("DELETE FROM delegates_log "
+                                  + "WHERE block>"+block);
+       
+       // Meesage
+        System.out.print("Done");
+   }
 }

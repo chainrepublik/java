@@ -28,7 +28,7 @@ public class CEscrowed extends CTable
 			 	 	 	       + "sender_adr VARCHAR(250) NOT NULL DEFAULT '', "
 			 	 	 	       + "rec_adr VARCHAR(250) NOT NULL DEFAULT '', "
                                                        + "escrower VARCHAR(250) NOT NULL DEFAULT '', "
-                                                       + "amount FLOAT(20,8) NOT NULL DEFAULT 0, "
+                                                       + "amount DOUBLE(20,8) NOT NULL DEFAULT 0, "
                                                        + "cur VARCHAR(10) NOT NULL DEFAULT '', "
                                                        + "expires BIGINT NOT NULL DEFAULT 0, "
                                                        + "block BIGINT NOT NULL DEFAULT 0)");

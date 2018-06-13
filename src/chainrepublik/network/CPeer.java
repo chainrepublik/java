@@ -282,7 +282,7 @@ public class CPeer extends Thread
                  long alive=UTILS.BASIC.tstamp();
                }
            }
-	   catch (Exception ex) 
+	   catch (EOFException ex) 
 	   { 
                System.out.println(ex.getMessage() + " - CPeer.java, 254");
                
@@ -294,6 +294,10 @@ public class CPeer extends Thread
                {  
                    System.out.println(e.getMessage() + " - CPeer.java, 257"); 
                }
+           }
+            catch (Exception ex) 
+	   { 
+               System.out.println(ex.getMessage() + " - CPeer.java, 254");
            }
 	  
    }

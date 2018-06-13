@@ -71,6 +71,18 @@ public class CArgs
             // Start mining
             case "start_mining" : UTILS.SETTINGS.start_mining=Boolean.valueOf(val); 
                                   break;
+            
+            case "reorg_block" : UTILS.SETTINGS.reorg_block=Long.valueOf(val); 
+                                 break;
+            
+            // Sync blocks
+            case "sync_blocks" : UTILS.SETTINGS.sync_blocks=Long.valueOf(val); 
+            break;
+            
+            // No sync
+            case "auto_shutdown" : UTILS.SETTINGS.autoshutdown=Boolean.valueOf(val); 
+                                   if (UTILS.SETTINGS.autoshutdown) System.out.println("Auto shutdown mode is ON.");
+                                   break;
               
         }
     }
@@ -84,6 +96,24 @@ public class CArgs
             
             // Message
             System.out.println("Resync initiated. Restart the kernel without op=full_resync."); 
+            
+            // Exit
+            System.exit(0);
+        }
+        
+        if (this.late_op.equals("list_adr"))
+        {
+            // Full resync
+            UTILS.WALLET.list();
+            
+            // Exit
+            System.exit(0);
+        }
+        
+        if (this.late_op.equals("reorg"))
+        {
+            // Full resync
+            UTILS.NETWORK.CONSENSUS.reorganize(UTILS.SETTINGS.reorg_block);
             
             // Exit
             System.exit(0);

@@ -25,7 +25,7 @@ public class CBonuses extends CTable
                                                     + "cou varchar(5) NOT NULL DEFAULT '', "
                                                     + "title varchar(45) NOT NULL DEFAULT '', "
                                                     + "expl varchar(1000) NOT NULL DEFAULT '', "
-                                                    + "amount float(9,4) NOT NULL DEFAULT '0.0000', "
+                                                    + "amount DOUBLE(9,4) NOT NULL DEFAULT '0.0000', "
                                                     + "prod varchar(100) NOT NULL DEFAULT '', "
                                                     + "block BIGINT NOT NULL DEFAULT 0)");
             
@@ -36,7 +36,8 @@ public class CBonuses extends CTable
             UTILS.DB.executeUpdate("CREATE INDEX bonuses_block ON bonuses(block)"); 
             
             // Populate
-            this.populate();
+            if (!this.reorg)
+               this.populate();
             
             // Confirm
             System.out.println("Done.");

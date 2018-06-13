@@ -103,7 +103,7 @@ public class CTable
         this.reorg=true;
         
         // Status
-        System.out.print("Loading checkpoint for table "+this.name+"...");
+        System.out.println("Loading checkpoint for table "+this.name+"...");
         
         // Drop table
         UTILS.DB.executeUpdate("DROP TABLE "+this.name);
@@ -131,7 +131,8 @@ public class CTable
        if (!this.name.equals("actions") && 
            !this.name.equals("my_adr") && 
            !this.name.equals("web_users") &&
-           !this.name.equals("sys_stats"))
+           !this.name.equals("sys_stats") &&
+           !this.name.equals("hidden"))
         UTILS.DB.executeUpdate("DROP TABLE "+this.name);
        
        // Done

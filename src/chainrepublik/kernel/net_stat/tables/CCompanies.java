@@ -72,25 +72,24 @@ public class CCompanies extends CTable
                 UTILS.DB.executeUpdate("DELETE FROM stocuri "
                                            + "WHERE adr='"+adr+"'");
                 
-                // Remove shares asset
-                UTILS.DB.executeUpdate("DELETE FROM assets "
-                                           + "WHERE symbol='"+symbol+"'");
-                
                 // Remove shares owners
                 UTILS.DB.executeUpdate("DELETE FROM assets_owners "
                                            + "WHERE symbol='"+symbol+"'");
                 
                 
                 // Remove asset markets
-                UTILS.DB.executeUpdate("SELECT * "
-                                       + "FROM assets_mkts "
-                                      + "WHERE symbol='"+symbol+"'");
+                ResultSet rs_mkt=UTILS.DB.executeQuery("SELECT * "
+                                                       + "FROM assets_mkts "
+                                                      + "WHERE asset='"+symbol+"'");
                 
                 // Has data ?
-                if (UTILS.DB.hasData(rs))
+                if (UTILS.DB.hasData(rs_mkt))
                 {
+                    // Next
+                    rs_mkt.next();
+                    
                     // Market ID
-                    long mktID=rs.getLong("mktID");
+                    long mktID=rs_mkt.getLong("mktID");
                     
                     // Remove market
                     UTILS.DB.executeUpdate("DELETE FROM assets_mkts "
@@ -99,6 +98,26 @@ public class CCompanies extends CTable
                     // Remove market orders
                     UTILS.DB.executeUpdate("DELETE FROM assets_mkts_pos "
                                                + "WHERE mktID='"+mktID+"'");
+                }
+                
+                // Remove shares asset
+                UTILS.DB.executeUpdate("DELETE FROM assets "
+                                           + "WHERE symbol='"+symbol+"'");
+                
+                // Address has funds ?
+                double balance=UTILS.ACC.getBalance(adr, "CRC");
+                
+                // Funds ?
+                if (balance>0.0001)
+                {
+                    // Move funds to default address
+                    UTILS.DB.executeUpdate("UPDATE adr "
+                                            + "SET balance=balance+"+balance+" "
+                                          + "WHERE adr='default'");
+                    
+                    // Remove address
+                    UTILS.DB.executeUpdate("DELETE FROM adr "
+                                          + "WHERE adr='"+adr+"'");
                 }
                 
             }

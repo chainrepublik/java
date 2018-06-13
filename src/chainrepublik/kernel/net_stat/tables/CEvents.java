@@ -43,7 +43,14 @@ public class CEvents extends CTable
      
     public void reorganize(long block, String chk_hash) throws Exception
     {
-       UTILS.DB.executeUpdate("DELETE FROM events "
+       // Meesage
+       System.out.println("Reorganizing events...");
+        
+       // Delete
+        UTILS.DB.executeUpdate("DELETE FROM events "
                                   + "WHERE block>"+block);
+       
+        // Meesage
+        System.out.print("Done");
     }
 }

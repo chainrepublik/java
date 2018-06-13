@@ -42,7 +42,14 @@ public class COutReq extends CTable
     
     public void expired() throws Exception
     {
-        UTILS.DB.executeUpdate("DELETE FROM out_req "
+       // Meesage
+       System.out.println("Reorganizing out_req...");
+        
+       // Delete
+       UTILS.DB.executeUpdate("DELETE FROM out_req "
                                    + "WHERE tstamp<"+(UTILS.BASIC.tstamp()-864000));
+       
+       // Meesage
+       System.out.print("Done");
     }
 }

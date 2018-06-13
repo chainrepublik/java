@@ -48,7 +48,14 @@ public class CRewards extends CTable
    
    public void reorganize(long block, String chk_hash) throws Exception
    {
+       // Meesage
+       System.out.println("Reorganizing rewards...");
+        
+       // Delete
        UTILS.DB.executeUpdate("DELETE FROM rewards "
                                   + "WHERE block>"+block);
+       
+       // Meesage
+       System.out.print("Done");
    }
 }

@@ -31,7 +31,7 @@ public class CBlocks extends CTable
                                                      + "net_dif VARCHAR(100) NOT NULL DEFAULT '0', "
                                                      + "commited BIGINT NOT NULL DEFAULT 0, "
                                                      + "confirmations BIGINT NOT NULL DEFAULT 0, "
-                                                     + "reward FLOAT(20, 8) NOT NULL DEFAULT 0, "
+                                                     + "reward DOUBLE(20, 8) NOT NULL DEFAULT 0, "
                                                      + "payload_hash VARCHAR(250) NOT NULL DEFAULT '')");
 	    
             // Indexes

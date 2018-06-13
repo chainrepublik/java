@@ -32,10 +32,5 @@ public class CBlocksPool extends CTable
             System.out.println("Done.");
         }
     }
-    
-    public void reorganize(long block, String chk_hash) throws Exception
-    {
-       // Load checkpoint
-       loadCheckpoint(chk_hash);
-    }
+   
 }

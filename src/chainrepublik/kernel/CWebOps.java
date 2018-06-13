@@ -14,6 +14,13 @@ import chainrepublik.network.packets.companies.*;
 import chainrepublik.network.packets.market.CRentPacket;
 import chainrepublik.network.packets.mes.*;
 import chainrepublik.network.packets.misc.*;
+import chainrepublik.network.packets.politics.congress.CEndorsePacket;
+import chainrepublik.network.packets.politics.congress.CNewLawPacket;
+import chainrepublik.network.packets.politics.congress.CVoteLawPacket;
+import chainrepublik.network.packets.politics.orgs.CJoinPartyPacket;
+import chainrepublik.network.packets.politics.orgs.CLeavePartyPacket;
+import chainrepublik.network.packets.politics.orgs.CNewOrgPropPacket;
+import chainrepublik.network.packets.politics.orgs.CVoteOrgPropPacket;
 import chainrepublik.network.packets.portofolio.*;
 import chainrepublik.network.packets.press.*;
 import chainrepublik.network.packets.trans.*;
@@ -57,7 +64,8 @@ public class CWebOps
                        !op.equals("ID_STOP_MINING") &&
                        !op.equals("ID_NEW_ADR") &&
                        !op.equals("ID_ADD_PEER") &&
-                       !op.equals("ID_REMOVE_PEER"))
+                       !op.equals("ID_REMOVE_PEER") &&
+                       !op.equals("ID_CHANGE_NODE_ADR"))
                    {
                        // User valid ?
                        ResultSet rs_user=UTILS.DB.executeQuery("SELECT * "
@@ -67,7 +75,7 @@ public class CWebOps
                                                                    + "AND ma.adr='"+rs.getString("target_adr")+"'");
                        
                        if (!UTILS.DB.hasData(rs_user)) 
-                           passed=false;
+                         passed=false;
                    }
                    
                   
@@ -250,6 +258,85 @@ public class CWebOps
                         UTILS.NETWORK.broadcast(packet);
                     }
                     
+                    // Join political party
+                    if (op.equals("ID_JOIN_PARTY"))
+                    {
+                        CJoinPartyPacket packet=new CJoinPartyPacket(rs.getString("fee_adr"),
+                                                                     rs.getString("target_adr"),
+                                                                     rs.getLong("par_1"));
+                        
+                        UTILS.NETWORK.broadcast(packet);
+                    }
+                    
+                    // Leave political party
+                    if (op.equals("ID_LEAVE_PARTY"))
+                    {
+                        CLeavePartyPacket packet=new CLeavePartyPacket(rs.getString("fee_adr"),
+                                                                       rs.getString("target_adr"));
+                        
+                        UTILS.NETWORK.broadcast(packet);
+                    }
+                    
+                    // Leave political party
+                    if (op.equals("ID_NEW_ORG_PROP"))
+                    {
+                        CNewOrgPropPacket packet=new CNewOrgPropPacket(rs.getString("fee_adr"),
+                                                                       rs.getString("target_adr"),
+                                                                       rs.getLong("par_1"),
+                                                                       rs.getString("par_2"), 
+                                                                       rs.getString("par_3"),
+                                                                       rs.getString("par_4"),
+                                                                       "",
+                                                                       "",
+                                                                       "",
+                                                                       rs.getString("par_5"));
+                        
+                        UTILS.NETWORK.broadcast(packet);
+                    }
+                    
+                    // Leave political party
+                    if (op.equals("ID_VOTE_ORG_PROP"))
+                    {
+                        CVoteOrgPropPacket packet=new CVoteOrgPropPacket(rs.getString("fee_adr"),
+                                                                         rs.getString("target_adr"),
+                                                                         rs.getLong("par_1"),
+                                                                         rs.getString("par_2"));
+                        
+                        UTILS.NETWORK.broadcast(packet);
+                    }
+                    
+                    if (op.equals("ID_VOTE_LAW"))
+                    {
+                        CVoteLawPacket packet=new CVoteLawPacket(rs.getString("fee_adr"),
+                                                                 rs.getString("target_adr"),
+                                                                 rs.getLong("par_1"),
+                                                                 rs.getString("par_2"));
+                        
+                        UTILS.NETWORK.broadcast(packet);
+                    }
+                    
+                    if (op.equals("ID_ENDORSE_ADR"))
+                    {
+                        CEndorsePacket packet=new CEndorsePacket(rs.getString("fee_adr"),
+                                                                 rs.getString("target_adr"),
+                                                                 rs.getString("par_1"),
+                                                                 rs.getString("par_2"));
+                        
+                        UTILS.NETWORK.broadcast(packet);
+                    }
+                    
+                    if (op.equals("ID_NEW_LAW"))
+                    {
+                        CNewLawPacket packet=new CNewLawPacket(rs.getString("fee_adr"),
+                                                               rs.getString("target_adr"),
+                                                               rs.getString("par_1"), 
+                                                               rs.getString("par_2"), 
+                                                               rs.getString("par_3"), 
+                                                               rs.getString("par_4"), 
+                                                               rs.getString("par_5"));
+                        
+                        UTILS.NETWORK.broadcast(packet);
+                    }
                     
                    if (op.equals("ID_IMPORT_ADR"))
                    {
@@ -302,6 +389,7 @@ public class CWebOps
                        // Remove old address
                        UTILS.DB.executeUpdate("DELETE FROM my_adr "
                                                   + "WHERE adr='"+old_adr+"'");
+                       
                    }
                    
                    if (op.equals("ID_RENEW"))
@@ -358,14 +446,10 @@ public class CWebOps
                    }
                    
                    if (op.equals("ID_START_MINING")) 
-                   { 
                        UTILS.CBLOCK.startMiners(rs.getInt("par_1")); 
-                   }
                    
                    if (op.equals("ID_STOP_MINING")) 
-                   { 
                        UTILS.CBLOCK.stopMiners();
-                   }
                    
                    if (op.equals("ID_NEW_AD"))
                    {

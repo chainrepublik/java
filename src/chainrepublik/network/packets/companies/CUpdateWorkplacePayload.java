@@ -126,8 +126,7 @@ public class CUpdateWorkplacePayload extends CPayload
         if (this.status.equals("ID_FREE"))
         {
             // Company has funds ?
-            if (balance<work_rs.getDouble("wage") || 
-                balance<this.wage)
+            if (balance<this.wage)
                 throw new Exception("Insuficient funds to execute this operation - CUpdateWorkplacePayload.java, 73");
             
             // Company has tools ?

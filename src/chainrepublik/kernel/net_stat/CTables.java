@@ -13,6 +13,9 @@ public class CTables
     // Adr
     public CAdr adr;
     
+    // Adr trace
+    public CAdrTrace adr_trace;
+    
     // Adr attr
     public CAdrAttr adr_attr;
     
@@ -97,6 +100,9 @@ public class CTables
     // Events
     public CEvents events;
     
+    // Hidden
+    public CHidden hidden;
+    
     // IPN
     public CIPN ipn;
     
@@ -162,6 +168,9 @@ public class CTables
     
     // Stocuri
     public CStocuri stocuri;
+    
+    // Seas
+    public CSeas seas;
     
     // Sync
     public CSync sync;
@@ -236,6 +245,9 @@ public class CTables
     
         // Adr attr
         this.adr_attr=new CAdrAttr();
+        
+        // Adr trace
+        this.adr_trace=new CAdrTrace();
     
         // Ads
         this.ads=new CAds();
@@ -317,6 +329,9 @@ public class CTables
     
         // Events
         this.events=new CEvents();
+        
+        // Hidden
+        this.hidden=new CHidden();
     
         // IPN
         this.ipn=new CIPN();
@@ -390,6 +405,9 @@ public class CTables
         // Sync
         this.sync=new CSync();
         
+        // Seas
+        this.seas=new CSeas();
+        
         // Sys stats
         this.sys_stats=new CSysStats();
     
@@ -461,6 +479,9 @@ public class CTables
     
         // Ads
         this.ads.create();
+        
+        // Adr trace
+        this.adr_trace.create();
         
         // Agents Log
         this.agents_log.create();
@@ -536,6 +557,9 @@ public class CTables
     
         // Events
         this.events.create();
+        
+        // Hidden
+        this.hidden.create();
     
         // IPN
         this.ipn.create();
@@ -609,6 +633,9 @@ public class CTables
         // Sync
         this.sync.create();
         
+        // Seas
+        this.seas.create();
+        
         // Sys stats
         this.sys_stats.create();
     
@@ -678,9 +705,6 @@ public class CTables
         // Adr attr
         this.adr_attr.refresh(block, hash);
     
-        // Ads
-        this.ads.refresh(block, hash);
-        
         // Allow trans
         this.allow_trans.refresh(block, hash);
     
@@ -711,9 +735,6 @@ public class CTables
         // Countries
         this.countries.refresh(block, hash);
         
-        // Del votes
-        this.del_votes.refresh(block, hash);
-    
         // Delegates
         this.delegates.refresh(block, hash);
         
@@ -741,9 +762,6 @@ public class CTables
         // Tweets
         this.tweets.refresh(block, hash);
     
-        // Tweets Follow
-        this.tweets_follow.refresh(block, hash);
-    
         // Wars
         this.wars.refresh(block, hash);
     
@@ -753,6 +771,9 @@ public class CTables
     
     public void reorganize(long block, String hash) throws Exception
     {
+        // Actions
+        this.actions.reorganize(block, hash);
+    
         // Adata
         this.adata.reorganize(block, hash);
     
@@ -761,10 +782,16 @@ public class CTables
     
         // Adr attr
         this.adr_attr.reorganize(block, hash);
+        
+        // Adr trace
+        this.adr_trace.reorganize(block, hash);
     
         // Ads
         this.ads.reorganize(block, hash);
         
+        // Agents Log
+        this.agents_log.reorganize(block, hash);
+    
         // Allow trans
         this.allow_trans.reorganize(block, hash);
     
@@ -777,11 +804,17 @@ public class CTables
         // Assets mkts pos
         this.assets_mkts_pos.reorganize(block, hash);
         
+        // Assets mkts trades
+        this.assets_mkts_trades.reorganize(block, hash);
+    
         // Assets owners
         this.assets_owners.reorganize(block, hash);
     
-        // Bonuses
-        this.bonuses.reorganize(block, hash);
+        // Blocks
+        this.blocks.reorganize(block, hash);
+    
+        // Checkpoints
+        this.checkpoints.reorganize(block, hash);
     
         // Com prods
         this.com_prods.reorganize(block, hash);
@@ -792,35 +825,140 @@ public class CTables
         // Companies
         this.companies.reorganize(block, hash);
     
+        // Con log
+        this.con_log.reorganize(block, hash);
+    
         // Countries
         this.countries.reorganize(block, hash);
         
+        // Crons
+        this.crons.reorganize(block, hash);
+        
+        // Cron Runs
+        this.cron_runs.reorganize(block, hash);
+    
         // Del votes
         this.del_votes.reorganize(block, hash);
     
         // Delegates
         this.delegates.reorganize(block, hash);
-        
+    
+        // Delegates log
+        this.delegates_log.reorganize(block, hash);
+    
+        // Dividends
+        this.dividends.reorganize(block, hash);
+    
+        // Endorsers
+        this.endorsers.reorganize(block, hash);
+    
+        // ErrorLog
+        this.error_log.reorganize(block, hash);
+    
         // Escrowed
         this.escrowed.reorganize(block, hash);
+    
+        // Events
+        this.events.reorganize(block, hash);
+        
+        // Hidden
+        this.hidden.reorganize(block, hash);
+    
+        // IPN
+        this.ipn.reorganize(block, hash);
+    
+        // IPNLog
+        this.ipn_log.reorganize(block, hash);
+    
+        // Items Consumed
+        this.items_consumed.reorganize(block, hash);
+        
+        // Ips
+        this.ips.reorganize(block, hash);
     
         // Laws
         this.laws.reorganize(block, hash);
     
+        // Laws Votes
+        this.laws_votes.reorganize(block, hash);
+    
+        // Mes
+        this.mes.reorganize(block, hash);
+    
+        // My adr
+        this.my_adr.reorganize(block, hash);
+    
+        // My trans
+        this.my_trans.reorganize(block, hash);
+    
+        // Net Stat
+        this.net_stat.reorganize(block, hash);
+        
         // Orgs
         this.orgs.reorganize(block, hash);
         
         // Orgs props
         this.orgs_props.reorganize(block, hash);
         
+        // Orgs props votes
+        this.orgs_props_votes.reorganize(block, hash);
+    
+        // Out Emails
+        this.out_req.reorganize(block, hash);
+    
+        // Packets
+        this.packets.reorganize(block, hash);
+    
+        // Peers
+        this.peers.reorganize(block, hash);
+    
+        // Peers pool
+        this.peers_pool.reorganize(block, hash);
+    
+        // Rec Packets
+        this.rec_packets.reorganize(block, hash);
+    
+        // Ref stats
+        this.ref_stats.reorganize(block, hash);
+    
         // Rent contracts
         this.rent_contracts.reorganize(block, hash);
+    
+        // Rewards
+        this.rewards.reorganize(block, hash);
     
         // Stocuri
         this.stocuri.reorganize(block, hash);
         
+        // Status Log
+        this.status_log.reorganize(block, hash);
+    
+        // Sync
+        this.sync.reorganize(block, hash);
+        
+        // Sys stats
+        this.sys_stats.reorganize(block, hash);
+    
+        // Tipuri Companii
+        this.tipuri_companii.reorganize(block, hash);
+    
+        // Tipuri Licente
+        this.tipuri_licente.reorganize(block, hash);
+    
+        // Tipuri Produse
+        this.tipuri_produse.reorganize(block, hash);
+        
         // Taxes
         this.taxes.reorganize(block, hash);
+        
+        // Bonuses
+        this.bonuses.reorganize(block, hash);
+    
+        // Trans
+        this.trans.reorganize(block, hash);
+    
+        // Trans Pool
+        this.trans_pool.reorganize(block, hash);
     
         // Tweets
         this.tweets.reorganize(block, hash);
@@ -828,8 +966,29 @@ public class CTables
         // Tweets Follow
         this.tweets_follow.reorganize(block, hash);
     
+        // Votes
+        this.votes.reorganize(block, hash);
+    
+        // Votes Stats
+        this.votes_stats.reorganize(block, hash); 
+    
         // Wars
         this.wars.reorganize(block, hash);
+    
+        // Wars Fighters
+        this.wars_fighters.reorganize(block, hash);
+    
+        // Web Ops
+        this.web_ops.reorganize(block, hash);
+    
+        // Web Sys Data
+        this.web_sys_data.reorganize(block, hash);
+    
+        // Web Users
+        this.web_users.reorganize(block, hash);
+    
+        // Work Procs
+        this.work_procs.reorganize(block, hash);
     
         // Workplaces
         this.workplaces.reorganize(block, hash);
@@ -1145,6 +1304,9 @@ public class CTables
     
         // Events
         this.events.fullResync();
+        
+        // Hidden
+        this.hidden.fullResync();
     
         // IPN
         this.ipn.fullResync();

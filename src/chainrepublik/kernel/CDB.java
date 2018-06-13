@@ -7,12 +7,6 @@ import java.sql.*;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import org.apache.commons.codec.digest.*;
-import org.hsqldb.*;
-import org.hsqldb.util.DatabaseManager;
-
-import java.util.Date;
-import java.util.Random;
 
 
 public class CDB 
@@ -62,8 +56,7 @@ public class CDB
        {
           if (this.con.isClosed())
           {
-               Class.forName("com.mysql.jdbc.Driver").newInstance();
-	       con = DriverManager.getConnection("jdbc:mysql://localhost:3306/"+UTILS.SETTINGS.db_name,
+                con = DriverManager.getConnection("jdbc:mysql://localhost:3306/"+UTILS.SETTINGS.db_name,
 					         UTILS.SETTINGS.db_user,
 					         UTILS.SETTINGS.db_pass);
                
@@ -74,11 +67,6 @@ public class CDB
           {
               return true;
           }
-       }
-       catch (SQLException ex) 
-       { 
-	    System.out.println(ex.getMessage());
-            System.exit(0);
        }
        catch (Exception ex) 
        {
@@ -95,14 +83,13 @@ public class CDB
        if (UTILS.SETTINGS.db_debug.equals("true"))
           System.out.println(query);
            
-       // Check connection
        this.checkConnection();
-       
+        
       // Create statement
-      Statement s=con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+      Statement s=con.createStatement();
       
       // Execute
-      ResultSet rs=s.executeQuery(query);
+      ResultSet rs=s.executeQuery(query); 
       
       // Adds to pool
       cons.add(s);
@@ -110,9 +97,10 @@ public class CDB
       // Size limit ?
       if (UTILS.NETWORK!=null)
       {
-         if (cons.size()>25000) 
+         if (cons.size()>25000 && 
+             UTILS.NETWORK.CONSENSUS.status.equals("ID_WAITING")) 
          {
-            for (int a=0; a<=100; a++)
+              for (int a=0; a<=100; a++)
             {
               // Close
               Statement st=cons.get(a);
@@ -143,7 +131,7 @@ public class CDB
 	
    public long executeUpdate(String query) throws Exception
    {
-      if (UTILS.SETTINGS.db_debug.equals("true"))
+        if (UTILS.SETTINGS.db_debug.equals("true"))
           System.out.println(query);
       
       // Check connection
@@ -158,6 +146,7 @@ public class CDB
       // Close rs
       p.close(); 
       
+     
       // Return
       return a;
    } 

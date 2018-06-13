@@ -23,7 +23,7 @@ public class CTaxes extends CTable
             UTILS.DB.executeUpdate("CREATE TABLE taxes (ID BIGINT AUTO_INCREMENT PRIMARY KEY, "
                                                     + "cou VARCHAR(5) NOT NULL DEFAULT '', "
                                                     + "tax VARCHAR(50) NOT NULL DEFAULT '', "
-                                                    + "value FLOAT(9, 2) NOT NULL DEFAULT 0, "
+                                                    + "value DOUBLE(9, 2) NOT NULL DEFAULT 0, "
                                                     + "prod VARCHAR(100) NOT NULL DEFAULT '', "
                                                     + "op VARCHAR(20) NOT NULL DEFAULT '', "
                                                     + "block BIGINT NOT NULL DEFAULT 0)");
@@ -36,7 +36,8 @@ public class CTaxes extends CTable
             UTILS.DB.executeUpdate("CREATE INDEX taxes_block ON taxes(block)"); 
             
             // Populate
-            this.populate();
+            if (!this.reorg)
+               this.populate();
             
             // Confirm
             System.out.println("Done.");

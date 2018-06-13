@@ -6,9 +6,7 @@ package chainrepublik.network.packets.press;
 import chainrepublik.kernel.UTILS;
 import chainrepublik.network.packets.CPayload;
 import chainrepublik.network.packets.blocks.CBlockPayload;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+
 
 
 public class CNewTweetPayload extends CPayload 
@@ -163,6 +161,33 @@ public class CNewTweetPayload extends CPayload
            if (!UTILS.BASIC.targetValid("ID_POST", this.retweet_tweet_ID))
               throw new Exception("Invalid retweet_tweet_ID - CNewTweetPayload.java");
         
+        // Miliary unit ?
+        if (this.mil_unit>0)
+        {
+            // Address mil unit
+            long mu=Long.parseLong(UTILS.BASIC.getAdrData(this.target_adr, "mil_unit"));
+            
+            // Member ?
+            if (mu!=this.mil_unit)
+                throw new Exception("Invalid military unit - CNewTweetPayload.java");
+        }
+        
+        // Political party ?
+        if (this.pol_party>0)
+        {
+            // Address mil unit
+            long pp=Long.parseLong(UTILS.BASIC.getAdrData(this.target_adr, "pol_party"));
+            
+            // Member ?
+            if (pp!=this.pol_party)
+                throw new Exception("Invalid political party - CNewTweetPayload.java");
+        }
+        
+        // Language
+        if (this.mil_unit>0 || this.pol_party>0)
+            if (this.cou.equals("EN"))
+               throw new Exception("Invalid language - CNewTweetPayload.java");
+        
         // Check Hash
 	String h=UTILS.BASIC.hash(this.getHash()+
  			          this.title+
@@ -196,6 +221,8 @@ public class CNewTweetPayload extends CPayload
                                             + "categ='"+this.categ+"', "
                                             + "expires='"+(this.block+(this.days*1440))+"', "
                                             + "retweet_tweet_ID='"+this.retweet_tweet_ID+"', "
+                                            + "mil_unit='"+this.mil_unit+"', "
+                                            + "pol_party='"+this.pol_party+"', "
                                             + "block='"+this.block+"'");
            
            // Retweet ?

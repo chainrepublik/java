@@ -69,7 +69,14 @@ public class CWorkProcs extends CTable
     
     public void reorganize(long block, String chk_hash) throws Exception
     {
+       // Meesage
+       System.out.println("Reorganizing work_procs...");
+        
+       // Delete
        UTILS.DB.executeUpdate("DELETE FROM work_procs "
                                   + "WHERE block>"+block);
+       
+       // Meesage
+       System.out.print("Done");
     }
 }

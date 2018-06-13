@@ -1,16 +1,14 @@
 package chainrepublik;
-
-import chainrepublik.agents.VM.CVM;
 import chainrepublik.kernel.*;
 import chainrepublik.kernel.net_stat.CNetStat;
 import chainrepublik.kernel.net_stat.CTables;
 import chainrepublik.kernel.temp.CDump;
 import chainrepublik.network.CCurBlock;
 import chainrepublik.network.CNetwork;
-import chainrepublik.network.packets.misc.CGiftPacket;
-import java.io.File;
+import chainrepublik.network.CPeer;
+import chainrepublik.network.packets.sync.CPutBlockPacket;
 import java.security.Security;
-import org.apache.commons.io.FileUtils;
+import java.sql.ResultSet;
 
 
 
@@ -54,9 +52,8 @@ public class main
         
         // Dump
         CDump dump=new CDump();
-        //dump.test();
-        //dump.populateAssetsMktsPos();
-        //dump.dumpTipuriProduse();
+        //dump.polParties("ES", 10);
+        //dump.dumpSeas();
       
         UTILS.MINER_UTILS=new CCPUMinerUtils();
         
@@ -94,19 +91,21 @@ public class main
         
         // Late operations
         UTILS.ARGS.lateOp();
-        
+       
         // Sync
         UTILS.SYNC=new CSync();
         
-        if (UTILS.SETTINGS.seed_mode)
-                UTILS.STATUS.setEngineStatus("ID_ONLINE");
-        else
-                UTILS.SYNC.start();
+        //if (UTILS.SETTINGS.seed_mode)
+            UTILS.STATUS.setEngineStatus("ID_ONLINE");
+        //else
+        //    UTILS.SYNC.start();
         
         
         
         System.out.println("Wallet is up an running...");
-        UTILS.CBLOCK.startMiners(1);
+        
+        
+        //UTILS.CBLOCK.startMiners(1);
         //UTILS.WALLET.list();
         
         // VM
@@ -118,7 +117,7 @@ public class main
                                            "MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEEpn9tcO9qb55dKKTCroSy6fa8mhyhChMYLdJer+WYnVR8Is9l1864vi9Z9eVXTkk3xo1ARNfY+fM0DWI0Wo7+g==", 
                                            "MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEl2O6B0Mx9CBYPXCeu+12qRElGE8PnvRIltHM8RYdLJNIUBi822woawtdw4l1xCsR1UJkHFHWNISrnudXt4ncqA==");
         UTILS.NETWORK.broadcast(packet);*/
-        
+        //UTILS.CRONS.checkLaws(100000);
         
     }
     

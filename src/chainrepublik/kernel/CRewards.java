@@ -616,8 +616,11 @@ public class CRewards
         // Loop
         while (rs.next())
         {
+            // Country area
+            long area=rs.getLong("area");
+                    
             // Percent
-            double p=rs.getLong("area")*100/total_area;
+            double p=UTILS.BASIC.round(area*100.0/total_area, 4);
             
             // Reward
             double amount=UTILS.BASIC.round(p*pool/100, 4);
@@ -884,9 +887,22 @@ public class CRewards
             case "ID_POL_PARTY" : name="political parties reward"; break;
         }
         
-        // Has country ?
-        if (UTILS.BASIC.getAdrData(adr, "cou").equals(""))
-            return;
+        // Taxed ?
+        boolean taxed=true;
+        
+        // Tax ?
+        if (reward.equals("ID_POL_PARTY") || 
+            reward.equals("ID_MIL_UNITS") || 
+            reward.equals("ID_COU_ENERGY") || 
+            reward.equals("ID_COU_AREA") || 
+            reward.equals("ID_NODES"))
+        taxed=false;
+           else 
+        taxed=true;
+        
+        // Taxed ?
+        if (taxed && UTILS.BASIC.getAdrData(adr, "cou").equals(""))
+           return;
         
         // Payment
         UTILS.ACC.newTrans(adr, 
@@ -898,7 +914,7 @@ public class CRewards
                            0,
                            UTILS.BASIC.hash(String.valueOf(this.block)), 
                            this.block,
-                           true,
+                           taxed,
                            "ID_REWARDS_TAX",
                            "");
         

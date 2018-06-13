@@ -26,7 +26,6 @@ public class CDelegates extends CTable
             UTILS.DB.executeUpdate("CREATE TABLE delegates(ID BIGINT AUTO_INCREMENT PRIMARY KEY, "
 				                         + "delegate VARCHAR(500) NOT NULL DEFAULT '', "
 				                         + "power BIGINT NOT NULL DEFAULT 0, "
-                                                         + "dif VARCHAR(100) NOT NULL DEFAULT '', "
                                                          + "block BIGINT NOT NULL DEFAULT 0)");
         
             // Indexes

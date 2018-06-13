@@ -46,8 +46,14 @@ public class CSettings
   // Start mining
   public boolean start_mining=false;
   
-  // Sync start block
-  public long sync_start_block=0;
+  // Reorg block
+  public long reorg_block=0;
+  
+  // Sync bocks
+  public long sync_blocks=1000;
+  
+  // Shotdown on freeze
+  public boolean autoshutdown=false;
   
   
   // Settings

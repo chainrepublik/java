@@ -30,7 +30,8 @@ public class COrgsPropsVotes extends CTable
             UTILS.DB.executeUpdate("CREATE INDEX orgs_props_votes_adr ON orgs_props_votes(adr)");
             UTILS.DB.executeUpdate("CREATE INDEX orgs_props_votes_vote_type ON orgs_props_votes(vote_type)");
             UTILS.DB.executeUpdate("CREATE INDEX orgs_props_votes_block ON orgs_props_votes(block)");
-            
+            UTILS.DB.executeUpdate("CREATE UNIQUE INDEX orgs_props_votes_adr_propID ON orgs_props_votes(adr, propID)");
+           
             // Confirm
             System.out.println("Done.");
         }
@@ -44,7 +45,14 @@ public class COrgsPropsVotes extends CTable
    
    public void reorganize(long block, String chk_hash) throws Exception
    {
+       // Meesage
+       System.out.println("Reorganizing orgs_props_votes...");
+        
+       // Delete
        UTILS.DB.executeUpdate("DELETE FROM orgs_props_votes "
                                   + "WHERE block>"+block);
+       
+       // Meesage
+       System.out.print("Done");
    }
 }

@@ -28,7 +28,7 @@ public class CAdr extends CTable
                                                + "description VARCHAR(1000) NOT NULL DEFAULT '', "
                                                + "ref_adr VARCHAR(500) NOT NULL DEFAULT '', "
                                                + "node_adr VARCHAR(500) NOT NULL DEFAULT '', "
-                                               + "balance double(20,8) NOT NULL DEFAULT 0, "
+                                               + "balance DOUBLE(20,8) NOT NULL DEFAULT 0, "
                                                + "pic VARCHAR(1000) NOT NULL DEFAULT '', "
                                                + "block BIGINT(20) NOT NULL DEFAULT 0, "
                                                + "pol_inf DOUBLE(10,2) NOT NULL DEFAULT 0, "
@@ -93,10 +93,6 @@ public class CAdr extends CTable
         if (this.hasTableRecords("del_votes", "adr", adr)) 
             return true;
         
-        // Domains
-        if (this.hasTableRecords("domains", "adr", adr)) 
-            return true;
-        
         // Escrowed
         if (this.hasTableRecords("escrowed", "sender_adr", adr)) 
             return true;
@@ -105,10 +101,6 @@ public class CAdr extends CTable
             return true;
         
         if (this.hasTableRecords("escrowed", "escrower", adr)) 
-            return true;
-        
-        // Profiles
-        if (this.hasTableRecords("profiles", "adr", adr)) 
             return true;
         
         // Assets markets
@@ -133,26 +125,6 @@ public class CAdr extends CTable
         
         // Tweets follow
         if (this.hasTableRecords("tweets_follow", "adr", adr)) 
-            return true;
-        
-        // Feeds
-        if (this.hasTableRecords("feeds", "adr", adr)) 
-            return true;
-        
-        // Feeds bets
-        if (this.hasTableRecords("feeds_bets", "adr", adr)) 
-            return true;
-        
-        // Feeds bets pos
-        if (this.hasTableRecords("feeds_bets_pos", "adr", adr)) 
-            return true;
-        
-        // Feeds spec mkts
-        if (this.hasTableRecords("feeds_spec_mkts", "adr", adr)) 
-            return true;
-        
-        // Feeds spec mkts pos
-        if (this.hasTableRecords("feeds_spec_mkts_pos", "adr", adr)) 
             return true;
         
         // Ok to delete

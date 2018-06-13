@@ -219,10 +219,8 @@ public class CSync extends Thread
                long start;
                
                // Start
-               if (UTILS.SETTINGS.sync_start_block==0)
-                    start=UTILS.NET_STAT.last_block;
-               else
-                   start=UTILS.SETTINGS.sync_start_block;
+               start=UTILS.NET_STAT.last_block+1;
+             
                
                // Zero ?
                if (start==0) start=1;
@@ -237,7 +235,7 @@ public class CSync extends Thread
                   // Increase counter
                   c++;    
                   
-                  if (c%500==0)
+                  if (c%UTILS.SETTINGS.sync_blocks==0)
                   {
                       // Insert
                       UTILS.DB.executeUpdate("INSERT INTO sync "
@@ -296,7 +294,8 @@ public class CSync extends Thread
            // Get the number of active jobs
 	   ResultSet rs=UTILS.DB.executeQuery("SELECT * "
 				              + "FROM sync "
-				             + "WHERE peer='"+peer+"'");
+				             + "WHERE peer='"+peer+"' "
+                                               + "AND status<>'ID_PENDING'");
 	    
             // Has data ?
             if (UTILS.DB.hasData(rs)) 

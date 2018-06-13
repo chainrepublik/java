@@ -28,7 +28,7 @@ public class CVotes extends CTable
                                                       +"targetID BIGINT NOT NULL DEFAULT '0', "
                                                       +"type VARCHAR(25) NOT NULL DEFAULT '', "
                                                       +"adr VARCHAR(250) NOT NULL DEFAULT '', "
-                                                      +"power FLOAT(9,2) NOT NULL DEFAULT 0, "
+                                                      +"power DOUBLE(9,2) NOT NULL DEFAULT 0, "
                                                       +"block BIGINT NOT NULL DEFAULT '0')");
         
             // Indexes
@@ -52,8 +52,15 @@ public class CVotes extends CTable
     
     public void reorganize(long block, String chk_hash) throws Exception
     {
+       // Meesage
+       System.out.println("Reorganizing votes...");
+        
+       // Delete
        UTILS.DB.executeUpdate("DELETE FROM votes "
                                   + "WHERE block>"+block);
+       
+       // Meesage
+       System.out.print("Done");
     }
     
 }

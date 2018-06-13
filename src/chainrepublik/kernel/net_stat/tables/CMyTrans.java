@@ -56,7 +56,14 @@ public class CMyTrans extends CTable
    
    public void reorganize(long block, String chk_hash) throws Exception
    {
+        // Meesage
+       System.out.println("Reorganizing my_trans...");
+        
+       // Delete
        UTILS.DB.executeUpdate("DELETE FROM my_trans "
                                   + "WHERE block>"+block);
+       
+       // Meesage
+       System.out.print("Done");
    }
 }

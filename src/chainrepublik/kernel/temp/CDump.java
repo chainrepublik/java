@@ -1,5 +1,6 @@
 package chainrepublik.kernel.temp;
 
+import chainrepublik.kernel.CAddress;
 import chainrepublik.kernel.UTILS;
 import java.sql.ResultSet;
 
@@ -18,7 +19,7 @@ public class CDump
         ResultSet rs=UTILS.DB.executeQuery("SELECT * FROM assets_mkts WHERE adr='default'");
         
         while (rs.next())
-            System.out.println("UTILS.DB.executeUpdate(\"INSERT INTO assets_mkts SET adr='"+rs.getString("adr")+"', asset='"+rs.getString("asset")+"', cur='"+rs.getString("cur")+"', name='"+rs.getString("name")+"', description='"+rs.getString("description")+"', decimals='"+rs.getString("decimals")+"', expires='"+rs.getString("expires")+"', last_price='"+rs.getString("last_price")+"', ask='"+rs.getString("ask")+"', bid='"+rs.getString("bid")+"', mktID='"+rs.getString("mktID")+"'\");");
+            System.out.println("INSERT INTO assets_mkts SET adr='"+rs.getString("adr")+"', asset='"+rs.getString("asset")+"', cur='"+rs.getString("cur")+"', name='"+rs.getString("name")+"', description='"+rs.getString("description")+"', decimals='"+rs.getString("decimals")+"', expires='"+rs.getString("expires")+"', last_price='"+rs.getString("last_price")+"', ask='"+rs.getString("ask")+"', bid='"+rs.getString("bid")+"', mktID='"+rs.getString("mktID")+"';");
     }
     
     public void dumpComProds() throws Exception
@@ -34,7 +35,7 @@ public class CDump
         ResultSet rs=UTILS.DB.executeQuery("SELECT * FROM countries");
         
         while (rs.next())
-            System.out.println("UTILS.DB.executeUpdate(\"INSERT INTO countries SET adr='"+rs.getString("adr")+"', country='"+rs.getString("country")+"', code='"+rs.getString("code")+"', x='"+rs.getLong("x")+"', y='"+rs.getLong("y")+"', area='"+rs.getLong("area")+"', occupied='"+rs.getString("occupied")+"' \");");
+            System.out.println("UTILS.DB.executeUpdate(\"INSERT INTO countries SET adr='"+rs.getString("adr")+"', private='"+rs.getString("private")+"', owner='"+rs.getString("owner")+"', country='"+rs.getString("country")+"', code='"+rs.getString("code")+"', x='"+rs.getLong("x")+"', y='"+rs.getLong("y")+"', area='"+rs.getLong("area")+"', occupied='"+rs.getString("occupied")+"' \");");
     }
     
     public void dumpDelegates() throws Exception
@@ -181,6 +182,40 @@ public class CDump
                                              + "price='1', "
                                              + "orderID='"+UTILS.BASIC.getID()+"', "
                                              + "expires=0");
+    }
+    
+    public void polParties(String cou, long no) throws Exception
+    {
+        for (int a=1; a<=no; a++)
+        {
+            CAddress adr=new CAddress();
+            adr.generate();
+            
+            long ID=UTILS.BASIC.getID();
+            UTILS.DB.executeUpdate("INSERT INTO orgs "
+                                         + "SET orgID='"+ID+"', "
+                                             + "type='ID_POL_PARTY', "
+                                             + "country='"+cou+"', "
+                                             + "avatar='"+ID+"', "
+                                             + "adr='"+adr.getPublic()+"'");
+        }
+    }
+    
+    public void dumpPolParties() throws Exception
+    {
+        ResultSet rs=UTILS.DB.executeQuery("SELECT * FROM orgs");
+        
+        while (rs.next())
+            System.out.println("UTILS.DB.executeUpdate(\"INSERT INTO pol_parties SET adr='"+rs.getString("adr")+"', orgID='"+rs.getString("orgID")+"', type='"+rs.getString("type")+"', name='"+rs.getString("name")+"', description='"+rs.getString("description")+"', mil_unit_level='"+rs.getString("mil_unit_level")+"', country='"+rs.getString("country")+"', avatar='"+rs.getString("avatar")+"'\");");
+    }
+    
+    public void dumpSeas() throws Exception
+    {
+        ResultSet rs=UTILS.DB.executeQuery("SELECT * FROM seas");
+        
+        while (rs.next())
+            System.out.println("UTILS.DB.executeUpdate(\"INSERT INTO seas SET name='"+rs.getString("name")+"', posX='"+rs.getLong("posX")+"', posY='"+rs.getString("posY")+"', seaID='"+rs.getLong("seaID")+"'\");");
+    
     }
     
 }

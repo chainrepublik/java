@@ -151,7 +151,7 @@ public class CBlockPacket extends CPacket
                                                this.net_dif))
               {
                  System.out.println("Invalid POW");
-                 return false;
+                 //return false;
               }
               
             // Payload size
@@ -168,6 +168,8 @@ public class CBlockPacket extends CPacket
 	// Check 
 	public void check() throws Exception
 	{
+            
+            
              // Precheck
             if (!this.preCheck())
                 throw new Exception("Invalid block - CBlockPacket.java");
@@ -225,6 +227,7 @@ public class CBlockPacket extends CPacket
                 this.updateConfirms();
         }
         
+        
    public void afterBlock(long block) throws Exception
    {
        // Trans pool
@@ -247,9 +250,10 @@ public class CBlockPacket extends CPacket
        
        // Cleanup
        UTILS.TABLES.expired(block);
-       
+        
        // Refresh
        UTILS.TABLES.refresh(block, this.hash);
+       
    }
    
    public void payReward(String adr) throws Exception
@@ -291,7 +295,6 @@ public class CBlockPacket extends CPacket
        // Block
        long block_no=1;
        
-        
        // Prev hash
        String prev_hash=UTILS.NET_STAT.last_block_hash;
        
@@ -311,21 +314,6 @@ public class CBlockPacket extends CPacket
            // Block no
            block_no=rs.getLong("block");
        
-           // Set confirms to zero
-           UTILS.DB.executeUpdate("UPDATE packets "
-                                   + "SET confirms=0 "
-                                 + "WHERE block='"+block_no+"'");
-           
-           // Set confirms to zero for blocks
-           UTILS.DB.executeUpdate("UPDATE blocks "
-                                   + "SET confirmations=0 "
-                                 + "WHERE hash='"+rs.getString("hash")+"'");
-           
-           // Update confirmations for packets
-           UTILS.DB.executeUpdate("UPDATE packets "
-                                   + "SET confirms='"+confirms+"' "
-                                 + "WHERE block_hash='"+prev_hash+"'");
-           
            // Update confirmations for blocks
            UTILS.DB.executeUpdate("UPDATE blocks "
                                    + "SET confirmations='"+confirms+"' "
@@ -334,9 +322,6 @@ public class CBlockPacket extends CPacket
            // New hash
            prev_hash=rs.getString("prev_hash");
        }
-       
-       // Close
-       
    }
    
    

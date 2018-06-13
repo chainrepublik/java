@@ -34,7 +34,13 @@ public class CCheckpoints extends CTable
     
     public void reorganize(long block, String chk_hash) throws Exception
     {
+        // Meesage
+        System.out.println("Reorganizing checkpoints...");
+        
         // Remove
         UTILS.DB.executeUpdate("DELETE FROM checkpoints WHERE block>"+block);
+        
+        // Meesage
+        System.out.println("Done");
     }
 }

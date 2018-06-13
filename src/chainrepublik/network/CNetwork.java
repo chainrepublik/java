@@ -79,13 +79,15 @@ public class CNetwork extends Thread
           {
               // IP valid ?
               if (adr!=null)
+              {
                 if (!UTILS.BASIC.isIP(adr))
                   throw new Exception("Invalid address - CNetwork.java, 94");
               
-              // Updates last seen
-	      UTILS.DB.executeUpdate("UPDATE peers "
+                 // Updates last seen
+	         UTILS.DB.executeUpdate("UPDATE peers "
                                       + "SET last_seen='"+UTILS.BASIC.tstamp()+"' "
                                     + "WHERE peer='"+adr+"'");
+              }
           }
           
 	  public synchronized void processRequest(CPacket packet, CPeer sender) throws Exception
@@ -100,6 +102,7 @@ public class CNetwork extends Thread
 	     try
 	     { 
 		  // Seen
+                  if (sender!=null)
                   seen(sender.adr);
                   
 		  // Already processed
@@ -123,7 +126,6 @@ public class CNetwork extends Thread
                       if (packet.tip.equals("ID_DELIVER_BLOCKS_PACKET") ||
                           packet.tip.equals("ID_REQ_CON_RESPONSE_PACKET") || 
                           packet.tip.equals("ID_REQ_DATA_PACKET") || 
-                          packet.tip.equals("ID_PUT_BLOCK_PACKET") || 
                           packet.tip.equals("ID_NETSTAT_PACKET") ||
                           packet.tip.equals("ID_PING_PACKET"))
                       packet.check(sender);

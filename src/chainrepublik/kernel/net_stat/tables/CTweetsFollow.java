@@ -50,8 +50,15 @@ public class CTweetsFollow extends CTable
     
     public void reorganize(long block, String chk_hash) throws Exception
     {
-       // Load checkpoint
-       loadCheckpoint(chk_hash);
+       // Meesage
+       System.out.println("Reorganizing tweets_follow...");
+        
+       // Delete
+       UTILS.DB.executeUpdate("DELETE FROM tweets_follow "
+                                  + "WHERE block>"+block);
+       
+       // Meesage
+       System.out.print("Done");
     }
     
 }

@@ -49,8 +49,15 @@ public class CDelVotes extends CTable
     
     public void reorganize(long block, String chk_hash) throws Exception
     {
-       // Load checkpoint
-       loadCheckpoint(chk_hash);
+       // Meesage
+        System.out.println("Reorganizing del_votes...");
+        
+        // Remove
+        UTILS.DB.executeUpdate("DELETE FROM del_votes "
+                                   + "WHERE block>"+block);
+        
+        // Meesage
+        System.out.print("Done");
     }
     
     public void populate() throws Exception

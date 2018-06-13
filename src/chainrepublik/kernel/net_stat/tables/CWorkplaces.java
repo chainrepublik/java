@@ -24,7 +24,7 @@ public class CWorkplaces extends CTable
                                                            +"comID BIGINT(20) NOT NULL DEFAULT 0, "
                                                            +"expires BIGINT NOT NULL DEFAULT 0, "
                                                            +"status VARCHAR(25) NOT NULL DEFAULT '', "
-                                                           +"wage FLOAT(20, 4) NOT NULL DEFAULT 0, "
+                                                           +"wage DOUBLE(20, 4) NOT NULL DEFAULT 0, "
                                                            +"prod VARCHAR(50) NOT NULL DEFAULT '', "
                                                            +"work_ends BIGINT NOT NULL DEFAULT 0, "
                                                            +"block BIGINT NOT NULL DEFAULT 0)");

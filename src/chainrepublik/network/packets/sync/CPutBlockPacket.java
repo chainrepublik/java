@@ -11,7 +11,7 @@ import chainrepublik.network.packets.blocks.CBlockPacket;
 public class CPutBlockPacket extends CPacket
 {
     // Block
-    CBlockPacket block=null;
+    public CBlockPacket block=null;
     
     public CPutBlockPacket(String block_hash) throws Exception
     {

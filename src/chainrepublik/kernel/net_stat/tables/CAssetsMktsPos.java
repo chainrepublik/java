@@ -99,6 +99,11 @@ public class CAssetsMktsPos extends CTable
                                        + "SET qty=qty+"+UTILS.FORMAT_8.format(qty)+" "
                                      + "WHERE owner='"+owner+"' "
                                        + "AND symbol='"+asset+"'");
+                
+                UTILS.DB.executeUpdate("UPDATE stocuri "
+                                       + "SET qty=qty+"+UTILS.FORMAT_8.format(qty)+" "
+                                     + "WHERE adr='"+owner+"' "
+                                       + "AND tip='"+asset+"'");
            }
         }
         

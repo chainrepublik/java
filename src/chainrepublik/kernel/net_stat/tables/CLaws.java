@@ -21,21 +21,24 @@ public class CLaws extends CTable
                 System.out.print("Creating table "+this.name+"...");
             
                 UTILS.DB.executeUpdate("CREATE TABLE laws (ID BIGINT(20) AUTO_INCREMENT PRIMARY KEY, "
+                                                   + "lawID BIGINT(20) DEFAULT NULL, "
                                                    + "adr VARCHAR(250) NOT NULL DEFAULT '', "
                                                    + "type VARCHAR(100) NOT NULL DEFAULT '', "
-                                                   + "bonus VARCHAR(250) NOT NULL DEFAULT '', "
-                                                   + "tax VARCHAR(250) NOT NULL DEFAULT '', "
-                                                   + "new_val float(20,8) NOT NULL DEFAULT 0, "
-                                                   + "expl VARCHAR(1000) NOT NULL DEFAULT '', "
+                                                   + "par_1 VARCHAR(2500) NOT NULL DEFAULT '', "
+                                                   + "par_2 VARCHAR(2500) NOT NULL DEFAULT '', "
+                                                   + "par_3 VARCHAR(2500) NOT NULL DEFAULT '', "
+                                                   + "par_4 VARCHAR(2500) NOT NULL DEFAULT '', "
+                                                   + "par_5 VARCHAR(2500) NOT NULL DEFAULT '', "
+                                                   + "expl VARCHAR(2500) NOT NULL DEFAULT '', "
                                                    + "status VARCHAR(25) NOT NULL DEFAULT '', "
-                                                   + "country VARCHAR(45) DEFAULT NULL, "
+                                                   + "country VARCHAR(45) NOT NULL DEFAULT '', "
                                                    + "voted_yes BIGINT(20) NOT NULL DEFAULT '0', "
                                                    + "voted_no BIGINT(20) NOT NULL DEFAULT '0', "
-                                                   + "lawID BIGINT(20) DEFAULT NULL, "
                                                    + "block BIGINT(20) NOT NULL DEFAULT '0')");
            
                 // Indexes
                 UTILS.DB.executeUpdate("CREATE INDEX laws_adr ON laws(adr)");
+                UTILS.DB.executeUpdate("CREATE INDEX laws_type ON laws(type)");
                 UTILS.DB.executeUpdate("CREATE INDEX laws_status ON laws(status)");
                 UTILS.DB.executeUpdate("CREATE INDEX laws_country ON laws(country)");
                 UTILS.DB.executeUpdate("CREATE UNIQUE INDEX laws_lawID ON laws(lawID)");

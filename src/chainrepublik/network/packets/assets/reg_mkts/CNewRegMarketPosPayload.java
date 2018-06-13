@@ -204,12 +204,20 @@ public class CNewRegMarketPosPayload extends CPayload
                                                asset, 
                                                "New short position on market "+rs.getString("mktID"), 
                                                "", 
-                                               qty*rs.getDouble("price"),
+                                               qty,
                                                this.hash, 
                                                this.block,
                                                false,
                                                "",
                                                "");
+                         
+                         // Product ?
+                         if (UTILS.BASIC.isProd(asset))
+                             UTILS.ACC.payBuyBonus(rs.getString("adr"), 
+                                                   asset, 
+                                                   qty, 
+                                                   this.block, 
+                                                   hash);
                       
                          // Receive coins
                          UTILS.ACC.newTrans(this.target_adr,
@@ -250,7 +258,8 @@ public class CNewRegMarketPosPayload extends CPayload
         {
                 // Asset balance
                 if (balance_cur<this.qty*this.price)
-                     throw new Exception("Innsuficient funds - CNewRegMarketPosPayload.java");
+                    throw new Exception("Innsuficient funds - CNewRegMarketPosPayload.java");
+               
                 
                 // Buy orders
                 rs=UTILS.DB.executeQuery("SELECT * "
@@ -302,12 +311,20 @@ public class CNewRegMarketPosPayload extends CPayload
                                               asset, 
                                               "New long position on market "+rs.getString("mktID"), 
                                               "", 
-                                              qty*rs.getDouble("price"),
+                                              qty,
                                               this.hash, 
                                               this.block,
                                               false,
                                               "",
                                               "");
+                         
+                         // Product ?
+                         if (UTILS.BASIC.isProd(asset))
+                             UTILS.ACC.payBuyBonus(this.target_adr, 
+                                                   asset, 
+                                                   qty, 
+                                                   this.block, 
+                                                   hash);
                          
                         // Remain
                         remain=remain-qty;

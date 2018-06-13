@@ -43,7 +43,7 @@ public class CTransPool
                                                    + "FROM trans_pool "
                                                   + "WHERE src='"+src+"' "
                                                     + "AND hash='"+hash+"' "
-                                                    + "AND amount='"+amount+"' "
+                                                    + "AND amount='"+UTILS.FORMAT_8.format(amount)+"' "
                                                     + "AND block='"+block+"'");
                 
                 if (!UTILS.DB.hasData(rs))

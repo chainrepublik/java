@@ -22,18 +22,20 @@ public class CStocuri extends CTable
             UTILS.DB.executeUpdate("CREATE TABLE stocuri (ID bigint(20) AUTO_INCREMENT PRIMARY KEY, "
                                                     + "adr varchar(250) NOT NULL DEFAULT '', "
                                                     + "tip varchar(100) NOT NULL DEFAULT '', "
-                                                    + "qty float(20,4) NOT NULL DEFAULT '0.0000', "
+                                                    + "qty DOUBLE(20,4) NOT NULL DEFAULT '0.0000', "
                                                     + "expires bigint(20) NOT NULL DEFAULT '0', "
                                                     + "cap bigint(20) NOT NULL DEFAULT '0', "
-                                                    + "used float(20,4) NOT NULL DEFAULT '0.0000', "
-                                                    + "invested float(20,4) NOT NULL DEFAULT '0.0000', "
-                                                    + "sale_qty float(20,4) NOT NULL DEFAULT '0.0000', "
-                                                    + "rented_to varchar(250) DEFAULT '', "
+                                                    + "used DOUBLE(20,4) NOT NULL DEFAULT '0.0000', "
+                                                    + "invested DOUBLE(20,4) NOT NULL DEFAULT '0.0000', "
+                                                    + "sale_qty DOUBLE(20,4) NOT NULL DEFAULT '0.0000', "
+                                                    + "rented_to varchar(250) NOT NULL DEFAULT '', "
                                                     + "rented_expires bigint(20) NOT NULL DEFAULT '0', "
-                                                    + "rent_price float(20,4) NOT NULL DEFAULT '0.0000', "
+                                                    + "rent_price DOUBLE(20,4) NOT NULL DEFAULT '0.0000', "
                                                     + "in_use bigint(20) NOT NULL DEFAULT '0', "
                                                     + "stocID bigint(20) NOT NULL DEFAULT '0', "
-                                                    + "energy float(10,4) DEFAULT '0.0000',"
+                                                    + "energy DOUBLE(10,4) NOT NULL DEFAULT '0.0000',"
+                                                    + "loc_type VARCHAR(20) NOT NULL DEFAULT '',"
+                                                    + "locID VARCHAR(20) NOT NULL DEFAULT '',"
                                                     + "block bigint(20) NOT NULL DEFAULT '0')");
 	
             // Indexes
@@ -44,10 +46,14 @@ public class CStocuri extends CTable
             UTILS.DB.executeUpdate("CREATE INDEX stocuri_rented_expires ON stocuri(rented_expires)");
             UTILS.DB.executeUpdate("CREATE UNIQUE INDEX stocuri_stocID ON stocuri(stocID)");
             UTILS.DB.executeUpdate("CREATE INDEX stocuri_in_use ON stocuri(in_use)");
+            UTILS.DB.executeUpdate("CREATE INDEX stocuri_loc_type ON stocuri(loc_type)");
+            UTILS.DB.executeUpdate("CREATE INDEX stocuri_locID ON stocuri(locID)");
             UTILS.DB.executeUpdate("CREATE INDEX stocuri_block ON stocuri(block)");
             
             // Populate
-            this.populate();
+            if (!this.reorg)
+               this.populate();
+            
             
             // Confirm
             System.out.println("Done.");
@@ -98,7 +104,8 @@ public class CStocuri extends CTable
                  UTILS.BASIC.refreshEnergy(adr);
                  
                  // Rented ?
-                 UTILS.BASIC.refreshEnergy(rented_to);
+                 if (UTILS.BASIC.isAdr(rented_to))
+                    UTILS.BASIC.refreshEnergy(rented_to);
                  
                  // Event
                  UTILS.BASIC.newEvent(rs.getString("adr"), "One of your items has expired. Check your portofolio.", block);

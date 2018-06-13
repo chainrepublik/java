@@ -37,9 +37,9 @@ public class CAdrAttr extends CTable
                                                   + "l1 BIGINT NOT NULL DEFAULT 0, "
                                                   + "l2 BIGINT NOT NULL DEFAULT 0, "
                                                   + "l3 BIGINT NOT NULL DEFAULT 0, "
-                                                  + "d1 FLOAT (20,8) NOT NULL DEFAULT 0, "
-                                                  + "d2 FLOAT (20,8) NOT NULL DEFAULT 0, "
-                                                  + "d3 FLOAT (20,8) NOT NULL DEFAULT 0, "
+                                                  + "d1 DOUBLE (20,8) NOT NULL DEFAULT 0, "
+                                                  + "d2 DOUBLE (20,8) NOT NULL DEFAULT 0, "
+                                                  + "d3 DOUBLE (20,8) NOT NULL DEFAULT 0, "
                                                   + "expires BIGINT NOT NULL DEFAULT 0)");
 	
             // Indexes 

@@ -22,7 +22,7 @@ public class CEndorsers extends CTable
                                                          + "endorser VARCHAR(250) NOT NULL DEFAULT '', "
                                                          + "endorsed VARCHAR(250) DEFAULT NULL DEFAULT '', "
                                                          + "type VARCHAR(20) DEFAULT NULL DEFAULT '', "
-                                                         + "power FLOAT(20,2) DEFAULT NULL DEFAULT 0, "
+                                                         + "power DOUBLE(20,2) DEFAULT NULL DEFAULT 0, "
                                                          + "block BIGINT(20) DEFAULT NULL DEFAULT 0)");
             // Indexes
             UTILS.DB.executeUpdate("CREATE INDEX endorsers_endorser ON endorsers(endorser)");
@@ -51,6 +51,7 @@ public class CEndorsers extends CTable
     public void reorganize(long block, String chk_hash) throws Exception
     {
        // Load checkpoint
-       loadCheckpoint(chk_hash);
+       UTILS.DB.executeUpdate("DELETE FROM endorsers "
+                                  + "WHERE block>"+block);
     }
 }

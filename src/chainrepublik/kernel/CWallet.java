@@ -52,6 +52,9 @@ public class CWallet
    {
 	// Check if settings file exists
         f=new File(UTILS.WRITEDIR+"wallet.CRC");
+        
+        // Log 
+        System.out.println("Loading wallet from "+UTILS.WRITEDIR+"wallet.CRC");
         	  
 	// File exist ?
 	if (f.exists()==false)

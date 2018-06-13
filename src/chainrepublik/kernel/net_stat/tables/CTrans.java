@@ -49,4 +49,17 @@ public class CTrans extends CTable
         UTILS.DB.executeUpdate("DELETE FROM trans "
                                    + "WHERE block<"+(block-14400));
     }
+    
+    public void reorganize(long block, String chk_hash) throws Exception
+    {
+        // Meesage
+       System.out.println("Reorganizing trans...");
+        
+       // Delete
+       UTILS.DB.executeUpdate("DELETE FROM trans "
+                                  + "WHERE block>"+block);
+       
+       // Meesage
+       System.out.print("Done");
+    }
 }

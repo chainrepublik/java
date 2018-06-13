@@ -20,7 +20,7 @@ public class CTipuriProduse extends CTable
             // Create
                     UTILS.DB.executeUpdate("CREATE TABLE tipuri_produse (ID BIGINT(20) AUTO_INCREMENT PRIMARY KEY, "
                                                               + "prod VARCHAR(50) NOT NULL DEFAULT '', "
-                                                              + "work_hours float(20,2) NOT NULL DEFAULT '0.00', "
+                                                              + "work_hours DOUBLE(20,2) NOT NULL DEFAULT '0.00', "
                                                               + "prod_1 VARCHAR(50) NOT NULL DEFAULT '', "
                                                               + "prod_1_qty DOUBLE(20,8) NOT NULL DEFAULT '0.00000000', "
                                                               + "prod_2 VARCHAR(50) NOT NULL DEFAULT '', "
@@ -42,7 +42,7 @@ public class CTipuriProduse extends CTable
                                                               + "capacity BIGINT(20) NOT NULL DEFAULT '0', "
                                                               + "name VARCHAR(45) DEFAULT NULL, "
                                                               + "expires BIGINT(20) DEFAULT NULL, "
-                                                              + "net_cost float(10,4) DEFAULT '0.00', "
+                                                              + "net_cost DOUBLE(10,4) DEFAULT '0.00', "
                                                               + "damage BIGINT(20) DEFAULT '0')");
            
             // Indexes

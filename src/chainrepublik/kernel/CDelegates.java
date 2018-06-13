@@ -104,10 +104,6 @@ public class CDelegates
         rs=UTILS.DB.executeQuery("SELECT * "
                                  + "FROM delegates");
         
-        // Parse
-        while (rs.next())
-            UTILS.DB.executeUpdate("UPDATE delegates "
-                                    + "SET dif='"+UTILS.BASIC.formatDif(this.getDif(rs.getString("delegate"), block).toString(16))+"'");
         
         // Delete downvoted delegates
         UTILS.DB.executeUpdate("DELETE FROM delegates WHERE power<10");
@@ -174,15 +170,7 @@ public class CDelegates
             return false;
     }
     
-    
-    
-    public BigInteger getDif(String delegate, long block) throws Exception
-    {
-        return UTILS.NET_STAT.net_dif.multiply(BigInteger.valueOf(this.getPower(delegate, block)));
-    }
-    
    
-    
     public long getMinedBlocks(String delegate, long block) throws Exception
     {
         ResultSet rs=UTILS.DB.executeQuery("SELECT COUNT(*) AS mined "

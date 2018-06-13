@@ -252,7 +252,7 @@ public class CPeers extends Thread
         // Load data
         ResultSet rs=UTILS.DB.executeQuery("SELECT * "
                                            + "FROM peers "
-                                          + "WHERE last_seen<"+String.valueOf(UTILS.BASIC.tstamp()-60));
+                                          + "WHERE last_seen<"+String.valueOf(UTILS.BASIC.tstamp()-120));
            
         // Remove peers
         while (rs.next()) 
@@ -273,7 +273,7 @@ public class CPeers extends Thread
               tick++;
               
               // Ping
-               if (tick % 20==0) 
+               if (tick % 30==0) 
                {
                   CPing ping=new CPing();
                   UTILS.NETWORK.broadcast(ping);

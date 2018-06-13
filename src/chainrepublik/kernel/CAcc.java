@@ -52,27 +52,25 @@ public class CAcc
                                      rs.getDouble("amount"), 
                                      block);
                       
-                      // Update trans
-                      UTILS.DB.executeUpdate("UPDATE trans "
-                                              + "SET status='ID_CLEARED' "
-                                            + "WHERE ID='"+rs.getLong("ID")+"'");
-                    }
-                }
-                
-             
+                // Update trans
+                UTILS.DB.executeUpdate("UPDATE trans "
+                                        + "SET status='ID_CLEARED' "
+                                      + "WHERE ID='"+rs.getLong("ID")+"'");
+            }
         }
+    }
         
         
-        public double newProdTrans(String adr, 
+    public double newProdTrans(String adr, 
                                    double amount, 
                                    String prod, 
                                    String expl, 
                                    String hash,
                                    double cost,
                                    long block) throws Exception
-        {
-            // ResultSet
-            ResultSet rs;
+    {
+        // ResultSet
+        ResultSet rs;
             
             // Address valid
             if (!UTILS.BASIC.isAdr(adr) && 
@@ -1067,10 +1065,6 @@ public class CAcc
                        String hash, 
                        long block) throws Exception
     {
-        // Block ?
-        if (block<20000)
-            return;
-            
         // Product ?
         if (!prod.equals(""))
             if (!UTILS.BASIC.isProd(prod))
@@ -1094,7 +1088,7 @@ public class CAcc
                                                  + "amount='"+UTILS.FORMAT_8.format(-t)+"', "
                                                  + "cur='CRC', "
                                                  + "hash='"+hash+"', "
-                                                 + "expl='You paid a tax to state budget', "
+                                                 + "expl='WW91IHBhaWQgYSB0YXggdG8gc3RhdGUgYnVkZ2V0', "
                                                  + "invested='0', "
                                                  + "block='"+block+"', "
                                                  + "block_hash='"+UTILS.NET_STAT.actual_block_hash+"', "
@@ -1107,7 +1101,7 @@ public class CAcc
                                                  + "amount='"+UTILS.FORMAT_8.format(t)+"', "
                                                  + "cur='CRC', "
                                                  + "hash='"+hash+"', "
-                                                 + "expl='You received a tax', "
+                                                 + "expl='WW91IHJlY2VpdmVkIGEgdGF4', "
                                                  + "invested='0', "
                                                  + "block='"+block+"', "
                                                  + "block_hash='"+UTILS.NET_STAT.actual_block_hash+"', "
@@ -1116,19 +1110,86 @@ public class CAcc
             
             // Mine ?
 	    if (UTILS.WALLET.isMine(adr))
-                UTILS.DB.executeUpdate("INSERT INTO trans "
-                                             + "SET src='"+adr+"', "
-                                                 + "amount='"+UTILS.FORMAT_8.format(-t)+"', "
-                                                 + "cur='CRC', "
+                UTILS.DB.executeUpdate("INSERT INTO my_trans "
+                                             + "SET userID='"+this.getAdrUserID(adr)+"', "
+                                                 + "adr='"+adr+"', "
+                                                 + "amount='"+UTILS.FORMAT_8.format(t)+"', "
+                                                 + "cur='"+prod+"', "
+                                                 + "expl='WW91IHBhaWQgYSB0YXggdG8gc3RhdGUgYnVkZ2V0', "
                                                  + "hash='"+hash+"', "
-                                                 + "expl='You paid a tax to state budget', "
-                                                 + "invested='0', "
                                                  + "block='"+block+"', "
                                                  + "block_hash='"+UTILS.NET_STAT.actual_block_hash+"', "
-                                                 + "tstamp='"+UTILS.BASIC.tstamp()+"', "
-                                                 + "status='ID_PENDING'");
+                                                 + "tstamp='"+UTILS.BASIC.tstamp()+"'");
+            
         }
     }
     
-    
+    public void payBuyBonus(String adr, 
+                            String prod, 
+                            double qty,
+                            long block,
+                            String hash) throws Exception
+    {
+        // Adr
+        if (!UTILS.BASIC.isAdr(adr)) 
+           throw new Exception("Invalid address, CAcc.java, 1138");
+            
+        // Product
+        if (!UTILS.BASIC.isProd(prod))
+            throw new Exception("Invalid product, CAcc.java, 1142");
+        
+        // Qty ?
+        if (qty<0)
+            throw new Exception("Invalid qty, CAcc.java, 1146");
+        
+        // Hash
+        if (!UTILS.BASIC.isHash(hash))
+            throw new Exception("Invalid hash, CAcc.java, 1150");
+        
+        // Address country
+        String cou=UTILS.BASIC.getAdrData(adr, "cou");
+        
+        // Countru valid ?
+        if (!UTILS.BASIC.isCou(cou))
+            throw new Exception("Invalid country, CAcc.java, 1157");
+        
+        // Load bous amount
+        double bonus=UTILS.BASIC.getBonus(cou, "ID_BUY_BONUS", prod);
+        
+        // Bonus not zero ?
+        if (bonus>0)
+        {
+            // Bonus amount
+            bonus=bonus*qty;
+        
+            // Budget ?
+            if (UTILS.BASIC.getBudget(cou, "CRC")<bonus)
+            {
+                // Post event
+                UTILS.BASIC.newEvent(adr, "State budget run out of cash. All bonuses where reset to zero.", block);
+            
+                // Set all bonuses on zero
+                UTILS.DB.executeUpdate("UPDATE bonuses "
+                                        + "SET amount=0 "
+                                      + "WHERE cou='"+cou+"'");
+            }
+        
+            // Premium citizen or company ?
+            if (UTILS.BASIC.isCompanyAdr(adr) ||
+                Long.parseLong(UTILS.BASIC.getAdrData(adr, "premium"))>0)
+                UTILS.ACC.newTransfer(UTILS.BASIC.getCouAdr(cou), 
+                                      adr,
+                                      bonus, 
+                                      "CRC", 
+                                      "State budget bonus", 
+                                      "", 
+                                      0,
+                                      UTILS.BASIC.hash(String.valueOf(block)), 
+                                      block,
+                                      false,
+                                      "",
+                                      "");  
+        }
+        
+    }
 }
