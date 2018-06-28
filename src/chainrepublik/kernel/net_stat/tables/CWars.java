@@ -20,18 +20,22 @@ public class CWars extends CTable
             
             // Create
             UTILS.DB.executeUpdate("CREATE TABLE wars (ID BIGINT(20) AUTO_INCREMENT PRIMARY KEY, "
-                                                    + "warID BIGINT(20) DEFAULT NULL, "
-                                                    + "attacker VARCHAR(10) NOT NULL, "
-                                                    + "defender VARCHAR(45) DEFAULT NULL, "
-                                                    + "attacker_points VARCHAR(45) DEFAULT NULL, "
-                                                    + "defender_points VARCHAR(45) DEFAULT NULL, "
-                                                    + "status VARCHAR(20) DEFAULT '', "
-                                                    + "block BIGINT(20) DEFAULT NULL)");
+                                                    + "warID BIGINT(20) NOT NULL DEFAULT 0, "
+                                                    + "attacker VARCHAR(10) NOT NULL DEFAULT '', "
+                                                    + "defender VARCHAR(10) NOT NULL DEFAULT '', "
+                                                    + "target VARCHAR(10) NOT NULL DEFAULT '', "
+                                                    + "attacker_points VARCHAR(45) NOT NULL DEFAULT 0, "
+                                                    + "defender_points VARCHAR(45) NOT NULL DEFAULT 0, "
+                                                    + "status VARCHAR(20) NOT NULL DEFAULT 'ID_PENDING', "
+                                                    + "lawID BIGINT NOT NULL DEFAULT 0, "
+                                                    + "block BIGINT(20) NOT NULL DEFAULT 0)");
             
             // Indexes
             UTILS.DB.executeUpdate("CREATE UNIQUE INDEX wars_warID ON wars(warID)");
             UTILS.DB.executeUpdate("CREATE INDEX wars_attacker ON wars(attacker)");
             UTILS.DB.executeUpdate("CREATE INDEX wars_defender ON wars(defender)");
+            UTILS.DB.executeUpdate("CREATE INDEX wars_target ON wars(target)");
+            UTILS.DB.executeUpdate("CREATE INDEX wars_lawID ON wars(lawID)");
             UTILS.DB.executeUpdate("CREATE INDEX wars_block ON wars(block)");
             
             // Confirm

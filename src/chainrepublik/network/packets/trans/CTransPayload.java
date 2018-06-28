@@ -76,8 +76,6 @@ public class CTransPayload extends CPayload
                                         this.expl_dest+
                                         mes_hash); 
            
-          // Sign
-          this.sign();
        }
         
         

@@ -23,17 +23,16 @@ public class CAddAttrPacket extends CBroadcastPacket
                           long days) throws Exception
     {
         // Constructor
-        super("ID_ADD_ATTR_PACKET");
+        super(fee_adr, "ID_ADD_ATTR_PACKET");
         
         // Builds the payload class
-	  CAddAttrPayload dec_payload=new CAddAttrPayload(target_adr, attr,  s1, s2, s3, l1, l2, l3, d1, d2, d3, days);
+	CAddAttrPayload dec_payload=new CAddAttrPayload(target_adr, attr,  s1, s2, s3, l1, l2, l3, d1, d2, d3, days);
 					
 	// Build the payload
 	this.payload=UTILS.SERIAL.serialize(dec_payload);
 					
         // Network fee
-	CFeePayload fee=new CFeePayload(fee_adr,  0.0001*days, "Add address attribute network fee");
-	this.fee_payload=UTILS.SERIAL.serialize(fee);
+	this.setFee(0.0001*days, "Add address attribute network fee");
 			   
 	// Sign packet
 	this.sign();
@@ -52,11 +51,8 @@ public class CAddAttrPacket extends CBroadcastPacket
           // Deserialize transaction data
    	  CAddAttrPayload dec_payload=(CAddAttrPayload) UTILS.SERIAL.deserialize(payload);
           
-          // Deserialize payload
-          CFeePayload fee=(CFeePayload) UTILS.SERIAL.deserialize(fee_payload);
-        
           // Check fee
-	  if (fee.amount<0.0001*dec_payload.days)
+	  if (this.fee<0.0001*dec_payload.days)
 	      throw new Exception("Invalid fee - CAddAttrPacket.java");
           
           // Check payload

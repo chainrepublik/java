@@ -30,9 +30,6 @@ public class CWorkPayload extends CPayload
  	hash=UTILS.BASIC.hash(this.getHash()+
  			      this.workplaceID+
                               this.minutes);
-           
-        // Sign
-        this.sign();
     }
     
     public void disableWorkplaces(long comID, String reason) throws Exception

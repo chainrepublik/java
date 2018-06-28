@@ -33,8 +33,6 @@ public class UTILS
    // AES
     public static CAES AES;
     
-    // ECC
-    public static CECC ECC;
     
     // Network
     public static CNetwork NETWORK;
@@ -93,4 +91,7 @@ public class UTILS
     
     // Tables
     public static CTables TABLES;
+    
+    // Laws
+    public static CLaws LAWS;
 }

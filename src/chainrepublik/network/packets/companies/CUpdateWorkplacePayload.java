@@ -47,9 +47,7 @@ public class CUpdateWorkplacePayload extends CPayload
                               this.status+
  			      this.wage+
                               this.prod);
-           
-        // Sign
-        this.sign();
+     
     }
     
      public void check(CBlockPayload block) throws Exception

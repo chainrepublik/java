@@ -14,7 +14,7 @@ public class CWorkPacket extends CBroadcastPacket
                        long minutes) throws Exception
     {
         // Constructor
-        super("ID_WORK_PACKET");
+        super(fee_adr, "ID_WORK_PACKET");
         
         // Builds the payload class
 	CWorkPayload dec_payload=new CWorkPayload(adr,
@@ -25,8 +25,7 @@ public class CWorkPacket extends CBroadcastPacket
 	this.payload=UTILS.SERIAL.serialize(dec_payload);
 					
         // Network fee
-	CFeePayload fee=new CFeePayload(fee_adr, 0.0001, "Work network fee");
-	this.fee_payload=UTILS.SERIAL.serialize(fee);
+	this.setFee(0.0001, "Work network fee");
 			   
 	// Sign packet
 	this.sign();
@@ -45,11 +44,8 @@ public class CWorkPacket extends CBroadcastPacket
           // Deserialize transaction data
    	  CWorkPayload dec_payload=(CWorkPayload) UTILS.SERIAL.deserialize(payload);
           
-          // Deserialize payload
-          CFeePayload fee=(CFeePayload) UTILS.SERIAL.deserialize(fee_payload);
-        
           // Check fee
-	  if (fee.amount<0.0001)
+	  if (this.fee<0.0001)
 	      throw new Exception("Invalid fee - CWorkPacket.java");
           
           // Check payload

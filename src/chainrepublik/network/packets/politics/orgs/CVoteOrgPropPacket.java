@@ -14,7 +14,7 @@ public class CVoteOrgPropPacket extends CBroadcastPacket
                                String vote) throws Exception
     {
         // Constructor
-        super("ID_VOTE_ORG_PROP_PACKET");
+        super(fee_adr, "ID_VOTE_ORG_PROP_PACKET");
         
         // Builds the payload class
 	CVoteOrgPropPayload dec_payload=new CVoteOrgPropPayload(adr, 
@@ -25,8 +25,7 @@ public class CVoteOrgPropPacket extends CBroadcastPacket
 	this.payload=UTILS.SERIAL.serialize(dec_payload);
 					
         // Network fee
-	CFeePayload fee=new CFeePayload(fee_adr,  0.0001, "Vote organization proposal network fee");
-	this.fee_payload=UTILS.SERIAL.serialize(fee);
+	this.setFee(0.0001, "Vote organization proposal network fee");
 			   
 	// Sign packet
 	this.sign();
@@ -45,11 +44,8 @@ public class CVoteOrgPropPacket extends CBroadcastPacket
           // Deserialize transaction data
    	  CVoteOrgPropPayload dec_payload=(CVoteOrgPropPayload) UTILS.SERIAL.deserialize(payload);
           
-          // Deserialize payload
-          CFeePayload fee=(CFeePayload) UTILS.SERIAL.deserialize(fee_payload);
-        
           // Check fee
-	  if (fee.amount<0.0001)
+	  if (this.fee<0.0001)
 	      throw new Exception("Invalid fee - CEndorsePacket.java");
           
           // Check payload

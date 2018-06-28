@@ -17,22 +17,21 @@ public class CNewLawPacket extends CBroadcastPacket
                          String expl) throws Exception
     {
         // Constructor
-        super("ID_NEW_LAW_PACKET");
+        super(fee_adr, "ID_NEW_LAW_PACKET");
         
         // Builds the payload class
 	CNewLawPayload dec_payload=new CNewLawPayload(adr, 
                                                      law_type, 
                                                      par_1, 
                                                      par_2, 
-                                                     par_3, 
+                                                     par_3,
                                                      expl);
                               
 	// Build the payload
 	this.payload=UTILS.SERIAL.serialize(dec_payload);
 					
         // Network fee
-	CFeePayload fee=new CFeePayload(fee_adr,  0.0001, "Congress law proposal network fee");
-	this.fee_payload=UTILS.SERIAL.serialize(fee);
+	this.setFee(0.0001, "Congress law proposal network fee");
 			   
 	// Sign packet
 	this.sign();
@@ -51,11 +50,8 @@ public class CNewLawPacket extends CBroadcastPacket
           // Deserialize transaction data
    	  CNewLawPayload dec_payload=(CNewLawPayload) UTILS.SERIAL.deserialize(payload);
           
-          // Deserialize payload
-          CFeePayload fee=(CFeePayload) UTILS.SERIAL.deserialize(fee_payload);
-        
           // Check fee
-	  if (fee.amount<0.0001)
+	  if (this.fee<0.0001)
 	      throw new Exception("Invalid fee - CNewLawPacket.java");
           
           // Check payload
@@ -66,8 +62,8 @@ public class CNewLawPacket extends CBroadcastPacket
           foot.add("Address", dec_payload.target_adr);
           foot.add("Law Type", dec_payload.law_type);
           foot.add("Paramater 1", dec_payload.par_1);
-          foot.add("Paramater 1", dec_payload.par_2);
-          foot.add("Paramater 1", dec_payload.par_3);
+          foot.add("Paramater 2", dec_payload.par_2);
+          foot.add("Paramater 3", dec_payload.par_3);
           foot.add("Explanation", dec_payload.expl);
           foot.write();
     }

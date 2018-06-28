@@ -15,7 +15,7 @@ public class CCloseRegMarketPosPacket extends CBroadcastPacket
                                     String adr,
                                     long orderID) throws Exception
     {
-          super("ID_REG_ASSET_MARKET_CLOSE_POS_PACKET");
+          super(fee_adr, "ID_REG_ASSET_MARKET_CLOSE_POS_PACKET");
 	  
 	  // Builds the payload class
 	  CCloseRegMarketPosPayload dec_payload=new CCloseRegMarketPosPayload(adr, orderID);
@@ -24,8 +24,7 @@ public class CCloseRegMarketPosPacket extends CBroadcastPacket
 	  this.payload=UTILS.SERIAL.serialize(dec_payload);
 					
           // Network fee
-	  CFeePayload fee=new CFeePayload(fee_adr,  0.0001, "Close asset market position network fee");
-	  this.fee_payload=UTILS.SERIAL.serialize(fee);
+	  this.setFee(0.0001, "Close asset market position network fee");
 			   
 	   // Sign packet
 	   this.sign();
@@ -44,11 +43,8 @@ public class CCloseRegMarketPosPacket extends CBroadcastPacket
           // Deserialize transaction data
    	  CCloseRegMarketPosPayload dec_payload=(CCloseRegMarketPosPayload) UTILS.SERIAL.deserialize(payload);
           
-          // Deserialize payload
-          CFeePayload fee=(CFeePayload) UTILS.SERIAL.deserialize(fee_payload);
-        
           // Check fee
-	  if (fee.amount<0.0001)
+	  if (this.fee<0.0001)
 	      throw new Exception("Invalid fee - CCloseRegMarketPosPacket.java");
           
           // Check payload

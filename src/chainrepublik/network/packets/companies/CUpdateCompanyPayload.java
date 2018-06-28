@@ -48,9 +48,7 @@ public class CUpdateCompanyPayload extends CPayload
  			      this.name+
                               this.desc+
  			      this.pic);
-           
-        // Sign
-        this.sign();
+       
     }
     
     

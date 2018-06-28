@@ -3,6 +3,7 @@
 
 package chainrepublik.kernel;
 
+import chainrepublik.network.packets.CBroadcastPacket;
 import java.sql.ResultSet;
 import java.util.Timer;
 import chainrepublik.network.packets.CPacket;
@@ -24,6 +25,7 @@ import chainrepublik.network.packets.politics.orgs.CVoteOrgPropPacket;
 import chainrepublik.network.packets.portofolio.*;
 import chainrepublik.network.packets.press.*;
 import chainrepublik.network.packets.trans.*;
+import chainrepublik.network.packets.war.CFightPacket;
 
 
 public class CWebOps 
@@ -40,6 +42,8 @@ public class CWebOps
      public void loadWebOps() throws Exception
      { 
          String op;
+         
+         CBroadcastPacket packet=null;
          
           
        try
@@ -125,7 +129,7 @@ public class CWebOps
                                // Send coins
                                if (UTILS.STATUS.new_acc_reward>0.0001)
                                {
-                                    CTransPacket packet=new CTransPacket(UTILS.STATUS.node_adr, 
+                                     packet=new CTransPacket(UTILS.STATUS.node_adr, 
 			                                                 UTILS.STATUS.node_adr,  
 			                                                 adr, 
 			                                                 UTILS.STATUS.new_acc_reward, 
@@ -133,20 +137,22 @@ public class CWebOps
 			                                                 "Welcome to ChainRepublik",
                                                                          "",
                                                                          rs.getLong("ID"));
+                                     
+                                     UTILS.NETWORK.broadcast(packet);
                         
-                                    UTILS.NETWORK.broadcast(packet);
+                                    
                                }
                                
                                // Welcome gift ?
                                if (UTILS.ACC.getBalance(UTILS.STATUS.node_adr, "ID_GIFT")>1)
                                {
                                     // New packet
-                                    CGiftPacket packet=new CGiftPacket(UTILS.STATUS.node_adr, 
+                                     packet=new CGiftPacket(UTILS.STATUS.node_adr, 
                                                                        UTILS.STATUS.node_adr, 
                                                                        adr);
                        
-                                    // Broadcast
                                     UTILS.NETWORK.broadcast(packet);
+                                    
                                }
                            }
                        }
@@ -156,24 +162,24 @@ public class CWebOps
                    if (op.equals("ID_CONSUME_ITEM"))
                    {
                        // New packet
-                       CConsumeItemPacket packet=new CConsumeItemPacket(rs.getString("fee_adr"),
+                        packet=new CConsumeItemPacket(rs.getString("fee_adr"),
                                                                         rs.getString("target_adr"),
                                                                         rs.getLong("par_1"));
                        
-                       // Broadcast
-                       UTILS.NETWORK.broadcast(packet);
+                       
+                       
                    }
                    
                    // Gift
                    if (op.equals("ID_GIFT"))
                    {
                        // New packet
-                       CGiftPacket packet=new CGiftPacket(rs.getString("fee_adr"),
+                        packet=new CGiftPacket(rs.getString("fee_adr"),
                                                           rs.getString("target_adr"),
                                                           rs.getString("par_1"));
                        
-                       // Broadcast
-                       UTILS.NETWORK.broadcast(packet);
+                       
+                       
                    }
                    
                    // Add peer
@@ -189,18 +195,18 @@ public class CWebOps
                    if (op.equals("ID_USE_ITEM"))
                    {
                        // Packet
-                       CUseItemPacket packet=new CUseItemPacket(rs.getString("fee_adr"),
+                        packet=new CUseItemPacket(rs.getString("fee_adr"),
                                                                 rs.getString("target_adr"),
                                                                 rs.getLong("par_1"));
                        
-                       // Broadcast
-                       UTILS.NETWORK.broadcast(packet);
+                       
+                       
                    }
                    
                    // New transaction
                    if (op.equals("ID_TRANSACTION")) 
                    {
-                        CTransPacket packet=new CTransPacket(rs.getString("fee_adr"),
+                         packet=new CTransPacket(rs.getString("fee_adr"),
                                                              rs.getString("target_adr"),
                                                              rs.getString("par_1"),
                                                              rs.getDouble("par_2"),
@@ -209,12 +215,12 @@ public class CWebOps
                                                              rs.getString("par_5"),
                                                              rs.getLong("ID"));
                         
-                        UTILS.NETWORK.broadcast(packet);
+                        
                    }
                    
                    if (op.equals("ID_ADR_REGISTER_PACKET"))
                    {
-                       CAdrRegisterPacket packet=new CAdrRegisterPacket(rs.getString("fee_adr"),
+                        packet=new CAdrRegisterPacket(rs.getString("fee_adr"),
                                                                         rs.getString("target_adr"),
 		                                                        rs.getString("par_1"), 
 		                                                        UTILS.BASIC.base64_decode(rs.getString("par_2")),
@@ -224,7 +230,7 @@ public class CWebOps
                                                                         rs.getString("par_6"),
                                                                         rs.getLong("days"));
                     
-                       UTILS.NETWORK.broadcast(packet);
+                       
                    }
                    
                    
@@ -250,37 +256,37 @@ public class CWebOps
                     // Escrowed sign
                     if (op.equals("ID_ESCROWED_SIGN"))
                     {
-                        CEscrowedTransSignPacket packet=new CEscrowedTransSignPacket(rs.getString("fee_adr"),
+                         packet=new CEscrowedTransSignPacket(rs.getString("fee_adr"),
                                                                                      rs.getString("par_1"),
                                                                                      rs.getString("target_adr"),
                                                                                      rs.getString("par_2"));
                         
-                        UTILS.NETWORK.broadcast(packet);
+                        
                     }
                     
                     // Join political party
                     if (op.equals("ID_JOIN_PARTY"))
                     {
-                        CJoinPartyPacket packet=new CJoinPartyPacket(rs.getString("fee_adr"),
+                         packet=new CJoinPartyPacket(rs.getString("fee_adr"),
                                                                      rs.getString("target_adr"),
                                                                      rs.getLong("par_1"));
                         
-                        UTILS.NETWORK.broadcast(packet);
+                        
                     }
                     
                     // Leave political party
                     if (op.equals("ID_LEAVE_PARTY"))
                     {
-                        CLeavePartyPacket packet=new CLeavePartyPacket(rs.getString("fee_adr"),
+                         packet=new CLeavePartyPacket(rs.getString("fee_adr"),
                                                                        rs.getString("target_adr"));
                         
-                        UTILS.NETWORK.broadcast(packet);
+                        
                     }
                     
                     // Leave political party
                     if (op.equals("ID_NEW_ORG_PROP"))
                     {
-                        CNewOrgPropPacket packet=new CNewOrgPropPacket(rs.getString("fee_adr"),
+                         packet=new CNewOrgPropPacket(rs.getString("fee_adr"),
                                                                        rs.getString("target_adr"),
                                                                        rs.getLong("par_1"),
                                                                        rs.getString("par_2"), 
@@ -291,51 +297,61 @@ public class CWebOps
                                                                        "",
                                                                        rs.getString("par_5"));
                         
-                        UTILS.NETWORK.broadcast(packet);
+                        
                     }
                     
                     // Leave political party
                     if (op.equals("ID_VOTE_ORG_PROP"))
                     {
-                        CVoteOrgPropPacket packet=new CVoteOrgPropPacket(rs.getString("fee_adr"),
+                         packet=new CVoteOrgPropPacket(rs.getString("fee_adr"),
                                                                          rs.getString("target_adr"),
                                                                          rs.getLong("par_1"),
                                                                          rs.getString("par_2"));
                         
-                        UTILS.NETWORK.broadcast(packet);
+                        
                     }
                     
                     if (op.equals("ID_VOTE_LAW"))
                     {
-                        CVoteLawPacket packet=new CVoteLawPacket(rs.getString("fee_adr"),
+                         packet=new CVoteLawPacket(rs.getString("fee_adr"),
                                                                  rs.getString("target_adr"),
                                                                  rs.getLong("par_1"),
                                                                  rs.getString("par_2"));
                         
-                        UTILS.NETWORK.broadcast(packet);
+                        
                     }
                     
                     if (op.equals("ID_ENDORSE_ADR"))
                     {
-                        CEndorsePacket packet=new CEndorsePacket(rs.getString("fee_adr"),
+                         packet=new CEndorsePacket(rs.getString("fee_adr"),
                                                                  rs.getString("target_adr"),
                                                                  rs.getString("par_1"),
                                                                  rs.getString("par_2"));
                         
-                        UTILS.NETWORK.broadcast(packet);
+                        
+                    }
+                    
+                    if (op.equals("ID_FIGHT"))
+                    {
+                         packet=new CFightPacket(rs.getString("fee_adr"),
+                                                             rs.getString("target_adr"),
+                                                             rs.getLong("par_1"), 
+                                                             rs.getString("par_2"));
+                        
+                        
                     }
                     
                     if (op.equals("ID_NEW_LAW"))
                     {
-                        CNewLawPacket packet=new CNewLawPacket(rs.getString("fee_adr"),
-                                                               rs.getString("target_adr"),
-                                                               rs.getString("par_1"), 
-                                                               rs.getString("par_2"), 
-                                                               rs.getString("par_3"), 
-                                                               rs.getString("par_4"), 
-                                                               rs.getString("par_5"));
+                         packet=new CNewLawPacket(rs.getString("fee_adr"),
+                                                  rs.getString("target_adr"),
+                                                  rs.getString("par_1"), 
+                                                  rs.getString("par_2"), 
+                                                  rs.getString("par_3"), 
+                                                  rs.getString("par_4"), 
+                                                  rs.getString("par_5"));
                         
-                        UTILS.NETWORK.broadcast(packet);
+                        
                     }
                     
                    if (op.equals("ID_IMPORT_ADR"))
@@ -394,30 +410,30 @@ public class CWebOps
                    
                    if (op.equals("ID_RENEW"))
                    {
-                       CRenewPacket packet=new CRenewPacket(rs.getString("fee_adr"), 
+                        packet=new CRenewPacket(rs.getString("fee_adr"), 
                                                             rs.getString("target_adr"), 
                                                             rs.getString("par_1"), 
                                                             rs.getLong("par_2"), 
                                                             rs.getLong("days"));
-                       UTILS.NETWORK.broadcast(packet);
+                       
                    }
                    
                    if (op.equals("ID_WORK"))
                    {
-                       CWorkPacket packet=new CWorkPacket(rs.getString("fee_adr"), 
+                        packet=new CWorkPacket(rs.getString("fee_adr"), 
                                                           rs.getString("target_adr"), 
                                                           rs.getLong("par_1"), 
                                                           rs.getLong("par_2"));
-                       UTILS.NETWORK.broadcast(packet);
+                       
                    }
                    
                    if (op.equals("ID_WTH_FUNDS"))
                    {
-                       CWthFundsPacket packet=new CWthFundsPacket(rs.getString("fee_adr"), 
+                        packet=new CWthFundsPacket(rs.getString("fee_adr"), 
                                                                   rs.getString("target_adr"), 
                                                                   rs.getLong("par_1"), 
                                                                   rs.getDouble("par_2"));
-                       UTILS.NETWORK.broadcast(packet);
+                       
                    }
                    
                    if (op.equals("ID_SHUTDOWN"))
@@ -428,7 +444,7 @@ public class CWebOps
                    
                    if (op.equals("ID_ADD_ATTR"))
                    {
-                      CAddAttrPacket packet=new  CAddAttrPacket(rs.getString("fee_adr"),
+                       packet=new  CAddAttrPacket(rs.getString("fee_adr"),
 		                                                rs.getString("target_adr"),
                                                                 rs.getString("par_1"),
                                                                 rs.getString("par_2"),
@@ -442,7 +458,7 @@ public class CWebOps
                                                                 rs.getDouble("par_10"),
                                                                 rs.getLong("days"));
                                                                    
-                       UTILS.NETWORK.broadcast(packet);
+                       
                    }
                    
                    if (op.equals("ID_START_MINING")) 
@@ -453,7 +469,7 @@ public class CWebOps
                    
                    if (op.equals("ID_NEW_AD"))
                    {
-                       CNewAdPacket packet=new CNewAdPacket(rs.getString("fee_adr"), 
+                        packet=new CNewAdPacket(rs.getString("fee_adr"), 
 		                                            rs.getString("target_adr"), 
 		                                            rs.getString("par_1"), 
 		                                            rs.getString("par_2"), 
@@ -461,32 +477,32 @@ public class CWebOps
                                                             rs.getLong("days"), 
 		                                            rs.getDouble("bid"));
                                                 
-                       UTILS.NETWORK.broadcast(packet);
+                       
                    }
                    
                    if (op.equals("ID_TRAVEL"))
                    {
-                       CTravelPacket packet=new CTravelPacket(rs.getString("fee_adr"), 
+                        packet=new CTravelPacket(rs.getString("fee_adr"), 
 		                                              rs.getString("target_adr"), 
 		                                              rs.getString("par_1"));
                        
-                       UTILS.NETWORK.broadcast(packet);
+                       
                    }
                    
                    if (op.equals("ID_CHG_CIT"))
                    {
-                       CAdrChgCitPacket packet=new CAdrChgCitPacket(rs.getString("fee_adr"), 
+                        packet=new CAdrChgCitPacket(rs.getString("fee_adr"), 
 		                                                    rs.getString("target_adr"), 
 		                                                    rs.getString("par_1"));
                        
-                       UTILS.NETWORK.broadcast(packet);
+                       
                    }
                    
                    
                     // Send message
                    if (op.equals("ID_SEND_MES"))
                    {
-                      CMesPacket packet=new CMesPacket(rs.getString("fee_adr"), 
+                       packet=new CMesPacket(rs.getString("fee_adr"), 
                                                        rs.getString("target_adr"),
 		                                       rs.getString("par_1"), 
                                                        rs.getString("par_2"), 
@@ -494,7 +510,7 @@ public class CWebOps
                                                        rs.getString("packet_sign"),
                                                        rs.getString("payload_sign"));
                                  
-                      UTILS.NETWORK.broadcast(packet);
+                      
                    }  
                    
                    
@@ -502,29 +518,19 @@ public class CWebOps
                    // New regular asset market
                    if (op.equals("ID_VOTE_DELEGATE"))
                    {
-                       CDelVotePacket packet=new CDelVotePacket(rs.getString("fee_adr"), 
+                        packet=new CDelVotePacket(rs.getString("fee_adr"), 
                                                                 rs.getString("target_adr"),
                                                                 rs.getString("par_1"),
                                                                 rs.getString("par_2"));
                       
-                       UTILS.NETWORK.broadcast(packet);
+                       
                    }
                    
-                   // Raaw packet
-                   if (op.equals("ID_RAW_PACKET"))
-                   {
-                       // Load data
-                       String data=rs.getString("par_1");
-                       byte[] decoded=UTILS.BASIC.base64_decode_data(data);
-                       CPacket packet=(CPacket) UTILS.SERIAL.deserialize(decoded);
-                       
-                       // Broadcast
-                       UTILS.NETWORK.broadcast(packet);
-                   }  
+                    
                    
                    if (op.equals("ID_ISSUE_ASSET"))
                    {
-                     CIssueAssetPacket packet=new CIssueAssetPacket(rs.getString("fee_adr"), 
+                      packet=new CIssueAssetPacket(rs.getString("fee_adr"), 
                                                                     rs.getString("target_adr"),
                                                                     rs.getString("par_1"),
                                                                     rs.getString("par_2"),
@@ -538,13 +544,13 @@ public class CWebOps
                                                                     rs.getString("par_10"),
                                                                     rs.getLong("days"));    
                         
-                        UTILS.NETWORK.broadcast(packet);
+                        
                    }
                    
                    // New regular asset market
                    if (op.equals("ID_NEW_REGULAR_ASSET_MARKET"))
                    {
-                       CNewRegMarketPacket packet=new CNewRegMarketPacket(rs.getString("fee_adr"), 
+                        packet=new CNewRegMarketPacket(rs.getString("fee_adr"), 
                                                                           rs.getString("target_adr"),
                                                                           rs.getString("par_1"),
                                                                           rs.getString("par_2"), 
@@ -553,25 +559,25 @@ public class CWebOps
                                                                           rs.getLong("par_5"),
                                                                           rs.getLong("days"));
                        
-                       UTILS.NETWORK.broadcast(packet);
+                       
                    }
                    
                    // Rent licence
                    if (op.equals("ID_RENT_LIC"))
                    {
-                       CRentLicencePacket packet=new CRentLicencePacket(rs.getString("fee_adr"), 
+                        packet=new CRentLicencePacket(rs.getString("fee_adr"), 
                                                                         rs.getString("target_adr"),
                                                                         rs.getLong("par_1"),
                                                                         rs.getString("par_2"), 
                                                                         rs.getLong("days"));
                               
-                        UTILS.NETWORK.broadcast(packet);
+                        
                    }
                    
                    // New regular asset market
                    if (op.equals("ID_NEW_REGULAR_MKT_POS"))
                    {
-                       CNewRegMarketPosPacket packet=new CNewRegMarketPosPacket(rs.getString("fee_adr"), 
+                        packet=new CNewRegMarketPosPacket(rs.getString("fee_adr"), 
                                                                                 rs.getString("target_adr"),
                                                                                 rs.getLong("par_1"), 
                                                                                 rs.getString("par_2"),
@@ -579,50 +585,50 @@ public class CWebOps
                                                                                 rs.getDouble("par_4"),
                                                                                 rs.getLong("days"));
                        
-                       UTILS.NETWORK.broadcast(packet);
+                       
                    }
                    
                    // Rent workplace
                    if (op.equals("ID_RENT_WORKPLACE"))
                    {
                        // New workplace
-                       CNewWorkplacePacket packet =new CNewWorkplacePacket(rs.getString("fee_adr"), 
+                        packet =new CNewWorkplacePacket(rs.getString("fee_adr"), 
                                                                            rs.getString("target_adr"),
                                                                            rs.getLong("par_1"), 
                                                                            rs.getLong("days"));
                        
-                       // Broadcast
-                       UTILS.NETWORK.broadcast(packet);
+                       
+                       
                    }
                    
                    // Rent workplace
                    if (op.equals("ID_UPDATE_WORKPLACE"))
                    {
                        // New workplace
-                       CUpdateWorkplacePacket packet =new CUpdateWorkplacePacket(rs.getString("fee_adr"), 
+                        packet =new CUpdateWorkplacePacket(rs.getString("fee_adr"), 
                                                                                  rs.getString("target_adr"),
                                                                                  rs.getLong("par_1"), 
                                                                                  rs.getString("par_2"), 
                                                                                  rs.getDouble("par_3"), 
                                                                                  rs.getString("par_4"));
                        
-                       // Broadcast
-                       UTILS.NETWORK.broadcast(packet);
+                       
+                       
                    }
                    
                    // New regular asset market
                    if (op.equals("ID_CLOSE_REGULAR_MKT_POS"))
                    {
-                       CCloseRegMarketPosPacket packet=new CCloseRegMarketPosPacket(rs.getString("fee_adr"), 
+                        packet=new CCloseRegMarketPosPacket(rs.getString("fee_adr"), 
                                                                                     rs.getString("target_adr"),
                                                                                     rs.getLong("par_1"));
                        
-                       UTILS.NETWORK.broadcast(packet);
+                       
                    }
                    
                    if (op.equals("ID_NEW_TWEET"))
                    {
-                        CNewTweetPacket packet=new CNewTweetPacket(rs.getString("fee_adr"), 
+                         packet=new CNewTweetPacket(rs.getString("fee_adr"), 
                                                                    rs.getString("target_adr"),
                                                                    UTILS.BASIC.base64_decode(rs.getString("par_1")), 
 		                                                   UTILS.BASIC.base64_decode(rs.getString("par_2")), 
@@ -634,114 +640,114 @@ public class CWebOps
                                                                    rs.getLong("par_8"),
                                                                    rs.getLong("days"));
                        
-                        UTILS.NETWORK.broadcast(packet);
+                        
                    }
                    
                    
                    // New tweet
                    if (op.equals("ID_NEW_COMMENT"))
                    {
-                       CCommentPacket packet=new  CCommentPacket(rs.getString("fee_adr"),
+                        packet=new  CCommentPacket(rs.getString("fee_adr"),
                                                                  rs.getString("target_adr"),
 		                                                 rs.getString("par_1"),
                                                                  rs.getLong("par_2"),
                                                                  rs.getString("par_3"));
                        
-                       UTILS.NETWORK.broadcast(packet);
+                       
                    }
                    
                    
                     // Update comment status
                    if (op.equals("ID_VOTE"))
                    {
-                       CVotePacket packet=new CVotePacket(rs.getString("fee_adr"),
+                        packet=new CVotePacket(rs.getString("fee_adr"),
                                                           rs.getString("target_adr"),
 		                                          rs.getString("par_1"), 
                                                           rs.getLong("par_2"), 
                                                           rs.getString("par_3"));
                        
-                       UTILS.NETWORK.broadcast(packet);
+                       
                    }
                    
                    // Follow
                    if (op.equals("ID_FOLLOW"))
                    {
-                       CFollowPacket packet=new CFollowPacket(rs.getString("fee_adr"),
+                        packet=new CFollowPacket(rs.getString("fee_adr"),
                                                               rs.getString("target_adr"),
 		                                              rs.getString("par_1"),
                                                               rs.getLong("days"));
                        
-                       UTILS.NETWORK.broadcast(packet);
+                       
                    }
                    
                    // Set rent price
                    if (op.equals("ID_SET_RENT_PRICE"))
                    {
-                       CSetRentPricePacket packet=new CSetRentPricePacket(rs.getString("fee_adr"),
+                        packet=new CSetRentPricePacket(rs.getString("fee_adr"),
                                                                           rs.getString("target_adr"),
 		                                                          rs.getLong("par_1"),
                                                                           rs.getDouble("par_2"));
                        
-                       UTILS.NETWORK.broadcast(packet);
+                       
                    }
                    
                    
                    // Rent item
                    if (op.equals("ID_RENT_ITEM"))
                    {
-                       CRentPacket packet=new CRentPacket(rs.getString("fee_adr"),
+                        packet=new CRentPacket(rs.getString("fee_adr"),
                                                           rs.getString("target_adr"),
 		                                          rs.getLong("par_1"),
                                                           rs.getLong("days"));
                        
-                       UTILS.NETWORK.broadcast(packet);
+                       
                    }
                    
                    // Update Company
                    if (op.equals("ID_UPDATE_COMPANY"))
                    {
-                       CUpdateCompanyPacket packet=new CUpdateCompanyPacket(rs.getString("fee_adr"),
+                        packet=new CUpdateCompanyPacket(rs.getString("fee_adr"),
                                                                             rs.getString("target_adr"),
                                                                             rs.getLong("par_1"),
 		                                                            rs.getString("par_2"),
                                                                             rs.getString("par_3"),
                                                                             rs.getString("par_4"));
                        
-                       UTILS.NETWORK.broadcast(packet);
+                       
                    }
                    
                    
                    // Update profile
                    if (op.equals("ID_UPDATE_PROFILE"))
                    {
-                       CUpdateProfilePacket packet=new CUpdateProfilePacket(rs.getString("fee_adr"),
+                        packet=new CUpdateProfilePacket(rs.getString("fee_adr"),
                                                                             rs.getString("target_adr"),
 		                                                            rs.getString("par_1"),
                                                                             rs.getString("par_2"));
                        
-                       UTILS.NETWORK.broadcast(packet);
+                       
                    }
                    
                    // Unfollow
                    if (op.equals("ID_UNFOLLOW"))
                    {
-                       CUnfollowPacket packet=new CUnfollowPacket(rs.getString("fee_adr"),
+                        packet=new CUnfollowPacket(rs.getString("fee_adr"),
                                                                   rs.getString("target_adr"),
 		                                                  rs.getString("par_1"));
                        
-                       UTILS.NETWORK.broadcast(packet);
+                       
                    }
                    
                    
                    // Unfollow
                    if (op.equals("ID_DONATE_ITEM"))
                    {
-                       CDonateItemPacket packet=new CDonateItemPacket(rs.getString("fee_adr"),
+                        packet=new CDonateItemPacket(rs.getString("fee_adr"),
                                                                       rs.getString("target_adr"),
 		                                                      rs.getLong("par_1"),
                                                                       rs.getString("par_2"));
                        
-                       UTILS.NETWORK.broadcast(packet);
+                       
                    }
                    
                    // New Company
@@ -753,7 +759,7 @@ public class CWebOps
                         
                         
                         // Packet
-                        CNewCompanyPacket packet=new CNewCompanyPacket(rs.getString("fee_adr"),
+                         packet=new CNewCompanyPacket(rs.getString("fee_adr"),
                                                                        adr,
                                                                        rs.getString("par_1"),
                                                                        rs.getString("par_2"),
@@ -764,10 +770,43 @@ public class CWebOps
                                                                        rs.getString("par_7"),
                                                                        rs.getLong("days"));
                         
-                        // Broadcast
-                        UTILS.NETWORK.broadcast(packet);
+                        
+                        
                     }
-                   
+                    
+                    if (packet!=null)
+                    {
+                       // Has signature ?
+                       if (packet.sign.equals(""))
+                       {
+                          if (!rs.getString("packet_sign").equals(""))
+                          {
+                              // Set signature
+                              packet.setSign(rs.getString("packet_sign"));
+                              
+                              // Broadcast
+                              UTILS.NETWORK.broadcast(packet);
+                              
+                              // Update status
+                              UTILS.DB.executeUpdate("UPDATE web_ops "
+                                                      + "SET status='ID_EXECUTED' "
+                                                    + "WHERE ID='"+rs.getLong("ID")+"'"); 
+                          }
+                          else
+                          {
+                              // Update status
+                              UTILS.DB.executeUpdate("UPDATE web_ops "
+                                                      + "SET status='ID_WAIT_SIGN', "
+                                                          + "packet_hash='"+packet.hash+"' "
+                                                    + "WHERE ID='"+rs.getLong("ID")+"'"); 
+                          }
+                       }
+                       else
+                       {
+                           if (!op.equals("ID_NEW_ACCOUNT"))
+                              UTILS.NETWORK.broadcast(packet);
+                       }
+                    }
                    }
                 }
            }
@@ -785,7 +824,13 @@ public class CWebOps
             // Update web ops
             try 
             { 
-                UTILS.DB.executeUpdate("UPDATE web_ops SET status='ID_EXECUTED'"); 
+                UTILS.DB.executeUpdate("UPDATE web_ops "
+                                        + "SET status='ID_EXECUTED' "
+                                      + "WHERE status='ID_PENDING'"); 
+                
+                UTILS.DB.executeUpdate("DELETE FROM web_ops "
+                                           + "WHERE status='ID_WAIT_SIGN' "
+                                             + "AND tstamp<="+(UTILS.BASIC.tstamp()-600));
             } 
             catch (Exception ex) 
             {

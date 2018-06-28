@@ -21,7 +21,7 @@ public class CEscrowedTransSignPacket  extends CBroadcastPacket
                                     String signer, 
                                     String type) throws Exception
     {
-	  super("ID_ESCROWED_TRANS_SIGN");
+	  super(fee_adr, "ID_ESCROWED_TRANS_SIGN");
 	  
           // Builds the payload class
 	  CEscrowedTransSignPayload dec_payload=new CEscrowedTransSignPayload(signer, trans_hash, type);
@@ -30,8 +30,7 @@ public class CEscrowedTransSignPacket  extends CBroadcastPacket
 	   this.payload=UTILS.SERIAL.serialize(dec_payload);
 			
 	   // Network fee
-           CFeePayload fee=new CFeePayload(fee_adr,  0.0001, "Escrowed transaction network fee");
-	   this.fee_payload=UTILS.SERIAL.serialize(fee);
+           this.setFee(0.0001, "Escrowed transaction network fee");
 	   
 	   // Sign packet
 	   this.sign();
@@ -51,11 +50,8 @@ public class CEscrowedTransSignPacket  extends CBroadcastPacket
      CEscrowedTransSignPayload dec_payload=(CEscrowedTransSignPayload) UTILS.SERIAL.deserialize(payload);
      dec_payload.check(block);
      
-     // Deserialize payload
-     CFeePayload fee=(CFeePayload) UTILS.SERIAL.deserialize(fee_payload);
-          
      // Check fee
-     if (fee.amount<0.0001)
+     if (this.fee<0.0001)
 	throw new Exception("Invalid fee - CTweetMesPacket.java"); 
      
      // Footprint

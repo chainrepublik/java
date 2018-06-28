@@ -4,6 +4,7 @@
 package chainrepublik.kernel;
 
 import chainrepublik.network.packets.blocks.CBlockPayload;
+import java.awt.Point;
 import java.security.SecureRandom;
 import java.sql.ResultSet;
 import java.util.regex.Matcher;
@@ -433,6 +434,15 @@ public class CUtils
             rs=UTILS.DB.executeQuery("SELECT * "
                                      + "FROM wars "
                                     + "WHERE warID='"+ID+"'");
+        
+            // Has data ?
+            if (UTILS.DB.hasData(rs)) 
+                return true;
+            
+            // Exchange
+            rs=UTILS.DB.executeQuery("SELECT * "
+                                     + "FROM exchange "
+                                    + "WHERE exID='"+ID+"'");
         
             // Has data ?
             if (UTILS.DB.hasData(rs)) 
@@ -2091,7 +2101,7 @@ public class CUtils
          // Load country data
          ResultSet rs=UTILS.DB.executeQuery("SELECT * "
                                             + "FROM countries "
-                                           + "WHERE cou='"+cou+"'");
+                                           + "WHERE code='"+cou+"'");
          
          // Next
          rs.next();
@@ -2170,7 +2180,7 @@ public class CUtils
             total_endorsed>25)
         return true;
         else
-        return false;
+        return true;
      }
      
      public double getBonus(String cou, String bonus, String prod) throws Exception
@@ -2225,4 +2235,369 @@ public class CUtils
          // Return
          return rs.getDouble("value");
      }
+     
+     public boolean isStateWeapon(String weapon) throws Exception
+     {
+         if (!weapon.equals("ID_TANK_ROUND") && 
+             !weapon.equals("ID_TANK") && 
+             !weapon.equals("ID_MISSILE_AIR_SOIL") && 
+             !weapon.equals("ID_MISSILE_SOIL_SOIL") && 
+             !weapon.equals("ID_MISSILE_BALISTIC_SHORT") && 
+             !weapon.equals("ID_MISSILE_BALISTIC_MEDIUM") && 
+             !weapon.equals("ID_MISSILE_BALISTIC_LONG") && 
+             !weapon.equals("ID_MISSILE_BALISTIC_INTERCONTINENTAL") && 
+             !weapon.equals("ID_NAVY_DESTROYER") && 
+             !weapon.equals("ID_AIRCRAFT_CARRIER") && 
+             !weapon.equals("ID_JET_FIGHTER"))
+        return false;
+         else
+        return true;
+     }
+     
+     public boolean isAttackWeapon(String weapon) throws Exception
+     {
+        if (!weapon.equals("ID_KNIFE") && 
+            !weapon.equals("ID_PISTOL") && 
+            !weapon.equals("ID_REVOLVER") && 
+            !weapon.equals("ID_RIFFLE") && 
+            !weapon.equals("ID_MACHINE_GUN") && 
+            !weapon.equals("ID_GRENADE_LAUNCHER"))
+        return false;
+         else
+        return true; 
+     }
+     
+     public boolean isDefenseWeapon(String weapon) throws Exception
+     {
+         if (!weapon.equals("ID_GLOVES") && 
+             !weapon.equals("ID_GLASSES") && 
+             !weapon.equals("ID_HELMET") && 
+             !weapon.equals("ID_BOOTS") && 
+             !weapon.equals("ID_VEST") && 
+             !weapon.equals("ID_SHIELD"))
+        return false;
+         else
+        return true;
+     }
+     
+     public long getWeaponDamage(String weapon) throws Exception
+     {
+        // Damage
+         long damage=0;
+         
+        // Is weapon ?
+        if (!this.isAttackWeapon(weapon) && 
+            !this.isDefenseWeapon(weapon))
+        throw new Exception ("Invalid weapon, CUtils.java, line 2191");
+        
+        // Select weapon
+        switch (weapon)
+        {
+            // Knife
+            case "ID_KNIFE" :  damage=100; break;
+            
+            // Pistoc
+            case "ID_PISTOL" :  damage=200; break;
+            
+            // Revolver
+            case "ID_REVOLVER" :  damage=300; break;
+            
+            // Riffle
+            case "ID_RIFFLE" :  damage=400; break;
+            
+            // Machine gun
+            case "ID_MACHINE_GUN" :  damage=500; break;
+            
+            // Grenade launcher
+            case "ID_GRENADE_LAUNCHER" :  damage=600; break;
+            
+            // Gloves
+            case "ID_GLOVES" :  damage=100; break;
+            
+            // Glasses
+            case "ID_GLASSES" :  damage=200; break;
+            
+            // Helmet
+            case "ID_HELMET" :  damage=300; break;
+            
+            // Boots
+            case "ID_BOOTS" :  damage=400; break;
+            
+            // Vest
+            case "ID_VEST" :  damage=500; break;
+            
+            // Schield
+            case "ID_SHIELD" :  damage=600; break;
+        }
+        
+        return damage;
+     }
+     
+     public boolean isAmmo(String ammo)
+     {
+        if (!ammo.equals("ID_TANK_ROUND") && 
+            !ammo.equals("ID_MISSILE_AIR_SOIL") && 
+            !ammo.equals("ID_MISSILE_SOIL_SOIL") && 
+            !ammo.equals("ID_MISSILE_BALISTIC_SHORT") && 
+            !ammo.equals("ID_MISSILE_BALISTIC_MEDIUM") && 
+            !ammo.equals("ID_MISSILE_BALISTIC_LONG") && 
+            !ammo.equals("ID_MISSILE_BALISTIC_INTERCONTINENTAL"))
+        return false;
+          else
+        return true;
+     }
+     
+     public long getAmmoDamage(String ammo) throws Exception
+     {
+         // Damage
+         long damage=0;
+         
+         // Ammo
+        if (!this.isAmmo(ammo))
+           throw new Exception ("Invalid ammo, CUtils.java, line 2191");
+         
+         switch (ammo)
+         {
+             // Tank round
+             case "ID_TANK_ROUND" : damage=500; break;
+             
+             // Air to soil missile
+             case "ID_MISSILE_AIR_SOIL" : damage=5000; break;
+             
+             // Soil to soil missile
+             case "ID_MISSILE_SOIL_SOIL" : damage=5000; break;
+             
+             // Balistic short
+             case "ID_MISSILE_BALISTIC_SHORT" : damage=10000; break;
+             
+             // Balistic medium
+             case "ID_MISSILE_BALISTIC_MEDIUM" : damage=10000; break;
+             
+             // Balistic long
+             case "ID_MISSILE_BALISTIC_LONG" : damage=10000; break;
+             
+             // Balistic intercontinental
+             case "ID_MISSILE_BALISTIC_INTERCONTINENTAL" : damage=10000; break;
+         }
+         
+         return damage;
+     }
+     
+     public long  getAmmoRange(String ammo) throws Exception
+     {
+         // Range
+         long range=0;
+         
+         if (!ammo.equals("ID_TANK_ROUND") && 
+             !ammo.equals("ID_MISSILE_AIR_SOIL") && 
+             !ammo.equals("ID_MISSILE_SOIL_SOIL") && 
+             !ammo.equals("ID_MISSILE_BALISTIC_SHORT") && 
+             !ammo.equals("ID_MISSILE_BALISTIC_MEDIUM") && 
+             !ammo.equals("ID_MISSILE_BALISTIC_LONG") && 
+             !ammo.equals("ID_MISSILE_BALISTIC_INTERCONTINENTAL"))
+        throw new Exception ("Invalid ammo, CUtils.java, line 2191");
+         
+         switch (ammo)
+         {
+             // Tank round
+             case "ID_TANK_ROUND" : range=0; break;
+             
+             // Air to soil missile
+             case "ID_MISSILE_AIR_SOIL" : range=1000; break;
+             
+             // Soil to soil missile
+             case "ID_MISSILE_SOIL_SOIL" : range=1000; break;
+             
+             // Balistic short
+             case "ID_MISSILE_BALISTIC_SHORT" : range=2500; break;
+             
+             // Balistic medium
+             case "ID_MISSILE_BALISTIC_MEDIUM" : range=5000; break;
+             
+             // Balistic long
+             case "ID_MISSILE_BALISTIC_LONG" : range=7500; break;
+             
+             // Balistic intercontinental
+             case "ID_MISSILE_BALISTIC_INTERCONTINENTAL" : range=10000; break;
+         }
+         
+         return range;
+     }
+     
+     public boolean isSea(long seaID) throws Exception
+     {
+         ResultSet rs=UTILS.DB.executeQuery("SELECT * "
+                                            + "FROM seas "
+                                           + "WHERE seaID='"+seaID+"'");
+         
+         // Has data ?
+         if (!UTILS.DB.hasData(rs))
+             return false;
+         else
+             return true;
+     }
+     
+     public Point getCouPos(String cou) throws Exception
+     {
+         // Is country ?
+         if (!this.isCountry(cou))
+             throw new Exception ("Invalid country, CUtils.java, line 1959");
+         
+         // Load country data
+         ResultSet rs=UTILS.DB.executeQuery("SELECT * "
+                                            + "FROM countries "
+                                           + "WHERE code='"+cou+"'");
+         
+         // Next
+         rs.next();
+         
+         // Return
+         return new Point(rs.getInt("x"), rs.getInt("y"));
+     }
+     
+     public Point getSeaPos(long seaID) throws Exception
+     {
+        // Is country ?
+         if (!this.isSea(seaID))
+             throw new Exception ("Invalid sea, CUtils.java, line 1959");
+         
+         // Load country data
+         ResultSet rs=UTILS.DB.executeQuery("SELECT * "
+                                            + "FROM seas "
+                                           + "WHERE seaID='"+seaID+"'");
+         
+         // Next
+         rs.next();
+         
+         // Return
+         return new Point(rs.getInt("posX"), rs.getInt("posY")); 
+     }
+     
+     public Point getWeaponPos(long stocID) throws Exception
+     {
+         // Stoc valid
+         if (!this.isStoc(stocID))
+            throw new Exception ("Invalid ID, CUtils.java, line 1959"); 
+         
+         // Load data
+         ResultSet rs=UTILS.DB.executeQuery("SELECT * "
+                                            + "FROM stocuri "
+                                           + "WHERE stocID='"+stocID+"'");
+         
+         // Next
+         rs.next();
+         
+         // Return
+         return this.getLocPos(rs.getString("war_loc_type"), rs.getString("war_locID"));
+     }
+     
+     public Point getLocPos(String loc_type, String locID) throws Exception
+     {
+        if (!loc_type.equals("ID_LAND") && 
+             !loc_type.equals("ID_SEA") && 
+             !loc_type.equals("ID_NAVY_DESTROYER") &&
+             !loc_type.equals("ID_AIRCRAFT_CARRIER"))
+        throw new Exception ("Invalid location type, CUtils.java, line 1959");
+        
+        // Land ?
+        if (loc_type.equals("ID_LAND"))
+            return this.getCouPos(locID);
+        
+        // Sea ?
+        if (loc_type.equals("ID_SEA"))
+            return this.getSeaPos(Long.parseLong(locID));
+        
+        // Navy destroyer or carier ?
+        if (loc_type.equals("ID_NAVY_DESTROYER") || 
+            loc_type.equals("ID_AIRCRAFT_CARRIER"))
+        return this.getWeaponPos(Long.parseLong(locID));
+        
+        return new Point(0, 0);
+     }
+     
+     public long getPointDist(Point p1, Point p2) throws Exception
+     {
+         long abs_x=Math.abs(p1.x-p2.x);
+         long abs_y=Math.abs(p1.y-p2.y);
+         long powX=Math.round(Math.pow(abs_x, 2));
+         long powY=Math.round(Math.pow(abs_y, 2));
+         
+         return Math.round(Math.sqrt(powX+powY)*8);
+     }
+     
+     public boolean isStoc(long stocID) throws Exception
+     {
+        // Query
+        ResultSet rs=UTILS.DB.executeQuery("SELECT * "
+                                           + "FROM stocuri "
+                                          + "WHERE stocID='"+stocID+"'");
+        
+        // Has data ?
+        if (UTILS.DB.hasData(rs))
+            return true;
+        else
+            return false;
+     }
+     
+     public long getAdrAttack(String adr) throws Exception
+     {
+         // Attack
+         long attack=0;
+         
+         // Address valid
+         if (!this.isAdr(adr))
+            throw new Exception ("Invalid address, CUtils.java, line 1959");
+         
+         // Load inventory
+         ResultSet rs=UTILS.DB.executeQuery("SELECT * "
+                               + "FROM stocuri "
+                              + "WHERE adr='"+adr+"' "
+                                + "AND in_use>0");
+         
+         while (rs.next())
+            if (this.isAttackWeapon(rs.getString("tip")))
+                attack=attack+this.getWeaponDamage(rs.getString("tip"));
+         
+         // Return
+         return attack;
+     }
+     
+     public long getAdrDefense(String adr) throws Exception
+     {
+        // Attack
+         long defense=0;
+         
+         // Address valid
+         if (!this.isAdr(adr))
+            throw new Exception ("Invalid address, CUtils.java, line 1959");
+         
+         // Load inventory
+         ResultSet rs=UTILS.DB.executeQuery("SELECT * "
+                                            + "FROM stocuri "
+                                           + "WHERE adr='"+adr+"' "
+                                             + "AND in_use>0");
+         
+         while (rs.next())
+            if (this.isAttackWeapon(rs.getString("tip")))
+                defense=defense+this.getWeaponDamage(rs.getString("tip"));
+         
+         // Return
+         return defense;
+     }
+     
+      
+    public boolean isBonus(String bonus) throws Exception
+    {
+        // Load bonus
+        ResultSet rs=UTILS.DB.executeQuery("SELECT * "
+                                           + "FROM bonuses "
+                                          + "WHERE bonus='"+bonus+"'");
+        
+        // Has data ?
+        if (UTILS.DB.hasData(rs))
+            return true;
+        else 
+            return false;
+    }
+    
 }

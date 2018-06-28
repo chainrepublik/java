@@ -16,7 +16,7 @@ public class CAdrChgCitPacket extends CBroadcastPacket
                            String cou) throws Exception
    {
 	   // Super class
-	   super("ID_ADR_CHG_CIT_PACKET");
+	   super(fee_adr, "ID_ADR_CHG_CIT_PACKET");
 	   
 	   // Builds the payload class
 	   CAdrChgCitPayload dec_payload=new CAdrChgCitPayload(adr,
@@ -26,8 +26,7 @@ public class CAdrChgCitPacket extends CBroadcastPacket
 	   this.payload=UTILS.SERIAL.serialize (dec_payload);
 			
 	   // Network fee
-	   CFeePayload fee=new CFeePayload(fee_adr,  0.0001, "Change citizenship network fee");
-	   this.fee_payload=UTILS.SERIAL.serialize(fee);
+	   this.setFee(0.0001, "Change citizenship network fee");
 	   
 	   // Sign packet
            this.sign();
@@ -45,11 +44,8 @@ public class CAdrChgCitPacket extends CBroadcastPacket
 	// Deserialize
 	CAdrChgCitPayload payload=(CAdrChgCitPayload) UTILS.SERIAL.deserialize(this.payload);
         
-        // Deserialize payload
-        CFeePayload fee=(CFeePayload) UTILS.SERIAL.deserialize(fee_payload);
-        
-	// Check fee
-	if (fee.amount<0.0001)
+        // Check fee
+	if (this.fee<0.0001)
 	   throw new Exception("Invalid fee - CAdrRegisterPacket.java");
 		  
 	// Check payload

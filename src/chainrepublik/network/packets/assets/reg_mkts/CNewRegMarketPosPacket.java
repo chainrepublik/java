@@ -19,7 +19,7 @@ public class CNewRegMarketPosPacket extends CBroadcastPacket
                                   double qty,
                                   long days) throws Exception
     {
-          super("ID_NEW_REG_ASSET_MARKET_POS_PACKET");
+          super(fee_adr, "ID_NEW_REG_ASSET_MARKET_POS_PACKET");
 	  
 	  // Builds the payload class
 	  CNewRegMarketPosPayload dec_payload=new CNewRegMarketPosPayload(adr,
@@ -33,8 +33,7 @@ public class CNewRegMarketPosPacket extends CBroadcastPacket
 	  this.payload=UTILS.SERIAL.serialize(dec_payload);
 					
           // Network fee
-	  CFeePayload fee=new CFeePayload(fee_adr,  0.0001*days, "New asset market position network fee");
-	  this.fee_payload=UTILS.SERIAL.serialize(fee);
+	  this.setFee(0.0001*days, "New asset market position network fee");
 			   
 	   // Sign packet
 	   this.sign();
@@ -53,11 +52,8 @@ public class CNewRegMarketPosPacket extends CBroadcastPacket
              // Deserialize transaction data
    	     CNewRegMarketPosPayload dec_payload=(CNewRegMarketPosPayload) UTILS.SERIAL.deserialize(payload);
              
-             // Deserialize payload
-             CFeePayload fee=(CFeePayload) UTILS.SERIAL.deserialize(fee_payload);
-        
              // Check fee
-	     if (fee.amount<dec_payload.days*0.0001)
+	     if (this.fee<dec_payload.days*0.0001)
 	         throw new Exception("Invalid fee - CNewRegMarketPosPacket.java");
           
              // Check payload

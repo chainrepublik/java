@@ -3,6 +3,7 @@ package chainrepublik.network.packets.politics.congress;
 import chainrepublik.kernel.UTILS;
 import chainrepublik.network.packets.CPayload;
 import chainrepublik.network.packets.blocks.CBlockPayload;
+import java.awt.Point;
 import java.sql.ResultSet;
 import java.util.Arrays;
 import java.util.List;
@@ -64,74 +65,9 @@ public class CNewLawPayload extends CPayload
                               this.par_2+
                               this.par_3+
                               this.expl);
-           
-        // Sign
-        this.sign();
+   
     }
     
-    public boolean isTax(String tax) throws Exception
-    {
-        ResultSet rs=UTILS.DB.executeQuery("SELECT * "
-                                           + "FROM taxes "
-                                          + "WHERE tax='"+tax+"'");
-        
-        // Has data ?
-        if (UTILS.DB.hasData(rs))
-            return true;
-        else 
-            return false;
-    }
-    
-    public boolean isBonus(String bonus) throws Exception
-    {
-        // Load bonus
-        ResultSet rs=UTILS.DB.executeQuery("SELECT * "
-                                           + "FROM bonuses "
-                                          + "WHERE bonus='"+bonus+"'");
-        
-        // Has data ?
-        if (UTILS.DB.hasData(rs))
-            return true;
-        else 
-            return false;
-    }
-    
-    public boolean isCit(String user, String cou) throws Exception
-    {
-        ResultSet rs=UTILS.DB.executeQuery("SELECT * "
-                                           + "FROM adr "
-                                          + "WHERE name='"+user+"' "
-                                            + "AND cou='"+cou+"'");
-        
-        if (UTILS.DB.hasData(rs))
-            return true;
-        else
-            return false;
-    }
-    
-    public boolean checkPremium(String list) throws Exception
-    {
-        // Country
-        String cou=UTILS.BASIC.getAdrData(this.target_adr, "cou");
-        
-        // Explode
-        List<String> players = Arrays.asList(list.split(","));
-        
-        // Parse
-        for (int a=0; a<=players.size()-1; a++)
-        {
-            // Is address ?
-            if (!UTILS.BASIC.isDomain(players.get(a)))
-                throw new Exception("Invalid name, CNewLawPayload.java, 102");
-            
-            // Citizen ?
-            if (!this.isCit(players.get(a), cou))
-                return false;
-        }
-        
-        // Return
-        return true;
-    }
     
     public void check(CBlockPayload block) throws Exception
     {
@@ -165,7 +101,11 @@ public class CNewLawPayload extends CPayload
             !this.law_type.equals("ID_REMOVE_PREMIUM") &&
             !this.law_type.equals("ID_DONATION") && 
             !this.law_type.equals("ID_OFICIAL_ART") &&
-            !this.law_type.equals("ID_DISTRIBUTE"))
+            !this.law_type.equals("ID_DISTRIBUTE") &&
+            !this.law_type.equals("ID_START_WAR") &&
+            !this.law_type.equals("ID_MOVE_WEAPONS") &&
+            !this.law_type.equals("ID_ATTACK") && 
+            !this.law_type.equals("ID_BUY_WEAPONS"))
         throw new Exception("Invalid law type, CNewLawPayload.java, 102");
         
         // Already a pending law ?
@@ -182,124 +122,88 @@ public class CNewLawPayload extends CPayload
         switch (this.law_type)
         {
             // Change tax
-            case "ID_OFICIAL_ART" :  // Amount
-                                    long artID=Long.parseLong(this.par_1);
-                                    
-                                    // Load article data
-                                    ResultSet rs2=UTILS.DB.executeQuery("SELECT * "
-                                                                        + "FROM tweets "
-                                                                       + "WHERE tweetID='"+artID+"'");
-                                    
-                                    // Author
-                                    String author=rs2.getString("adr");
-                                    
-                                    // Author is congressman ?
-                                    if (!UTILS.BASIC.isGovernor(author, UTILS.BASIC.getAdrData(author, "cou")))
-                                        throw new Exception("Author is not congressman, CNewLawPayload.java, 102");
+            case "ID_OFICIAL_ART" : // Check
+                                    if (!UTILS.LAWS.checkOfArtLaw(Long.parseLong(this.par_1)))
+                                        throw new Exception("Check failed, CNewLawPayload.java, 102");
                                     
                                    break;
                                    
                                    
             // Change tax
-            case "ID_CHG_TAX" :  // Amount
-                                    double tax_amount=Double.parseDouble(this.par_2);
+            case "ID_CHG_TAX" :     // Check
+                                    if (!UTILS.LAWS.checkChgTaxLaw(this.par_1, 
+                                                                   Double.parseDouble(this.par_2), 
+                                                                   par_3))
+                                        throw new Exception("Check failed, CNewLawPayload.java, 102");
                                     
-                                    // Max default tax
-                                    if (tax_amount<0 || tax_amount>25) 
-                                      throw new Exception("Invalid tax value, CNewLawPayload.java, 102");
-            
-                                   // Tax exist ?
-                                   if (!this.isTax(this.par_1))
-                                       throw new Exception("Invalid tax, CNewLawPayload.java, 102");
-                                   
-                                   // Product ?
-                                   if (!this.par_3.equals(""))
-                                      if (!UTILS.BASIC.isProd(par_3))
-                                        throw new Exception("Invalid tax product, CNewLawPayload.java, 102"); 
                                    break;
             
             // Change bonus
-            case "ID_CHG_BONUS" : // Amount
-                                    double bonus_amount=Double.parseDouble(this.par_3);
-                                    
-                                    // Min default bonus
-                                    if (bonus_amount<0) 
-                                      throw new Exception("Invalid bonus value, CNewLawPayload.java, 102");
-            
-                                   // Bonus exist ?
-                                   if (!this.isBonus(this.par_1))
-                                       throw new Exception("Invalid bonus, CNewLawPayload.java, 102");
-                                   
-                                   // Product ?
-                                   if (!this.par_2.equals(""))
-                                      if (!UTILS.BASIC.isProd(par_2))
-                                        throw new Exception("Invalid bonus product, CNewLawPayload.java, 102"); 
-                                   
+            case "ID_CHG_BONUS" : if (!UTILS.LAWS.checkChgBonusLaw(this.par_1, 
+                                                                   this.par_2, 
+                                                                   Double.parseDouble(this.par_3)))
+                                     throw new Exception("Check failed, CNewLawPayload.java, 102");
+                                  
                                    break;
             
             // Add premium
-            case "ID_ADD_PREMIUM" : if (!this.checkPremium(this.par_1))
-                                       throw new Exception("Invalid list, CNewLawPayload.java, 102");
+            case "ID_ADD_PREMIUM" : // Check
+                                    if (!UTILS.LAWS.checkPremiumLaw(cou, this.par_1))
+                                       throw new Exception("Check failed, CNewLawPayload.java, 102"); 
+                                       
                                     break;
                                     
             // Remove premium
-            case "ID_REMOVE_PREMIUM" : if (!this.checkPremium(this.par_1))
-                                            throw new Exception("Invalid list, CNewLawPayload.java, 102");
-                                        break;
+            case "ID_REMOVE_PREMIUM" : // Check
+                                       if (!UTILS.LAWS.checkPremiumLaw(cou, this.par_1))
+                                           throw new Exception("Check failed, CNewLawPayload.java, 102"); 
+                                       
+                                       break;
                                         
             // Donation
-            case "ID_DONATION" :  // Check address
-                                  if (!UTILS.BASIC.isAdr(this.par_1))                  
-                                     throw new Exception("Invalid donation address, CNewLawPayload.java, 102");
-                                  
-                                  // Amount
-                                  double donation_amount=Double.parseDouble(this.par_2);
-                                  
-                                  // Currency
-                                  String cur="CRC";
-                                  if (!this.par_3.equals(""))
-                                  {
-                                      // Currency
-                                      cur=this.par_3;
-                                      
-                                      // Valid currency ?
-                                      if (UTILS.BASIC.isCur(this.par_3));
-                                         throw new Exception("Invalid currency, CNewLawPayload.java, 102");
-                                  }
-                                      
-                                  // State budget
-                                  double budget=UTILS.BASIC.getBudget(cou, cur);
-                                  
-                                  // Only 5% of budget can be donated
-                                  if (budget/20<donation_amount)
-                                      throw new Exception("Invalid donation amount, CNewLawPayload.java, 102");
+            case "ID_DONATION" :  // Check
+                                  if (!UTILS.LAWS.checkDonationLaw(cou, this.par_1, Double.parseDouble(this.par_2)))
+                                     throw new Exception("Check failed, CNewLawPayload.java, 102"); 
                                   
                                   break;
                                   
             // Donation
-            case "ID_DISTRIBUTE" :  // Amount
-                                    double amount=Double.parseDouble(this.par_1);
-                                  
-                                    // Currency
-                                    cur="CRC";
-                                    if (!this.par_3.equals(""))
-                                    {
-                                        // Currency
-                                       cur=this.par_3;
-                                      
-                                        // Valid currency ?
-                                       if (UTILS.BASIC.isCur(this.par_3));
-                                           throw new Exception("Invalid currency, CNewLawPayload.java, 102");
-                                    }
-                                      
-                                  // State budget
-                                  budget=UTILS.BASIC.getBudget(cou, cur);
-                                  
-                                  // Only 5% of budget can be donated
-                                  if (budget/20<amount)
-                                      throw new Exception("Invalid donation amount, CNewLawPayload.java, 102");
+            case "ID_DISTRIBUTE" :  if (!UTILS.LAWS.checkDistributeLaw(cou, Double.parseDouble(this.par_1)))
+                                       throw new Exception("Check failed, CNewLawPayload.java, 102"); 
+                                    
+                                    break;
+            
+            // Start war
+            case "ID_START_WAR" : // Check
+                                  if (!UTILS.LAWS.checkStartWarLaw(cou, this.par_1, this.par_2))
+                                      throw new Exception("Check failed, CNewLawPayload.java, 102"); 
                                   
                                   break;
+            
+            // Move equipment
+            case "ID_MOVE_WEAPONS" : // Check
+                                     if (!UTILS.LAWS.checkMoveWeaponsLaw(cou, this.par_1, this.par_2, this.par_3))
+                                         throw new Exception("Check failed, CNewLawPayload.java, 102"); 
+                                     
+                                     break;
+            
+            // Launch attack
+            case "ID_ATTACK" : // Check attack params
+                               if (!UTILS.LAWS.checkAttackLaw(cou,
+                                                              this.par_1, 
+                                                              this.par_2, 
+                                                              this.par_3))
+                                       throw new Exception("Invalid attack params, CNewLawPayload.java, 102");
+                               break;
+                                      
+             // Buy weapons
+            case "ID_BUY_WEAPONS" : // Check attack params
+                                    if (!UTILS.LAWS.checkBuyLaw(cou,
+                                                                this.par_1, 
+                                                                this.par_2))
+                                    throw new Exception("Invalid buy weapons params, CNewLawPayload.java, 102");
+                                      
+                                      break;
         }
         
         // Hash

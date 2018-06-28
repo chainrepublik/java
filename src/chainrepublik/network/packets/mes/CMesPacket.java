@@ -23,11 +23,11 @@ public class CMesPacket extends CBroadcastPacket
                     String packet_sign,
                     String payload_sign) throws Exception
   {
-      super("ID_SEND_MES");
+      super(fee_adr, "ID_SEND_MES");
       
       
        // Builds the payload class
-	  CMesPayload dec_payload=new CMesPayload(sender_adr, 
+       CMesPayload dec_payload=new CMesPayload(sender_adr, 
 	                                          receiver_adr, 
 	                                          subject, 
 	                                          mes);
@@ -36,8 +36,7 @@ public class CMesPacket extends CBroadcastPacket
 	   this.payload=UTILS.SERIAL.serialize(dec_payload);
 			
 	   // Network fee
-	   CFeePayload fee=new CFeePayload(fee_adr,  0.0001, "Send message network fee");
-	   this.fee_payload=UTILS.SERIAL.serialize(fee);
+	   this.setFee(0.0001, "Send message network fee");
 	   
 	   // Sign packet
 	   this.sign();

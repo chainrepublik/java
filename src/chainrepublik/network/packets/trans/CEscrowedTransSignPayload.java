@@ -8,7 +8,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import chainrepublik.kernel.CAddress;
-import chainrepublik.kernel.CECC;
 import chainrepublik.kernel.UTILS;
 import chainrepublik.network.packets.CPayload;
 import chainrepublik.network.packets.blocks.CBlockPayload;
@@ -38,9 +37,7 @@ public class CEscrowedTransSignPayload extends CPayload
 	hash=UTILS.BASIC.hash(this.getHash()+
 		              this.trans_hash+
 			      this.type);
-		 
-	// Sign
-        this.sign();
+	
     }
 	
     public void check(CBlockPayload block) throws Exception

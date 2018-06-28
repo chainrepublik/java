@@ -32,9 +32,6 @@ public class CUpdateProfilePayload extends CPayload
  	   hash=UTILS.BASIC.hash(this.getHash()+
  			         this.img+
                                  this.description);
-           
-           // Sign
-           this.sign();
    }
    
    public void check(CBlockPayload block) throws Exception

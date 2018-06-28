@@ -19,7 +19,7 @@ public class CDump
         ResultSet rs=UTILS.DB.executeQuery("SELECT * FROM assets_mkts WHERE adr='default'");
         
         while (rs.next())
-            System.out.println("INSERT INTO assets_mkts SET adr='"+rs.getString("adr")+"', asset='"+rs.getString("asset")+"', cur='"+rs.getString("cur")+"', name='"+rs.getString("name")+"', description='"+rs.getString("description")+"', decimals='"+rs.getString("decimals")+"', expires='"+rs.getString("expires")+"', last_price='"+rs.getString("last_price")+"', ask='"+rs.getString("ask")+"', bid='"+rs.getString("bid")+"', mktID='"+rs.getString("mktID")+"';");
+            System.out.println("UTILS.DB.executeUpdate(\"INSERT INTO assets_mkts SET adr='"+rs.getString("adr")+"', asset='"+rs.getString("asset")+"', cur='"+rs.getString("cur")+"', name='"+rs.getString("name")+"', description='"+rs.getString("description")+"', decimals='"+rs.getString("decimals")+"', expires='"+rs.getString("expires")+"', last_price='"+rs.getString("last_price")+"', ask='"+rs.getString("ask")+"', bid='"+rs.getString("bid")+"', mktID='"+rs.getString("mktID")+"'\");");
     }
     
     public void dumpComProds() throws Exception

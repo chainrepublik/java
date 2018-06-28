@@ -81,8 +81,6 @@ public class CNewRegMarketPayload extends CPayload
                               this.days+
                               this.mktID);
        
-         // Sign
-        this.sign();
     }
 
     

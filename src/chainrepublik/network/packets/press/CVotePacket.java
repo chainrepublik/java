@@ -22,7 +22,7 @@ public class CVotePacket extends CBroadcastPacket
                       String type) throws Exception
    {
 	   // Super class
-	   super("ID_VOTE_PACKET");
+	   super(fee_adr, "ID_VOTE_PACKET");
 	   
 	   // Builds the payload class
 	   CVotePayload dec_payload=new CVotePayload(adr, 
@@ -34,8 +34,7 @@ public class CVotePacket extends CBroadcastPacket
 	   this.payload=UTILS.SERIAL.serialize(dec_payload);
 			
 	   // Network fee
-           CFeePayload fee=new CFeePayload(fee_adr,  0.0001, "Vote network fee");
-	   this.fee_payload=UTILS.SERIAL.serialize(fee);
+           this.setFee(0.0001, "Vote network fee");
 	   
 	   // Sign packet
            this.sign();
@@ -54,11 +53,8 @@ public class CVotePacket extends CBroadcastPacket
    	  // Deserialize transaction data
    	  CVotePayload dec_payload=(CVotePayload) UTILS.SERIAL.deserialize(payload);
           
-          // Deserialize payload
-          CFeePayload fee=(CFeePayload) UTILS.SERIAL.deserialize(fee_payload);
-                    
           // Check fee
-	  if (fee.amount<0.0001)
+	  if (this.fee<0.0001)
 	      throw new Exception("Invalid packet type - CVotePacket.java");
           
           // Check payload

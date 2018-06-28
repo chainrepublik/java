@@ -13,7 +13,7 @@ public class CJoinPartyPacket extends CBroadcastPacket
                              long orgID) throws Exception
     {
         // Constructor
-        super("ID_JOIN_PARTY_PACKET");
+        super(fee_adr, "ID_JOIN_PARTY_PACKET");
         
         // Builds the payload class
 	CJoinPartyPayload dec_payload=new CJoinPartyPayload(adr,
@@ -23,8 +23,7 @@ public class CJoinPartyPacket extends CBroadcastPacket
 	this.payload=UTILS.SERIAL.serialize(dec_payload);
 					
         // Network fee
-	CFeePayload fee=new CFeePayload(fee_adr,  0.0001, "Endorse address network fee");
-	this.fee_payload=UTILS.SERIAL.serialize(fee);
+	this.setFee(0.0001, "Join party network fee");
 			   
 	// Sign packet
 	this.sign();
@@ -40,15 +39,12 @@ public class CJoinPartyPacket extends CBroadcastPacket
    	  if (!this.tip.equals("ID_JOIN_PARTY_PACKET")) 
              throw new Exception("Invalid packet type - CEndorsePacket.java");
    	  
+          // Check fee
+	  if (this.fee<0.0001)
+	      throw new Exception("Invalid fee - CEndorsePacket.java");
+          
           // Deserialize transaction data
    	  CJoinPartyPayload dec_payload=(CJoinPartyPayload) UTILS.SERIAL.deserialize(payload);
-          
-          // Deserialize payload
-          CFeePayload fee=(CFeePayload) UTILS.SERIAL.deserialize(fee_payload);
-        
-          // Check fee
-	  if (fee.amount<0.0001)
-	      throw new Exception("Invalid fee - CEndorsePacket.java");
           
           // Check payload
           dec_payload.check(block);

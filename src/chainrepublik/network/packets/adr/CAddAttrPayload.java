@@ -127,9 +127,6 @@ public class CAddAttrPayload extends CPayload
                               this.d2+
                               this.d3+
                               this.days);
-          
-        // Sign
-        this.sign();
     }
    
    public void check(CBlockPayload block) throws Exception

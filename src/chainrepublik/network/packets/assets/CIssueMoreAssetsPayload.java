@@ -16,8 +16,7 @@ public class CIssueMoreAssetsPayload extends CPayload
     
     public CIssueMoreAssetsPayload(String adr, 
                                    String symbol, 
-                                   long qty, 
-                                   String payload_sign) throws Exception
+                                   long qty) throws Exception
     {
         // Constructor
         super(adr);
@@ -33,8 +32,6 @@ public class CIssueMoreAssetsPayload extends CPayload
                               this.symbol+
                               this.qty);
         
-        // Sign
-        this.sign(payload_sign);
     }
     
      public void check(CBlockPayload block) throws Exception

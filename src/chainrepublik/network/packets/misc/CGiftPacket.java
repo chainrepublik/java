@@ -15,7 +15,7 @@ public class CGiftPacket extends CBroadcastPacket
                        String adr, 
                        String target_adr) throws Exception
     {
-        super("ID_GIFT_PACKET");
+        super(fee_adr, "ID_GIFT_PACKET");
        
         // Builds the payload class
         CGiftPayload dec_payload=new CGiftPayload(adr, 
@@ -26,8 +26,7 @@ public class CGiftPacket extends CBroadcastPacket
           
          
 	// Network fee
-        CFeePayload fee=new CFeePayload(fee_adr,  0.0001, "Gift fee");
-	this.fee_payload=UTILS.SERIAL.serialize(fee);
+        this.setFee(0.0001, "Gift network fee");
        
         // Sign packet
         this.sign();
@@ -46,11 +45,8 @@ public class CGiftPacket extends CBroadcastPacket
         // Deserialize transaction data
    	CGiftPayload dec_payload=(CGiftPayload) UTILS.SERIAL.deserialize(payload);
         
-        // Deserialize payload
-        CFeePayload fee=(CFeePayload) UTILS.SERIAL.deserialize(fee_payload);
-     
         // Check fee
-	if (fee.amount<0.0001)
+	if (this.fee<0.0001)
 	   throw new Exception("Invalid fee - CRenewPacket.java");
           
         // Check payload

@@ -47,9 +47,7 @@ public class CVotePayload extends CPayload
  			         this.target_type+
                                  this.targetID+
                                  this.type);
- 	   
-           // Sign
- 	   this.sign();
+ 	
    }
    
    public void check(CBlockPayload block) throws Exception

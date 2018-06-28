@@ -3,44 +3,22 @@
 
 package chainrepublik.kernel;
 
-import java.math.BigInteger;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
 import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
 import java.security.Security;
 import java.security.Signature;
-import java.security.SignatureException;
+import java.security.interfaces.ECPrivateKey;
 import java.security.interfaces.ECPublicKey;
-import java.security.spec.InvalidKeySpecException;
+import java.security.spec.ECGenParameterSpec;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.sql.ResultSet;
-import java.sql.SQLException;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-
+import javax.crypto.Cipher;
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.codec.binary.Hex;
-import org.bouncycastle.asn1.sec.SECNamedCurves;
-import org.bouncycastle.asn1.x9.X9ECParameters;
-import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
-import org.bouncycastle.crypto.generators.ECKeyPairGenerator;
-import org.bouncycastle.crypto.params.ECDomainParameters;
-import org.bouncycastle.crypto.params.ECKeyGenerationParameters;
-import org.bouncycastle.crypto.params.ECPrivateKeyParameters;
-import org.bouncycastle.crypto.params.ECPublicKeyParameters;
-import org.bouncycastle.crypto.util.PublicKeyFactory;
-import org.bouncycastle.jce.ECNamedCurveTable;
-import org.bouncycastle.jce.interfaces.ECPrivateKey;
-import org.bouncycastle.jce.spec.ECNamedCurveParameterSpec;
-import org.bouncycastle.math.ec.ECPoint;
+
+
 
 public class CAddress 
 {
@@ -66,8 +44,25 @@ public class CAddress
     {
 		
     }
-
-	
+    
+    public CAddress(String pubKey) throws Exception
+    {
+    	// PRovider
+        Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+		  
+        // Key factory
+        KeyFactory keyFactory = KeyFactory.getInstance("ECDSA");
+		  
+        // Key spec
+        X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(Base64.decodeBase64(pubKey));
+		  
+        // Public key
+        this.ecPublicKey = (ECPublicKey) keyFactory.generatePublic(publicKeySpec);
+		
+	// Decode
+	this.public_key=Base64.decodeBase64(public_key);
+    }
+        
 	public CAddress(String public_key, 
                         String private_key)  throws Exception
 	{
@@ -153,26 +148,23 @@ public class CAddress
 	
 	public void generate() throws Exception
 	{
-            // Set curve
-            
-           
             // Key generator
-	    KeyPairGenerator keyPairGenerator =KeyPairGenerator.getInstance("EC", "BC");
-	           
-            // Curve specification     
-            ECNamedCurveParameterSpec curveParameterSpec = ECNamedCurveTable.getParameterSpec("secp256k1");
-		   
-            // Init
-            keyPairGenerator.initialize(curveParameterSpec, new SecureRandom()); 
-	    
-            // Pair
-            KeyPair KeyPair = keyPairGenerator.generateKeyPair();
-		   
+	    KeyPairGenerator keyPairGenerator =KeyPairGenerator.getInstance("ECDSA", "BC");
+            
+            // Load curve
+            ECGenParameterSpec ecSpec = new ECGenParameterSpec("secp256k1");
+            
+            // Initialize
+            keyPairGenerator.initialize(ecSpec, new SecureRandom());
+            
+            // Key pair
+            KeyPair kp = keyPairGenerator.generateKeyPair();
+            
             // Pub key
-            ecPublicKey = (ECPublicKey) KeyPair.getPublic();
+            ecPublicKey = (ECPublicKey) kp.getPublic();
 		   
             // Private key
-            ecPrivateKey = (ECPrivateKey) KeyPair.getPrivate();
+            ecPrivateKey = (ECPrivateKey) kp.getPrivate();
 	
             // Encoded
             this.public_key=ecPublicKey.getEncoded();
@@ -195,7 +187,7 @@ public class CAddress
 	public String encrypt(String data) throws Exception
 	{
 	    // Chiper
-            javax.crypto.Cipher c = javax.crypto.Cipher.getInstance("ECIESwithAES/DHAES/PKCS7Padding", "BC"); 
+            Cipher c = javax.crypto.Cipher.getInstance("ECIESwithAES/DHAES/PKCS7Padding"); 
 		   
             // Init
             c.init(c.ENCRYPT_MODE, this.ecPublicKey, new SecureRandom());   
@@ -242,4 +234,21 @@ public class CAddress
             // Return
             return Base64.encodeBase64String(signed);
 	}
+        
+        public boolean checkSig(String data, String sig) throws Exception
+    {  
+        // Signature
+        Signature signature = Signature.getInstance("ECDSA", "BC");	
+	
+        // Verify
+        signature.initVerify(this.ecPublicKey);
+	
+        // Update
+        signature.update(data.getBytes());
+		
+	if (signature.verify(Base64.decodeBase64(sig)))
+	    return true;
+	else
+	    return false;
+    }
 }

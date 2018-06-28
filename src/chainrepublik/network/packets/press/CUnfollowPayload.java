@@ -31,9 +31,7 @@ public class CUnfollowPayload extends CPayload
 	   // Hash
  	   hash=UTILS.BASIC.hash(this.getHash()+
  			         this.unfollow_adr);
- 	   
- 	   // Sign
- 	   this.sign();
+ 	  
    }
    
    public void check(CBlockPayload block) throws Exception

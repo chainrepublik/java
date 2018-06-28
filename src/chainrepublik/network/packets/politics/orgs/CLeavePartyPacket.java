@@ -12,7 +12,7 @@ public class CLeavePartyPacket  extends CBroadcastPacket
                              String adr) throws Exception
     {
         // Constructor
-        super("ID_LEAVE_PARTY_PACKET");
+        super(fee_adr, "ID_LEAVE_PARTY_PACKET");
         
         // Builds the payload class
 	CLeavePartyPayload dec_payload=new CLeavePartyPayload(adr);
@@ -21,8 +21,7 @@ public class CLeavePartyPacket  extends CBroadcastPacket
 	this.payload=UTILS.SERIAL.serialize(dec_payload);
 					
         // Network fee
-	CFeePayload fee=new CFeePayload(fee_adr,  0.0001, "Leave political party network fee");
-	this.fee_payload=UTILS.SERIAL.serialize(fee);
+	this.setFee(0.0001, "Leave political party network fee");
 			   
 	// Sign packet
 	this.sign();
@@ -41,11 +40,8 @@ public class CLeavePartyPacket  extends CBroadcastPacket
           // Deserialize transaction data
    	  CLeavePartyPayload dec_payload=(CLeavePartyPayload) UTILS.SERIAL.deserialize(payload);
           
-          // Deserialize payload
-          CFeePayload fee=(CFeePayload) UTILS.SERIAL.deserialize(fee_payload);
-        
           // Check fee
-	  if (fee.amount<0.0001)
+	  if (this.fee<0.0001)
 	      throw new Exception("Invalid fee - CEndorsePacket.java");
           
           // Check payload

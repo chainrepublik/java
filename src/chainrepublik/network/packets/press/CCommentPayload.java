@@ -54,10 +54,7 @@ public class CCommentPayload extends CPayload
                                  this.parentID+
                                  this.comID+
                                  this.mes);
- 	   
- 	   // Sign
- 	   this.sign();
-   }
+ }
    
    public void check(CBlockPayload block) throws Exception
    {

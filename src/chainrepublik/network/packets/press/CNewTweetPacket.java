@@ -28,7 +28,7 @@ public class CNewTweetPacket extends CBroadcastPacket
                           long days) throws Exception
    {
 	   // Super class
-	   super("ID_NEW_TWEET_PACKET");
+	   super(fee_adr, "ID_NEW_TWEET_PACKET");
 	   
 	   // Builds the payload class
 	   CNewTweetPayload dec_payload=new CNewTweetPayload(adr, 
@@ -46,8 +46,7 @@ public class CNewTweetPacket extends CBroadcastPacket
 	   this.payload=UTILS.SERIAL.serialize(dec_payload);
 			
 	   // Network fee
-           CFeePayload fee=new CFeePayload(fee_adr,  0.0001*days, "New article network fee");
-	   this.fee_payload=UTILS.SERIAL.serialize(fee);
+           this.setFee( 0.0001*days, "New article network fee");
            
 	   // Sign packet
            this.sign();
@@ -69,11 +68,8 @@ public class CNewTweetPacket extends CBroadcastPacket
           // Check payload
           dec_payload.check(block);
           
-          // Deserialize payload
-          CFeePayload fee=(CFeePayload) UTILS.SERIAL.deserialize(fee_payload);
-          
           // Check fee
-	  if (fee.amount<dec_payload.days*0.0001)
+	  if (this.fee<dec_payload.days*0.0001)
 	     throw new Exception("Invalid fee - CNewTweetPacket.java");
  
           // Footprint

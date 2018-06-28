@@ -53,15 +53,13 @@ public class main
         // Dump
         CDump dump=new CDump();
         //dump.polParties("ES", 10);
-        //dump.dumpSeas();
+        dump.dumpSeas();
       
         UTILS.MINER_UTILS=new CCPUMinerUtils();
         
         // Status
         UTILS.STATUS=new CStatus();
         
-        // ECC
-        UTILS.ECC=new CECC();
         
         // Net stat
         UTILS.NET_STAT=new CNetStat();
@@ -89,23 +87,27 @@ public class main
         // Rewards
         UTILS.REWARD=new CRewards();
         
+        // Laws
+        UTILS.LAWS=new CLaws();
+        
         // Late operations
         UTILS.ARGS.lateOp();
        
         // Sync
         UTILS.SYNC=new CSync();
         
-        //if (UTILS.SETTINGS.seed_mode)
+        if (UTILS.SETTINGS.seed_mode)
             UTILS.STATUS.setEngineStatus("ID_ONLINE");
-        //else
-        //    UTILS.SYNC.start();
+        else
+            UTILS.SYNC.start();
         
         
         
         System.out.println("Wallet is up an running...");
         
+       
         
-        //UTILS.CBLOCK.startMiners(1);
+        UTILS.CBLOCK.startMiners(2);
         //UTILS.WALLET.list();
         
         // VM

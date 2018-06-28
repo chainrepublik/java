@@ -76,10 +76,7 @@ public class CNewRegMarketPosPayload extends CPayload
                               String.valueOf(this.qty)+
                               String.valueOf(this.days)+
                               this.orderID);
-        
-        // Sign
-        this.sign();
-    }
+   }
     
      public void check(CBlockPayload block) throws Exception
      {

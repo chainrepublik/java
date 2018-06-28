@@ -4,7 +4,6 @@
 package chainrepublik.network.packets;
 import chainrepublik.kernel.UTILS;
 import chainrepublik.kernel.CAddress;
-import chainrepublik.kernel.CECC;
 import chainrepublik.network.CPeer;
 import chainrepublik.network.packets.blocks.*;
 
@@ -88,7 +87,7 @@ public class CPacket implements java.io.Serializable
    
    public boolean checkSign(String signer) throws Exception
    {
-        CECC ecc=new CECC(signer);
+        CAddress ecc=new CAddress(signer);
 	return (ecc.checkSig(hash, this.sign));
     }
    

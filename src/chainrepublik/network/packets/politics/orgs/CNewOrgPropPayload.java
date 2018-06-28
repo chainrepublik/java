@@ -85,9 +85,7 @@ public class CNewOrgPropPayload extends CPayload
                               this.par_4+
                               this.par_5+
                               this.expl);
-           
-        // Sign
-        this.sign();
+    
     }
     
    

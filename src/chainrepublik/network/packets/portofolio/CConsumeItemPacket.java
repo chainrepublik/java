@@ -13,7 +13,7 @@ public class CConsumeItemPacket extends CBroadcastPacket
                               long itemID) throws Exception
     {
         // Constructor
-        super("ID_CONSUME_ITEM_PACKET");
+        super(fee_adr, "ID_CONSUME_ITEM_PACKET");
         
         // Builds the payload class
 	CConsumeItemPayload dec_payload=new CConsumeItemPayload(adr, 
@@ -23,8 +23,7 @@ public class CConsumeItemPacket extends CBroadcastPacket
 	this.payload=UTILS.SERIAL.serialize(dec_payload);
 					
         // Network fee
-	CFeePayload fee=new CFeePayload(fee_adr, 0.0001, "Consume item network fee");
-	this.fee_payload=UTILS.SERIAL.serialize(fee);
+	this.setFee(0.0001, "Consume item network fee");
 			   
 	// Sign packet
 	this.sign();
@@ -43,11 +42,8 @@ public class CConsumeItemPacket extends CBroadcastPacket
           // Deserialize transaction data
    	  CConsumeItemPayload dec_payload=(CConsumeItemPayload) UTILS.SERIAL.deserialize(payload);
           
-          // Deserialize payload
-          CFeePayload fee=(CFeePayload) UTILS.SERIAL.deserialize(fee_payload);
-        
           // Check fee
-	  if (fee.amount<0.0001)
+	  if (this.fee<0.0001)
 	      throw new Exception("Invalid fee - CConsumeItemPacket.java");
           
           // Check payload

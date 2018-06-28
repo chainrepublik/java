@@ -31,9 +31,7 @@ public class CDonateItemPayload extends CPayload
  	hash=UTILS.BASIC.hash(this.getHash()+
  			      this.itemID+
                               this.rec_adr);
-           
-        // Sign
-        this.sign();
+       
     }
     
     public void check(CBlockPayload block) throws Exception

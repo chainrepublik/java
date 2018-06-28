@@ -21,7 +21,7 @@ public class CNewCompanyPacket extends CBroadcastPacket
                              long days) throws Exception
     {
         // Constructor
-        super("ID_NEW_COMPANY_PACKET");
+        super(fee_adr, "ID_NEW_COMPANY_PACKET");
         
         // Builds the payload class
 	CNewCompanyPayload dec_payload=new CNewCompanyPayload(adr, 
@@ -38,8 +38,7 @@ public class CNewCompanyPacket extends CBroadcastPacket
 	this.payload=UTILS.SERIAL.serialize(dec_payload);
 					
         // Network fee
-	CFeePayload fee=new CFeePayload(fee_adr,  days*0.2, "Company incorporation network fee");
-	this.fee_payload=UTILS.SERIAL.serialize(fee);
+	this.setFee(days*0.2, "Company incorporation network fee");
 			   
 	// Sign packet
 	this.sign();
@@ -58,11 +57,8 @@ public class CNewCompanyPacket extends CBroadcastPacket
           // Deserialize transaction data
    	  CNewCompanyPayload dec_payload=(CNewCompanyPayload) UTILS.SERIAL.deserialize(payload);
           
-          // Deserialize payload
-          CFeePayload fee=(CFeePayload) UTILS.SERIAL.deserialize(fee_payload);
-        
           // Check fee
-	  if (fee.amount<dec_payload.days*0.1)
+	  if (this.fee<dec_payload.days*0.1)
 	      throw new Exception("Invalid fee - CNewCompanyPacket.java");
           
           // Check payload

@@ -37,9 +37,7 @@ public class CNewWorkplacePayload extends CPayload
  			      this.comID+
  			      this.workID+
  			      this.days);
-           
-        // Sign
-        this.sign();
+          
     }
     
     public void check(CBlockPayload block) throws Exception

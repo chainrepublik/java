@@ -100,9 +100,7 @@ public class CNewTweetPayload extends CPayload
                                  this.mil_unit+
                                  this.pol_party+
                                  this.days);
- 	   
- 	   // Sign
-           this.sign(); 
+ 	
    }
    
    public void check(CBlockPayload block) throws Exception

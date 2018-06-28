@@ -24,9 +24,6 @@ public class CTravelPayload extends CPayload
 	   // Hash
  	   hash=UTILS.BASIC.hash(this.getHash()+
  			         cou);
-           
-           // Sign
-           this.sign();
    }
    
    public void check(CBlockPayload block) throws Exception

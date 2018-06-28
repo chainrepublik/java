@@ -20,7 +20,7 @@ public class CUnfollowPacket extends CBroadcastPacket
                           String unfollow_address) throws Exception
    {
 	   // Super class
-	   super("ID_UNFOLLOW_PACKET");
+	   super(fee_adr, "ID_UNFOLLOW_PACKET");
 	   
 	   // Builds the payload class
 	   CUnfollowPayload dec_payload=new CUnfollowPayload(adr, 
@@ -30,8 +30,7 @@ public class CUnfollowPacket extends CBroadcastPacket
 	   this.payload=UTILS.SERIAL.serialize(dec_payload);
 			
 	   // Network fee
-           CFeePayload fee=new CFeePayload(fee_adr,  0.0001, "Unfollow network fee");
-	   this.fee_payload=UTILS.SERIAL.serialize(fee);
+           this.setFee(0.0001, "Unfollow network fee");
 	   
 	   // Sign packet
            this.sign();
@@ -47,11 +46,8 @@ public class CUnfollowPacket extends CBroadcastPacket
    	  if (!this.tip.equals("ID_UNFOLLOW_PACKET")) 
    		throw new Exception("Invalid packet type - CFollowPayload.java"); 
           
-          // Deserialize payload
-          CFeePayload fee=(CFeePayload) UTILS.SERIAL.deserialize(fee_payload);
-          
           // Check fee
-	  if (fee.amount<0.0001)
+	  if (this.fee<0.0001)
 	      throw new Exception("Invalid fee - CFollowPayload.java"); 
           
           // Deserialize transaction data

@@ -21,7 +21,7 @@ public class CFollowPacket extends CBroadcastPacket
                         long days) throws Exception
    {
 	   // Super class
-	   super("ID_FOLLOW_PACKET");
+	   super(fee_adr, "ID_FOLLOW_PACKET");
 	   
 	   // Builds the payload class
 	   CFollowPayload dec_payload=new CFollowPayload(adr, 
@@ -32,8 +32,7 @@ public class CFollowPacket extends CBroadcastPacket
 	   this.payload=UTILS.SERIAL.serialize(dec_payload);
 			
 	   // Network fee
-           CFeePayload fee=new CFeePayload(fee_adr,  0.0001*days, "Follow network fee");
-	   this.fee_payload=UTILS.SERIAL.serialize(fee);
+           this.setFee(0.0001*days, "Follow network fee");
 	   
 	   // Sign packet
            this.sign();
@@ -52,11 +51,8 @@ public class CFollowPacket extends CBroadcastPacket
    	  // Deserialize transaction data
    	  CFollowPayload dec_payload=(CFollowPayload) UTILS.SERIAL.deserialize(payload);
           
-          // Deserialize payload
-          CFeePayload fee=(CFeePayload) UTILS.SERIAL.deserialize(fee_payload);
-          
           // Check fee
-	  if (fee.amount<0.0001*dec_payload.days)
+	  if (this.fee<0.0001*dec_payload.days)
 	      throw new Exception("Invalid fee - CFollowPacket.java");
           
           // Check payload

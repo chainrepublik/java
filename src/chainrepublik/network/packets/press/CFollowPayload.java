@@ -37,10 +37,7 @@ public class CFollowPayload extends CPayload
  	   hash=UTILS.BASIC.hash(this.getHash()+
  			         this.follow_adr+
                                  this.days);
- 	   
- 	   // Sign
-           this.sign();
-   }
+ }
    
    public void check(CBlockPayload block) throws Exception
    {

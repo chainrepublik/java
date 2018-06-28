@@ -15,9 +15,7 @@ public class CLeavePartyPayload extends CPayload
         
         // Hash
  	hash=UTILS.BASIC.hash(this.getHash());
-           
-        // Sign
-        this.sign();
+     
     }
     
     

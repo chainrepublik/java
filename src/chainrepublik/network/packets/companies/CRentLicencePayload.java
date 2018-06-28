@@ -52,9 +52,7 @@ public class CRentLicencePayload extends CPayload
  			      this.days+
                               this.prod_stocID+
                               this.lic_stocID);
-           
-        // Sign
-        this.sign();
+        
     }
     
     public void check(CBlockPayload block) throws Exception

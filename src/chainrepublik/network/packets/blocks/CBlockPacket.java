@@ -68,7 +68,7 @@ public class CBlockPacket extends CPacket
         public boolean preCheck() throws Exception
         {
             // Check signature
-            CECC ecc=new CECC(this.signer);
+            CAddress ecc=new CAddress(this.signer);
             if (!ecc.checkSig(hash, this.sign))
             {
                 System.out.println("Invalid block signature");
@@ -188,7 +188,7 @@ public class CBlockPacket extends CPacket
              block_payload.check();
 	   	
               // Check signature
-	      CECC ecc=new CECC(this.signer);
+	      CAddress ecc=new CAddress(this.signer);
 	      if (!ecc.checkSig(hash, this.sign))
                    throw new Exception("Invalid signature - CBlockPacket.java");
         }

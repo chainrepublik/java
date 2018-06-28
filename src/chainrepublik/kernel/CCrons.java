@@ -3,14 +3,9 @@
 
 package chainrepublik.kernel;
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Timer;
 import java.util.TimerTask;
-import chainrepublik.network.CPeer;
-import chainrepublik.network.packets.blocks.CBlockPayload;
-import java.util.Arrays;
-import java.util.List;
+
 
 public class CCrons 
 {
@@ -25,68 +20,73 @@ public class CCrons
    
    public CCrons()
    {
-        // Timer
+       // Timer
        timer = new Timer();
        task=new RemindTask();
        timer.schedule(task, 0, 1000);
    }
    
-   public void lawErr(long lawID, String reason, long block) throws Exception
+   public void endWar(long warID) throws Exception
    {
-       // Load law data
+       // Load war data
        ResultSet rs=UTILS.DB.executeQuery("SELECT * "
-                                          + "FROM laws "
-                                         + "WHERE lawID='"+lawID+"'");
+                                          + "FROM wars "
+                                         + "WHERE warID='"+warID+"'");
        
        // Next
        rs.next();
        
-       // Country address
-       String cou_adr=UTILS.BASIC.getCouAdr(rs.getString("country"));
+       // Attacker
+       String attacker=rs.getString("attacker");
        
-       // Post event
-       UTILS.BASIC.newEvent(cou_adr, "Law "+lawID+" could not be implemented for reason : "+reason, block);
+       // Defender
+       String defender=rs.getString("defender");
        
-       // Change law status
-       UTILS.DB.executeUpdate("UPDATE laws "
-                               + "SET status='ID_ERR' "
-                             + "WHERE lawID='"+lawID+"'");
+       // Target
+       String target=rs.getString("target");
+       
+       // Attacker adr
+       String attacker_adr=UTILS.BASIC.getCouAdr(attacker);
+       
+       // Defender adr
+       String defender_adr=UTILS.BASIC.getCouAdr(attacker);
+       
+       // Attacker winner ?
+       if (rs.getLong("attacker_points")>rs.getLong("defender_points"))
+       {
+           // Occupy target
+           UTILS.DB.executeUpdate("UPDATE countries "
+                                   + "SET occupied='"+attacker+"' "
+                                 + "WHERE code='"+target+"'");
+           
+           // Take all foreign military equipment
+           UTILS.DB.executeUpdate("UPDATE stocuri "
+                                   + "SET adr='"+attacker_adr+"' "
+                                 + "WHERE war_loc_type='ID_LAND' "
+                                   + "AND war_locID='"+target+"' "
+                                   + "AND status='ID_READY'");
+       }
+       else
+       {
+           // Occupy target
+           UTILS.DB.executeUpdate("UPDATE countries "
+                                   + "SET occupied='"+defender+"' "
+                                 + "WHERE code='"+target+"'");
+           
+           // Take all foreign military equipment
+           UTILS.DB.executeUpdate("UPDATE stocuri "
+                                   + "SET adr='"+defender_adr+"' "
+                                 + "WHERE war_loc_type='ID_LAND' "
+                                   + "AND war_locID='"+target+"' "
+                                   + "AND status='ID_READY'");
+       }
+       
+       // End war
+       UTILS.DB.executeUpdate("UPDATE wars "
+                               + "SET status='ID_ENDED' "
+                             + "WHERE warID='"+warID+"'");
    }
    
-   public void propErr(long propID, String reason, long block) throws Exception
-   {
-       // Load law data
-       ResultSet rs=UTILS.DB.executeQuery("SELECT * "
-                                          + "FROM orgs_props "
-                                         + "WHERE propID='"+propID+"'");
-       
-       // Next
-       rs.next();
-       
-       // Country address
-       long orgID=rs.getLong(rs.getString("orgID"));
-       
-       // Load org data
-       rs=UTILS.DB.executeQuery("SELECT * "
-                                + "FROM orgs "
-                               + "WHERE orgID='"+orgID+"'");
-       
-       // Next
-       rs.next();
-       
-       // Org address
-       String adr=rs.getString("adr");
-       
-       // Post event
-       UTILS.BASIC.newEvent(adr, "Proposal "+propID+" could not be implemented for reason : "+reason, block);
-       
-       // Change law status
-       UTILS.DB.executeUpdate("UPDATE orgs_props "
-                               + "SET status='ID_ERR' "
-                             + "WHERE propID='"+propID+"'");
-   }
-   
-  
    public void implementLaw(long lawID, long block) throws Exception
    {
        // Set as implemented
@@ -102,216 +102,59 @@ public class CCrons
        // Next
        rs.next();
        
+       // Country
+       String cou=UTILS.BASIC.getAdrData(rs.getString("adr"), "cou");
+       
        // Implement
        switch (rs.getString("type"))
        {
            // Change bonus
-           case "ID_CHG_BONUS" :  // Bonus
-                                  String bonus=UTILS.BASIC.base64_decode(rs.getString("par_1"));
-                                  
-                                  // Amount
-                                  double bonus_amount=Double.parseDouble(UTILS.BASIC.base64_decode(rs.getString("par_3")));
-                                  
-                                  // Prod
-                                  String bonus_prod=UTILS.BASIC.base64_decode(rs.getString("par_2"));
-                                  
-                                  // Update
-                                  UTILS.DB.executeUpdate("UPDATE bonuses "
-                                                          + "SET amount='"+bonus_amount+"' "
-                                                        + "WHERE bonus='"+bonus+"' "
-                                                          + "AND prod='"+bonus_prod+"' "
-                                                          + "AND cou='"+rs.getString("country")+"'");
+           case "ID_CHG_BONUS" :  // Implement
+                                  UTILS.LAWS.implementChgBonus(cou, 
+                                                               rs.getString("par_1"), 
+                                                               rs.getString("par_2"), 
+                                                               rs.getString("par_3"));
                                   
                                   break;
            
-           case "ID_CHG_TAX" :    // Tax
-                                  String tax=UTILS.BASIC.base64_decode(rs.getString("par_1"));
-                                  
-                                  // Amount
-                                  double tax_amount=Double.parseDouble(UTILS.BASIC.base64_decode(rs.getString("par_2")));
-                                  
-                                  // Prod
-                                  String tax_prod=UTILS.BASIC.base64_decode(rs.getString("par_3"));
-                                  
-                                  // Update
-                                  if (tax.equals("ID_SALE_TAX"))
-                                  UTILS.DB.executeUpdate("UPDATE taxes "
-                                                          + "SET value='"+tax_amount+"' "
-                                                        + "WHERE tax='"+tax+"' "
-                                                          + "AND prod='"+tax_prod+"' "
-                                                          + "AND cou='"+rs.getString("country")+"'");
-                                  
-                                  else
-                                  UTILS.DB.executeUpdate("UPDATE taxes "
-                                                          + "SET value='"+tax_amount+"' "
-                                                        + "WHERE tax='"+tax+"' "
-                                                          + "AND cou='"+rs.getString("country")+"'");
+           case "ID_CHG_TAX" :    UTILS.LAWS.implementChgTax(cou,
+                                                             rs.getString("par_1"), 
+                                                             rs.getString("par_2"), 
+                                                             rs.getString("par_3"));
                                   
                                   break;
                                   
-           case "ID_ADD_PREMIUM" :   // List
-                                     String list=UTILS.BASIC.base64_decode(rs.getString("par_1"));
-                                     
-                                     // Explode
-                                     List<String> players = Arrays.asList(list.split(","));
-        
-                                     // Parse
-                                     for (int a=0; a<=players.size()-1; a++)
-                                         UTILS.DB.executeUpdate("UPDATE adr "
-                                                                 + "SET premium='"+block+"' "
-                                                               + "WHERE name='"+players.get(a)+"'");
+           case "ID_ADD_PREMIUM" :   UTILS.LAWS.implementAddPremium(cou, 
+                                                                    block, 
+                                                                    rs.getString("par_1"));
         
                                     break;
                                      
-           case "ID_REMOVE_PREMIUM" : // List
-                                     list=UTILS.BASIC.base64_decode(rs.getString("par_1"));
-                                     
-                                     // Explode
-                                     players = Arrays.asList(list.split(","));
-        
-                                     // Parse
-                                     for (int a=0; a<=players.size()-1; a++)
-                                         UTILS.DB.executeUpdate("UPDATE adr "
-                                                                 + "SET premium=0 "
-                                                               + "WHERE name='"+players.get(a)+"'");
+           case "ID_REMOVE_PREMIUM" : UTILS.LAWS.implementRemovePremium(cou, rs.getString("par_1"));
         
                                     break;
                                      
                                      
             case "ID_OFICIAL_ART" : // Article ID
-                                    long artID=rs.getLong("tweetID");
-                                        
-                                    // Update
-                                    UTILS.DB.executeUpdate("UPDATE tweets "
-                                                                + "SET of_dec='"+block+"' "
-                                                              + "WHERE tweetID='"+artID+"'");
+                                    long artID=Long.parseLong(UTILS.BASIC.base64_decode(rs.getString("par_1")));
+                                    
+                                    // Implement
+                                    UTILS.LAWS.implementOfArt(artID, block);
                                         
                                     break;
                                     
                                      
-           case "ID_DONATION" : // Donation address
-                                String adr=UTILS.BASIC.base64_decode(rs.getString("par_1"));
-                                
-                                // Donation amount
-                                double amount=Double.parseDouble(UTILS.BASIC.base64_decode(rs.getString("par_2")));
-                                
-                                // Currency
-                                String cur="CRC";
-                                
-                                if (!rs.getString("par_3").equals(""))
-                                   cur=UTILS.BASIC.base64_decode(rs.getString("par_3"));
-                                      
-                                // Valid currency ?
-                                if (UTILS.BASIC.isCur(cur))
-                                {
-                                    // Country
-                                    String cou=UTILS.BASIC.getAdrData(rs.getString("adr"), "cou");
-                                           
-                                    // Country address
-                                    String cou_adr=UTILS.BASIC.getCouAdr(cou);
-                                  
-                                    // State budget
-                                    double budget=UTILS.BASIC.getBudget(cou, cur);
-                                  
-                                    // Only 5% of budget can be donated
-                                    if (budget/20>amount)
-                                    {
-                                        // Payment
-                                        UTILS.ACC.newTransfer(cou_adr, 
-                                                              adr,
-                                                              amount, 
-                                                              cur, 
-                                                              "State budget donation ", 
-                                                              "", 
-                                                              0,
-                                                              UTILS.BASIC.hash(String.valueOf(block)), 
-                                                              block,
-                                                              false,
-                                                              "",
-                                                              "");   
-                                              
-                                        // Clear
-                                        UTILS.ACC.clearTrans(UTILS.BASIC.hash(String.valueOf(block)), 
-                                                             "ID_ALL", 
+           case "ID_DONATION" : UTILS.LAWS.implementDonation(lawID, 
+                                                             cou, 
+                                                             rs.getString("par_1"), 
+                                                             rs.getString("par_2"), 
                                                              block);
-                                    } 
-                                    else this.lawErr(lawID, "Innsuficient funds", block);
-                                } 
-                                else this.lawErr(lawID, "Invalid currency", block);
                                 break;
                                 
-            case "ID_DISTRIBUTE" :  // Distribution amount
-                                    amount=Double.parseDouble(UTILS.BASIC.base64_decode(rs.getString("par_2")));
-                                
-                                    // Currency
-                                    cur="CRC";
-                                
-                                    if (!rs.getString("par_3").equals(""))
-                                       cur=UTILS.BASIC.base64_decode(rs.getString("par_3"));
-                                      
-                                    // Valid currency ?
-                                    if (UTILS.BASIC.isCur(cur))
-                                    {
-                                        // Country
-                                        String cou=UTILS.BASIC.getAdrData(rs.getString("adr"), "cou");
-                                           
-                                        // Country address
-                                        String cou_adr=UTILS.BASIC.getCouAdr(cou);
-                                  
-                                        // State budget
-                                        double budget=UTILS.BASIC.getBudget(cou, cur);
-                                  
-                                        // Only 5% of budget can be donated
-                                        if (budget/20>amount)
-                                        {
-                                           // Number of premium citizens
-                                           rs=UTILS.DB.executeQuery("SELECT COUNT(*) AS total "
-                                                                    + "FROM adr "
-                                                                   + "WHERE cou='' "
-                                                                     + "AND premium>0");
-                                           
-                                           // Next
-                                           rs.next();
-                                           
-                                           // Total
-                                           double total=rs.getLong("total");
-                                           
-                                           // Per citizen
-                                           double per_cit=UTILS.BASIC.round(amount/total, 4);
-                                           
-                                           // Minimum 0.0001 / citien ?
-                                           if (per_cit>=0.0001)
-                                           {
-                                                // Load all premium citizens
-                                                rs=UTILS.DB.executeQuery("SELECT * "
-                                                                         + "FROM adr "
-                                                                        + "WHERE cou='' "
-                                                                          + "AND premium>0");
-                                                
-                                                while (rs.next())
-                                                UTILS.ACC.newTransfer(cou_adr, 
-                                                                      rs.getString("adr"),
-                                                                      per_cit, 
-                                                                      cur, 
-                                                                      "State budget donation", 
-                                                                      "", 
-                                                                      0,
-                                                                      UTILS.BASIC.hash(String.valueOf(block)), 
-                                                                      block,
-                                                                      false,
-                                                                      "",
-                                                                      ""); 
-                                                
-                                                // Clear
-                                                UTILS.ACC.clearTrans(UTILS.BASIC.hash(String.valueOf(block)), 
-                                                                     "ID_ALL", 
-                                                                     block);
-                                           }
-                                           else this.lawErr(lawID, "Minimum 0.0001 / citizen required", block);
-                                       } 
-                                       else this.lawErr(lawID, "Innsuficient funds", block);
-                                    } 
-                                    else this.lawErr(lawID, "Invalid currency", block);
+            case "ID_DISTRIBUTE" :  UTILS.LAWS.implementDistribute(lawID, 
+                                                                   cou, 
+                                                                   rs.getString("par_1"),
+                                                                   block);
                                     break;
        }
    }
@@ -389,9 +232,9 @@ public class CCrons
                                                              "ID_ALL", 
                                                              block);
                                     } 
-                                    else this.propErr(propID, "Innsuficient funds", block);
+                                    else UTILS.LAWS.propErr(propID, "Innsuficient funds", block);
                                 } 
-                                else this.propErr(propID, "Invalid currency", block);
+                                else UTILS.LAWS.propErr(propID, "Invalid currency", block);
                                 
                                 break;
            
@@ -440,7 +283,7 @@ public class CCrons
        while (rs.next())
        {
            // Total pol endorsement
-           long total=this.getCongressVotingPower(rs.getString("cou"));
+           long total=this.getCongressVotingPower(rs.getString("country"));
            
            // Voted by over 50% 
            if (rs.getLong("voted_yes")>total/2)
@@ -465,6 +308,19 @@ public class CCrons
        
        return total;
     }
+   
+   public void checkWars(long block) throws Exception
+   {
+       // Load wars data
+       ResultSet rs=UTILS.DB.executeQuery("SELECT * "
+                                          + "FROM wars "
+                                         + "WHERE status='ID_PENDING' "
+                                           + "AND block<"+(block-1440));
+       
+       // Parse
+       while (rs.next())
+           this.endWar(rs.getLong("warID"));
+   }
    
    public void checkProps(long block) throws Exception
    {
@@ -558,7 +414,7 @@ public class CCrons
          
          // Decrease energy
          UTILS.DB.executeUpdate("UPDATE adr "
-                                 + "SET energy=energy-energy*0.0008"
+                                 + "SET energy=energy-energy*0.0008 "
                                + "WHERE energy>=1");
      }
      
@@ -715,8 +571,8 @@ public class CCrons
          long last_block=rs.getLong("tstamp");
          
          if (UTILS.SETTINGS.autoshutdown && 
-             online<UTILS.BASIC.tstamp()-600 && 
-             last_block<UTILS.BASIC.tstamp()-600)
+             online<UTILS.BASIC.tstamp()-1200 && 
+             last_block<UTILS.BASIC.tstamp()-1200)
          {
              System.out.println("System frozen. Exiting.");
              System.exit(0);
@@ -751,6 +607,9 @@ public class CCrons
          
          // Orgs props
          this.checkProps(block);
+         
+         // Check wars
+         this.checkWars(block);
      }
      
      class RemindTask extends TimerTask 

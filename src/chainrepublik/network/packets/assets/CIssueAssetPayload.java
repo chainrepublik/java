@@ -114,9 +114,6 @@ public class CIssueAssetPayload extends CPayload
                                   this.qty+
                                   this.trans_fee_adr+
                                   this.trans_fee);
-        
-        // Sign
-        this.sign();
    }
     
     public void check(CBlockPayload block) throws Exception

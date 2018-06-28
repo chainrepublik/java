@@ -15,7 +15,7 @@ public class CRentLicencePacket extends CBroadcastPacket
                               long days) throws Exception
     {
         // Constructor
-        super("ID_RENT_LIC_PACKET");
+        super(fee_adr, "ID_RENT_LIC_PACKET");
         
         // Builds the payload class
 	CRentLicencePayload dec_payload=new CRentLicencePayload(adr, 
@@ -27,8 +27,7 @@ public class CRentLicencePacket extends CBroadcastPacket
 	this.payload=UTILS.SERIAL.serialize(dec_payload);
 					
         // Network fee
-	CFeePayload fee=new CFeePayload(fee_adr, 0.0001, "Rent licence network fee");
-	this.fee_payload=UTILS.SERIAL.serialize(fee);
+	this.setFee(0.0001, "Rent licence network fee");
 			   
 	// Sign packet
 	this.sign();
@@ -47,11 +46,8 @@ public class CRentLicencePacket extends CBroadcastPacket
           // Deserialize transaction data
    	  CRentLicencePayload dec_payload=(CRentLicencePayload) UTILS.SERIAL.deserialize(payload);
           
-          // Deserialize payload
-          CFeePayload fee=(CFeePayload) UTILS.SERIAL.deserialize(fee_payload);
-        
           // Check fee
-	  if (fee.amount<0.0001)
+	  if (this.fee<0.0001)
 	      throw new Exception("Invalid fee - CRentLicencePacket.java");
           
           // Check payload

@@ -16,7 +16,7 @@ public class CUpdateCompanyPacket extends CBroadcastPacket
                                  String pic) throws Exception
     {
         // Constructor
-        super("ID_UPDATE_COM_PACKET");
+        super(fee_adr, "ID_UPDATE_COM_PACKET");
         
         // Builds the payload class
 	CUpdateCompanyPayload dec_payload=new CUpdateCompanyPayload(adr,
@@ -29,8 +29,7 @@ public class CUpdateCompanyPacket extends CBroadcastPacket
 	this.payload=UTILS.SERIAL.serialize(dec_payload);
 					
         // Network fee
-	CFeePayload fee=new CFeePayload(fee_adr, 0.0001, "Update company network fee");
-	this.fee_payload=UTILS.SERIAL.serialize(fee);
+	this.setFee(0.0001, "Update company network fee");
 			   
 	// Sign packet
 	this.sign();
@@ -49,11 +48,8 @@ public class CUpdateCompanyPacket extends CBroadcastPacket
           // Deserialize transaction data
    	  CUpdateCompanyPayload dec_payload=(CUpdateCompanyPayload) UTILS.SERIAL.deserialize(payload);
           
-          // Deserialize payload
-          CFeePayload fee=(CFeePayload) UTILS.SERIAL.deserialize(fee_payload);
-        
           // Check fee
-	  if (fee.amount<0.0001)
+	  if (this.fee<0.0001)
 	      throw new Exception("Invalid fee - CUpdateCompanyPacket.java");
           
           // Check payload

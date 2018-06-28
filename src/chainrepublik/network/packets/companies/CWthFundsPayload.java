@@ -30,9 +30,6 @@ public class CWthFundsPayload extends CPayload
  	hash=UTILS.BASIC.hash(this.getHash()+
  			      this.comID+
                               this.amount);
-           
-        // Sign
-        this.sign();
     }
     
     public void check(CBlockPayload block) throws Exception

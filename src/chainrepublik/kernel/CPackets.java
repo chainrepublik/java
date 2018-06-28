@@ -34,9 +34,6 @@ public class CPackets
     // Fee amount
     String fee_amount;
     
-    // Fee hash
-    String fee_hash;
-    
     // Payload size
     long payload_size;
     
@@ -58,15 +55,8 @@ public class CPackets
        CPayload payload=(CPayload) UTILS.SERIAL.deserialize(packet.payload);
        this.payload_hash=payload.hash;
        
-       // Fee source
-       CFeePayload fee=(CFeePayload) UTILS.SERIAL.deserialize(packet.fee_payload);
-       this.fee_src=fee.target_adr;
-       
        // Fee amount
-       this.fee_amount=UTILS.FORMAT_8.format(fee.amount);
-       
-       // Fee hash
-       this.fee_hash=fee.hash;
+       this.fee_amount=UTILS.FORMAT_8.format(packet.fee);
        
        // Payload size
        this.payload_size=packet.payload.length;
@@ -139,7 +129,6 @@ public class CPackets
                                          + "payload_hash='"+this.payload_hash+"', "
                                          + "fee_src='"+this.fee_src+"', "
                                          + "fee_amount='"+this.fee_amount+"', "
-                                         + "fee_hash='"+this.fee_hash+"', "
                                          + "payload_size='"+this.payload_size+"', "
                                          + "par_1_name='"+this.names[1]+"', "
                                          + "par_1_val='"+UTILS.BASIC.base64_encode(this.values[1])+"', "

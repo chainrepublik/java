@@ -33,9 +33,7 @@ public class CVoteLawPayload extends CPayload
  	hash=UTILS.BASIC.hash(this.getHash()+
                               this.lawID+
                               this.vote_type);
-           
-        // Sign
-        this.sign();
+     
     }
     
     public void check(CBlockPayload block) throws Exception

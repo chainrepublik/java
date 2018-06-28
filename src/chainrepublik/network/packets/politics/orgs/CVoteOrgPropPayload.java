@@ -30,9 +30,6 @@ public class CVoteOrgPropPayload extends CPayload
  	this.hash=UTILS.BASIC.hash(this.getHash()+
                                    this.propID+
                                    this.vote);
-        
-        // Sign
-        this.sign();
     }
     
    

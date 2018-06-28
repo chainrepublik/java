@@ -84,8 +84,8 @@ public class CWallet
         
             // Input Streqm
 	    String wallet = FileUtils.readFileToString(f, "UTF-8");
-	    wallet=UTILS.AES.decrypt(wallet, UTILS.SETTINGS.getWalletPass());
-		       
+            wallet=UTILS.AES.decrypt(wallet, UTILS.SETTINGS.getWalletPass());
+                
 	    // Load addresses
             String[] s=wallet.split("\\*");
 		      

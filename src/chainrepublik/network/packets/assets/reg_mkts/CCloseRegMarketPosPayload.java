@@ -28,9 +28,6 @@ public class CCloseRegMarketPosPayload  extends CPayload
         // Hash
         hash=UTILS.BASIC.hash(this.getHash()+
                               this.orderID);
-          
-        // Sign
-        this.sign();
     }
    
    public void check(CBlockPayload block) throws Exception

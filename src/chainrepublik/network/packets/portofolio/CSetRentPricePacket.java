@@ -15,7 +15,7 @@ public class CSetRentPricePacket extends CBroadcastPacket
                              double price) throws Exception
     {
         // Constructor
-        super("ID_SET_RENT_PRICE_PACKET");
+        super(fee_adr, "ID_SET_RENT_PRICE_PACKET");
         
         // Builds the payload class
 	CSetRentPricePayload dec_payload=new CSetRentPricePayload(adr, 
@@ -26,8 +26,7 @@ public class CSetRentPricePacket extends CBroadcastPacket
 	this.payload=UTILS.SERIAL.serialize(dec_payload);
 					
         // Network fee
-	CFeePayload fee=new CFeePayload(fee_adr, 0.0001, "Set rent price network fee");
-	this.fee_payload=UTILS.SERIAL.serialize(fee);
+	this.setFee(0.0001, "Set rent price network fee");
 			   
 	// Sign packet
 	this.sign();
@@ -46,11 +45,8 @@ public class CSetRentPricePacket extends CBroadcastPacket
           // Deserialize transaction data
    	  CSetRentPricePayload dec_payload=(CSetRentPricePayload) UTILS.SERIAL.deserialize(payload);
           
-          // Deserialize payload
-          CFeePayload fee=(CFeePayload) UTILS.SERIAL.deserialize(fee_payload);
-        
           // Check fee
-	  if (fee.amount<0.0001)
+	  if (this.fee<0.0001)
 	      throw new Exception("Invalid fee - CRentPacket.java");
           
           // Check payload

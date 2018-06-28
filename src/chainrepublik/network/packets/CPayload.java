@@ -4,7 +4,6 @@
 package chainrepublik.network.packets;
 
 import chainrepublik.kernel.CAddress;
-import chainrepublik.kernel.CECC;
 import chainrepublik.kernel.UTILS;
 import chainrepublik.network.packets.blocks.CBlockPayload;
 
@@ -74,14 +73,6 @@ public class CPayload  implements java.io.Serializable
             if (!this.target_adr.equals(""))
                if (!UTILS.BASIC.isAdr(this.target_adr))
                   throw new Exception("Invalid target address - CPayload");
-            
-            // Sig valid ?
-            if (!UTILS.BASIC.isBase64(this.sign))
-               throw new Exception("Invalid signature format - CPayload");
-            
-           // Check sig
-           if (!this.checkSig())
-              throw new Exception("Invalid signature - CPayload");
            
            // Block number
            if (block!=null)
@@ -93,40 +84,7 @@ public class CPayload  implements java.io.Serializable
            UTILS.DB.executeUpdate("DELETE FROM trans WHERE hash='"+this.hash+"'");
         }
         
-        
-        public void sign(String sig) throws Exception
-        {
-            if (!this.target_adr.equals(""))
-            {
-                if (sig.equals(""))
-                {
-    	           CAddress adr=UTILS.WALLET.getAddress(this.target_adr);
-    	           this.sign=adr.sign(this.hash);
-                }
-                else this.sign=sig;
-            }
-        }
-        
-        public void sign() throws Exception
-        {
-            if (!this.target_adr.equals(""))
-            {
-               CAddress adr=UTILS.WALLET.getAddress(this.target_adr);
-    	       this.sign=adr.sign(this.hash);
-                
-            }
-        }
-    
-        public boolean checkSig() throws Exception
-        {
-    	   CECC ecc=new CECC(this.target_adr);
-    	
-    	   if (ecc.checkSig(this.hash, this.sign)==true)
-    		return true;
-    	   else
-    		return false;
-        }
-    
+       
         public void commit(CBlockPayload block) throws Exception
         {
            

@@ -22,9 +22,6 @@ public class CJoinPartyPayload extends CPayload
         // Hash
  	hash=UTILS.BASIC.hash(this.getHash()+
                               this.orgID);
-           
-        // Sign
-        this.sign();
     }
     
     

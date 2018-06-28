@@ -58,8 +58,6 @@ public class CNewAdPayload extends CPayload
  			         this.bid+
                                  this.hours);
  	   
- 	   //Sign
-           this.sign();
    }
    
    public void check(CBlockPayload block) throws Exception

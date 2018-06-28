@@ -26,7 +26,7 @@ public class CTransPacket extends CBroadcastPacket
                         long reqID) throws Exception
 	{
 		// Super class
-		super("ID_TRANS_PACKET");
+		super(fee_adr,"ID_TRANS_PACKET");
 		   
 		CTransPayload dec_payload = new CTransPayload(src, 
                                                               dest,
@@ -46,8 +46,7 @@ public class CTransPacket extends CBroadcastPacket
                 if (f<0.0001) f=0.0001;
 	        
                 // Fee
-                CFeePayload fee=new CFeePayload(fee_adr,  f, "Simple transaction neetwork fee");
-	        this.fee_payload=UTILS.SERIAL.serialize(fee);
+                this.setFee(f, "Simple transaction neetwork fee");
                 
                 // Hash
                 UTILS.DB.executeUpdate("UPDATE web_ops "
@@ -72,17 +71,14 @@ public class CTransPacket extends CBroadcastPacket
 	      CTransPayload dec_payload=(CTransPayload) UTILS.SERIAL.deserialize(payload);
 	      dec_payload.check(block);
 	      
-              // Deserialize payload
-              CFeePayload fee=(CFeePayload) UTILS.SERIAL.deserialize(fee_payload);
-        
               if (dec_payload.cur.equals("CRC"))
               {
-                     if (fee.amount<0.0001)
+                     if (this.fee<0.0001)
                         throw new Exception("Invalid fee - CTransPacket.java");
               }
               else
               {
-                     if (fee.amount<(dec_payload.amount*0.0001))
+                     if (this.fee<(dec_payload.amount*0.0001))
                         throw new Exception("Invalid fee - CTransPacket.java");
               }
 	   	  

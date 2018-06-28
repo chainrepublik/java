@@ -4,7 +4,6 @@
 package chainrepublik.network.packets.mes;
 
 import chainrepublik.kernel.CAddress;
-import chainrepublik.kernel.CECC;
 import chainrepublik.kernel.UTILS;
 import chainrepublik.network.packets.CPayload;
 import chainrepublik.network.packets.blocks.CBlockPayload;
@@ -55,7 +54,7 @@ public class CMesPayload extends CPayload
 	    this.mes=UTILS.AES.encrypt(mes, k);
 		    
 	    // Encrypt key
-	    CECC ecc=new CECC(receiver_adr);
+	    CAddress ecc=new CAddress(receiver_adr);
 	    this.key=ecc.encrypt(k);
                
             // Hash
@@ -64,9 +63,6 @@ public class CMesPayload extends CPayload
 				  this.subj+
 				  this.mes+
 				  this.key);
-                    
-	    // Sign
-	    this.sign();
         }
 	
 	

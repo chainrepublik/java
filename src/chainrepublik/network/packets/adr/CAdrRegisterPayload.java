@@ -79,9 +79,6 @@ public class CAdrRegisterPayload extends CPayload
  			         node_adr+
  			         pic+
                                  days);
-           
-           // Sign
-           this.sign();
    }
    
    public void check(CBlockPayload block) throws Exception

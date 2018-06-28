@@ -46,9 +46,7 @@ public class CRenewPayload extends CPayload
                               this.target_type+
                               this.targetID+
 			      days);
-		
-	// Sign
-	this.sign();
+	
     }
     
      public void check(CBlockPayload block) throws Exception

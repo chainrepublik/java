@@ -53,7 +53,7 @@ public class CWebOps extends CTable
                                                         + "resp_1 TEXT, "
                                                         + "resp_2 TEXT, "
 			 	 			+ "packet_sign VARCHAR(250) NOT NULL DEFAULT '', "
-			 	 			+ "payload_sign VARCHAR(250) NOT NULL DEFAULT '', "
+			 	 			+ "packet_hash VARCHAR(250) NOT NULL DEFAULT '', "
 			 	 			+ "status VARCHAR(50) NOT NULL DEFAULT 'ID_PENDING', "
 			 	 			+ "response VARCHAR(500) NOT NULL DEFAULT '', "
 			 	 			+ "tstamp BIGINT NOT NULL DEFAULT 0, "

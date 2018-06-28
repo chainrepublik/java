@@ -14,7 +14,7 @@ public class CEndorsePacket extends CBroadcastPacket
                            String type) throws Exception
     {
         // Constructor
-        super("ID_ENDORSE_ADR_PACKET");
+        super(fee_adr, "ID_ENDORSE_ADR_PACKET");
         
         // Builds the payload class
 	CEndorsePayload dec_payload=new CEndorsePayload(adr, 
@@ -25,8 +25,7 @@ public class CEndorsePacket extends CBroadcastPacket
 	this.payload=UTILS.SERIAL.serialize(dec_payload);
 					
         // Network fee
-	CFeePayload fee=new CFeePayload(fee_adr,  0.0001, "Endorse address network fee");
-	this.fee_payload=UTILS.SERIAL.serialize(fee);
+	this.setFee( 0.0001, "Endorse address network fee");
 			   
 	// Sign packet
 	this.sign();
@@ -45,11 +44,8 @@ public class CEndorsePacket extends CBroadcastPacket
           // Deserialize transaction data
    	  CEndorsePayload dec_payload=(CEndorsePayload) UTILS.SERIAL.deserialize(payload);
           
-          // Deserialize payload
-          CFeePayload fee=(CFeePayload) UTILS.SERIAL.deserialize(fee_payload);
-        
           // Check fee
-	  if (fee.amount<0.0001)
+	  if (this.fee<0.0001)
 	      throw new Exception("Invalid fee - CEndorsePacket.java");
           
           // Check payload

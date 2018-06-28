@@ -290,18 +290,29 @@ public class CTipuriLicente extends CTable
         UTILS.DB.executeUpdate("INSERT INTO tipuri_licente SET tip='ID_LIC_PROD_TOOLS_PROD_GRAPES', name='Vineyard Production Tools Production Licence', com_type='ID_COM_TOOLS', price='0.1', prod='ID_TOOLS_PROD_GRAPES' ");
         UTILS.DB.executeUpdate("INSERT INTO tipuri_licente SET tip='ID_LIC_PROD_TOOLS_PROD_BOTTLES', name='Bottles Company Production Tools Production Licence', com_type='ID_COM_TOOLS', price='0.1', prod='ID_TOOLS_PROD_BOTTLES' ");
         UTILS.DB.executeUpdate("INSERT INTO tipuri_licente SET tip='ID_LIC_PROD_TOOLS_PROD_WINE', name='Winery Production Tools Production Licence', com_type='ID_COM_TOOLS', price='0.1', prod='ID_TOOLS_PROD_WINE' ");
-        UTILS.DB.executeUpdate("INSERT INTO tipuri_licente SET tip='ID_LIC_PROD_REVOLVER', name='0.357 Magnum Production Licence', com_type='ID_COM_WEAPONS', price='0.1', prod='ID_REVOLVER' ");
-        UTILS.DB.executeUpdate("INSERT INTO tipuri_licente SET tip='ID_LIC_PROD_AKM', name='AKM Assault Rifle Production Licence', com_type='ID_COM_WEAPONS', price='0.1', prod='ID_AKM' ");
-        UTILS.DB.executeUpdate("INSERT INTO tipuri_licente SET tip='ID_LIC_PROD_HK416', name='HK416 Assault Rifle Production Licence', com_type='ID_COM_WEAPONS', price='0.1', prod='ID_HK416' ");
-        UTILS.DB.executeUpdate("INSERT INTO tipuri_licente SET tip='ID_LIC_PROD_500MILLS', name='500MILLS Shotgun Production Licence', com_type='ID_COM_WEAPONS', price='0.1', prod='ID_500MILLS' ");
-        UTILS.DB.executeUpdate("INSERT INTO tipuri_licente SET tip='ID_LIC_PROD_M110', name='M110 Sniper Rifle Production Licence', com_type='ID_COM_WEAPONS', price='0.1', prod='ID_M110' ");
-        UTILS.DB.executeUpdate("INSERT INTO tipuri_licente SET tip='ID_LIC_PROD_RPG', name='RPG-7 Rocket Launcher', com_type='ID_COM_WEAPONS', price='0.1', prod='ID_RPG' ");
-        UTILS.DB.executeUpdate("INSERT INTO tipuri_licente SET tip='ID_LIC_PROD_MISSLE_HELLFIRE', name='AGM-114 Production Licence', com_type='ID_COM_WEAPONS', price='0.1', prod='ID_MISSILE_HELLFIRE' ");
-        UTILS.DB.executeUpdate("INSERT INTO tipuri_licente SET tip='ID_LIC_PROD_BALLISTIC_SHORT', name='Short Range Ballistic Missile Production Licence', com_type='ID_COM_WEAPONS', price='0.1', prod='ID_MISSILE_BALLISTIC_SHORT' ");
-        UTILS.DB.executeUpdate("INSERT INTO tipuri_licente SET tip='ID_LIC_PROD_BALLISTIC_MEDIUM', name='Medium Range Ballistic Missile Production Licence', com_type='ID_COM_WEAPONS', price='0.1', prod='ID_MISSILE_BALLISTIC_MEDIUM' ");
-        UTILS.DB.executeUpdate("INSERT INTO tipuri_licente SET tip='ID_LIC_PROD_BALLISTIC_LONG', name='Long Range Ballistic Missile Production Licence', com_type='ID_COM_WEAPONS', price='0.1', prod='ID_MISSILE_BALLISTIC_LONG' ");
-        UTILS.DB.executeUpdate("INSERT INTO tipuri_licente SET tip='ID_LIC_PROD_BALLISTIC_INTER', name='Intercontinental Ballistic Missile Production Licence', com_type='ID_COM_WEAPONS', price='0.1', prod='ID_MISSILE_BALLISTIC_INTERCONTINENTAL' ");
-        UTILS.DB.executeUpdate("INSERT INTO tipuri_licente SET tip='ID_LIC_PROD_TANK', name='M1 Abrams Tank Production Licence', com_type='ID_COM_WEAPONS', price='0.1', prod='ID_TANK' ");
+        UTILS.DB.executeUpdate("INSERT INTO tipuri_licente SET tip='ID_LIC_PROD_KNIFE', name='Knifes Production Licence', com_type='ID_COM_SMALL_WEAPONS', price='0.1', prod='ID_KNIFE' ");
+        UTILS.DB.executeUpdate("INSERT INTO tipuri_licente SET tip='ID_LIC_PROD_PISTOL', name='Pistols Production Licence', com_type='ID_COM_SMALL_WEAPONS', price='0.1', prod='ID_PISTOL' ");
+        UTILS.DB.executeUpdate("INSERT INTO tipuri_licente SET tip='ID_LIC_PROD_REVOLVER', name='Revolvers Production Licence', com_type='ID_COM_SMALL_WEAPONS', price='0.1', prod='ID_REVOLVER' ");
+        UTILS.DB.executeUpdate("INSERT INTO tipuri_licente SET tip='ID_LIC_PROD_RIFFLE', name='Riffles Production Licence', com_type='ID_COM_SMALL_WEAPONS', price='0.1', prod='ID_RIFFLE' ");
+        UTILS.DB.executeUpdate("INSERT INTO tipuri_licente SET tip='ID_LIC_PROD_MACHINE_GUN', name='Machine Guns Production Licence', com_type='ID_COM_SMALL_WEAPONS', price='0.1', prod='ID_MACHINE_GUN' ");
+        UTILS.DB.executeUpdate("INSERT INTO tipuri_licente SET tip='ID_LIC_PROD_GRENADE_LAUNCHER', name='Grenade Launchers Production Licence', com_type='ID_COM_SMALL_WEAPONS', price='0.1', prod='ID_GRENADE_LAUNCHER' ");
+        UTILS.DB.executeUpdate("INSERT INTO tipuri_licente SET tip='ID_LIC_PROD_ GLOVES', name='Military Gloves Production Licence', com_type='ID_COM_SMALL_WEAPONS', price='0.1', prod='ID_GLOVES' ");
+        UTILS.DB.executeUpdate("INSERT INTO tipuri_licente SET tip='ID_LIC_PROD_GLASSES', name='Military Glassess Production Licence', com_type='ID_COM_SMALL_WEAPONS', price='0.1', prod='ID_GLASSES' ");
+        UTILS.DB.executeUpdate("INSERT INTO tipuri_licente SET tip='ID_LIC_PROD_HELMET', name='Military Helmets Production Licence', com_type='ID_COM_SMALL_WEAPONS', price='0.1', prod='ID_HELMET' ");
+        UTILS.DB.executeUpdate("INSERT INTO tipuri_licente SET tip='ID_LIC_PROD_BOOTS', name='Military Boots Production Licence', com_type='ID_COM_SMALL_WEAPONS', price='0.1', prod='ID_BOOTS' ");
+        UTILS.DB.executeUpdate("INSERT INTO tipuri_licente SET tip='ID_LIC_PROD_VEST', name='Military Vests Production Licence', com_type='ID_COM_SMALL_WEAPONS', price='0.1', prod='ID_VEST' ");
+        UTILS.DB.executeUpdate("INSERT INTO tipuri_licente SET tip='ID_LIC_PROD_SHIELD', name='Military Shields Production Licence', com_type='ID_COM_SMALL_WEAPONS', price='0.1', prod='ID_SHIELD' ");
+        UTILS.DB.executeUpdate("INSERT INTO tipuri_licente SET tip='ID_TANK', name='Tanks Production Licence', com_type='ID_COM_HEAVY_WEAPONS', price='0.1', prod='ID_TANK' ");
+        UTILS.DB.executeUpdate("INSERT INTO tipuri_licente SET tip='ID_TANK_ROUND', name='Tank Rounds  Production Licence', com_type='ID_COM_HEAVY_WEAPONS', price='0.1', prod='ID_TANK_ROUND' ");
+        UTILS.DB.executeUpdate("INSERT INTO tipuri_licente SET tip='ID_MISSILE_AIR_SOIL', name='Air to Surface Missiles Production Licence', com_type='ID_COM_HEAVY_WEAPONS', price='0.1', prod='ID_MISSILE_AIR_SOIL' ");
+        UTILS.DB.executeUpdate("INSERT INTO tipuri_licente SET tip='ID_MISSILE_SOIL_SOIL', name='Surface to Surface Missiles Production Licence', com_type='ID_COM_HEAVY_WEAPONS', price='0.1', prod='ID_MISSILE_SOIL_SOIL' ");
+        UTILS.DB.executeUpdate("INSERT INTO tipuri_licente SET tip='ID_MISSILE_BALISTIC_SHORT', name='Short Range Balisitc Missiles Production Licence', com_type='ID_COM_HEAVY_WEAPONS', price='0.1', prod='ID_MISSILE_BALISTIC_SHORT' ");
+        UTILS.DB.executeUpdate("INSERT INTO tipuri_licente SET tip='ID_MISSILE_BALISTIC_MEDIUM', name='Medium Range Balistic Missiles Production Licence', com_type='ID_COM_HEAVY_WEAPONS', price='0.1', prod='ID_MISSILE_BALISTIC_MEDIUM' ");
+        UTILS.DB.executeUpdate("INSERT INTO tipuri_licente SET tip='ID_MISSILE_BALISTIC_LONG', name='Long Range Balistic Missiles Production Licence', com_type='ID_COM_HEAVY_WEAPONS', price='0.1', prod='ID_MISSILE_BALISTIC_LONG' ");
+        UTILS.DB.executeUpdate("INSERT INTO tipuri_licente SET tip='ID_MISSILE_BALISTIC_INTERCONTINENTAL', name='Intercontinental Balistic Missiles', com_type='ID_COM_HEAVY_WEAPONS', price='0.1', prod='ID_MISSILE_BALISTIC_INTERCONTINENTAL' ");
+        UTILS.DB.executeUpdate("INSERT INTO tipuri_licente SET tip='ID_NAVY_DESTROYER', name='Navy Destroyer Production Licence', com_type='ID_COM_HEAVY_WEAPONS', price='0.1', prod='ID_NAVY_DESTROYER' ");
+        UTILS.DB.executeUpdate("INSERT INTO tipuri_licente SET tip='ID_AIRCRAFT_CARRIER', name='Aircraft Carrier Production Licence', com_type='ID_COM_HEAVY_WEAPONS', price='0.1', prod='ID_AIRCRAFT_CARRIER' ");
+        UTILS.DB.executeUpdate("INSERT INTO tipuri_licente SET tip='ID_JET_FIGHTER', name='Jet Fighter Production Licence', com_type='ID_COM_HEAVY_WEAPONS', price='0.1', prod='ID_JET_FIGHTER' ");
         UTILS.DB.executeUpdate("INSERT INTO tipuri_licente SET tip='ID_LIC_PROD_GIFTS', name='Gifts Production Licence', com_type='ID_COM_GIFT', price='0.1', prod='ID_GIFT' ");
-    }
+}
 }

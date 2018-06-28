@@ -30,9 +30,7 @@ public class CSetRentPricePayload extends CPayload
  	hash=UTILS.BASIC.hash(this.getHash()+
  			      this.itemID+
                               this.price);
-           
-        // Sign
-        this.sign();
+       
     }
     
     public void check(CBlockPayload block) throws Exception

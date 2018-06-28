@@ -20,14 +20,19 @@ public class CWarsFighters extends CTable
             
             // Create
             UTILS.DB.executeUpdate("CREATE TABLE wars_fighters (ID BIGINT(20) AUTO_INCREMENT PRIMARY KEY, "
-                                                             + "warID BIGINT(20) NOT NULL, "
-                                                             + "adr VARCHAR(250) DEFAULT NULL, "
-                                                             + "influence DOUBLE(10,2) DEFAULT NULL, "
-                                                             + "block BIGINT(20) DEFAULT NULL)");
+                                                             + "warID BIGINT(20) NOT NULL DEFAULT 0, "
+                                                             + "adr VARCHAR(250) NOT NULL DFAULT '', "
+                                                             + "type VARCHAR(5) NOT NULL DEFAULT 'AT', "
+                                                             + "damage BIGINT NOT NULL DEFAULT 0, "
+                                                             + "weapon VARCHAR(100) NOT NULL DEFAULT '', "
+                                                             + "lawID BIGINT NOT NULL DEFAULT 0, "
+                                                             + "block BIGINT(20) NOT NULL DEFAULT 0)");
             
             // Indexes
             UTILS.DB.executeUpdate("CREATE INDEX wars_fighters_warID ON wars_fighters(warID)");
             UTILS.DB.executeUpdate("CREATE INDEX wars_fighters_adr ON wars_fighters(adr)");
+            UTILS.DB.executeUpdate("CREATE INDEX wars_fighters_lawID ON wars_fighters(lawID)");
+            UTILS.DB.executeUpdate("CREATE INDEX wars_fighters_type ON wars_fighters(type)");
             UTILS.DB.executeUpdate("CREATE INDEX wars_fighters_block ON wars_fighters(block)");
             
             // Confirm

@@ -114,9 +114,7 @@ public class CNewCompanyPayload extends CPayload
                                  this.assetMktID+
  			         this.stocID+
                                  this.days);
-           
-        // Sign
-        this.sign();
+    
     }
     
     public void check(CBlockPayload block) throws Exception
@@ -272,8 +270,8 @@ public class CNewCompanyPayload extends CPayload
                                     + "SET adr='"+this.target_adr+"', "
                                         + "assetID='"+this.assetID+"', "
                                         + "symbol='"+this.symbol+"', "
-                                        + "title='"+this.symbol+" company shares', "
-                                        + "description='"+this.symbol+" company shares', "
+                                        + "title='"+UTILS.BASIC.base64_encode(this.symbol+" company shares")+", "
+                                        + "description='"+UTILS.BASIC.base64_encode(this.symbol+" company shares")+", "
                                         + "qty='10000', "
                                         + "how_buy='"+UTILS.BASIC.base64_encode("Use the internal asset markets")+"', "
                                         + "how_sell='"+UTILS.BASIC.base64_encode("Use the internal asset markets")+"', "

@@ -50,9 +50,9 @@ public class CBlockPayload extends CPayload
 		if (packet.hash.equals(UTILS.BASIC.hash(p.payload)))
 		   return true;
                 
-                // Check fee hash
-		if (packet.hash.equals(UTILS.BASIC.hash(p.fee_payload)))
-		   return true;
+                // Payload hash
+                if (UTILS.BASIC.hash(packet.payload).equals(UTILS.BASIC.hash(p.payload)))
+                    return true;
             }
             
             // Not found
@@ -80,10 +80,8 @@ public class CBlockPayload extends CPayload
                    // Load packet
                    CBroadcastPacket p=(CBroadcastPacket)this.packets.get(a);
                    
-                   CFeePayload fee=(CFeePayload) UTILS.SERIAL.deserialize(p.fee_payload);
-                   
                    // Smaller net fee ?
-                   if (fee.amount/p.payload.length<fee.amount/packet.payload.length)
+                   if (p.fee/p.payload.length<p.fee/packet.payload.length)
                    {
                        // Remove
                        this.packets.remove(a);
@@ -123,10 +121,7 @@ public class CBlockPayload extends CPayload
            
            // Return
            this.hash=hash;
-           
-           // Sign
-           sign();
-	}
+        }
 	
 	
 	// Checks the block integrity

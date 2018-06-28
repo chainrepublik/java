@@ -47,8 +47,6 @@ public class CFeePayload extends CTransPayload
                                         this.expl_src+
                                         this.expl_dest); 
            
-            // Sign
-            this.sign();
     }
     
     public void check(CBlockPayload block) throws Exception

@@ -28,9 +28,11 @@ public class CSysStats extends CTable
                                                           + "companies BIGINT(11) NOT NULL DEFAULT 0, "
                                                           + "workplaces BIGINT(11) NOT NULL DEFAULT 0, "
                                                           + "total_energy BIGINT(11) NOT NULL DEFAULT 0, "
-                                                          + "avg_energy BIGINT(11) DEFAULT NULL DEFAULT 0, "
-                                                          + "total_war_points BIGINT(11) DEFAULT NULL DEFAULT 0, "
-                                                          + "avg_war_points BIGINT(11) DEFAULT NULL DEFAULT 0, "
+                                                          + "avg_energy BIGINT(11) NOT NULL DEFAULT 0, "
+                                                          + "total_war_points BIGINT(11) NOT NULL DEFAULT 0, "
+                                                          + "avg_war_points BIGINT(11) NOT NULL DEFAULT 0, "
+                                                          + "total_pol_end BIGINT(11) NOT NULL DEFAULT 0, "
+                                                          + "avg_pol_end BIGINT(11) NOT NULL DEFAULT 0, "
                                                           + "total_pol_inf BIGINT(11) NOT NULL DEFAULT 0, "
                                                           + "avg_pol_inf BIGINT(11) NOT NULL DEFAULT 0)");
             

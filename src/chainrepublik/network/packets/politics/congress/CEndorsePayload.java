@@ -30,9 +30,7 @@ public class CEndorsePayload extends CPayload
  	hash=UTILS.BASIC.hash(this.getHash()+
  			      this.endorsed+
                               this.type);
-           
-        // Sign
-        this.sign();
+    
     }
     
     public void check(CBlockPayload block) throws Exception

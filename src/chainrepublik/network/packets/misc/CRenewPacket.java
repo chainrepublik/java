@@ -24,7 +24,7 @@ public class CRenewPacket extends CBroadcastPacket
                         long targetID, 
                         long days) throws Exception
     {
-       super("ID_RENEW_PACKET");
+       super(fee_adr, "ID_RENEW_PACKET");
        
       // Builds the payload class
           CRenewPayload dec_payload=new CRenewPayload(adr, 
@@ -37,8 +37,7 @@ public class CRenewPacket extends CBroadcastPacket
           
          
 	  // Network fee
-	   CFeePayload fee=new CFeePayload(fee_adr,  0.0001*days, "Renew network fee");
-	   this.fee_payload=UTILS.SERIAL.serialize(fee);
+	  this.setFee(0.0001*days, "Renew network fee");
        
        
        // Sign packet
@@ -58,11 +57,8 @@ public class CRenewPacket extends CBroadcastPacket
         // Deserialize transaction data
    	CRenewPayload dec_payload=(CRenewPayload) UTILS.SERIAL.deserialize(payload);
         
-        // Deserialize payload
-        CFeePayload fee=(CFeePayload) UTILS.SERIAL.deserialize(fee_payload);
-     
         // Check fee
-	if (fee.amount<dec_payload.days*0.0001)
+	if (this.fee<dec_payload.days*0.0001)
 	   throw new Exception("Invalid fee - CRenewPacket.java");
           
         // Check payload
