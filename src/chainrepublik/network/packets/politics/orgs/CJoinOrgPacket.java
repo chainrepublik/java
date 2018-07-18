@@ -4,11 +4,10 @@ import chainrepublik.kernel.CPackets;
 import chainrepublik.kernel.UTILS;
 import chainrepublik.network.packets.CBroadcastPacket;
 import chainrepublik.network.packets.blocks.CBlockPayload;
-import chainrepublik.network.packets.trans.CFeePayload;
 
-public class CJoinPartyPacket extends CBroadcastPacket 
+public class CJoinOrgPacket extends CBroadcastPacket 
 {
-     public CJoinPartyPacket(String fee_adr,
+     public CJoinOrgPacket(String fee_adr,
                              String adr,
                              long orgID) throws Exception
     {
@@ -16,7 +15,7 @@ public class CJoinPartyPacket extends CBroadcastPacket
         super(fee_adr, "ID_JOIN_PARTY_PACKET");
         
         // Builds the payload class
-	CJoinPartyPayload dec_payload=new CJoinPartyPayload(adr,
+	CJoinOrgPayload dec_payload=new CJoinOrgPayload(adr,
                                                             orgID);
                               
 	// Build the payload
@@ -44,7 +43,7 @@ public class CJoinPartyPacket extends CBroadcastPacket
 	      throw new Exception("Invalid fee - CEndorsePacket.java");
           
           // Deserialize transaction data
-   	  CJoinPartyPayload dec_payload=(CJoinPartyPayload) UTILS.SERIAL.deserialize(payload);
+   	  CJoinOrgPayload dec_payload=(CJoinOrgPayload) UTILS.SERIAL.deserialize(payload);
           
           // Check payload
           dec_payload.check(block);

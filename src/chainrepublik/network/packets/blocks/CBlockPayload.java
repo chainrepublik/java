@@ -2,14 +2,10 @@
 // Contact : vcris@gmx.com
 
 package chainrepublik.network.packets.blocks;
-
-import chainrepublik.kernel.CAddress;
 import chainrepublik.kernel.UTILS;
 import chainrepublik.network.packets.CBroadcastPacket;
 import chainrepublik.network.packets.CPayload;
 import java.util.ArrayList;
-
-import chainrepublik.network.packets.trans.CFeePayload;
 
 
 

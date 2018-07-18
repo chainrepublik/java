@@ -4,7 +4,6 @@ import chainrepublik.kernel.CPackets;
 import chainrepublik.kernel.UTILS;
 import chainrepublik.network.packets.CBroadcastPacket;
 import chainrepublik.network.packets.blocks.CBlockPayload;
-import chainrepublik.network.packets.trans.CFeePayload;
 
 public class CNewWorkplacePacket extends CBroadcastPacket
 {
@@ -25,7 +24,7 @@ public class CNewWorkplacePacket extends CBroadcastPacket
 	this.payload=UTILS.SERIAL.serialize(dec_payload);
 					
         // Network fee
-	this.setFee(days*0.1, "New workplace network fee");
+	this.setFee(0.0001, "New workplace network fee");
 			   
 	// Sign packet
 	this.sign();
@@ -45,7 +44,7 @@ public class CNewWorkplacePacket extends CBroadcastPacket
    	  CNewWorkplacePayload dec_payload=(CNewWorkplacePayload) UTILS.SERIAL.deserialize(payload);
           
           // Check fee
-	  if (this.fee<dec_payload.days*0.01)
+	  if (this.fee<0.0001)
 	      throw new Exception("Invalid fee - CNewWorkplacePacket.java");
           
           // Check payload

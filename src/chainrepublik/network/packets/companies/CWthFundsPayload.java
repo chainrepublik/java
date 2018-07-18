@@ -37,18 +37,12 @@ public class CWthFundsPayload extends CPayload
    	// Super class
    	super.check(block);
         
-        // Com ID 
-        ResultSet com_rs=UTILS.DB.executeQuery("SELECT * "
-                                               + "FROM companies "
-                                              + "WHERE comID='"+this.comID+"' "
-                                                + "AND adr='"+this.target_adr+"'");
+        // Company addrews
+        String com_adr=UTILS.BASIC.getComAdr(this.comID);
         
-        // No data
-        if (!UTILS.DB.hasData(com_rs))
+        // Owns company ?
+        if (UTILS.BASIC.isComOwner(this.target_adr, comID))
             throw new Exception("Invalid company ID - CWthFundsPayload.java, 68");
-        
-        // Next
-        com_rs.next();
         
         // Amount
         this.amount=UTILS.BASIC.round(this.amount, 4);
@@ -58,14 +52,25 @@ public class CWthFundsPayload extends CPayload
             throw new Exception("Invalid amount - CWthFundsPayload.java, 68");
         
         // Balance
-        if (UTILS.ACC.getBalance(com_rs.getString("adr"), "CRC")<amount)
+        if (UTILS.ACC.getBalance(com_adr, "CRC")<amount)
              throw new Exception("Insuficient funds - CWthFundsPayload.java, 68");
         
-        // Shareholders
+        // Symbol
         ResultSet rs=UTILS.DB.executeQuery("SELECT * "
-                                           + "FROM assets_owners "
-                                          + "WHERE symbol='"+com_rs.getString("symbol")+"' "
-                                            + "AND qty>=0.01");
+                                           + "FROM companies "
+                                          + "WHERE comID='"+this.comID+"'");
+        
+        // Next
+        rs.next();
+        
+        // Symbol
+        String sym=rs.getString("symbol");
+        
+        // Shareholders
+        rs=UTILS.DB.executeQuery("SELECT * "
+                                 + "FROM assets_owners "
+                                + "WHERE symbol='"+sym+"' "
+                                  + "AND qty>=0.01");
         
         // Hash
         String h=UTILS.BASIC.hash(this.getHash()+
@@ -86,11 +91,11 @@ public class CWthFundsPayload extends CPayload
             double to_pay=rs.getDouble("qty")*per_share;
             
             // Pay
-            UTILS.ACC.newTransfer(com_rs.getString("adr"), 
+            UTILS.ACC.newTransfer(com_adr, 
                                   rs.getString("owner"), 
                                   to_pay, 
                                   "CRC", 
-                                  "Company "+com_rs.getString("symbol")+" paid dividends", 
+                                  "Company "+sym+" paid dividends", 
                                   "", 
                                   0,
                                   this.hash, 

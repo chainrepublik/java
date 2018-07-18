@@ -26,6 +26,15 @@ public class CCrons
        timer.schedule(task, 0, 1000);
    }
    
+   public void checkWeaponsMove(long block) throws Exception
+   {
+       UTILS.DB.executeUpdate("UPDATE stocuri "
+                               + "SET war_status='ID_READY', "
+                                   + "war_arrive=0 "
+                             + "WHERE war_status='ID_TRANSIT' "
+                               + "AND war_arrive<"+block);
+   }
+   
    public void endWar(long warID) throws Exception
    {
        // Load war data
@@ -117,24 +126,28 @@ public class CCrons
                                   
                                   break;
            
+           // Change tax
            case "ID_CHG_TAX" :    UTILS.LAWS.implementChgTax(cou,
                                                              rs.getString("par_1"), 
                                                              rs.getString("par_2"), 
                                                              rs.getString("par_3"));
                                   
                                   break;
-                                  
+                        
+           // Add premium citizens
            case "ID_ADD_PREMIUM" :   UTILS.LAWS.implementAddPremium(cou, 
                                                                     block, 
                                                                     rs.getString("par_1"));
         
                                     break;
-                                     
+                                
+           // Remove premium citizens
            case "ID_REMOVE_PREMIUM" : UTILS.LAWS.implementRemovePremium(cou, rs.getString("par_1"));
         
                                     break;
                                      
-                                     
+                                   
+            // Make article official
             case "ID_OFICIAL_ART" : // Article ID
                                     long artID=Long.parseLong(UTILS.BASIC.base64_decode(rs.getString("par_1")));
                                     
@@ -143,7 +156,7 @@ public class CCrons
                                         
                                     break;
                                     
-                                     
+           // Donation law 
            case "ID_DONATION" : UTILS.LAWS.implementDonation(lawID, 
                                                              cou, 
                                                              rs.getString("par_1"), 
@@ -151,11 +164,42 @@ public class CCrons
                                                              block);
                                 break;
                                 
+            // Funds distribution
             case "ID_DISTRIBUTE" :  UTILS.LAWS.implementDistribute(lawID, 
                                                                    cou, 
                                                                    rs.getString("par_1"),
                                                                    block);
                                     break;
+                                    
+            // Start war law
+            case "ID_START_WAR" :  UTILS.LAWS.implementStartWar(lawID, 
+                                                                rs.getString("par_1"),
+                                                                rs.getString("par_2"),
+                                                                block);
+                                   break;
+                                   
+            // Move weapons law
+            case "ID_MOVE_WEAPONS" :  UTILS.LAWS.implementMoveWeapons(lawID, 
+                                                                      rs.getString("par_1"),
+                                                                      rs.getString("par_2"),
+                                                                      rs.getString("par_3"),
+                                                                      block);
+                                   break;
+                                   
+            // Buy weapons
+            case "ID_BUY_WEAPONS" :  UTILS.LAWS.implementBuyWeapons(lawID, 
+                                                                    rs.getString("par_1"),
+                                                                    rs.getString("par_2"),
+                                                                    block);
+                                   break;
+                                   
+            // Attack law
+            case "ID_ATTACK" :  UTILS.LAWS.implementAttack(lawID, 
+                                                           rs.getString("par_1"),
+                                                           rs.getString("par_2"),
+                                                           rs.getString("par_3"),
+                                                           block);
+                                   break;
        }
    }
    
@@ -610,6 +654,9 @@ public class CCrons
          
          // Check wars
          this.checkWars(block);
+         
+         // Weapons move
+         this.checkWeaponsMove(block);
      }
      
      class RemindTask extends TimerTask 

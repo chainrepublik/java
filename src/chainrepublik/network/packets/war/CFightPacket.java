@@ -6,7 +6,6 @@ import chainrepublik.network.packets.CBroadcastPacket;
 import chainrepublik.network.packets.CPacket;
 import chainrepublik.network.packets.blocks.CBlockPayload;
 import chainrepublik.network.packets.portofolio.CUseItemPayload;
-import chainrepublik.network.packets.trans.CFeePayload;
 
 public class CFightPacket extends CBroadcastPacket
 {

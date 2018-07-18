@@ -459,10 +459,12 @@ public class CUtils
        if (!target_type.equals("ID_TWEET") && 
            !target_type.equals("ID_COM") &&
            !target_type.equals("ID_ASSET") &&
-           !target_type.equals("ID_ASSET_MKT") && 
+           !target_type.equals("ID_EXCHANGE") && 
            !target_type.equals("ID_PROP") && 
            !target_type.equals("ID_LAW"))
         return false;
+       
+      
        
        // Result
        ResultSet rs=null;
@@ -487,13 +489,13 @@ public class CUtils
                                                        + "FROM assets "
                                                       + "WHERE assetID='"+targetID+"'");
                                 break;  
+                                
+            // Exchange order          
+            case "ID_EXCHANGE" : rs=UTILS.DB.executeQuery("SELECT * "
+                                                          + "FROM exchange "
+                                                         + "WHERE exID='"+targetID+"'");
+                                break;  
             
-            // Asset market
-            case "ID_ASSET_MKT" : rs=UTILS.DB.executeQuery("SELECT * "
-                                                           + "FROM assets_mkts "
-                                                          + "WHERE mktID='"+targetID+"'");
-                                  break;  
-                                  
             // Party Proposal
             case "ID_PROP" : rs=UTILS.DB.executeQuery("SELECT * "
                                                       + "FROM orgs_props "
@@ -524,9 +526,8 @@ public class CUtils
            throw new Exception("Invalid address, CUtils.java - 516");
             
         // Check attribute
-        if (!attr.equals("ID_RES_REC") &&  
-            !attr.equals("ID_TRUST_ASSET"))
-        return false;
+        if (!attr.equals("ID_TRUST_ASSET"))
+            return false;
         
         // Load data
         ResultSet rs=UTILS.DB.executeQuery("SELECT * "
@@ -718,6 +719,24 @@ public class CUtils
                                           + "WHERE adr='"+adr+"'");
         
         // Has data
+        if (UTILS.DB.hasData(rs))
+            return true;
+        else
+            return false;
+    }
+    
+    public boolean isComOwner(String adr, long comID) throws Exception
+    {
+        // Valid address ?
+        if (!this.isAdr(adr))
+            throw new Exception("Invalid address, CUtils.java, 644");
+            
+        ResultSet rs=UTILS.DB.executeQuery("SELECT * "
+                                           + "FROM companies "
+                                          + "WHERE owner='"+adr+"' "
+                                            + "AND comID='"+comID+"'");
+        
+        // Result
         if (UTILS.DB.hasData(rs))
             return true;
         else

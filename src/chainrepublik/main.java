@@ -6,6 +6,7 @@ import chainrepublik.kernel.temp.CDump;
 import chainrepublik.network.CCurBlock;
 import chainrepublik.network.CNetwork;
 import chainrepublik.network.CPeer;
+import chainrepublik.network.packets.adr.CTransferAdrPacket;
 import chainrepublik.network.packets.sync.CPutBlockPacket;
 import java.security.Security;
 import java.sql.ResultSet;
@@ -52,8 +53,10 @@ public class main
         
         // Dump
         CDump dump=new CDump();
-        //dump.polParties("ES", 10);
-        dump.dumpSeas();
+        //dump.polParties("LT", 10);
+        //dump.dumpSeas();
+        //dump.dumpPolParties();
+        
       
         UTILS.MINER_UTILS=new CCPUMinerUtils();
         
@@ -90,6 +93,9 @@ public class main
         // Laws
         UTILS.LAWS=new CLaws();
         
+        // Constants
+        UTILS.CONST=new CConst();
+        
         // Late operations
         UTILS.ARGS.lateOp();
        
@@ -105,22 +111,7 @@ public class main
         
         System.out.println("Wallet is up an running...");
         
-       
-        
-        UTILS.CBLOCK.startMiners(2);
-        //UTILS.WALLET.list();
-        
-        // VM
-        //File file = new File("./src/chainrepublik/agents/code.txt"); 
-        //String string = FileUtils.readFileToString(file);
-        //UTILS.VM=new CVM(343242);
-        
-        /*CGiftPacket packet=new CGiftPacket("MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEEpn9tcO9qb55dKKTCroSy6fa8mhyhChMYLdJer+WYnVR8Is9l1864vi9Z9eVXTkk3xo1ARNfY+fM0DWI0Wo7+g==",
-                                           "MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEEpn9tcO9qb55dKKTCroSy6fa8mhyhChMYLdJer+WYnVR8Is9l1864vi9Z9eVXTkk3xo1ARNfY+fM0DWI0Wo7+g==", 
-                                           "MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEl2O6B0Mx9CBYPXCeu+12qRElGE8PnvRIltHM8RYdLJNIUBi822woawtdw4l1xCsR1UJkHFHWNISrnudXt4ncqA==");
-        UTILS.NETWORK.broadcast(packet);*/
-        //UTILS.CRONS.checkLaws(100000);
-        
+        //UTILS.CBLOCK.startMiners(2);
     }
     
     

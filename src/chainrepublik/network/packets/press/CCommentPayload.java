@@ -29,9 +29,9 @@ public class CCommentPayload extends CPayload
    private static final long serialVersionUID = 1;
    	
    public CCommentPayload(String adr, 
-                           String parent_type,
-		           long parentID,
-                           String mes) throws Exception
+                          String parent_type,
+		          long parentID,
+                          String mes) throws Exception
    {
 	  // Superclass
 	   super(adr);
@@ -74,7 +74,7 @@ public class CCommentPayload extends CPayload
       
       // Target valid
       if (!UTILS.BASIC.targetValid(this.parent_type, this.parentID))
-          throw new Exception("Invalid target type - CTweetMesPayload.java");
+            throw new Exception("Invalid target type - CTweetMesPayload.java");
       
       // Already commented ?
       ResultSet rs=UTILS.DB.executeQuery("SELECT * "

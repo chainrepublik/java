@@ -55,6 +55,7 @@ public class CUpdateWorkplacePayload extends CPayload
    	// Super class
    	super.check(block);
         
+        
         // Load workplace data
         ResultSet work_rs=UTILS.DB.executeQuery("SELECT * "
                                                 + "FROM workplaces "
@@ -70,11 +71,14 @@ public class CUpdateWorkplacePayload extends CPayload
         // Company ID
         long comID=work_rs.getLong("comID");
         
+        // Company addrews
+        String com_adr=UTILS.BASIC.getComAdr(comID);
+        
         // Load company data
         ResultSet com_rs=UTILS.DB.executeQuery("SELECT * "
                                                + "FROM companies "
                                               + "WHERE comID='"+comID+"' "
-                                                + "AND adr='"+this.target_adr+"'");
+                                                + "AND owner='"+this.target_adr+"'");
         
         // Has data ?
         if (!UTILS.DB.hasData(com_rs))

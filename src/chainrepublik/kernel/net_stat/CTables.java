@@ -100,6 +100,9 @@ public class CTables
     // Events
     public CEvents events;
     
+    // Exchange
+    public CExchange exchange;
+    
     // Hidden
     public CHidden hidden;
     
@@ -330,6 +333,9 @@ public class CTables
         // Events
         this.events=new CEvents();
         
+        // Exchange
+        this.exchange=new CExchange();
+        
         // Hidden
         this.hidden=new CHidden();
     
@@ -558,6 +564,9 @@ public class CTables
         // Events
         this.events.create();
         
+        // Exchange
+        this.exchange.create();
+        
         // Hidden
         this.hidden.create();
     
@@ -740,6 +749,9 @@ public class CTables
         
         // Escrowed
         this.escrowed.refresh(block, hash);
+        
+        // Exchange
+        this.exchange.refresh(block, hash);
     
         // Laws
         this.laws.refresh(block, hash);
@@ -860,6 +872,9 @@ public class CTables
     
         // Events
         this.events.reorganize(block, hash);
+        
+        // Exchange
+        this.exchange.reorganize(block, hash);
         
         // Hidden
         this.hidden.reorganize(block, hash);
@@ -1088,6 +1103,9 @@ public class CTables
     
         // Events
         this.events.expired(block);
+        
+        // Exchange
+        this.exchange.expired(block);
     
         // IPN
         this.ipn.expired(block);
@@ -1304,6 +1322,9 @@ public class CTables
     
         // Events
         this.events.fullResync();
+        
+        // Exchange
+        this.exchange.fullResync();
         
         // Hidden
         this.hidden.fullResync();

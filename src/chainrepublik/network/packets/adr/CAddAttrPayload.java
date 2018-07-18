@@ -41,6 +41,9 @@ public class CAddAttrPayload extends CPayload
     // Days
     long days;
     
+    // Serial
+    private static final long serialVersionUID = 100L;
+    
     public CAddAttrPayload(String adr, 
                            String attr,
                            String s1, 
@@ -90,17 +93,6 @@ public class CAddAttrPayload extends CPayload
         // UID
         this.days=days;
         
-        // Restrict recipients
-        if (this.attr.equals("ID_RES_REC"))
-        {
-            this.l1=0;
-            this.l2=0;
-            this.l3=0;
-            this.d1=0;
-            this.d2=0;
-            this.d3=0;
-        }
-        
         // Trust asset
         if (this.attr.equals("ID_TRUST_ASSET"))
         {
@@ -138,9 +130,8 @@ public class CAddAttrPayload extends CPayload
        this.checkEnergy();
        
        // Attribute ?
-       if (!this.attr.equals("ID_RES_REC") &&
-           !this.attr.equals("ID_TRUST_ASSET"))
-        throw new Exception("Invalid attribute - CAddAttrPayload.java");
+       if (!this.attr.equals("ID_TRUST_ASSET"))
+          throw new Exception("Invalid attribute - CAddAttrPayload.java");
         
         // Has attribute ?
         if (UTILS.BASIC.hasAttr(this.target_adr, this.attr, this.s1))
@@ -149,38 +140,13 @@ public class CAddAttrPayload extends CPayload
         // Days
         if (this.days<1)
             throw new Exception("Invalid days - CAddAttrPayload.java");
-        
-        // Restrict
-        if (this.attr.equals("ID_RES_REC"))
-        {
-            if (this.s1.equals("") && 
-                this.s2.equals("") && 
-                this.s3.equals(""))
-            throw new Exception("Invalid addresses - CAddAttrPayload.java");
-            
-            // Adr 1
-            if (!this.s1.equals(""))
-                if (!UTILS.BASIC.isAdr(this.s1))
-                    throw new Exception("Invalid recipient 1 - CAddAttrPayload.java");
-            
-            // Adr 2
-            if (!this.s2.equals(""))
-                if (!UTILS.BASIC.isAdr(this.s2))
-                    throw new Exception("Invalid recipient 2 - CAddAttrPayload.java");
-            
-            // Adr 3
-            if (!this.s3.equals(""))
-                if (!UTILS.BASIC.isAdr(this.s3))
-                    throw new Exception("Invalid recipient 3 - CAddAttrPayload.java");
-        }
+    
         
         // Trust asset
         if (this.attr.equals("ID_TRUST_ASSET"))
-        {
-            // IS asset ?
             if (!UTILS.BASIC.isAsset(this.s1))
                 throw new Exception("Invalid asset - CAddAttrPayload.java");
-        }
+        
         
         // Hash
         String h=UTILS.BASIC.hash(this.getHash()+

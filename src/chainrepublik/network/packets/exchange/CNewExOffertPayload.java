@@ -56,8 +56,7 @@ public class CNewExOffertPayload extends CPayload
                                String details,
                                String pay_info,
                                String contact,
-                               long days,
-                               long block)  throws Exception
+                               long days)  throws Exception
    {
         // Constructor
         super(adr);
@@ -134,7 +133,7 @@ public class CNewExOffertPayload extends CPayload
             throw new Exception("Invalid side, CNewExOffertPayload.java, 113");   
         
         // Price type
-        if (!this.price_type.equals("ID_LIVE") && 
+        if (!this.price_type.equals("ID_VARIABLE") && 
             !this.price_type.equals("ID_FIXED"))
             throw new Exception("Invalid price type, CNewExOffertPayload.java, 113");   
         
@@ -159,6 +158,55 @@ public class CNewExOffertPayload extends CPayload
             if (this.price<0.01)
                throw new Exception("Invalid price, CNewExOffertPayload.java, 113");
         
+        // Min
+        if (min<0.01)
+           throw new Exception("Invalid minimum amount, CNewExOffertPayload.java, 113"); 
+        
+        // Max
+        if (max>10000 || max<min)
+           throw new Exception("Invalid maximum amount, CNewExOffertPayload.java, 113"); 
+        
+        // Method
+        if (!this.method.equals("ID_LOCAL_TRANSFER") && 
+            !this.method.equals("ID_WIRE_TRANSFER") && 
+            !this.method.equals("ID_CARD") && 
+            !this.method.equals("ID_WESTERN") && 
+            !this.method.equals("ID_MONEYGRAM") && 
+            !this.method.equals("ID_CRYPTO") && 
+            !this.method.equals("ID_NETELLER") && 
+            !this.method.equals("ID_SKRILL") && 
+            !this.method.equals("ID_OK_PAY") && 
+            !this.method.equals("ID_PAXUM") && 
+            !this.method.equals("ID_PAYPAL") && 
+            !this.method.equals("ID_PAYEER") && 
+            !this.method.equals("ID_PAYONEER") && 
+            !this.method.equals("ID_PAYSAFE") && 
+            !this.method.equals("ID_WEBMONEY") && 
+            !this.method.equals("ID_PAYZA") && 
+            !this.method.equals("ID_CASH") && 
+            !this.method.equals("ID_OTHER"))
+        throw new Exception("Invalid method, CNewExOffertPayload.java, 113"); 
+        
+        // Details
+        if (!UTILS.BASIC.isString(this.details) || 
+            UTILS.BASIC.base64_encode(this.details).length()>=2500)
+            throw new Exception("Invalid details, CNewExOffertPayload.java, 113"); 
+        
+        // Pay info
+        if (this.side.equals("ID_SELL"))
+          if (!UTILS.BASIC.isString(this.pay_info) || 
+            UTILS.BASIC.base64_encode(this.pay_info).length()>=1000)
+            throw new Exception("Invalid payment info, CNewExOffertPayload.java, 113");
+        
+        // Contact 
+        if (!UTILS.BASIC.isString(this.contact) || 
+            UTILS.BASIC.base64_encode(this.contact).length()>=1000)
+            throw new Exception("Invalid contact details, CNewExOffertPayload.java, 113");
+        
+        // Days
+        if (this.days<1)
+           throw new Exception("Invalid days, CNewExOffertPayload.java, 113"); 
+        
         // Check hash
 	String h=UTILS.BASIC.hash(this.getHash()+
                                   this.exID+
@@ -171,6 +219,8 @@ public class CNewExOffertPayload extends CPayload
                                   this.method+
                                   this.details+
                                   this.pay_info+
+                                  this.contact+
+                                  this.days+
 		                  this.exID);
 	
         // Check hash
@@ -182,6 +232,27 @@ public class CNewExOffertPayload extends CPayload
 	{
 	    // Superclass
 	    super.commit(block);
+            
+            // Null
+            if (this.pay_info==null)
+                this.pay_info="";
+            
+            // Insert 
+            UTILS.DB.executeUpdate("INSERT INTO exchange "
+                                         + "SET adr='"+this.target_adr+"', "
+                                             + "exID='"+this.exID+"', "
+                                             + "side='"+this.side+"', "
+                                             + "price_type='"+this.price_type+"', "
+                                             + "margin='"+this.margin+"', "
+                                             + "price='"+this.price+"', "
+                                             + "min='"+this.min+"', "
+                                             + "max='"+this.max+"', "
+                                             + "method='"+this.method+"', "
+                                             + "details='"+UTILS.BASIC.base64_encode(this.details)+"', "
+                                             + "pay_info='"+UTILS.BASIC.base64_encode(this.pay_info)+"', "
+                                             + "contact='"+UTILS.BASIC.base64_encode(this.contact)+"', "
+                                             + "expires='"+(this.block+days*1440)+"', "
+                                             + "block='"+this.block+"'");
             
             // Position type
             UTILS.ACC.clearTrans(hash, "ID_ALL", this.block);

@@ -57,6 +57,13 @@ public class CUpdateCompanyPayload extends CPayload
    	// Super class
    	super.check(block);
         
+         // Company address
+        String com_adr=UTILS.BASIC.getComAdr(this.comID);
+        
+        // Company owner ?
+        if (!UTILS.BASIC.isComOwner(this.target_adr, comID))
+             throw new Exception("Invalid company ID, CUpdateCompanyPayload.java, 74");
+        
         // Name
         if (!UTILS.BASIC.isTitle(this.name))
             throw new Exception("Invalid name, CUpdateCompanyPayload.java, 65");
@@ -70,17 +77,7 @@ public class CUpdateCompanyPayload extends CPayload
             if (!UTILS.BASIC.isPic(this.pic))
                 throw new Exception("Invalid pic, CUpdateCompanyPayload.java, 74");
         
-        // Companu exist ?
-        ResultSet rs=UTILS.DB.executeQuery("SELECT * "
-                                           + "FROM companies "
-                                          + "WHERE adr='"+this.target_adr+"' "
-                                            + "AND comID='"+this.comID+"'");
-        
-        // Has data ?
-        if (!UTILS.DB.hasData(rs))
-             throw new Exception("Invalid company ID, CUpdateCompanyPayload.java, 74");
-        
-         // Hash
+        // Hash
  	String h=UTILS.BASIC.hash(this.getHash()+
                                   this.comID+
  			          this.name+

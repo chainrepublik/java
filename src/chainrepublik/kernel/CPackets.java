@@ -4,12 +4,8 @@
 package chainrepublik.kernel;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import chainrepublik.network.packets.CBroadcastPacket;
 import chainrepublik.network.packets.CPayload;
-import chainrepublik.network.packets.adr.CAdrRegisterPayload;
-import chainrepublik.network.packets.trans.CFeePayload;
 
 public class CPackets 
 {
@@ -80,6 +76,10 @@ public class CPackets
     
     public void add(String name, String val)
     {
+        // Null ?
+        if (val==null)
+            return;
+        
         // Increase size
         no++;
         
@@ -92,7 +92,7 @@ public class CPackets
     
     public void add(String name, long val)
     {
-        // Increase size
+       // Increase size
         no++;
         
         // Insert name

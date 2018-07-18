@@ -7,13 +7,12 @@ import chainrepublik.kernel.CPackets;
 import chainrepublik.kernel.UTILS;
 import chainrepublik.network.packets.CBroadcastPacket;
 import chainrepublik.network.packets.blocks.CBlockPayload;
-import chainrepublik.network.packets.trans.CFeePayload;
 
 
 public class CMesPacket extends CBroadcastPacket 
 {
-    // Serial
-   private static final long serialVersionUID = 100L;
+  // Serial
+  private static final long serialVersionUID = 100L;
    
   public CMesPacket(String fee_adr, 
 		    String sender_adr, 
@@ -57,9 +56,12 @@ public class CMesPacket extends CBroadcastPacket
   	  CMesPayload dec_payload=(CMesPayload) UTILS.SERIAL.deserialize(payload);
           dec_payload.check(block);
           
+          // Check fee
+          if (this.fee<0.0001)
+	       throw new Exception("Invalid fee - CRemoveExOffertPacket.java");
+          
           // Footprint
           CPackets foot=new CPackets(this);
-                  
           foot.add("Source", dec_payload.target_adr);
           foot.add("Destination", dec_payload.receiver_adr);
           foot.write();

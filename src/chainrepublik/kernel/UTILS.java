@@ -94,4 +94,7 @@ public class UTILS
     
     // Laws
     public static CLaws LAWS;
+    
+    // Constants
+    public static CConst CONST;
 }

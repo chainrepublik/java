@@ -21,6 +21,7 @@ public class CCompanies extends CTable
             // Create
             UTILS.DB.executeUpdate("CREATE TABLE companies(ID BIGINT AUTO_INCREMENT PRIMARY KEY, "
                                                     + "adr VARCHAR(250) NOT NULL DEFAULT '', "
+                                                    + "owner VARCHAR(250) NOT NULL DEFAULT '', "
                                                     + "comID BIGINT(250) NOT NULL DEFAULT 0, "
                                                     + "tip VARCHAR(50) NOT NULL DEFAULT '', "
                                                     + "name VARCHAR(250) NOT NULL DEFAULT '', "
@@ -33,6 +34,7 @@ public class CCompanies extends CTable
 	   UTILS.DB.executeUpdate("CREATE INDEX companies_adr ON companies(adr)");
            UTILS.DB.executeUpdate("CREATE UNIQUE INDEX companies_comID ON companies(comID)");
            UTILS.DB.executeUpdate("CREATE INDEX companies_tip ON companies(tip)");  
+           UTILS.DB.executeUpdate("CREATE INDEX companies_owner ON companies(owner)");  
            UTILS.DB.executeUpdate("CREATE UNIQUE INDEX companies_symbol ON companies(symbol)"); 
            
            // Confirm

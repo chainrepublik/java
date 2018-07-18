@@ -108,7 +108,7 @@ public class CEscrowedTransSignPayload extends CPayload
                            amount,
                            cur, 
                            "Funds have been released by escrower / sender", 
-                           escrower, 
+                           "", 
                            0,
                            this.hash, 
                            this.block,
@@ -123,7 +123,7 @@ public class CEscrowedTransSignPayload extends CPayload
                            amount,
                            cur, 
                            "Funds have been returned to you by escrower / sender", 
-                           escrower, 
+                           "", 
                            0,
                            this.hash, 
                            this.block,
@@ -140,15 +140,12 @@ public class CEscrowedTransSignPayload extends CPayload
         // Check payload
         this.check(block);
               
-        // Superclass
-	super.commit(block);
-               
-        // Clear transactions
-        UTILS.ACC.clearTrans(hash, "ID_ALL", this.block);
-               
         // Delete transaction
         UTILS.DB.executeUpdate("DELETE FROM escrowed "
                                     + "WHERE trans_hash='"+this.trans_hash+"'");
+        
+        // Clear transactions
+        UTILS.ACC.clearTrans(hash, "ID_ALL", this.block);
     }
 }
 

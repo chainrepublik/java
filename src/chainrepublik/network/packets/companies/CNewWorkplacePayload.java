@@ -45,8 +45,11 @@ public class CNewWorkplacePayload extends CPayload
    	// Super class
    	super.check(block);
         
+        // Company addrews
+        String com_adr=UTILS.BASIC.getComAdr(this.comID);
+        
         // Company address
-        if (!UTILS.BASIC.isComAdr(comID, this.target_adr))
+        if (!UTILS.BASIC.isComOwner(this.target_adr, this.comID))
            throw new Exception("Invalid company address, CNewWorkplacePayload.java, 52");
         
         // Workplace ID
@@ -57,15 +60,20 @@ public class CNewWorkplacePayload extends CPayload
         if (days<30)
             throw new Exception("Invalid days, CNewWorkplacePayload.java, 60");
         
+        // Has funds ?
+        if (UTILS.ACC.getBalance(com_adr, "CRC", block)<UTILS.CONST.wp_price*this.days)
+            throw new Exception("Insuficient funds, CNewWorkplacePayload.java, 60");
+        
         // Company owns a production licence ?
         ResultSet rs=UTILS.DB.executeQuery("SELECT * "
                                            + "FROM stocuri "
-                                          + "WHERE adr='"+this.target_adr+"' "
+                                          + "WHERE adr='"+com_adr+"' "
                                             + "AND tip LIKE '%ID_LIC_PROD%'");
         
         // Has data ?
         if (!UTILS.DB.hasData(rs))
            throw new Exception("Company has no production licence active, CNewWorkplacePayload.java, 60");
+        
         
         // Hash
         String h=UTILS.BASIC.hash(this.getHash()+
@@ -76,6 +84,20 @@ public class CNewWorkplacePayload extends CPayload
         // Hash match ?
         if (!h.equals(this.hash))
             throw new Exception("Invalid hash, CNewWorkplacePayload.java, 70");
+        
+         // Take money
+        UTILS.ACC.newTransfer(com_adr, 
+                              "default", 
+                              UTILS.CONST.wp_price*this.days, 
+                              "CRC", 
+                              "You rented a licence for "+days+" days", 
+                              "", 
+                              0,
+                              this.hash, 
+                              this.block,
+                              false,
+                              "",
+                              "");
    }
     
   
@@ -83,6 +105,9 @@ public class CNewWorkplacePayload extends CPayload
     {
        // Superclass
        super.commit(block);
+       
+        // Company address
+        String com_adr=UTILS.BASIC.getComAdr(this.comID);
        
        // Company data
        ResultSet rs=UTILS.DB.executeQuery("SELECT * "
@@ -95,7 +120,7 @@ public class CNewWorkplacePayload extends CPayload
        // Default licence
        rs=UTILS.DB.executeQuery("SELECT * "
                                 + "FROM stocuri "
-                               + "WHERE adr='"+this.target_adr+"' "
+                               + "WHERE adr='"+com_adr+"' "
                                  + "AND tip LIKE '%ID_LIC_PROD%'");
        
        // Next
@@ -120,5 +145,8 @@ public class CNewWorkplacePayload extends CPayload
                                         + "status='ID_SUSPENDED', "
                                         + "prod='"+prod+"', "
                                         + "block='"+this.block+"'");
+       
+       // Clear trans
+       UTILS.ACC.clearTrans(this.hash, "ID_ALL", this.block);
     }
 }

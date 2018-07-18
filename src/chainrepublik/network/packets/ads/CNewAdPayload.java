@@ -124,7 +124,7 @@ public class CNewAdPayload extends CPayload
    		                        + "message='"+UTILS.BASIC.base64_encode(this.mes)+"', "
    		   	                + "link='"+UTILS.BASIC.base64_encode(this.link)+"', "
                                         + "mkt_bid='"+UTILS.FORMAT_4.format(this.bid)+"', "
-   		   	                + "expire='"+(this.block+(this.hours*60))+"', "
+   		   	                + "expires='"+(this.block+(this.hours*60))+"', "
    		      	                + "block='"+this.block+"'");
        
        // Clear trans

@@ -56,9 +56,23 @@ public class CDelegates
                                            + "JOIN adr ON adr.adr=dv.adr");
         
         while (rs.next())
-        UTILS.DB.executeUpdate("UPDATE del_votes "
-                                + "SET power='"+Math.round(rs.getDouble("balance"))+"' "
-                              + "WHERE ID='"+rs.getLong("ID")+"'");
+        {
+            // Number of votes
+            ResultSet no_rs=UTILS.DB.executeQuery("SELECT COUNT(*) AS total "
+                                                  + "FROM del_votes "
+                                                 + "WHERE adr='"+rs.getString("adr")+"'");
+            
+            // Next
+            no_rs.next();
+            
+            // No
+            long no=no_rs.getLong("total");
+            
+            // Update
+            UTILS.DB.executeUpdate("UPDATE del_votes "
+                                    + "SET power='"+Math.round(rs.getDouble("balance")/no)+"' "
+                                  + "WHERE ID='"+rs.getLong("ID")+"'");
+        }
     }
     
     public void logDelegates(long block) throws Exception

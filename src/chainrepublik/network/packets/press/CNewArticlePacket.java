@@ -7,15 +7,14 @@ import chainrepublik.kernel.CPackets;
 import chainrepublik.kernel.UTILS;
 import chainrepublik.network.packets.CBroadcastPacket;
 import chainrepublik.network.packets.blocks.CBlockPayload;
-import chainrepublik.network.packets.trans.CFeePayload;
 
 
-public class CNewTweetPacket extends CBroadcastPacket 
+public class CNewArticlePacket extends CBroadcastPacket 
 {
    // Serial
    private static final long serialVersionUID = 1L;
    
-   public CNewTweetPacket(String fee_adr, 
+   public CNewArticlePacket(String fee_adr, 
 		          String adr, 
 		          String title,
                           String mes, 
@@ -31,7 +30,7 @@ public class CNewTweetPacket extends CBroadcastPacket
 	   super(fee_adr, "ID_NEW_TWEET_PACKET");
 	   
 	   // Builds the payload class
-	   CNewTweetPayload dec_payload=new CNewTweetPayload(adr, 
+	   CNewArticlePayload dec_payload=new CNewArticlePayload(adr, 
                                                              title,
 		                                             mes, 
                                                              categ,
@@ -63,7 +62,7 @@ public class CNewTweetPacket extends CBroadcastPacket
    		throw new Exception("Invalid packet type - CNewTweetPacket.java");
    	  
    	  // Deserialize transaction data
-   	  CNewTweetPayload dec_payload=(CNewTweetPayload) UTILS.SERIAL.deserialize(payload);
+   	  CNewArticlePayload dec_payload=(CNewArticlePayload) UTILS.SERIAL.deserialize(payload);
           
           // Check payload
           dec_payload.check(block);

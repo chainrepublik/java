@@ -44,6 +44,10 @@ public class CTransPacket extends CBroadcastPacket
                 
                 // Min fee ?
                 if (f<0.0001) f=0.0001;
+                
+                // Escrowed ?
+                if (!escrower.equals(""))
+                    f=f+0.0030;
 	        
                 // Fee
                 this.setFee(f, "Simple transaction neetwork fee");

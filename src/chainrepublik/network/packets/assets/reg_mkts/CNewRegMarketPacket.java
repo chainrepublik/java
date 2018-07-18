@@ -6,9 +6,7 @@ package chainrepublik.network.packets.assets.reg_mkts;
 import chainrepublik.kernel.CPackets;
 import chainrepublik.kernel.UTILS;
 import chainrepublik.network.packets.CBroadcastPacket;
-import chainrepublik.network.packets.assets.CIssueMoreAssetsPayload;
 import chainrepublik.network.packets.blocks.CBlockPayload;
-import chainrepublik.network.packets.trans.CFeePayload;
 
 public class CNewRegMarketPacket extends CBroadcastPacket 
 {

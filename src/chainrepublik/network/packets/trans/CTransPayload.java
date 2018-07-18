@@ -235,6 +235,7 @@ public class CTransPayload extends CPayload
                     // Clear transaction for receiver
                     UTILS.ACC.clearTrans(hash, "ID_RECEIVE", this.block);
                 }
+                
                 else
                 {
                       UTILS.DB.executeUpdate("INSERT INTO escrowed "
@@ -243,7 +244,7 @@ public class CTransPayload extends CPayload
                                                         + "rec_adr='"+this.dest+"', "
                                                         + "escrower='"+this.escrower+"', "
                                                         + "amount='"+this.amount+"', "
-                                                        + "expire='"+(this.block+43200)+"', "
+                                                        + "expires='"+(this.block+43200)+"', "
                                                         + "cur='"+this.cur+"', "
                                                         + "block='"+this.block+"'");
                 }

@@ -18,6 +18,282 @@ public class CLaws
        }
     }
     
+    public String getLawCou(long lawID) throws Exception
+    {
+        // Load law data
+       ResultSet rs=UTILS.DB.executeQuery("SELECT * "
+                                          + "FROM laws "
+                                         + "WHERE lawID='"+lawID+"'");
+       
+       // Next
+       rs.next();
+       
+       // Return
+       return rs.getString("country");
+    }
+    
+    public void implementMoveWeapons(long lawID, 
+                                     String weapons, 
+                                     String target_type, 
+                                     String targetID,
+                                     long block) throws Exception
+    {
+        // Decode
+        weapons=UTILS.BASIC.base64_decode(weapons);
+        target_type=UTILS.BASIC.base64_decode(target_type);
+        targetID=UTILS.BASIC.base64_decode(targetID);
+        
+        // Get country
+        String cou=this.getLawCou(lawID);
+        
+        // Check
+        double cost=this.checkMoveWeaponsLaw(cou, weapons, target_type, targetID);
+        
+        // Check
+        if (cost==0)
+        {
+            this.lawErr(lawID, "Unexpected error", block);
+            return;
+        }
+        
+        // Explode
+        List<String> wlist = Arrays.asList(weapons.split(","));
+        
+        // Parse
+        for (int a=0; a<=wlist.size()-1; a++)
+        {
+            // Weapon ID
+            long wID=Long.parseLong(wlist.get(a));
+            
+            // Weapon position
+            Point w_pos=UTILS.BASIC.getWeaponPos(wID);
+            
+            // Target pos
+            Point target_pos=UTILS.BASIC.getLocPos(target_type, targetID);
+            
+            // Distance
+            long dist=UTILS.BASIC.getPointDist(w_pos, target_pos);
+            
+            // Update weapon
+            UTILS.DB.executeUpdate("UPDATE stocuri "
+                                    + "SET war_loc_type='"+target_type+"', "
+                                        + "war_locID='"+targetID+"', "
+                                        + "war_status='ID_TRANSIT', "
+                                        + "war_arrive='"+(block+dist)+"' "
+                                  + "WHERE stocID='"+wID+"'");
+        }
+     
+        // Pay
+        UTILS.ACC.newTransfer(UTILS.BASIC.getCouAdr(cou), 
+                              "default", 
+                              cost, 
+                              "CRC", 
+                              "Weapons movement fee", 
+                              "", 
+                              0, 
+                              UTILS.BASIC.hash(String.valueOf(lawID)), 
+                              block, 
+                              false, 
+                              "", 
+                              "");
+        
+        // Clear
+        UTILS.ACC.clearTrans(UTILS.BASIC.hash(String.valueOf(lawID)), "ID_ALL", block);
+    }
+    
+    public void implementBuyWeapons(long lawID, 
+                                    String posID, 
+                                    String qty,
+                                    long block) throws Exception
+    {
+        // Get country
+        String cou=this.getLawCou(lawID);
+        
+        // Decode
+        posID=UTILS.BASIC.base64_decode(posID);
+        qty=UTILS.BASIC.base64_decode(qty);
+        
+        // Check
+        if (!this.checkBuyLaw(cou, posID, qty))
+        {
+            this.lawErr(lawID, "Unexpected error", block);
+            return; 
+        }
+        
+        // Load position data
+        ResultSet rs=UTILS.DB.executeQuery("SELECT am.*, "
+                                                + "amp.adr AS seller_adr, "
+                                                + "amp.orderID, "
+                                                + "amp.price, "
+                                                + "tp.expires AS prod_expires "
+                                           + "FROM assets_mkts_pos AS amp "
+                                           + "JOIN assets_mkts AS am ON amp.mktID=am.mktID "
+                                           + "JOIN tipuri_produse AS tp ON tp.prod=am.asset "
+                                          + "WHERE amp.orderID='"+posID+"'");
+        
+        // Next
+        rs.next();
+        
+        // Take weapons
+        UTILS.DB.executeUpdate("UPDATE assets_mkts_pos "
+                                + "SET qty=qty-"+qty+" "
+                              + "WHERE orderID='"+posID+"'");
+        
+        
+        // Deliver weapons
+        for (int a=1; a<=Long.parseLong(qty); a++)
+        {
+            // Counter
+            long b=1;
+            
+            // Stoc ID
+            while (UTILS.BASIC.isID(lawID+b))
+                b++;
+            
+            if (rs.getString("asset").equals("ID_NAVY_DESTROYER") || 
+                rs.getString("asset").equals("ID_AIRCRAFT_CARRIER"))
+                UTILS.DB.executeUpdate("INSERT INTO stocuri "
+                                             + "SET adr='"+UTILS.BASIC.getCouAdr(cou)+"', "
+                                                 + "tip='"+rs.getString("asset")+"', "
+                                                 + "qty=1, "
+                                                 + "expires='"+(block+rs.getLong("prod_expires"))+"', "
+                                                 + "stocID='"+(lawID+b)+"', "
+                                                 + "war_loc_type='ID_SEA', "
+                                                 + "war_locID='1528888939427', "
+                                                 + "war_loc_status='ID_READY', "
+                                                 + "block='"+block+"'");
+            else
+                UTILS.DB.executeUpdate("INSERT INTO stocuri "
+                                             + "SET adr='"+UTILS.BASIC.getCouAdr(cou)+"', "
+                                                 + "tip='"+rs.getString("asset")+"', "
+                                                 + "qty=1, "
+                                                 + "expires='"+(block+rs.getLong("prod_expires"))+"', "
+                                                 + "stocID='"+(lawID+b)+"', "
+                                                 + "war_loc_type='ID_LAND', "
+                                                 + "war_locID='"+cou+"', "
+                                                 + "war_status='ID_READY', "
+                                                 + "block='"+block+"'");
+        }
+        
+        // Make payment
+        UTILS.ACC.newTransfer(UTILS.BASIC.getCouAdr(cou), 
+                              rs.getString("seller_adr"), 
+                              Long.parseLong(qty)*rs.getDouble("price"), 
+                              "CRC", 
+                              "Congress weapons aquisition", 
+                              "", 
+                              0, 
+                              UTILS.BASIC.hash(String.valueOf(lawID)), 
+                              block, 
+                              false, 
+                              "", 
+                              "");
+        
+        // Clear
+        UTILS.ACC.clearTrans(UTILS.BASIC.hash(String.valueOf(lawID)), "ID_ALL", block);
+        
+        // Remove zero qty positions
+        UTILS.DB.executeUpdate("DELETE FROM assets_mkts_pos "
+                                   + "WHERE qty=0");
+    }
+    
+    public void implementAttack(long lawID, 
+                                String list, 
+                                String warID, 
+                                String side,
+                                long block) throws Exception
+    {
+         // Damage
+        long damage=0;
+        
+         // Get country
+        String cou=this.getLawCou(lawID);
+        
+        // Decode
+        list=UTILS.BASIC.base64_decode(list);
+        warID=UTILS.BASIC.base64_decode(warID);
+        side=UTILS.BASIC.base64_decode(side);
+        
+        // Check
+        if (!this.checkAttackLaw(cou, list, warID, side))
+        {
+            this.lawErr(lawID, "Unexpected error", block);
+            return; 
+        }
+        
+         // Explode
+        List<String> weapons = Arrays.asList(list.split(","));
+        
+        // Parse
+        for (int a=0; a<=weapons.size()-1; a++)
+        {
+            // Weapon ID
+            long wID=Long.parseLong(weapons.get(a));
+            
+            // Load weapon data
+            ResultSet rs=UTILS.DB.executeQuery("SELECT * "
+                                               + "FROM stocuri AS st "
+                                               + "JOIN tipuri_produse AS tp ON tp.prod=st.tip "
+                                              + "WHERE st.stocID='"+wID+"'");
+            
+            // Next 
+            rs.next();
+            
+            // Total damage
+            damage=damage+rs.getLong("damage");
+            
+            // Remove weapon
+            UTILS.DB.executeUpdate("DELETE FROM stocuri "
+                                       + "WHERE stocID='"+wID+"'");
+        }
+        
+        // Apply damage
+        if (side.equals("ID_AT"))
+            UTILS.DB.executeUpdate("UPDATE wars "
+                                    + "SET attacker_points=attacker_points+"+damage+" "
+                                  + "WHERE warID='"+Long.parseLong(warID)+"'");
+        else
+            UTILS.DB.executeUpdate("UPDATE wars "
+                                    + "SET defender_points=defender_points+"+damage+" "
+                                  + "WHERE warID='"+Long.parseLong(warID)+"'");
+        
+        // Add fight
+        UTILS.DB.executeUpdate("INSERT INTO wars_fighters "
+                                     + "SET warID='"+Long.parseLong(warID)+"', "
+                                         + "adr='"+UTILS.BASIC.getCouAdr(cou)+"', "
+                                         + "damage='"+damage+"', "
+                                         + "type='"+side+"', "
+                                         + "lawID='"+lawID+"'");
+    }
+    
+    public void implementStartWar(long lawID, 
+                                  String defender, 
+                                  String target, 
+                                  long block) throws Exception
+    {
+        // Get country
+        String cou=this.getLawCou(lawID);
+        
+        // Check
+        if (!this.checkStartWarLaw(cou, UTILS.BASIC.base64_decode(defender), UTILS.BASIC.base64_decode(target)))
+        {
+            this.lawErr(lawID, "Unexpected error", block);
+            return;
+        }
+        
+        // Start war
+        UTILS.DB.executeUpdate("INSERT INTO wars "
+                                     + "SET warID='"+lawID+"', "
+                                         + "attacker='"+cou+"', "
+                                         + "defender='"+UTILS.BASIC.base64_decode(defender)+"', "
+                                         + "target='"+UTILS.BASIC.base64_decode(target)+"', "
+                                         + "attacker_points='0', "
+                                         + "defender_points='0', "
+                                         + "status='ID_ACTIVE', "
+                                         + "lawID='"+lawID+"', "
+                                         + "block='"+block+"'");
+    }
+    
     public void lawErr(long lawID, String reason, long block) throws Exception
    {
        // Load law data
@@ -683,7 +959,7 @@ public class CLaws
         return true;
     }
     
-    public boolean checkMoveWeaponsLaw(String cou,
+    public double checkMoveWeaponsLaw(String cou,
                                        String list, 
                                        String target_type, 
                                        String targetID) throws Exception
@@ -693,7 +969,7 @@ public class CLaws
         
         // Check target
         if (!this.checkTarget(cou, target_type, targetID))
-            return false;
+            return 0;
         
         // Explode
         List<String> weapons = Arrays.asList(list.split(","));
@@ -733,7 +1009,7 @@ public class CLaws
            throw new Exception("Insufucuent funds, CNewLawPayload.java, 102"); 
         
         // Return
-        return true;
+        return cost;
     }
     
     public boolean checkAttackLaw(String cou,

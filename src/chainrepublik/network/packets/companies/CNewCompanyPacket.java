@@ -3,9 +3,7 @@ package chainrepublik.network.packets.companies;
 import chainrepublik.kernel.CPackets;
 import chainrepublik.kernel.UTILS;
 import chainrepublik.network.packets.CBroadcastPacket;
-import chainrepublik.network.packets.adr.CAddAttrPayload;
 import chainrepublik.network.packets.blocks.CBlockPayload;
-import chainrepublik.network.packets.trans.CFeePayload;
 
 public class CNewCompanyPacket extends CBroadcastPacket
 {
@@ -38,7 +36,7 @@ public class CNewCompanyPacket extends CBroadcastPacket
 	this.payload=UTILS.SERIAL.serialize(dec_payload);
 					
         // Network fee
-	this.setFee(days*0.2, "Company incorporation network fee");
+	this.setFee(days*UTILS.CONST.com_price, "Company incorporation network fee");
 			   
 	// Sign packet
 	this.sign();

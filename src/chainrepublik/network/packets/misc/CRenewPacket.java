@@ -6,12 +6,7 @@ package chainrepublik.network.packets.misc;
 import chainrepublik.kernel.CPackets;
 import chainrepublik.kernel.UTILS;
 import chainrepublik.network.packets.CBroadcastPacket;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import chainrepublik.network.packets.ads.CNewAdPayload;
 import chainrepublik.network.packets.blocks.CBlockPayload;
-import chainrepublik.network.packets.trans.CFeePayload;
 
 public class CRenewPacket extends CBroadcastPacket
 {

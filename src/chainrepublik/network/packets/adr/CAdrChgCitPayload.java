@@ -47,6 +47,22 @@ public class CAdrChgCitPayload extends CPayload
         if (!UTILS.BASIC.getAdrData(this.target_adr, "loc").equals(this.cou))
             throw new Exception("Address has to move first - CAdrRegisterPayload.java");
         
+        // Owner of a private country ?
+        ResultSet rs=UTILS.DB.executeQuery("SELECT * "
+                                           + "FROM countries "
+                                          + "WHERE owner='"+this.target_adr+"'");
+        
+        // Has data ?
+        if (UTILS.DB.hasData(rs))
+        {
+            // Next
+            rs.next();
+            
+            // Move to owned country ?
+            if (!this.cou.equals(rs.getString("code")))
+                throw new Exception("You can't change your citizenship - CAdrRegisterPayload.java");
+        }
+        
         // Check hash
  	String h=UTILS.BASIC.hash(this.getHash()+
  			          cou);
@@ -65,8 +81,15 @@ public class CAdrChgCitPayload extends CPayload
       UTILS.DB.executeUpdate("UPDATE adr "
                               + "SET cou='"+this.cou+"', "
                                   + "pol_inf=0, "
-                                  + "premium=0 "
+                                  + "pol_party=0, "
+                                  + "mil_unit=0, "
+                                  + "pol_endorsed=0 "
                             + "WHERE adr='"+this.target_adr+"'");
+      
+      // Remove endorsements
+      UTILS.DB.executeUpdate("DELETE FROM endorsers "
+                                 + "WHERE endorser='"+this.target_adr+"' "
+                                    + "OR endorsed='"+this.target_adr+"'");
       
       // Clear trans
       UTILS.ACC.clearTrans(this.hash, "ID_ALL", this.block);

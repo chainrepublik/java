@@ -5,10 +5,10 @@ import chainrepublik.network.packets.CPayload;
 import chainrepublik.network.packets.blocks.CBlockPayload;
 import java.sql.ResultSet;
 
-public class CLeavePartyPayload extends CPayload
+public class CLeaveOrgPayload extends CPayload
 {
     
-    public CLeavePartyPayload(String adr) throws Exception
+    public CLeaveOrgPayload(String adr) throws Exception
     {
         // Superclass
 	super(adr);

@@ -5,12 +5,12 @@ import chainrepublik.network.packets.CPayload;
 import chainrepublik.network.packets.blocks.CBlockPayload;
 import java.sql.ResultSet;
 
-public class CJoinPartyPayload extends CPayload
+public class CJoinOrgPayload extends CPayload
 {
     // Party ID
     long orgID;
     
-    public CJoinPartyPayload(String adr, 
+    public CJoinOrgPayload(String adr, 
                              long orgID) throws Exception
     {
         // Superclass

@@ -4,10 +4,12 @@ import chainrepublik.kernel.CPackets;
 import chainrepublik.kernel.UTILS;
 import chainrepublik.network.packets.CBroadcastPacket;
 import chainrepublik.network.packets.blocks.CBlockPayload;
-import chainrepublik.network.packets.trans.CFeePayload;
 
 public class CAddAttrPacket extends CBroadcastPacket
 {
+    // Serial
+    private static final long serialVersionUID = 100L;
+   
     public CAddAttrPacket(String fee_adr, 
 		          String target_adr, 
 		          String attr,
@@ -26,7 +28,18 @@ public class CAddAttrPacket extends CBroadcastPacket
         super(fee_adr, "ID_ADD_ATTR_PACKET");
         
         // Builds the payload class
-	CAddAttrPayload dec_payload=new CAddAttrPayload(target_adr, attr,  s1, s2, s3, l1, l2, l3, d1, d2, d3, days);
+	CAddAttrPayload dec_payload=new CAddAttrPayload(target_adr, 
+                                                        attr,  
+                                                        s1, 
+                                                        s2, 
+                                                        s3, 
+                                                        l1, 
+                                                        l2, 
+                                                        l3, 
+                                                        d1, 
+                                                        d2, 
+                                                        d3, 
+                                                        days);
 					
 	// Build the payload
 	this.payload=UTILS.SERIAL.serialize(dec_payload);

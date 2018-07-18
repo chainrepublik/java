@@ -182,7 +182,9 @@ public class CNewLawPayload extends CPayload
             
             // Move equipment
             case "ID_MOVE_WEAPONS" : // Check
-                                     if (!UTILS.LAWS.checkMoveWeaponsLaw(cou, this.par_1, this.par_2, this.par_3))
+                                     double cost=UTILS.LAWS.checkMoveWeaponsLaw(cou, this.par_1, this.par_2, this.par_3);
+                                     
+                                     if (cost==0)
                                          throw new Exception("Check failed, CNewLawPayload.java, 102"); 
                                      
                                      break;

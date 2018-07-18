@@ -63,8 +63,6 @@ public class CRenewPayload extends CPayload
         // Target type
         if (!this.target_type.equals("ID_ADR")
             && !this.target_type.equals("ID_ASSET")
-            && !this.target_type.equals("ID_ASSET_MKT")
-            && !this.target_type.equals("ID_ASSET_MKT_POS")
             && !this.target_type.equals("ID_COM")
             && !this.target_type.equals("ID_WORKPLACE")
             && !this.target_type.equals("ID_LIC"))
@@ -113,70 +111,31 @@ public class CRenewPayload extends CPayload
             
             fee=(rs.getLong("days")*0.0001+rs.getLong("qty")*0.0001)*tf;
         }
-        
-        // Assets market
-        if (this.target_type.equals("ID_ASSET_MKT"))
-        {
-            // Valid asset
-            ResultSet rs=UTILS.DB.executeQuery("SELECT * "
-                                               + "FROM assets_mkts "
-                                              + "WHERE adr="+this.target_adr+" "
-                                                + "AND mktID="+this.targetID);
-            
-            // Has data ?
-            if (!UTILS.DB.hasData(rs))
-                throw new Exception("Invalid asset market - CRenewPayload.java");
-            
-            // Next
-            rs.next();
-            
-            // Over asset expire block ?
-            if (rs.getLong("expires")+this.days*1440>UTILS.BASIC.getAssetExpireBlock(rs.getLong("asset")))
-                throw new Exception("Invalid expiration date - CRenewPayload.java");
-            
-            // Fee
-            fee=this.days*1440*0.0001;
-        }
-        
-        // Asset market position
-        if (this.target_type.equals("ID_ASSET_MKT_POS"))
-        {
-            // Valid asset
-            ResultSet rs=UTILS.DB.executeQuery("SELECT * "
-                                               + "FROM assets_mkts_pos "
-                                              + "WHERE adr="+this.target_adr+" "
-                                                + "AND orderID="+this.targetID);
-            
-            // Has data ?
-            if (!UTILS.DB.hasData(rs))
-                throw new Exception("Invalid asset market pos ID - CRenewPayload.java");
-            
-            // Next
-            rs.next();
-            
-            // Over asset expire block ?
-            if (rs.getLong("expires")+this.days*1440>UTILS.BASIC.getAssetMktExpireBlock(rs.getLong("mktID")))
-                throw new Exception("Invalid expiration date - CRenewPayload.java");
-            
-            // Fee
-            fee=this.days*1440*0.0001;
-        }
+       
+        // Company ID
+        long comID=0;
         
         // Company
-        if (this.target_type.equals("ID_COMPANY"))
+        if (this.target_type.equals("ID_COM"))
         {
             // Valid company
             ResultSet rs=UTILS.DB.executeQuery("SELECT * "
                                                + "FROM companies "
-                                              + "WHERE adr="+this.target_adr+" "
-                                                + "AND comID="+this.targetID);
+                                              + "WHERE owner='"+this.target_adr+"' "
+                                                + "AND comID='"+this.targetID+"'");
             
             // Has data ?
             if (!UTILS.DB.hasData(rs))
                 throw new Exception("Invalid asset market pos ID - CRenewPayload.java");
             
+            // Next
+            rs.next();
+            
             // Fee
-            fee=this.days*0.01;
+            fee=this.days*UTILS.CONST.com_price;
+            
+            // Com ID
+            comID=rs.getLong("comID");
         }
         
         // Workplace
@@ -184,16 +143,23 @@ public class CRenewPayload extends CPayload
         {
             // Valid company
             ResultSet rs=UTILS.DB.executeQuery("SELECT * "
-                                               + "FROM workplaces "
-                                              + "WHERE adr="+this.target_adr+" "
-                                                + "AND workplaceID="+this.targetID);
+                                               + "FROM workplaces AS wp "
+                                               + "JOIN companies AS com ON wp.comID=com.comID "
+                                              + "WHERE com.owner='"+this.target_adr+"' "
+                                                + "AND wp.workplaceID='"+this.targetID+"'");
             
             // Has data ?
             if (!UTILS.DB.hasData(rs))
                 throw new Exception("Invalid workplace ID - CRenewPayload.java");
             
+            // Next
+            rs.next();
+            
             // Fee
-            fee=this.days*0.01;
+            fee=this.days*UTILS.CONST.wp_price;
+            
+            // Com ID
+            comID=rs.getLong("comID");
         }
         
         // Licence
@@ -202,21 +168,42 @@ public class CRenewPayload extends CPayload
             // Valid company
             ResultSet rs=UTILS.DB.executeQuery("SELECT * "
                                                + "FROM stocuri AS st "
-                                               + "JOIN tipuri_licente AS tl ON tl.tip=st.tip"
-                                              + "WHERE adr="+this.target_adr+" "
-                                                + "AND stocID="+this.targetID);
+                                               + "JOIN companies AS com ON com.adr=st.adr"
+                                              + "WHERE stocID='"+this.targetID+"' "
+                                                + "AND com.owner='"+this.target_adr+"'");
             
             // Has data ?
             if (!UTILS.DB.hasData(rs))
                 throw new Exception("Invalid licence ID - CRenewPayload.java");
             
+            // Next
+            rs.next();
+            
+            // Is licence ?
+            if (!UTILS.BASIC.isLic(rs.getString("tip")))
+                throw new Exception("Invalid licence ID - CRenewPayload.java");
+            
             // Fee
-            fee=this.days*0.01;
+            fee=this.days*UTILS.CONST.lic_price;
+            
+            // Com ID
+            comID=rs.getLong("comID");
         }
         
         // Funds
         if (UTILS.ACC.getBalance(this.target_adr, "CRC", block)<fee)
            throw new Exception("Insufficient funds to execute this operation - CRenewPayload.java");
+        
+        // Source address
+        String adr;
+        
+        // Source address
+        if (this.target_type.equals("ID_COM") || 
+            this.target_type.equals("ID_WORKPLACE") || 
+            this.target_type.equals("ID_LIC"))
+        adr=UTILS.BASIC.getComAdr(comID);
+        else
+        adr=this.target_adr;
         
         // Check hash
         String h=UTILS.BASIC.hash(this.getHash()+
@@ -226,9 +213,9 @@ public class CRenewPayload extends CPayload
            
         if (!h.equals(hash))
            throw new Exception("Invalid hash - CRenewPayload.java");
-         
+        
         // Transactions
-        UTILS.ACC.newTransfer(this.target_adr, 
+        UTILS.ACC.newTransfer(adr, 
                               "default", 
                               fee, 
                               "CRC", 
@@ -265,20 +252,8 @@ public class CRenewPayload extends CPayload
                                                     + "WHERE assetID='"+this.targetID+"'");
                               break;
                             
-            // Address
-            case "ID_ASSET_MKT" : UTILS.DB.executeUpdate("UPDATE assets_mkts "
-                                                          + "SET expires=expires+"+(this.days*1440)+" "
-                                                        + "WHERE mktID='"+this.targetID+"'");
-                                  break;
-                            
-            // Address
-            case "ID_ASSET_MKT_POS" : UTILS.DB.executeUpdate("UPDATE assets_mkts_pos "
-                                                              + "SET expires=expires+"+(this.days*1440)+" "
-                                                            + "WHERE orderID='"+this.targetID+"'");
-                                      break;
-                            
-            // Address
-            case "ID_COMPANY" : UTILS.DB.executeUpdate("UPDATE companies "
+           // Address
+            case "ID_COM" : UTILS.DB.executeUpdate("UPDATE companies "
                                                         + "SET expires=expires+"+(this.days*1440)+" "
                                                       + "WHERE comID='"+this.targetID+"'");
                                 break;

@@ -4,18 +4,17 @@ import chainrepublik.kernel.CPackets;
 import chainrepublik.kernel.UTILS;
 import chainrepublik.network.packets.CBroadcastPacket;
 import chainrepublik.network.packets.blocks.CBlockPayload;
-import chainrepublik.network.packets.trans.CFeePayload;
 
-public class CLeavePartyPacket  extends CBroadcastPacket 
+public class CLeaveOrgPacket  extends CBroadcastPacket 
 {
-    public CLeavePartyPacket(String fee_adr,
+    public CLeaveOrgPacket(String fee_adr,
                              String adr) throws Exception
     {
         // Constructor
         super(fee_adr, "ID_LEAVE_PARTY_PACKET");
         
         // Builds the payload class
-	CLeavePartyPayload dec_payload=new CLeavePartyPayload(adr);
+	CLeaveOrgPayload dec_payload=new CLeaveOrgPayload(adr);
                               
 	// Build the payload
 	this.payload=UTILS.SERIAL.serialize(dec_payload);
@@ -38,7 +37,7 @@ public class CLeavePartyPacket  extends CBroadcastPacket
              throw new Exception("Invalid packet type - CEndorsePacket.java");
    	  
           // Deserialize transaction data
-   	  CLeavePartyPayload dec_payload=(CLeavePartyPayload) UTILS.SERIAL.deserialize(payload);
+   	  CLeaveOrgPayload dec_payload=(CLeaveOrgPayload) UTILS.SERIAL.deserialize(payload);
           
           // Check fee
 	  if (this.fee<0.0001)

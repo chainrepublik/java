@@ -9,7 +9,7 @@ import chainrepublik.network.packets.blocks.CBlockPayload;
 
 
 
-public class CNewTweetPayload extends CPayload 
+public class CNewArticlePayload extends CPayload 
 {
    // Title
    String title;
@@ -44,7 +44,7 @@ public class CNewTweetPayload extends CPayload
    // Serial
    private static final long serialVersionUID = 1L;
    
-   public CNewTweetPayload(String adr, 
+   public CNewArticlePayload(String adr, 
 		           String title, 
                            String mes, 
                            String categ,

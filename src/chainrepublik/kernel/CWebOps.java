@@ -12,14 +12,15 @@ import chainrepublik.network.packets.ads.*;
 import chainrepublik.network.packets.assets.*;
 import chainrepublik.network.packets.assets.reg_mkts.*;
 import chainrepublik.network.packets.companies.*;
+import chainrepublik.network.packets.exchange.CNewExOffertPacket;
 import chainrepublik.network.packets.market.CRentPacket;
 import chainrepublik.network.packets.mes.*;
 import chainrepublik.network.packets.misc.*;
 import chainrepublik.network.packets.politics.congress.CEndorsePacket;
 import chainrepublik.network.packets.politics.congress.CNewLawPacket;
 import chainrepublik.network.packets.politics.congress.CVoteLawPacket;
-import chainrepublik.network.packets.politics.orgs.CJoinPartyPacket;
-import chainrepublik.network.packets.politics.orgs.CLeavePartyPacket;
+import chainrepublik.network.packets.politics.orgs.CJoinOrgPacket;
+import chainrepublik.network.packets.politics.orgs.CLeaveOrgPacket;
 import chainrepublik.network.packets.politics.orgs.CNewOrgPropPacket;
 import chainrepublik.network.packets.politics.orgs.CVoteOrgPropPacket;
 import chainrepublik.network.packets.portofolio.*;
@@ -267,7 +268,7 @@ public class CWebOps
                     // Join political party
                     if (op.equals("ID_JOIN_PARTY"))
                     {
-                         packet=new CJoinPartyPacket(rs.getString("fee_adr"),
+                         packet=new CJoinOrgPacket(rs.getString("fee_adr"),
                                                                      rs.getString("target_adr"),
                                                                      rs.getLong("par_1"));
                         
@@ -277,7 +278,7 @@ public class CWebOps
                     // Leave political party
                     if (op.equals("ID_LEAVE_PARTY"))
                     {
-                         packet=new CLeavePartyPacket(rs.getString("fee_adr"),
+                         packet=new CLeaveOrgPacket(rs.getString("fee_adr"),
                                                                        rs.getString("target_adr"));
                         
                         
@@ -467,6 +468,22 @@ public class CWebOps
                    if (op.equals("ID_STOP_MINING")) 
                        UTILS.CBLOCK.stopMiners();
                    
+                   if (op.equals("ID_NEW_EX_ORDER"))
+                       packet=new CNewExOffertPacket(rs.getString("fee_adr"),
+		                                     rs.getString("target_adr"),
+                                                     rs.getString("par_1"),
+                                                     rs.getString("par_2"),
+                                                     rs.getLong("par_3"),
+                                                     rs.getDouble("par_4"),
+                                                     rs.getDouble("par_5"),
+                                                     rs.getDouble("par_6"),
+                                                     rs.getString("par_7"),
+                                                     rs.getString("par_8"),
+                                                     rs.getString("par_9"),
+                                                     rs.getString("par_10"),
+                                                     rs.getLong("days"));
+                   
+                   
                    if (op.equals("ID_NEW_AD"))
                    {
                         packet=new CNewAdPacket(rs.getString("fee_adr"), 
@@ -474,8 +491,8 @@ public class CWebOps
 		                                            rs.getString("par_1"), 
 		                                            rs.getString("par_2"), 
 		                                            rs.getString("par_3"),
-                                                            rs.getLong("days"), 
-		                                            rs.getDouble("bid"));
+                                                            rs.getLong("par_4"),
+                                                            rs.getDouble("par_5"));
                                                 
                        
                    }
@@ -628,7 +645,7 @@ public class CWebOps
                    
                    if (op.equals("ID_NEW_TWEET"))
                    {
-                         packet=new CNewTweetPacket(rs.getString("fee_adr"), 
+                         packet=new CNewArticlePacket(rs.getString("fee_adr"), 
                                                                    rs.getString("target_adr"),
                                                                    UTILS.BASIC.base64_decode(rs.getString("par_1")), 
 		                                                   UTILS.BASIC.base64_decode(rs.getString("par_2")), 

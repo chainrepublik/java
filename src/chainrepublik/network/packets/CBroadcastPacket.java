@@ -6,7 +6,6 @@ package chainrepublik.network.packets;
 import chainrepublik.kernel.CAddress;
 import chainrepublik.kernel.UTILS;
 import chainrepublik.network.packets.blocks.CBlockPayload;
-import chainrepublik.network.packets.trans.CFeePayload;
 
 public class CBroadcastPacket extends CPacket 
 {	
@@ -140,7 +139,8 @@ public class CBroadcastPacket extends CPacket
                 throw new Exception("Invalid payload block - CBroadcastPacket.java"); 
             
             // Address
-            if (!this.tip.equals("ID_ADR_REGISTER_PACKET"))
+            if (!this.tip.equals("ID_ADR_REGISTER_PACKET") && 
+                !this.tip.equals("ID_NEW_COMPANY_PACKET"))
                 if (!payload.target_adr.equals(this.adr))
                    throw new Exception("Invalid payload address - CBroadcastPacket.java");
             

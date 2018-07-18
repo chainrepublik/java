@@ -5,12 +5,8 @@ package chainrepublik.network.packets.assets;
 
 import chainrepublik.kernel.CPackets;
 import chainrepublik.kernel.UTILS;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import chainrepublik.network.packets.CBroadcastPacket;
-import chainrepublik.network.packets.ads.CNewAdPayload;
 import chainrepublik.network.packets.blocks.CBlockPayload;
-import chainrepublik.network.packets.trans.CFeePayload;
 
 public class CIssueAssetPacket extends CBroadcastPacket 
 {

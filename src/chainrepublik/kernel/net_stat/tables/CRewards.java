@@ -43,7 +43,7 @@ public class CRewards extends CTable
    public void expired(long block) throws Exception
    {
        UTILS.DB.executeUpdate("DELETE FROM rewards "
-                             + "WHERE block<"+(block-14400));
+                             + "WHERE block<"+(block-144000));
    }
    
    public void reorganize(long block, String chk_hash) throws Exception

@@ -61,7 +61,10 @@ public class CRentLicencePayload extends CPayload
    	super.check(block);
         
         // Company address
-        if (!UTILS.BASIC.isComAdr(comID, this.target_adr))
+        String com_adr=UTILS.BASIC.getComAdr(this.comID);
+        
+        // Company address
+        if (!UTILS.BASIC.isComOwner(this.target_adr, comID))
            throw new Exception("Invalid company ID, CRentLicencePayload.java, 53");
         
         // Licence
@@ -69,7 +72,7 @@ public class CRentLicencePayload extends CPayload
            throw new Exception("Invalid licence, CRentLicencePayload.java, 63");
         
         // Already has this licence ?
-        if (UTILS.BASIC.hasProd(this.target_adr, this.lic))
+        if (UTILS.BASIC.hasProd(com_adr, this.lic))
             throw new Exception("Company has this product already, CRentLicencePayload.java, 63");
         
         // Valid ID
@@ -98,7 +101,7 @@ public class CRentLicencePayload extends CPayload
             throw new Exception("Invalid days, CRentLicencePayload.java, 67");
         
         // Funds ?
-        if (UTILS.ACC.getBalance(this.target_adr, "CRC", block)<price)
+        if (UTILS.ACC.getBalance(com_adr, "CRC", block)<price)
             throw new Exception("Insuficient funds, CRentLicencePayload.java, 77");
         
         // Hash
@@ -114,7 +117,7 @@ public class CRentLicencePayload extends CPayload
             throw new Exception("Invalid hash, CRentLicencePayload.java, 77");
         
         // Take money
-        UTILS.ACC.newTransfer(this.target_adr, 
+        UTILS.ACC.newTransfer(com_adr, 
                               "default", 
                               price, 
                               "CRC", 
@@ -133,6 +136,9 @@ public class CRentLicencePayload extends CPayload
        // Superclass
        super.commit(block);
        
+        // Company address
+        String com_adr=UTILS.BASIC.getComAdr(this.comID);
+       
        // Load licence data
        ResultSet rs=UTILS.DB.executeQuery("SELECT * "
                                           + "FROM tipuri_licente "
@@ -147,13 +153,13 @@ public class CRentLicencePayload extends CPayload
        // Has stoc ?
        rs=UTILS.DB.executeQuery("SELECT * "
                                 + "FROM stocuri "
-                               + "WHERE adr='"+this.target_adr+"' "
+                               + "WHERE adr='"+com_adr+"' "
                                  + "AND tip='"+prod+"'");
        
        // Insert prod
        if (!UTILS.DB.hasData(rs))
        UTILS.DB.executeUpdate("INSERT INTO stocuri "
-                                    + "SET adr='"+this.target_adr+"', "
+                                    + "SET adr='"+com_adr+"', "
                                         + "tip='"+prod+"', "
                                         + "qty=0, "
                                         + "stocID='"+this.prod_stocID+"', "
@@ -162,7 +168,7 @@ public class CRentLicencePayload extends CPayload
        
        // Insert licence
        UTILS.DB.executeUpdate("INSERT INTO stocuri "
-                                    + "SET adr='"+this.target_adr+"', "
+                                    + "SET adr='"+com_adr+"', "
                                          + "tip='"+this.lic+"', "
                                          + "qty=1, "
                                          + "stocID='"+this.lic_stocID+"', "

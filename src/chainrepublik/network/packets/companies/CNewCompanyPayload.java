@@ -213,6 +213,7 @@ public class CNewCompanyPayload extends CPayload
        // Insert company
        UTILS.DB.executeUpdate("INSERT INTO companies "
                                     + "SET adr='"+this.target_adr+"', "
+                                        + "owner='"+this.shareholder_adr+"', "
                                         + "tip='"+this.type+"', "
                                         + "comID='"+this.comID+"', "
                                         + "name='"+UTILS.BASIC.base64_encode(this.name)+"', "
@@ -270,8 +271,8 @@ public class CNewCompanyPayload extends CPayload
                                     + "SET adr='"+this.target_adr+"', "
                                         + "assetID='"+this.assetID+"', "
                                         + "symbol='"+this.symbol+"', "
-                                        + "title='"+UTILS.BASIC.base64_encode(this.symbol+" company shares")+", "
-                                        + "description='"+UTILS.BASIC.base64_encode(this.symbol+" company shares")+", "
+                                        + "title='"+UTILS.BASIC.base64_encode(this.symbol+" company shares")+"', "
+                                        + "description='"+UTILS.BASIC.base64_encode(this.symbol+" company shares")+"', "
                                         + "qty='10000', "
                                         + "how_buy='"+UTILS.BASIC.base64_encode("Use the internal asset markets")+"', "
                                         + "how_sell='"+UTILS.BASIC.base64_encode("Use the internal asset markets")+"', "
