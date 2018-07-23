@@ -34,7 +34,6 @@ public class CAdr extends CTable
                                                + "pol_inf DOUBLE(10,2) NOT NULL DEFAULT 0, "
                                                + "energy DOUBLE(10,4) NOT NULL DEFAULT 0, "
                                                + "energy_block DOUBLE(10,4) NOT NULL DEFAULT 0, "
-                                               + "master_adr VARCHAR(250) NOT NULL DEFAULT '', "
                                                + "loc VARCHAR(5) NOT NULL DEFAULT '', "
                                                + "pol_endorsed BIGINT(20) NOT NULL DEFAULT 0, "
                                                + "created BIGINT(20) NOT NULL DEFAULT 0, "
@@ -50,9 +49,14 @@ public class CAdr extends CTable
             // Indexes
             UTILS.DB.executeUpdate("CREATE UNIQUE INDEX adr_adr ON adr(adr)");
             UTILS.DB.executeUpdate("CREATE INDEX adr_cou ON adr(cou)");
-	    UTILS.DB.executeUpdate("CREATE INDEX adr_block ON adr(block)");
-            UTILS.DB.executeUpdate("CREATE INDEX adr_travel ON adr(travel)");
-            UTILS.DB.executeUpdate("CREATE INDEX adr_work ON adr(work)");
+	    UTILS.DB.executeUpdate("CREATE INDEX adr_travel ON adr(travel)");
+            UTILS.DB.executeUpdate("CREATE INDEX adr_name ON adr(name)");
+            UTILS.DB.executeUpdate("CREATE INDEX adr_ref_adr ON adr(ref_adr)");
+            UTILS.DB.executeUpdate("CREATE INDEX adr_node_adr ON adr(node_adr)");
+            UTILS.DB.executeUpdate("CREATE INDEX adr_loc ON adr(loc)");
+            UTILS.DB.executeUpdate("CREATE INDEX adr_created ON adr(created)");
+            UTILS.DB.executeUpdate("CREATE INDEX adr_pol_party ON adr(pol_party)");
+            UTILS.DB.executeUpdate("CREATE INDEX adr_mil_unit ON adr(mil_unit)");
             
             // Populate
             if (!reorg)

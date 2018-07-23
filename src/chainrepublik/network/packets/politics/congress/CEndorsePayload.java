@@ -47,11 +47,11 @@ public class CEndorsePayload extends CPayload
            throw new Exception("Invalid type, CEndorsePayload.java, 102");
         
         // Registered endorser ?
-        if (!UTILS.BASIC.isRegistered(this.target_adr))
+        if (!UTILS.BASIC.isRegistered(this.target_adr, this.block))
             throw new Exception("Target address is already registered, CEndorsePayload.java, 102");
         
         // Registered endorsed ?
-        if (!UTILS.BASIC.isRegistered(this.endorsed))
+        if (!UTILS.BASIC.isRegistered(this.endorsed, this.block))
             throw new Exception("Target address is already registered, CEndorsePayload.java, 102");
         
         // Already endorse ?

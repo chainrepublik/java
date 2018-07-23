@@ -2,20 +2,14 @@
 // Contact : vcris@gmx.com
 
 package chainrepublik.network.packets.trans;
-
 import chainrepublik.kernel.UTILS;
-
-
-
 
 
 public class CMesDetails implements java.io.Serializable
 {
    // Message
    public String mes;
-   
-   // Key
-   String key;
+ 
    
    // HAsh
    String hash;
@@ -29,7 +23,7 @@ public class CMesDetails implements java.io.Serializable
        this.mes=mes;
        
        // Hash
-       this.hash=UTILS.BASIC.hash(this.key+this.mes);
+       this.hash=UTILS.BASIC.hash(this.mes);
    }
    
    public void getMessage(String adr, String trans_hash) throws Exception

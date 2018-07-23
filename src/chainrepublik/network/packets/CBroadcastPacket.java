@@ -44,6 +44,10 @@ public class CBroadcastPacket extends CPacket
         
         public void checkFee(CBlockPayload block) throws Exception
         {
+            // Min fee
+            if (this.fee<0.0001)
+               throw new Exception("Invalid fee, CBroadcastPAcket.java, line 62");
+                
             // Balance
             if (UTILS.ACC.getBalance(this.adr, "CRC", block)<this.fee)
                 throw new Exception("Insuficient funds to pay the network fee, CBroadcastPAcket.java, line 62");
@@ -191,6 +195,10 @@ public class CBroadcastPacket extends CPacket
 	
 	public void sign() throws Exception
 	{
+            // Can sign ?
+            if (!UTILS.WALLET.isMine(this.adr))
+                throw new Exception("We don't own the private key of this address ("+this.adr+"), CBroadcastPacket.java, line 224");
+            
             // Packet hash
             this.hash=UTILS.BASIC.hash(this.tip+
                                        this.tstamp+

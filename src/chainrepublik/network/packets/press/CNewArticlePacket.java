@@ -12,7 +12,7 @@ import chainrepublik.network.packets.blocks.CBlockPayload;
 public class CNewArticlePacket extends CBroadcastPacket 
 {
    // Serial
-   private static final long serialVersionUID = 1L;
+   private static final long serialVersionUID = 100L;
    
    public CNewArticlePacket(String fee_adr, 
 		          String adr, 
@@ -20,8 +20,7 @@ public class CNewArticlePacket extends CBroadcastPacket
                           String mes, 
                           String categ,
                           String cou, 
-                          long retweet_tweet_ID,
-		          String pic,
+                          String pic,
                           long mil_unit,
                           long pol_party,
                           long days) throws Exception
@@ -31,15 +30,14 @@ public class CNewArticlePacket extends CBroadcastPacket
 	   
 	   // Builds the payload class
 	   CNewArticlePayload dec_payload=new CNewArticlePayload(adr, 
-                                                             title,
-		                                             mes, 
-                                                             categ,
-                                                             cou,
-                                                             pic,
-                                                             retweet_tweet_ID,
-                                                             mil_unit,
-                                                             pol_party,
-                                                             days);
+                                                                 title,
+		                                                 mes, 
+                                                                 categ,
+                                                                 cou,
+                                                                 pic,
+                                                                 mil_unit,
+                                                                 pol_party,
+                                                                 days);
 			
 	   // Build the payload
 	   this.payload=UTILS.SERIAL.serialize(dec_payload);
@@ -79,7 +77,6 @@ public class CNewArticlePacket extends CBroadcastPacket
           foot.add("Pic", String.valueOf(dec_payload.pic));
           foot.add("Military Unit", String.valueOf(dec_payload.pol_party));
           foot.add("Political Party", String.valueOf(dec_payload.mil_unit));
-          foot.add("Retweet Tweet ID", String.valueOf(dec_payload.retweet_tweet_ID));
           foot.write();
    	
    }

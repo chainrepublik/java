@@ -106,12 +106,6 @@ public class CTables
     // Hidden
     public CHidden hidden;
     
-    // IPN
-    public CIPN ipn;
-    
-    // IPNLog
-    public CIPNLog ipn_log;
-    
     // Items Consumed
     public CItemsConsumed items_consumed;
     
@@ -339,12 +333,6 @@ public class CTables
         // Hidden
         this.hidden=new CHidden();
     
-        // IPN
-        this.ipn=new CIPN();
-    
-        // IPNLog
-        this.ipn_log=new CIPNLog();
-    
         // Items Consumed
         this.items_consumed=new CItemsConsumed();
         
@@ -569,12 +557,6 @@ public class CTables
         
         // Hidden
         this.hidden.create();
-    
-        // IPN
-        this.ipn.create();
-    
-        // IPNLog
-        this.ipn_log.create();
     
         // Items Consumed
         this.items_consumed.create();
@@ -879,12 +861,6 @@ public class CTables
         // Hidden
         this.hidden.reorganize(block, hash);
     
-        // IPN
-        this.ipn.reorganize(block, hash);
-    
-        // IPNLog
-        this.ipn_log.reorganize(block, hash);
-    
         // Items Consumed
         this.items_consumed.reorganize(block, hash);
         
@@ -1107,12 +1083,6 @@ public class CTables
         // Exchange
         this.exchange.expired(block);
     
-        // IPN
-        this.ipn.expired(block);
-    
-        // IPNLog
-        this.ipn_log.expired(block);
-    
         // Items Consumed
         this.items_consumed.expired(block);
     
@@ -1328,12 +1298,6 @@ public class CTables
         
         // Hidden
         this.hidden.fullResync();
-    
-        // IPN
-        this.ipn.fullResync();
-    
-        // IPNLog
-        this.ipn_log.fullResync();
     
         // Items Consumed
         this.items_consumed.fullResync();

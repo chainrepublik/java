@@ -2200,17 +2200,6 @@ public class CParser extends testBaseVisitor
                                   false,
                                   "",
                                   "");
-                
-            // IPN
-            if (UTILS.WALLET.isMine(dest))
-                UTILS.BASIC.checkNewTransIPN("confirmed", 
-                                             target_adr, 
-                                             dest, 
-                                             amount, 
-                                             cur, 
-                                             mes, 
-                                             this.VM.trigger_hash, 
-                                             this.VM.SYSTEM.BLOCK.BLOCK);
             
             // Clear trans
             UTILS.ACC.clearTrans(this.VM.trigger_hash, "ID_ALL", this.VM.SYSTEM.BLOCK.BLOCK);

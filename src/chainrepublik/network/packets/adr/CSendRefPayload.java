@@ -43,27 +43,31 @@ public class CSendRefPayload extends CPayload
             
         // Check energy
         this.checkEnergy();
-	    	
-	// Check receiver
-        if (!UTILS.BASIC.isAdr(this.rec) || 
-            !UTILS.BASIC.isRegistered(this.rec))
-            throw new Exception("Invalid receiver - CMesPayload.java");
         
+        // Referer
+        if (!UTILS.BASIC.isAdr(this.ref))
+	   throw new Exception("Invalid referer - CSendRefPayload.java, line 49");
         
-        // Registered
-        if (!UTILS.BASIC.isAdr(this.ref) || 
-            !UTILS.BASIC.isRegistered(this.ref))
-            throw new Exception("Invalid afiliate - CMesPayload.java");
+        // Receiver
+        if (!UTILS.BASIC.isAdr(this.rec))
+	   throw new Exception("Invalid receiver - CSendRefPayload.java, line 49");
         
-        // Owns afiliate ?
+        // Check adr
+        if (this.target_adr.equals(this.rec) || 
+            this.target_adr.equals(this.ref) || 
+            this.ref.equals(this.rec))
+        throw new Exception("Invalid addressess - CSendRefPayload.java, line 49");
+        
+	// Owns afiliate ?
         ResultSet rs=UTILS.DB.executeQuery("SELECT * "
                                            + "FROM adr "
                                           + "WHERE adr='"+this.ref+"' "
-                                            + "AND ref_adr='"+this.target_adr+"'");
+                                            + "AND ref_adr='"+this.target_adr+"' "
+                                            + "AND cou<>''");
         
         // Has data ?
         if (!UTILS.DB.hasData(rs))
-           throw new Exception("Invalid afiliate - CMesPayload.java");
+           throw new Exception("Invalid afiliate - CSendRefPayload.java, line 60");
         
         // Check hash
 	String h=UTILS.BASIC.hash(this.getHash()+
@@ -72,26 +76,26 @@ public class CSendRefPayload extends CPayload
 	
         // Check hash
         if (!this.hash.equals(h))
-	   throw new Exception("Invalid hash - CMesPayload.java");
+	   throw new Exception("Invalid hash - CSendRefPayload.java, line 69");
     }
-	   
-	public void commit(CBlockPayload block) throws Exception
-	{
-	    // Superclass
-	    super.commit(block);
+	  
+    public void commit(CBlockPayload block) throws Exception
+    {
+	// Superclass
+	super.commit(block);
             
-            // Remove
-            UTILS.DB.executeUpdate("UPDATE adr "
-                                    + "SET ref_adr='"+this.rec+"' "
-                                  + "WHERE adr='"+this.ref+"'");
+        // Remove
+        UTILS.DB.executeUpdate("UPDATE adr "
+                                + "SET ref_adr='"+this.rec+"' "
+                              + "WHERE adr='"+this.ref+"'");
             
-            // Event
-            UTILS.BASIC.newEvent(this.rec, 
-                                 UTILS.BASIC.getAdrData(this.target_adr, "name")+" send you an affiliate ("+UTILS.BASIC.getAdrData(this.ref, "name")+")", 
-                                 this.block);
+        // Event
+        UTILS.BASIC.newEvent(this.rec, 
+                             UTILS.BASIC.getAdrData(this.target_adr, "name")+" send you an affiliate ("+UTILS.BASIC.getAdrData(this.ref, "name")+")", 
+                             this.block);
             
-            // Position type
-            UTILS.ACC.clearTrans(hash, "ID_ALL", this.block);
-        }
+        // Position type
+        UTILS.ACC.clearTrans(hash, "ID_ALL", this.block);
     }
+}
 

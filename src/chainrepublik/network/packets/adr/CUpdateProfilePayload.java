@@ -19,19 +19,19 @@ public class CUpdateProfilePayload extends CPayload
                                 String img,
                                 String description) throws Exception
    {
-	   // Superclass
-	   super(adr);
+	// Superclass
+	super(adr);
 	   
-	   // Avatar
-	   this.img=img;
+	// Avatar
+	this.img=img;
            
-           // Description
-	   this.description=description;
+        // Description
+	this.description=description;
 	   
-	   // Hash
- 	   hash=UTILS.BASIC.hash(this.getHash()+
- 			         this.img+
-                                 this.description);
+	// Hash
+ 	hash=UTILS.BASIC.hash(this.getHash()+
+		              this.img+
+                              this.description);
    }
    
    public void check(CBlockPayload block) throws Exception
@@ -43,7 +43,7 @@ public class CUpdateProfilePayload extends CPayload
         this.checkEnergy();
    	
         // Registered ?
-        if (!UTILS.BASIC.isRegistered(this.target_adr))
+        if (!UTILS.BASIC.isRegistered(this.target_adr, this.block))
             throw new Exception("Address is not regisstered - CUpdateProfilePayload.java");
         
         // Avatar 

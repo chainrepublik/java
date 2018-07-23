@@ -7,9 +7,9 @@ import java.sql.ResultSet;
 public class CExchange extends CTable
 {
      public CExchange()
-    {
+     {
         super("exchange");
-    }
+     }
     
     public void create() throws Exception
     {
@@ -19,8 +19,8 @@ public class CExchange extends CTable
             System.out.print("Creating table exchange...");
             
             // Create
-            UTILS.DB.executeUpdate("CREATE TABLE assets(ID BIGINT AUTO_INCREMENT PRIMARY KEY, "
-                                                       +"extID BIGINT NOT NULL DEFAULT 0, "
+            UTILS.DB.executeUpdate("CREATE TABLE exchange(ID BIGINT AUTO_INCREMENT PRIMARY KEY, "
+                                                       +"exID BIGINT NOT NULL DEFAULT 0, "
                                                        +"adr VARCHAR(250) NOT NULL DEFAULT '', "
                                                        +"side VARCHAR(10) NOT NULL DEFAULT '', "
                                                        +"price_type VARCHAR(20) NOT NULL DEFAULT '', "
@@ -37,9 +37,9 @@ public class CExchange extends CTable
             
             // Indexes
             UTILS.DB.executeUpdate("CREATE INDEX exchange_extID ON exchange(extID)");
-            UTILS.DB.executeUpdate("CREATE INDEX exchange_adr ON assets(adr)");
-            UTILS.DB.executeUpdate("CREATE INDEX exchange_expires ON assets(expires)");
-            UTILS.DB.executeUpdate("CREATE INDEX exchange_block ON assets(block)");  
+            UTILS.DB.executeUpdate("CREATE INDEX exchange_adr ON exchange(adr)");
+            UTILS.DB.executeUpdate("CREATE INDEX exchange_method ON exchange(method)");
+            UTILS.DB.executeUpdate("CREATE INDEX exchange_block ON exchange(block)");  
             
             // Confirm
             System.out.println("Done.");
@@ -48,10 +48,10 @@ public class CExchange extends CTable
     
     public void expired(long block) throws Exception
     {
-       // Load expiresd
-       ResultSet rs=UTILS.DB.executeQuery("DELETE FROM exhange "
-                                         + "WHERE expires<"+block+" "
-                                           + "AND expires>0");
+       // Remove expiresd
+       UTILS.DB.executeUpdate("DELETE FROM exchange "
+                                  + "WHERE expires<"+block+" "
+                                    + "AND expires>0");
     }
     
     public void reorganize(long block, String chk_hash) throws Exception

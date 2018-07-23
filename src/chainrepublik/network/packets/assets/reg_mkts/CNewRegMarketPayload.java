@@ -2,13 +2,10 @@
 // Contact : vcris@gmx.com
 
 package chainrepublik.network.packets.assets.reg_mkts;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import chainrepublik.kernel.UTILS;
 import chainrepublik.network.packets.CPayload;
 import chainrepublik.network.packets.blocks.CBlockPayload;
+import java.sql.ResultSet;
 
 public class CNewRegMarketPayload extends CPayload
 {   
@@ -69,7 +66,7 @@ public class CNewRegMarketPayload extends CPayload
         this.days=days;
         
         // Market ID
-        this.mktID=Math.round(Math.random()*10000000000L);
+        this.mktID=UTILS.BASIC.getID();
       
         // Hash
         hash=UTILS.BASIC.hash(this.getHash()+
@@ -120,6 +117,16 @@ public class CNewRegMarketPayload extends CPayload
         // Decimals
         if (this.decimals<0 || this.decimals>8)
             throw new Exception("Invalid decimals - CNewRegMarketPayload.java");
+        
+        // Another market exist ?
+        ResultSet rs=UTILS.DB.executeQuery("SELECT * "
+                                           + "FROM assets_mkts "
+                                          + "WHERE asset='"+this.asset_symbol+"' "
+                                            + "AND cur='"+this.cur_symbol+"'");
+        
+        // Has data ?
+        if (UTILS.DB.hasData(rs))
+           throw new Exception("Market already exist - CNewRegMarketPayload.java");
         
         // Hash code
         String h=UTILS.BASIC.hash(this.getHash()+

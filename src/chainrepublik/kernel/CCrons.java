@@ -666,7 +666,7 @@ public class CCrons
        {  
            try
            {
-               // Load web ops
+              // Load web ops
                UTILS.WEB_OPS.loadWebOps();
                
                // Sync
@@ -682,6 +682,9 @@ public class CCrons
                
                // Setup
                UTILS.STATUS.load(false);
+               
+               // Stress test
+               UTILS.STRESS.run();
               
            }
            catch (Exception ex)

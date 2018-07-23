@@ -8,13 +8,14 @@ import chainrepublik.network.packets.blocks.CBlockPayload;
 public class CLeaveOrgPacket  extends CBroadcastPacket 
 {
     public CLeaveOrgPacket(String fee_adr,
-                             String adr) throws Exception
+                           String adr,
+                           long orgID) throws Exception
     {
         // Constructor
         super(fee_adr, "ID_LEAVE_PARTY_PACKET");
         
         // Builds the payload class
-	CLeaveOrgPayload dec_payload=new CLeaveOrgPayload(adr);
+	CLeaveOrgPayload dec_payload=new CLeaveOrgPayload(adr, orgID);
                               
 	// Build the payload
 	this.payload=UTILS.SERIAL.serialize(dec_payload);

@@ -33,13 +33,10 @@ public class CTweets extends CTable
                                                         + "pic VARCHAR(250) NOT NULL DEFAULT '', "
                                                         + "block BIGINT NOT NULL DEFAULT '0', "
                                                         + "expires BIGINT NOT NULL DEFAULT '0', "
-                                                        + "retweet VARCHAR(2) NOT NULL DEFAULT 'N', "
-                                                        + "retweet_tweet_ID BIGINT NOT NULL DEFAULT '0', "
                                                         + "cou VARCHAR(10) NOT NULL DEFAULT '', "
                                                         + "of_dec BIGINT NOT NULL DEFAULT 0, "
                                                         + "pol_party BIGINT NOT NULL DEFAULT 0, "
-                                                        + "mil_unit BIGINT NOT NULL DEFAULT 0, "
-                                                        + "retweets BIGINT NOT NULL DEFAULT '0')");
+                                                        + "mil_unit BIGINT NOT NULL DEFAULT 0)");
              
             UTILS.DB.executeUpdate("CREATE UNIQUE INDEX tweets_tweetID ON tweets(tweetID)");
             UTILS.DB.executeUpdate("CREATE INDEX tweets_adr ON tweets(adr)");

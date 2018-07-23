@@ -3,31 +3,17 @@
 
 package chainrepublik.kernel;
 
-import java.awt.List;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
+
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
-import javax.crypto.SealedObject;
-
 import org.apache.commons.io.FileUtils;
 
 public class CWallet 
 {
-   // Addresses
-   public ArrayList addresses=new ArrayList();
+   CAddressess addresses=new CAddressess();
    
    // Output buffer
    ObjectOutputStream f_out;
@@ -67,7 +53,7 @@ public class CWallet
 	    // Generate an address
 	    CAddress adr=new CAddress();
 	    adr.generate();
-	    this.addresses.add(adr);
+	    this.addresses.add(new CAdr(adr.getPublic(), adr.getPrivate(), ""));
 			    
 	    // Insert address
             UTILS.DB.executeUpdate("INSERT INTO my_adr "
@@ -83,18 +69,16 @@ public class CWallet
             System.out.println("Decrypting wallet file...");
         
             // Input Streqm
-	    String wallet = FileUtils.readFileToString(f, "UTF-8");
-            wallet=UTILS.AES.decrypt(wallet, UTILS.SETTINGS.getWalletPass());
-                
-	    // Load addresses
-            String[] s=wallet.split("\\*");
-		      
-	    for (int a=0; a<=s.length-1; a++)
-	    {
-		String[] adr=s[a].split(",");
-		CAddress address=new CAddress(adr[0], adr[1]); 
-		this.addresses.add(address);
-            }
+            byte[] w_enc = FileUtils.readFileToByteArray(f);
+            
+            // Decrypt
+            byte[] w_dec=UTILS.AES.decryptData(w_enc, UTILS.SETTINGS.getWalletPass());
+            
+            // Deserialize
+            this.addresses=(CAddressess) UTILS.SERIAL.deserialize(w_dec);
+            
+            // Done
+            System.out.println("Decrypted. "+this.addresses.adr.size()+" addressess found");
         }
      }
    
@@ -102,31 +86,27 @@ public class CWallet
      {
          String w="";
     	 
-    	 // Get wallet data
-    	 for (int a=0; a<=this.addresses.size()-1; a++)
-    	 {
-    		 w=w+((CAddress)addresses.get(a)).getPublic()+","+
-    		     ((CAddress)addresses.get(a)).getPrivate()+","+
-    		     ((CAddress)addresses.get(a)).description+"*";
-    	 }
-    	 
- 
-    	 
-    	 // Encrypt
+         // Encrypt
     	 try
     	 {
-             String enc=UTILS.AES.encrypt(w, UTILS.SETTINGS.getWalletPass()); 
-    	     FileUtils.writeStringToFile(f, enc, "UTF-8");
-    	 }
+             // Serialize
+             byte[] wr=UTILS.SERIAL.serialize(this.addresses);
+             
+             // Encrypt
+             byte[] enc=UTILS.AES.encryptData(wr, UTILS.SETTINGS.getWalletPass()); 
+             
+             // Write to file
+             FileUtils.writeByteArrayToFile(f, enc);
+         }
     	 catch (Exception ex) 
     	 { 
-    		System.out.println("Exception in CWallet.java file at line 120"); 
+    	    System.out.println("Exception in CWallet.java file at line 120"); 
     	 }
      }
      
      public void removeAdr(int no) throws Exception
      {
-       this.addresses.remove(no);
+       this.addresses.adr.remove(no);
        save();
      }
      
@@ -141,7 +121,7 @@ public class CWallet
 	adr.generate();
 		 
 	// Add
-	this.addresses.add(adr);
+	this.addresses.add(new CAdr(adr.getPublic(), adr.getPrivate(), ""));
          
         // Insert address
 	UTILS.DB.executeUpdate("INSERT INTO my_adr "
@@ -166,38 +146,38 @@ public class CWallet
             return;
             
     	// Add address
-        this.addresses.add(adr);
+        this.addresses.add(new CAdr(adr.getPublic(), adr.getPrivate(), ""));
 		 
 	// Save wallet
-	save();
+	this.save();
 	
         // Last generated
 	this.last_adr=adr;
     }
      
-     public String getFirst() throws Exception
-     {
-         CAddress temp=(CAddress) this.addresses.get(0);
-         return temp.getPublic();
-     }
      
      public boolean isMine(String adr) throws Exception
      {
-    	 for (int a=0; a<=this.addresses.size()-1; a++)
-    		 if (((CAddress)this.addresses.get(a)).getPublic().equals(adr))
-    	       return true;
-    	 
+         String ad;
+         
+    	 for (int a=0; a<=this.addresses.adr.size()-1; a++)
+         {
+             ad=this.addresses.adr.get(a).pub_key;
+             
+             if (ad.equals(adr))
+                 return true;
+         }
+    		
     	 return false;
      }
      
     
      public CAddress getAddress(String adr) throws Exception
      {
-    	 for (int a=0; a<=this.addresses.size()-1; a++)
+    	 for (int a=0; a<=this.addresses.adr.size()-1; a++)
     	 {
-    		 CAddress ad=(CAddress) this.addresses.get(a);
-    		 if (ad.getPublic().equals(adr))
-    			 return ad;
+    		 if (this.addresses.adr.get(a).pub_key.equals(adr))
+    			 return new CAddress(this.addresses.adr.get(a).pub_key, this.addresses.adr.get(a).priv_key);
     	 }
     	 
     	 throw new Exception("Address doesn't exist");
@@ -205,21 +185,22 @@ public class CWallet
      
      public void list()
      {
-         for (int a=0; a<=this.addresses.size()-1; a++)
+         System.out.println(this.addresses.adr.size()+" total addressess");
+         
+         for (int a=0; a<=this.addresses.adr.size()-1; a++)
          {
-            CAddress adr=(CAddress)this.addresses.get(a);
-            System.out.println("Address : "+adr.getPublic());
-            System.out.println("Address : "+adr.getPrivate());
+            CAdr adr=this.addresses.adr.get(a);
+            System.out.println("Address : "+adr.pub_key);
             System.out.println("-------------------------------------------");
          }
      }
      
      public boolean adrExist(CAddress address)
      {
-         for (int a=0; a<=this.addresses.size()-1; a++)
+         for (int a=0; a<=this.addresses.adr.size()-1; a++)
          {
-            CAddress adr=(CAddress)this.addresses.get(a);
-            if (adr.getPublic().equals(address.getPublic()))
+            CAdr adr=this.addresses.adr.get(a);
+            if (adr.pub_key.equals(address.getPublic()))
                 return true;
          }
          

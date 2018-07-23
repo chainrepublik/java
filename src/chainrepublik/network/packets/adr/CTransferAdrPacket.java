@@ -7,10 +7,13 @@ import chainrepublik.network.packets.blocks.CBlockPayload;
 
 public class CTransferAdrPacket extends CBroadcastPacket
 {
-  public CTransferAdrPacket(String fee_adr, 
+    // Serial
+    private static final long serialVersionUID = 100L;
+    
+    public CTransferAdrPacket(String fee_adr, 
 		            String adr, 
 		            String to_adr) throws Exception
-  {
+    {
         super(fee_adr, "ID_TRANSFER_ADR_PACKET");
       
         // Builds the payload class
@@ -25,30 +28,30 @@ public class CTransferAdrPacket extends CBroadcastPacket
 	   
 	// Sign packet
 	this.sign();
-  }
+    }
   
-  // Check 
-  public void check(CBlockPayload block) throws Exception
-  {
-    // Super class
-    super.check(block);
+    // Check 
+    public void check(CBlockPayload block) throws Exception
+    {
+       // Super class
+       super.check(block);
   	  
-    // Check type
-    if (!this.tip.equals("ID_TRANSFER_ADR_PACKET")) 
-  	throw new Exception("Invalid packet type - CSendRefPacket.java");
+       // Check type
+       if (!this.tip.equals("ID_TRANSFER_ADR_PACKET")) 
+  	   throw new Exception("Invalid packet type - CSendRefPacket.java");
   	  
-    // Check
-    CTransferAdrPayload dec_payload=(CTransferAdrPayload) UTILS.SERIAL.deserialize(payload);
-    dec_payload.check(block);
+       // Check
+       CTransferAdrPayload dec_payload=(CTransferAdrPayload) UTILS.SERIAL.deserialize(payload);
+       dec_payload.check(block);
     
-    // Check fee
-    if (this.fee<0.01)
-	throw new Exception("Invalid fee - CTransferAdrPacket.java");
+       // Check fee
+       if (this.fee<0.01)
+	   throw new Exception("Invalid fee - CTransferAdrPacket.java");
           
-    // Footprint
-    CPackets foot=new CPackets(this);
-    foot.add("To Address", dec_payload.to_adr);
-    foot.write();
-  }
+       // Footprint
+       CPackets foot=new CPackets(this);
+       foot.add("To Address", dec_payload.to_adr);
+       foot.write();
+    }
 
 }

@@ -26,9 +26,6 @@ public class CNewArticlePayload extends CPayload
    // Categ
    String categ;
    
-   // Retweet tweet id
-   long retweet_tweet_ID;
-   
    // TweetID
    long tweetID;
    
@@ -45,15 +42,14 @@ public class CNewArticlePayload extends CPayload
    private static final long serialVersionUID = 1L;
    
    public CNewArticlePayload(String adr, 
-		           String title, 
-                           String mes, 
-                           String categ,
-                           String cou,
-                           String pic,
-                           long retweet_tweet_ID,
-                           long mil_unit,
-                           long pol_party,
-                           long days) throws Exception
+		             String title, 
+                             String mes, 
+                             String categ,
+                             String cou,
+                             String pic,
+                             long mil_unit,
+                             long pol_party,
+                             long days) throws Exception
    {
 	  // Superclass
 	   super(adr);
@@ -73,9 +69,6 @@ public class CNewArticlePayload extends CPayload
            // Category
            this.categ=categ;
               
-           // Retweet tweeet ID
-           this.retweet_tweet_ID=retweet_tweet_ID;
-           
            // Tweet ID
            this.tweetID=UTILS.BASIC.getID();
            
@@ -95,7 +88,6 @@ public class CNewArticlePayload extends CPayload
                                  this.pic+
                                  this.cou+
                                  this.categ+
-                                 this.retweet_tweet_ID+
                                  this.tweetID+
                                  this.mil_unit+
                                  this.pol_party+
@@ -112,7 +104,7 @@ public class CNewArticlePayload extends CPayload
        this.checkEnergy(5);
         
         // Days
-        if (days<1)
+        if (days<30)
             throw new Exception("Invalid days - CNewTweetPayload.java");
         
         // ID valid ?
@@ -123,41 +115,52 @@ public class CNewArticlePayload extends CPayload
         if (!UTILS.BASIC.isCou(this.cou))
             throw new Exception("Invalid language - CNewTweetPayload.java");
         
+        // Title
+        if (!UTILS.BASIC.isTitle(this.title))
+            throw new Exception("Invalid title - CNewTweetPayload.java");
+        
+        // Message
+        if (!UTILS.BASIC.isDesc(this.mes))
+            throw new Exception("Invalid message - CNewTweetPayload.java");
+        
+        // Pic
+        if (!this.pic.equals(""))
+          if (!UTILS.BASIC.isPic(this.pic))
+            throw new Exception("Invalid pic - CNewTweetPayload.java");
+        
         // Category
-        if (!this.categ.equals("ID_ADULTS") && !this.categ.equals("ID_ART") && !this.categ.equals("ID_AUTOMOTIVE") && 
-            !this.categ.equals("ID_BEAUTY") && !this.categ.equals("ID_BUSINESS") && !this.categ.equals("ID_COMEDY") && 
-            !this.categ.equals("ID_CRYPTO") && !this.categ.equals("ID_EDUCATION") && !this.categ.equals("ID_ENTERTAINMENT") && 
-            !this.categ.equals("ID_FAMILY") && !this.categ.equals("ID_FASHION") && !this.categ.equals("ID_FOOD") && 
-            !this.categ.equals("ID_GAMING") && !this.categ.equals("ID_HEALTH") && !this.categ.equals("ID_HOWTO") && 
-            !this.categ.equals("ID_JOURNALS") && !this.categ.equals("ID_LIFESTYLE") && !this.categ.equals("ID_HOWTO") && 
-            !this.categ.equals("ID_CHAINREPUBLIK") && !this.categ.equals("ID_MOVIES") && !this.categ.equals("ID_MUSIC") && 
-            !this.categ.equals("ID_NEWS") && !this.categ.equals("ID_PETS") && !this.categ.equals("ID_PHOTOGRAPHY") && 
-            !this.categ.equals("ID_POLITICS") && !this.categ.equals("ID_SCIENCE") && !this.categ.equals("ID_SHOPPING") && 
-            !this.categ.equals("ID_SPORTS") && !this.categ.equals("ID_TECH") && !this.categ.equals("ID_TRAVEL") && 
+        if (!this.categ.equals("ID_ADULTS") && 
+            !this.categ.equals("ID_ART") && 
+            !this.categ.equals("ID_AUTOMOTIVE") && 
+            !this.categ.equals("ID_BEAUTY") && 
+            !this.categ.equals("ID_BUSINESS") && 
+            !this.categ.equals("ID_COMEDY") && 
+            !this.categ.equals("ID_CRYPTO") && 
+            !this.categ.equals("ID_EDUCATION") && 
+            !this.categ.equals("ID_ENTERTAINMENT") && 
+            !this.categ.equals("ID_FAMILY") && 
+            !this.categ.equals("ID_FASHION") && 
+            !this.categ.equals("ID_FOOD") && 
+            !this.categ.equals("ID_GAMING") && 
+            !this.categ.equals("ID_HEALTH") && 
+            !this.categ.equals("ID_HOWTO") && 
+            !this.categ.equals("ID_JOURNALS") && 
+            !this.categ.equals("ID_LIFESTYLE") && 
+            !this.categ.equals("ID_HOWTO") && 
+            !this.categ.equals("ID_CHAINREPUBLIK") && 
+            !this.categ.equals("ID_MOVIES") && 
+            !this.categ.equals("ID_MUSIC") && 
+            !this.categ.equals("ID_NEWS") && 
+            !this.categ.equals("ID_PETS") && 
+            !this.categ.equals("ID_PHOTOGRAPHY") && 
+            !this.categ.equals("ID_POLITICS") && 
+            !this.categ.equals("ID_SCIENCE") && 
+            !this.categ.equals("ID_SHOPPING") && 
+            !this.categ.equals("ID_SPORTS") && 
+            !this.categ.equals("ID_TECH") && 
+            !this.categ.equals("ID_TRAVEL") && 
             !this.categ.equals("ID_OTHER"))
-        throw new Exception("Invalid location - CNewTweetPayload.java");
-        
-        // Not a retweet
-        if (this.retweet_tweet_ID==0)
-        {
-           // Check title
-           if (!UTILS.BASIC.isTitle(this.title))
-               throw new Exception ("Invalid title - CNewTweetPayload.java");
-        
-   	   // Check Message
-           if (!UTILS.BASIC.isDesc(this.mes, 10000))
-            throw new Exception ("Invalid message - CNewTweetPayload.java");
-           
-           // Pic
-           if (!this.pic.equals(""))
-            if (!UTILS.BASIC.isPic(this.pic))
-                throw new Exception ("Invalid pic - CNewTweetPayload.java");
-        }
-            
-        // Check if retweet ID exist
-        if (this.retweet_tweet_ID>0)
-           if (!UTILS.BASIC.targetValid("ID_POST", this.retweet_tweet_ID))
-              throw new Exception("Invalid retweet_tweet_ID - CNewTweetPayload.java");
+        throw new Exception("Invalid category - CNewTweetPayload.java");
         
         // Miliary unit ?
         if (this.mil_unit>0)
@@ -181,11 +184,6 @@ public class CNewArticlePayload extends CPayload
                 throw new Exception("Invalid political party - CNewTweetPayload.java");
         }
         
-        // Language
-        if (this.mil_unit>0 || this.pol_party>0)
-            if (this.cou.equals("EN"))
-               throw new Exception("Invalid language - CNewTweetPayload.java");
-        
         // Check Hash
 	String h=UTILS.BASIC.hash(this.getHash()+
  			          this.title+
@@ -193,7 +191,6 @@ public class CNewArticlePayload extends CPayload
                                   this.pic+
                                   this.cou+
                                   this.categ+
-                                  this.retweet_tweet_ID+
                                   this.tweetID+
                                   this.mil_unit+
                                   this.pol_party+
@@ -218,17 +215,10 @@ public class CNewArticlePayload extends CPayload
                                             + "cou='"+this.cou+"', "
                                             + "categ='"+this.categ+"', "
                                             + "expires='"+(this.block+(this.days*1440))+"', "
-                                            + "retweet_tweet_ID='"+this.retweet_tweet_ID+"', "
                                             + "mil_unit='"+this.mil_unit+"', "
                                             + "pol_party='"+this.pol_party+"', "
                                             + "block='"+this.block+"'");
            
-           // Retweet ?
-           if (this.retweet_tweet_ID>0)
-           UTILS.DB.executeUpdate("UPDATE tweets "
-                                   + "SET retweets=retweets+1, "
-                                       + "block='"+this.block+"' "
-                                 + "WHERE tweetID='"+this.retweet_tweet_ID+"'");
            
            // Position type
            UTILS.ACC.clearTrans(hash, "ID_ALL", this.block);

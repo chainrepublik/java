@@ -17,14 +17,14 @@ public class CEscrowedTransSignPacket  extends CBroadcastPacket
     private static final long serialVersionUID = 100L;
    
     public CEscrowedTransSignPacket(String fee_adr,
+                                    String adr, 
                                     String trans_hash, 
-                                    String signer, 
                                     String type) throws Exception
     {
 	  super(fee_adr, "ID_ESCROWED_TRANS_SIGN");
 	  
           // Builds the payload class
-	  CEscrowedTransSignPayload dec_payload=new CEscrowedTransSignPayload(signer, trans_hash, type);
+	  CEscrowedTransSignPayload dec_payload=new CEscrowedTransSignPayload(adr, trans_hash, type);
 			
 	   // Build the payload
 	   this.payload=UTILS.SERIAL.serialize(dec_payload);

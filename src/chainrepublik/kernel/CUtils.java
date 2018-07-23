@@ -247,10 +247,6 @@ public class CUtils
         // Valid title ?
         public boolean isTitle(String title) throws Exception
         {
-            // String ?
-            if (!this.isString(title))
-                return false;
-        
             // Length
             if (title.length()<2 || title.length()>100)
                 return false;
@@ -262,12 +258,8 @@ public class CUtils
         // Valid description ?
         public boolean isDesc(String desc) throws Exception
         {
-            // String ?
-            if (!this.isString(desc))
-                return false;
-        
             // Length
-            if (desc.length()<5 || desc.length()>1000)
+            if (desc.length()<2 || desc.length()>1000)
                 return false;
         
             // Passed
@@ -688,7 +680,7 @@ public class CUtils
            return false;
     }
     
-    public boolean isRegistered(String adr) throws Exception
+    public boolean isRegistered(String adr, long block) throws Exception
     {
         // Valid address
         if (!this.isAdr(adr))
@@ -698,7 +690,7 @@ public class CUtils
         ResultSet rs=UTILS.DB.executeQuery("SELECT * "
                                            + "FROM adr "
                                           + "WHERE adr='"+adr+"' "
-                                            + "AND cou<>''");
+                                            + "AND expires>"+block);
         
         // Has data
         if (UTILS.DB.hasData(rs))
@@ -761,7 +753,8 @@ public class CUtils
             return false;
     }
     
-    public boolean isCitAdr(String adr) throws Exception
+    
+    public boolean isCitAdr(String adr, long block) throws Exception
     {
         // Adr
         if (!this.isAdr(adr))
@@ -771,7 +764,7 @@ public class CUtils
         if (!this.isGovAdr(adr) && 
             !this.isCompanyAdr(adr) &&
             !this.isOrgAdr(adr) && 
-            this.isRegistered(adr))
+            this.isRegistered(adr, block))
         return true;
         
         // Not citizen address
@@ -1330,7 +1323,7 @@ public class CUtils
     }
     
     // Returns an unused user address
-    public String getFreeAdr(long userID) throws Exception
+    public String getFreeAdr(long userID, long block) throws Exception
     {
         ResultSet rs=UTILS.DB.executeQuery("SELECT * "
                                            + "FROM my_adr "
@@ -1343,7 +1336,7 @@ public class CUtils
         // Next
         while (rs.next())
           if (!UTILS.BASIC.isCompanyAdr(rs.getString("adr")) && 
-              !UTILS.BASIC.isRegistered(rs.getString("adr")) &&
+              !UTILS.BASIC.isRegistered(rs.getString("adr"), block) &&
               UTILS.WALLET.isMine(rs.getString("adr")))
           return rs.getString("adr");
         
@@ -1600,14 +1593,14 @@ public class CUtils
         return false;
     }
     
-    public boolean canConsume(String adr, String item) throws Exception
+    public boolean canConsume(String adr, String item, long block) throws Exception
     {
         // Is address
         if (!this.isAdr(adr))
            throw new Exception("Invalid item ID");
         
         // Is energy booster ?
-        if (this.isEnergyBooster(item) && this.isCitAdr(adr))
+        if (this.isEnergyBooster(item) && this.isCitAdr(adr, block))
              return true;
         else
             return false;
@@ -1843,8 +1836,7 @@ public class CUtils
         return str;
     }
     
-     public void checkNewTransIPN(String status, 
-                                  String target_adr, 
+     public void checkNewTransIPN(String target_adr, 
                                   String dest, 
                                   double amount, 
                                   String cur, 
@@ -2617,6 +2609,211 @@ public class CUtils
             return true;
         else 
             return false;
+    }
+    
+    public boolean hasRecords(String adr, 
+                              String table, 
+                              String col) throws Exception
+    {
+        // Load data
+        ResultSet rs=UTILS.DB.executeQuery("SELECT * "
+                                           + "FROM "+table+" "
+                                          + "WHERE "+col+"='"+adr+"'");
+        
+        // Has data
+        if (UTILS.DB.hasData(rs))
+            return true;
+        
+        // No rows
+        return false;
+    }
+    
+    public boolean traceAdr(String adr) throws Exception
+    {
+        // Address valid
+         if (!this.isAdr(adr))
+            throw new Exception ("Invalid address, CUtils.java, line 1959");
+        
+        // Adr
+        if (this.hasRecords(adr, "adr", "adr") || 
+            this.hasRecords(adr, "adr", "ref_adr") || 
+            this.hasRecords(adr, "adr", "node_adr"))
+        return true;
+        
+        // Adr attr
+        if (this.hasRecords(adr, "adr_attr", "adr"))
+            return true;
+        
+        // Ads
+        if (this.hasRecords(adr, "ads", "adr"))
+            return true;
+        
+        // Assets
+        if (this.hasRecords(adr, "assets", "adr"))
+            return true;
+        
+        // Assets
+        if (this.hasRecords(adr, "assets", "adr"))
+            return true;
+        
+        // Assets mkts
+        if (this.hasRecords(adr, "assets_mkts", "adr"))
+            return true;
+        
+        // Assets mkts pos
+        if (this.hasRecords(adr, "assets_mkts_pos", "adr"))
+            return true;
+        
+        // Assets owners
+        if (this.hasRecords(adr, "assets_owners", "owner"))
+            return true;
+        
+        // Blocks
+        if (this.hasRecords(adr, "blocks", "signer"))
+            return true;
+        
+        // Comments
+        if (this.hasRecords(adr, "comments", "adr"))
+            return true;
+        
+        // Companies
+        if (this.hasRecords(adr, "companies", "adr") || 
+            this.hasRecords(adr, "companies", "owner"))
+            return true;
+        
+        // Countries
+        if (this.hasRecords(adr, "countries", "adr") || 
+            this.hasRecords(adr, "countries", "owner"))
+            return true;
+        
+        // Del votes
+        if (this.hasRecords(adr, "del_votes", "delegate") || 
+            this.hasRecords(adr, "del_votes", "adr"))
+            return true;
+        
+        // Delegates
+        if (this.hasRecords(adr, "delegates", "delegate"))
+            return true;
+        
+        // Delegates log
+        if (this.hasRecords(adr, "delegates_log", "delegate"))
+            return true;
+        
+        // Endorsers
+        if (this.hasRecords(adr, "endorsers", "endorser") || 
+            this.hasRecords(adr, "endorsers", "endorsed"))
+            return true;
+        
+        // Escrowed
+        if (this.hasRecords(adr, "escrowed", "sender_adr") || 
+            this.hasRecords(adr, "escrowed", "rec_adr") || 
+            this.hasRecords(adr, "escrowed", "escrower"))
+            return true;
+        
+        // Events
+        if (this.hasRecords(adr, "events", "adr"))
+            return true;
+        
+        // Exchange
+        if (this.hasRecords(adr, "exchange", "adr"))
+            return true;
+        
+        // Items consumed
+        if (this.hasRecords(adr, "items_consumed", "adr"))
+            return true;
+        
+        // Laws
+        if (this.hasRecords(adr, "laws", "adr"))
+            return true;
+        
+        // Laws votes
+        if (this.hasRecords(adr, "laws_votes", "adr"))
+            return true;
+        
+        // Mes
+        if (this.hasRecords(adr, "mes", "from_adr") || 
+            this.hasRecords(adr, "mes", "to_adr"))
+            return true;
+        
+        // My adr
+        if (this.hasRecords(adr, "my_adr", "adr"))
+            return true;
+        
+        // My trans
+        if (this.hasRecords(adr, "my_trans", "adr") || 
+            this.hasRecords(adr, "my_trans", "adr_assoc"))
+            return true;
+        
+        // Orgs
+        if (this.hasRecords(adr, "orgs", "adr"))
+            return true;
+        
+        // Orgs props
+        if (this.hasRecords(adr, "orgs_props", "adr"))
+            return true;
+        
+        // Orgs props votes
+        if (this.hasRecords(adr, "orgs_props_votes", "adr"))
+            return true;
+        
+        // Rent contracts
+        if (this.hasRecords(adr, "rent_contracts", "from_adr") || 
+            this.hasRecords(adr, "rent_contracts", "to_adr"))
+            return true;
+        
+        // Rewards
+        if (this.hasRecords(adr, "rewards", "adr"))
+            return true;
+        
+        // Stocuri
+        if (this.hasRecords(adr, "stocuri", "adr"))
+            return true;
+        
+        // Trans
+        if (this.hasRecords(adr, "trans", "src"))
+            return true;
+        
+        // Trans pool
+        if (this.hasRecords(adr, "trans_pool", "src"))
+            return true;
+        
+        // Tweets
+        if (this.hasRecords(adr, "tweets", "adr"))
+            return true;
+        
+        // Tweets follow
+        if (this.hasRecords(adr, "tweets_follow", "adr") || 
+            this.hasRecords(adr, "tweets_follow", "follows"))
+            return true;
+       
+        // Votes
+        if (this.hasRecords(adr, "votes", "adr"))
+            return true;
+        
+        // War fighters
+        if (this.hasRecords(adr, "wars_fighters", "adr"))
+            return true;
+        
+        // Web ops
+        if (this.hasRecords(adr, "web_ops", "fee_adr") || 
+            this.hasRecords(adr, "web_ops", "target_adr"))
+            return true;
+        
+        // Web sys data
+        if (this.hasRecords(adr, "web_sys_data", "node_adr") || 
+            this.hasRecords(adr, "web_sys_data", "mining_adr"))
+            return true;
+        
+        // Web users
+        if (this.hasRecords(adr, "web_users", "adr"))
+            return true;
+        
+        // Work procs
+        if (this.hasRecords(adr, "work_procs", "adr"))
+            return true;
+        
+        // Return
+        return false;
     }
     
 }

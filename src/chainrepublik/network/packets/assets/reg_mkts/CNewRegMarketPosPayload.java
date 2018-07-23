@@ -84,7 +84,7 @@ public class CNewRegMarketPosPayload extends CPayload
    	  super.check(block);
           
           // Registered ?
-          if (!UTILS.BASIC.isRegistered(this.target_adr))
+          if (!UTILS.BASIC.isRegistered(this.target_adr, this.block))
              throw new Exception("Address not registered - CNewRegMarketPosPayload.java");
           
         // Check marketID

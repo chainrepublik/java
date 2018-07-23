@@ -258,31 +258,26 @@ public class CWebOps
                     if (op.equals("ID_ESCROWED_SIGN"))
                     {
                          packet=new CEscrowedTransSignPacket(rs.getString("fee_adr"),
-                                                                                     rs.getString("par_1"),
-                                                                                     rs.getString("target_adr"),
-                                                                                     rs.getString("par_2"));
+                                                             rs.getString("target_adr"),
+                                                             rs.getString("par_1"),
+                                                             rs.getString("par_2"));
                         
                         
                     }
                     
                     // Join political party
                     if (op.equals("ID_JOIN_PARTY"))
-                    {
                          packet=new CJoinOrgPacket(rs.getString("fee_adr"),
                                                                      rs.getString("target_adr"),
                                                                      rs.getLong("par_1"));
                         
                         
-                    }
-                    
                     // Leave political party
                     if (op.equals("ID_LEAVE_PARTY"))
-                    {
                          packet=new CLeaveOrgPacket(rs.getString("fee_adr"),
-                                                                       rs.getString("target_adr"));
-                        
-                        
-                    }
+                                                    rs.getString("target_adr"),
+                                                    rs.getLong("par_1"));
+                    
                     
                     // Leave political party
                     if (op.equals("ID_NEW_ORG_PROP"))
@@ -523,9 +518,7 @@ public class CWebOps
                                                        rs.getString("target_adr"),
 		                                       rs.getString("par_1"), 
                                                        rs.getString("par_2"), 
-                                                       rs.getString("par_3"),
-                                                       rs.getString("packet_sign"),
-                                                       rs.getString("payload_sign"));
+                                                       rs.getString("par_3"));
                                  
                       
                    }  
@@ -651,8 +644,7 @@ public class CWebOps
 		                                                   UTILS.BASIC.base64_decode(rs.getString("par_2")), 
                                                                    rs.getString("par_3"),
                                                                    rs.getString("par_4"),
-                                                                   rs.getLong("par_5"),
-		                                                   UTILS.BASIC.base64_decode(rs.getString("par_6")),
+                                                                   UTILS.BASIC.base64_decode(rs.getString("par_6")),
                                                                    rs.getLong("par_7"),
                                                                    rs.getLong("par_8"),
                                                                    rs.getLong("days"));
@@ -771,21 +763,20 @@ public class CWebOps
                     if (op.equals("ID_NEW_COMPANY"))
                     {
                         // Address
-                        String adr=UTILS.WALLET.newAddress(rs.getLong("userID"), 
-                                                    rs.getString("par_3")+" company address");
-                        
+                        CAddress adr=new CAddress();
+                        adr.generate();
                         
                         // Packet
                          packet=new CNewCompanyPacket(rs.getString("fee_adr"),
-                                                                       adr,
-                                                                       rs.getString("par_1"),
-                                                                       rs.getString("par_2"),
-                                                                       rs.getString("par_3"),
-                                                                       rs.getString("par_4"),
-                                                                       rs.getString("par_5"), 
-                                                                       rs.getString("par_6"),
-                                                                       rs.getString("par_7"),
-                                                                       rs.getLong("days"));
+                                                      rs.getString("fee_adr"),
+                                                      rs.getString("par_1"),
+                                                      rs.getString("par_2"),
+                                                      rs.getString("par_3"),
+                                                      rs.getString("par_4"),
+                                                      rs.getString("par_5"), 
+                                                      rs.getString("par_6"),
+                                                      adr.getPublic(),
+                                                      rs.getLong("days"));
                         
                         
                         

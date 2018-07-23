@@ -31,7 +31,7 @@ public class CUseItemPayload extends CPayload
    	super.check(block);
         
         // Registered
-        if (!UTILS.BASIC.isRegistered(this.target_adr))
+        if (!UTILS.BASIC.isRegistered(this.target_adr, this.block))
             throw new Exception("Target address is not registered, CRentPayload.java, 102");
         
         // Item ID

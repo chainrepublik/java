@@ -131,7 +131,7 @@ public class CDB
 	
    public long executeUpdate(String query) throws Exception
    {
-        if (UTILS.SETTINGS.db_debug.equals("true"))
+       if (UTILS.SETTINGS.db_debug.equals("true"))
           System.out.println(query);
       
       // Check connection

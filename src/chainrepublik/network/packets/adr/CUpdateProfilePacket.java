@@ -7,6 +7,9 @@ import chainrepublik.network.packets.blocks.CBlockPayload;
 
 public class CUpdateProfilePacket extends CBroadcastPacket
 {
+     // Serial
+    private static final long serialVersionUID = 100L;
+    
     public CUpdateProfilePacket(String fee_adr, 
 		                String target_adr, 
 		                String img,

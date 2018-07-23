@@ -43,13 +43,8 @@ public class CIssueAssetPacket extends CBroadcastPacket
 	   // Build the payload
 	   this.payload=UTILS.SERIAL.serialize(dec_payload);
            
-           // Net fee 
-           double tf=1;
-           if (trans_fee>1) tf=trans_fee;
-           double net_fee=(0.0001*days+qty*0.0001)*tf;
-               
-	   // Network fee
-	   this.setFee(net_fee, "Issue asset network fee");
+           // Network fee
+	   this.setFee(0.0001, "Issue asset network fee");
 	   
            // Sign packet
 	   this.sign();
@@ -71,13 +66,8 @@ public class CIssueAssetPacket extends CBroadcastPacket
         // Check payload
         dec_payload.check(block);
           
-        // Net fee
-        double tf=1;
-        if (dec_payload.trans_fee>1) tf=dec_payload.trans_fee;
-        double net_fee=((0.0001*dec_payload.days)+(dec_payload.qty*0.0001))*tf;
-        
         // Check fee
-	if (this.fee<net_fee)
+	if (this.fee<0.0001)
 	      throw new Exception("Invalid fee - CIssueAssetPacket.java");
           
         // Footprint

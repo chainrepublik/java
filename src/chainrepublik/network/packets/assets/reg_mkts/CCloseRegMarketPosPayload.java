@@ -4,12 +4,9 @@
 package chainrepublik.network.packets.assets.reg_mkts;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import chainrepublik.kernel.UTILS;
 import chainrepublik.network.packets.CPayload;
 import chainrepublik.network.packets.blocks.CBlockPayload;
-import chainrepublik.network.packets.trans.CTransPayload;
 
 public class CCloseRegMarketPosPayload  extends CPayload
 {
@@ -31,7 +28,7 @@ public class CCloseRegMarketPosPayload  extends CPayload
     }
    
    public void check(CBlockPayload block) throws Exception
-    {
+   {
         // Super class
    	super.check(block);
         
@@ -98,7 +95,7 @@ public class CCloseRegMarketPosPayload  extends CPayload
            
         // Hash
         String h=UTILS.BASIC.hash(this.getHash()+
-                                    this.orderID);
+                                  this.orderID);
           
         if (!h.equals(this.hash))
            throw new Exception("Invalid hash - CCloseRegMarketPosPayload.java");

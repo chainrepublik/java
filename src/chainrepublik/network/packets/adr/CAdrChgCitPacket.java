@@ -8,7 +8,7 @@ import chainrepublik.network.packets.blocks.CBlockPayload;
 public class CAdrChgCitPacket extends CBroadcastPacket
 {
    // Serial
-   private static final long serialVersionUID = 1L;
+   private static final long serialVersionUID = 100L;
     
    public CAdrChgCitPacket(String fee_adr,
                            String adr,

@@ -3,11 +3,10 @@ import chainrepublik.kernel.*;
 import chainrepublik.kernel.net_stat.CNetStat;
 import chainrepublik.kernel.net_stat.CTables;
 import chainrepublik.kernel.temp.CDump;
+import chainrepublik.kernel.temp.CStressTest;
 import chainrepublik.network.CCurBlock;
 import chainrepublik.network.CNetwork;
-import chainrepublik.network.CPeer;
-import chainrepublik.network.packets.adr.CTransferAdrPacket;
-import chainrepublik.network.packets.sync.CPutBlockPacket;
+import chainrepublik.network.packets.press.*;
 import java.security.Security;
 import java.sql.ResultSet;
 
@@ -55,9 +54,7 @@ public class main
         CDump dump=new CDump();
         //dump.polParties("LT", 10);
         //dump.dumpSeas();
-        //dump.dumpPolParties();
-        
-      
+       
         UTILS.MINER_UTILS=new CCPUMinerUtils();
         
         // Status
@@ -102,6 +99,10 @@ public class main
         // Sync
         UTILS.SYNC=new CSync();
         
+        // Stress test
+        UTILS.STRESS=new CStressTest();
+        //UTILS.STRESS.start();
+        
         if (UTILS.SETTINGS.seed_mode)
             UTILS.STATUS.setEngineStatus("ID_ONLINE");
         else
@@ -111,7 +112,8 @@ public class main
         
         System.out.println("Wallet is up an running...");
         
-        //UTILS.CBLOCK.startMiners(2);
+        UTILS.CBLOCK.startMiners(2);
+       
     }
     
     

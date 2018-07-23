@@ -7,14 +7,20 @@ import java.sql.ResultSet;
 
 public class CLeaveOrgPayload extends CPayload
 {
+    // Org ID
+    long orgID;
     
-    public CLeaveOrgPayload(String adr) throws Exception
+    public CLeaveOrgPayload(String adr, long orgID) throws Exception
     {
         // Superclass
 	super(adr);
         
+        // Org ID
+        this.orgID=orgID;
+        
         // Hash
- 	hash=UTILS.BASIC.hash(this.getHash());
+ 	hash=UTILS.BASIC.hash(this.getHash()+
+                              this.orgID);
      
     }
     
@@ -27,12 +33,25 @@ public class CLeaveOrgPayload extends CPayload
         // Check energy
         this.checkEnergy();
         
+        // Org ID valid ?
+        ResultSet rs=UTILS.DB.executeQuery("SELECT * "
+                                           + "FROM orgs "
+                                          + "WHERE orgID='"+this.orgID+"'");
+        
+        // Has data
+        if (!UTILS.DB.hasData(rs))
+           throw new Exception("Invalid orgID, CLeavePartyPayload.java, 58");
+        
         // Address party
         long party=Long.parseLong(UTILS.BASIC.getAdrData(this.target_adr, "pol_party"));
         
+        // Address mil_unit
+        long mil_unit=Long.parseLong(UTILS.BASIC.getAdrData(this.target_adr, "mil_unit"));
+        
         // Not in a party ?
-        if (party==0)
-            throw new Exception("Not in a party, CLeavePartyPayload.java, 58");
+        if (party!=this.orgID && 
+            mil_unit!=this.orgID)
+            throw new Exception("Invalid orgID, CLeavePartyPayload.java, 58");
         
         // Hash
  	String h=UTILS.BASIC.hash(this.getHash());
@@ -47,21 +66,36 @@ public class CLeaveOrgPayload extends CPayload
         // Superclass
         super.commit(block);
         
-        // Insert endorser
-        UTILS.DB.executeUpdate("UPDATE adr "
-                                + "SET pol_party=0 "
-                              + "WHERE adr='"+this.target_adr+"'");
+        // Load org data
+        ResultSet rs=UTILS.DB.executeQuery("SELECT * "
+                                           + "FROM orgs "
+                                          + "WHERE orgID='"+this.orgID+"'");
         
-        // Reset political influence
-        UTILS.DB.executeUpdate("UPDATE adr "
-                                + "SET pol_inf=0, "
-                                    + "pol_endorsed=0 "
-                              + "WHERE adr='"+this.target_adr+"'");
+        // Next
+        rs.next();
         
-        // Removed endorsers
-        UTILS.DB.executeUpdate("DELETE FROM endorsers "
-                                   + "WHERE endorsed='"+this.target_adr+"' "
-                                      + "OR endorser='"+this.target_adr+"'");
+        // Pol party
+        if (rs.getString("type").equals("ID_POL_PARTY"))
+        {
+            // Change cit
+            UTILS.DB.executeUpdate("UPDATE adr "
+                                    + "SET pol_inf=0, "
+                                        + "pol_party=0, "
+                                        + "pol_endorsed=0 "
+                                  + "WHERE adr='"+this.target_adr+"'");
+      
+           // Remove endorsements
+           UTILS.DB.executeUpdate("DELETE FROM endorsers "
+                                   + "WHERE endorser='"+this.target_adr+"' "
+                                      + "OR endorsed='"+this.target_adr+"'");
+        }
+        else
+        {
+            UTILS.DB.executeUpdate("UPDATE adr "
+                                    + "SET mil_unit=0, "
+                                        + "war_points=0 "
+                                  + "WHERE adr='"+this.target_adr+"'");
+        }
         
         // Position type
         UTILS.ACC.clearTrans(hash, "ID_ALL", this.block);

@@ -8,7 +8,7 @@ import chainrepublik.network.packets.blocks.CBlockPayload;
 public class CTravelPacket extends CBroadcastPacket
 {
     // Serial
-   private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 100L;
     
    public CTravelPacket(String fee_adr,
                            String adr,

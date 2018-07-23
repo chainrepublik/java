@@ -18,9 +18,7 @@ public class CMesPacket extends CBroadcastPacket
 		    String sender_adr, 
 		    String receiver_adr, 
 		    String subject, 
-		    String mes,
-                    String packet_sign,
-                    String payload_sign) throws Exception
+		    String mes) throws Exception
   {
       super(fee_adr, "ID_SEND_MES");
       

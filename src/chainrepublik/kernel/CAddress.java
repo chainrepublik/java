@@ -219,6 +219,11 @@ public class CAddress
 	
 	public String sign(String data) throws Exception
 	{
+            // Can sign ?
+            if (!UTILS.WALLET.isMine(this.getPublic()))
+                throw new Exception("We don't own the private key of this address ("+this.getPublic()+"), CBroadcastPacket.java, line 224");
+            
+                
 	    // Signature
             Signature signature = Signature.getInstance("ECDSA", "BC");
 	

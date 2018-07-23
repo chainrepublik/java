@@ -69,8 +69,8 @@ public class CDonateItemPayload extends CPayload
            throw new Exception("Item can't be donated, CDonateItemPayload.java, 102");
         
         // Citizen address
-        if (!UTILS.BASIC.isCitAdr(this.target_adr) || 
-            !UTILS.BASIC.isCitAdr(this.rec_adr))
+        if (!UTILS.BASIC.isCitAdr(this.target_adr, this.block) || 
+            !UTILS.BASIC.isCitAdr(this.rec_adr, this.block))
         throw new Exception("Only citizens can donate / receive donations, CDonateItemPayload.java, 102");
         
         // Check hash

@@ -98,7 +98,7 @@ public class CPayload  implements java.io.Serializable
         public void checkEnergy() throws Exception
         {
            // Registered ?
-           if (UTILS.BASIC.isRegistered(this.target_adr))
+           if (UTILS.BASIC.isRegistered(this.target_adr, this.block))
            {
                // Load address type
                String owner_type=UTILS.BASIC.getAdrOwnerType(this.target_adr);
@@ -126,7 +126,7 @@ public class CPayload  implements java.io.Serializable
         public void checkEnergy(double required) throws Exception
         {
            // Registered ?
-           if (UTILS.BASIC.isRegistered(this.target_adr))
+           if (UTILS.BASIC.isRegistered(this.target_adr, this.block))
            {
                // Load address type
                String owner_type=UTILS.BASIC.getAdrOwnerType(this.target_adr);

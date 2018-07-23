@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class CNewCompanyPayload extends CPayload
 {
     // Address
-    String shareholder_adr; 
+    String com_adr; 
     
     // Type
     String type;
@@ -32,9 +32,6 @@ public class CNewCompanyPayload extends CPayload
     // Company ID
     long comID;
     
-    // Workplace ID
-    long workplaceID;
-    
     // Asset ID
     long assetID;
     
@@ -54,7 +51,7 @@ public class CNewCompanyPayload extends CPayload
                               String symbol, 
                               String cou, 
                               String pic,
-                              String shareholder_adr,
+                              String com_adr,
                               long days) throws Exception
     {
         // Superclass
@@ -81,9 +78,6 @@ public class CNewCompanyPayload extends CPayload
         // Company ID
         this.comID=UTILS.BASIC.getID();
         
-        // Workplace ID
-        this.workplaceID=UTILS.BASIC.getID();
-        
         // Asset ID
         this.assetID=UTILS.BASIC.getID();
         
@@ -97,7 +91,7 @@ public class CNewCompanyPayload extends CPayload
         this.days=days;
         
         // Shareholder adr
-        this.shareholder_adr=shareholder_adr;
+        this.com_adr=com_adr;
         
         // Hash
  	hash=UTILS.BASIC.hash(this.getHash()+
@@ -108,8 +102,7 @@ public class CNewCompanyPayload extends CPayload
                                  this.cou+
                                  this.pic+
                                  this.comID+
-                                 this.shareholder_adr+
-                                 this.workplaceID+
+                                 this.com_adr+
                                  this.assetID+
                                  this.assetMktID+
  			         this.stocID+
@@ -122,14 +115,14 @@ public class CNewCompanyPayload extends CPayload
    	// Super class
    	super.check(block);
         
-        // Registered
-        if (UTILS.BASIC.isRegistered(this.target_adr))
-            throw new Exception("Target address is already registered, CNewCompanyPayload.java, 102");
+        // Registered owner
+        if (!UTILS.BASIC.isRegistered(this.target_adr, this.block))
+            throw new Exception("Target address is not registered, CNewCompanyPayload.java, 102");
         
-        // Already a company 
-        if (UTILS.BASIC.isCompanyAdr(this.target_adr))
-            throw new Exception("Invalid target address, CNewCompanyPayload.java, 105");
-            
+        // Registered owner
+        if (UTILS.BASIC.traceAdr(this.com_adr))
+            throw new Exception("Company address is not new, CNewCompanyPayload.java, 102");
+        
         // Type
         if (!UTILS.BASIC.isStringID(this.type))
             throw new Exception("Invalid type, CNewCompanyPayload.java, 109");
@@ -174,7 +167,6 @@ public class CNewCompanyPayload extends CPayload
         
         // IDs exist ?
         if (UTILS.BASIC.isID(this.comID) || 
-            UTILS.BASIC.isID(this.workplaceID) || 
             UTILS.BASIC.isID(this.assetID) || 
             UTILS.BASIC.isID(this.assetMktID) ||
             UTILS.BASIC.isID(this.stocID))
@@ -193,8 +185,7 @@ public class CNewCompanyPayload extends CPayload
                                  this.cou+
                                  this.pic+
                                  this.comID+
-                                 this.shareholder_adr+
-                                 this.workplaceID+
+                                 this.com_adr+
                                  this.assetID+
                                  this.assetMktID+
                                  this.stocID+
@@ -212,8 +203,8 @@ public class CNewCompanyPayload extends CPayload
        
        // Insert company
        UTILS.DB.executeUpdate("INSERT INTO companies "
-                                    + "SET adr='"+this.target_adr+"', "
-                                        + "owner='"+this.shareholder_adr+"', "
+                                    + "SET adr='"+this.com_adr+"', "
+                                        + "owner='"+this.target_adr+"', "
                                         + "tip='"+this.type+"', "
                                         + "comID='"+this.comID+"', "
                                         + "name='"+UTILS.BASIC.base64_encode(this.name)+"', "
@@ -235,7 +226,7 @@ public class CNewCompanyPayload extends CPayload
        {
            // Insert
            UTILS.DB.executeUpdate("INSERT INTO stocuri "
-                                        + "SET adr='"+this.target_adr+"', "
+                                        + "SET adr='"+this.com_adr+"', "
                                             + "stocID='"+lastID+"', "
                                             + "tip='"+rs.getString("prod")+"', "
                                             + "expires=0, "
@@ -248,7 +239,7 @@ public class CNewCompanyPayload extends CPayload
        // Tools company ?
        if (this.type.equals("ID_COM_TOOLS"))
            UTILS.DB.executeUpdate("INSERT INTO stocuri "
-                                        + "SET adr='"+this.target_adr+"', "
+                                        + "SET adr='"+this.com_adr+"', "
                                             + "stocID='"+(lastID+1)+"', "
                                             + "tip='ID_TOOLS_PROD_TOOLS', "
                                             + "expires=0, "
@@ -258,7 +249,7 @@ public class CNewCompanyPayload extends CPayload
        // Construction company ?
        if (this.type.equals("ID_BUILD_COM_CONSTRUCTION"))
            UTILS.DB.executeUpdate("INSERT INTO stocuri "
-                                        + "SET adr='"+this.target_adr+"', "
+                                        + "SET adr='"+this.com_adr+"', "
                                             + "stocID='"+(lastID+1)+"', "
                                             + "tip='ID_BUILD_COM_CONSTRUCTION', "
                                             + "expires=0, "
@@ -281,7 +272,7 @@ public class CNewCompanyPayload extends CPayload
        
        // Insert shares
        UTILS.DB.executeUpdate("INSERT INTO assets_owners "
-                                    + "SET owner='"+this.shareholder_adr+"', "
+                                    + "SET owner='"+this.target_adr+"', "
                                         + "symbol='"+this.symbol+"', "
                                         + "qty='10000'");
        
@@ -302,7 +293,7 @@ public class CNewCompanyPayload extends CPayload
        
        // Register address
        UTILS.DB.executeUpdate("INSERT INTO adr "
-                                    + "SET adr='"+this.target_adr+"', "
+                                    + "SET adr='"+this.com_adr+"', "
                                          + "name='"+this.symbol+"', "
                                          + "cou='"+this.cou+"', "
                                          + "expires='"+(this.block+this.days*1440)+"', "

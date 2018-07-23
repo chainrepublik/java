@@ -6,6 +6,7 @@ package chainrepublik.kernel;
 import chainrepublik.agents.VM.CVM;
 import chainrepublik.kernel.net_stat.CNetStat;
 import chainrepublik.kernel.net_stat.CTables;
+import chainrepublik.kernel.temp.CStressTest;
 import chainrepublik.network.CCurBlock;
 import chainrepublik.network.CNetwork;
 import java.text.DecimalFormat;
@@ -97,4 +98,7 @@ public class UTILS
     
     // Constants
     public static CConst CONST;
+    
+    // Stress test
+    public static CStressTest STRESS;
 }

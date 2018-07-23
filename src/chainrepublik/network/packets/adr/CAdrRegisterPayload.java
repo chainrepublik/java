@@ -87,7 +87,7 @@ public class CAdrRegisterPayload extends CPayload
    	super.check(block);
    	  
         // Already registered ?
-        if (UTILS.BASIC.isRegistered(this.target_adr))
+        if (UTILS.BASIC.isRegistered(this.target_adr, this.block))
            throw new Exception("Address is already registered - CAdrRegisterPayload.java");
         
         // Country
@@ -95,11 +95,8 @@ public class CAdrRegisterPayload extends CPayload
              throw new Exception("Invalid country - CAdrRegisterPayload.java");
           
         // Name
-        if (!name.matches("^[0-9a-zA-Z _-]{5,30}$"))
-        {
-            System.out.println(this.name);
-	     throw new Exception("Invalid name - CAdrRegisterPayload.java");
-        }
+        if (!name.matches("^[0-9a-zA-Z]{5,30}$"))
+           throw new Exception("Invalid name - CAdrRegisterPayload.java");
         
         // Name exist ?
         ResultSet rs=UTILS.DB.executeQuery("SELECT * "
@@ -122,13 +119,22 @@ public class CAdrRegisterPayload extends CPayload
           
         // Ref adr 
         if (!this.ref_adr.equals(""))
+        {
              if (!UTILS.BASIC.isAdr(this.ref_adr))
-               throw new Exception("Invalid ref adr - CAdrRegisterPayload.java");
-          
+                throw new Exception("Invalid ref adr - CAdrRegisterPayload.java");
+             
+             if (this.target_adr.equals(ref_adr))
+                throw new Exception("Invalid ref adr - CAdrRegisterPayload.java"); 
+        }
+        
         // Node adr
         if (!this.node_adr.equals(""))
              if (!UTILS.BASIC.isAdr(this.node_adr))
                throw new Exception("Invalid node adr - CAdrRegisterPayload.java");
+        
+        // Days
+        if (this.days<365)
+            throw new Exception("Minimum value for days is 365 - CAdrRegisterPayload.java");
         
         // Check hash
  	String h=UTILS.BASIC.hash(this.getHash()+
@@ -149,18 +155,37 @@ public class CAdrRegisterPayload extends CPayload
        // Superclass
        super.commit(block);
        
-       // Insert
+       // Address exist ?
+       ResultSet rs=UTILS.DB.executeQuery("SELECT * "
+                                          + "FROM adr "
+                                         + "WHERE adr='"+this.target_adr+"'");
+       
+       // No address
+       if (!UTILS.DB.hasData(rs))
        UTILS.DB.executeUpdate("INSERT INTO adr "
-                                         + "SET adr='"+this.target_adr+"', "
-   	                                     + "cou='"+this.cou+"', "
-                                             + "loc='"+this.cou+"', "
-   	    	                             + "name='"+this.name+"', "
-                                             + "description='"+UTILS.BASIC.base64_encode(this.description)+"', "
-   	    	                             + "ref_adr='"+this.ref_adr+"', "
-   	       	                             + "node_adr='"+this.node_adr+"', "
-   	    	                             + "pic='"+UTILS.BASIC.base64_encode(this.pic)+"', "
-                                             + "expires='"+(this.block+this.days*1440)+"', "
-   	       	                             + "created='"+this.block+"'");
+                                    + "SET adr='"+this.target_adr+"', "
+   	                                + "cou='"+this.cou+"', "
+                                        + "loc='"+this.cou+"', "
+   	    	                        + "name='"+this.name+"', "
+                                        + "description='"+UTILS.BASIC.base64_encode(this.description)+"', "
+   	                                + "ref_adr='"+this.ref_adr+"', "
+   	       	                        + "node_adr='"+this.node_adr+"', "
+   	    	                        + "pic='"+UTILS.BASIC.base64_encode(this.pic)+"', "
+                                        + "expires='"+(this.block+this.days*1440)+"', "
+   	       	                        + "created='"+this.block+"'");
+       
+       else
+       UTILS.DB.executeUpdate("UPDATE adr "
+                               + "SET cou='"+this.cou+"', "
+                                   + "loc='"+this.cou+"', "
+   	    	                   + "name='"+this.name+"', "
+                                   + "description='"+UTILS.BASIC.base64_encode(this.description)+"', "
+   	                           + "ref_adr='"+this.ref_adr+"', "
+   	                           + "node_adr='"+this.node_adr+"', "
+   	    	                   + "pic='"+UTILS.BASIC.base64_encode(this.pic)+"', "
+                                   + "expires='"+(this.block+this.days*1440)+"', "
+                                   + "block='"+this.block+"', "
+      	                           + "created='"+this.block+"'");
     }
   
 }

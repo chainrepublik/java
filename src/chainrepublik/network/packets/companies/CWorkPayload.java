@@ -77,7 +77,7 @@ public class CWorkPayload extends CPayload
    	super.check(block);
         
         // Registered address ?
-        if (!UTILS.BASIC.isCitAdr(this.target_adr))
+        if (!UTILS.BASIC.isCitAdr(this.target_adr, this.block))
            throw new Exception("Only citizens can work - CWorkPayload.java, 68");
             
         // Workplace exist ?

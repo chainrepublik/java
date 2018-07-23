@@ -15,7 +15,7 @@ public class CNewCompanyPacket extends CBroadcastPacket
                              String symbol, 
                              String cou, 
                              String pic,
-                             String shareholder_adr,
+                             String com_adr,
                              long days) throws Exception
     {
         // Constructor
@@ -29,7 +29,7 @@ public class CNewCompanyPacket extends CBroadcastPacket
                                                               symbol, 
                                                               cou,
                                                               pic,
-                                                              shareholder_adr,
+                                                              com_adr,
                                                               days);
                               
 	// Build the payload
@@ -64,14 +64,14 @@ public class CNewCompanyPacket extends CBroadcastPacket
           
           // Footprint
           CPackets foot=new CPackets(this);
-          foot.add("Address", dec_payload.target_adr);
+          foot.add("Owner Address", dec_payload.target_adr);
           foot.add("Type", dec_payload.type);
           foot.add("Name", dec_payload.name);
           foot.add("Description", dec_payload.desc);
           foot.add("Symbol", dec_payload.symbol);
           foot.add("Country", dec_payload.cou);
           foot.add("Pic", dec_payload.pic);
-          foot.add("Shareholder Address", dec_payload.shareholder_adr);
+          foot.add("Company Address", dec_payload.com_adr);
           foot.add("Days", dec_payload.days);
           foot.write();
     }

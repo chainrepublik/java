@@ -51,9 +51,6 @@ public class CEscrowedTransSignPayload extends CPayload
 	throw new Exception("Invalid signature type - CEscrowedtransSignPayload.java");
 	   
         // Load transaction data
-        
-    	          
-        // Finds the user
         ResultSet rs=UTILS.DB.executeQuery("SELECT * "
                                            + "FROM escrowed "
                                           + "WHERE trans_hash='"+this.trans_hash+"'");

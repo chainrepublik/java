@@ -7,8 +7,6 @@ import chainrepublik.kernel.UTILS;
 import chainrepublik.network.packets.CPayload;
 import chainrepublik.network.packets.blocks.CBlockPayload;
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 
 
 public class CVotePayload extends CPayload 
@@ -163,7 +161,7 @@ public class CVotePayload extends CPayload
         // Power
         double power=UTILS.BASIC.round(e-e*p/100, 2);
        
-        // Like
+        // Insert
         if (power>0.1)
         UTILS.DB.executeUpdate("INSERT INTO votes "
                                      + "SET adr='"+this.target_adr+"', "

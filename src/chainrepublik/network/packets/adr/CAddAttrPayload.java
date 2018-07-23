@@ -1,7 +1,5 @@
 package chainrepublik.network.packets.adr;
 
-import java.sql.ResultSet;
-import java.sql.Statement;
 import chainrepublik.kernel.UTILS;
 import chainrepublik.network.packets.CPayload;
 import chainrepublik.network.packets.blocks.CBlockPayload;
@@ -140,13 +138,25 @@ public class CAddAttrPayload extends CPayload
         // Days
         if (this.days<1)
             throw new Exception("Invalid days - CAddAttrPayload.java");
-    
         
         // Trust asset
         if (this.attr.equals("ID_TRUST_ASSET"))
+        {
+            // Check params
+            if (!this.s2.equals("") || 
+                !this.s3.equals("") ||
+                this.l1!=0 || 
+                this.l2!=0 || 
+                this.l3!=0 || 
+                this.d1!=0 || 
+                this.d2!=0 || 
+                this.d3!=0)
+            throw new Exception("Invalid asset - CAddAttrPayload.java");
+            
+            // Is asset ?
             if (!UTILS.BASIC.isAsset(this.s1))
-                throw new Exception("Invalid asset - CAddAttrPayload.java");
-        
+               throw new Exception("Invalid asset - CAddAttrPayload.java");
+        }        
         
         // Hash
         String h=UTILS.BASIC.hash(this.getHash()+

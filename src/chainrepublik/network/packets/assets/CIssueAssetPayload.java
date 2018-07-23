@@ -121,8 +121,16 @@ public class CIssueAssetPayload extends CPayload
         // Super class
         super.check(block);
         
-         // Check energy
-       this.checkEnergy();
+        // Check energy
+        this.checkEnergy();
+        
+        // Registered ?
+        if (!UTILS.BASIC.isRegistered(this.target_adr, this.block))
+           throw new Exception("Address is not registered - CIssueAssetPayload.java");
+        
+        // Asset ID
+        if (UTILS.BASIC.isID(this.assetID))
+           throw new Exception("Address is not registered - CIssueAssetPayload.java");
         
         // Symbol length
         if (!UTILS.BASIC.isSymbol(this.symbol, 6))
@@ -169,7 +177,7 @@ public class CIssueAssetPayload extends CPayload
              throw new Exception("Invalid pic - CIssueAssetPayload.java");
         
        // Days
-       if (this.days<100)
+       if (this.days<365)
           throw new Exception("Invalid days - CIssueAssetPayload.java");
         
         // Transaction fee address
@@ -177,9 +185,37 @@ public class CIssueAssetPayload extends CPayload
             throw new Exception("Invalid transaction fee address - CIssueAssetPayload.java");
         
         // Transaction fee
-        if (this.trans_fee<0 || this.trans_fee>10)
+        if (this.trans_fee<0 || this.trans_fee>5)
             throw new Exception("Invalid transaction fee - CIssueAssetPayload.java");
-       
+        
+         // Transfer fee
+         double tf=1;
+         
+         // Transfer fee
+         if (this.trans_fee>1)
+            tf=trans_fee;
+         
+         // Net fee
+         double net_fee=((0.0001*days)+(qty*0.0001))*tf;
+         
+         // Funds
+         if (UTILS.ACC.getBalance(this.target_adr, "CRC", block)<net_fee)
+             throw new Exception("Insuficient funds - CIssueAssetPayload.java");
+         
+         // Transfer
+         UTILS.ACC.newTransfer(this.target_adr, 
+                               "default", 
+                               net_fee, 
+                               "CRC", 
+                               "You have issued a new asset - "+this.symbol, 
+                               "", 
+                               0, 
+                               this.hash, 
+                               this.block, 
+                               false, 
+                               "", 
+                               "");
+        
         // Calculates hash
         String h=UTILS.BASIC.hash(this.getHash()+
                                  this.assetID+
@@ -190,7 +226,7 @@ public class CIssueAssetPayload extends CPayload
                                  this.how_sell+
                                  this.web_page+
                                  this.pic+
-                                 days+
+                                 this.days+
                                  this.qty+
                                  this.trans_fee_adr+
                                  this.trans_fee);

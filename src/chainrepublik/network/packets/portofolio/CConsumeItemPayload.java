@@ -31,7 +31,7 @@ public class CConsumeItemPayload extends CPayload
    	super.check(block);
         
         // Registered
-        if (!UTILS.BASIC.isRegistered(this.target_adr))
+        if (!UTILS.BASIC.isRegistered(this.target_adr, this.block))
             throw new Exception("Target address is not registered, CRentPayload.java, 102");
         
         // Item ID
@@ -53,7 +53,7 @@ public class CConsumeItemPayload extends CPayload
         rs.next();
         
         // Can consume ?
-        if (!UTILS.BASIC.canConsume(this.target_adr, rs.getString("tip")))
+        if (!UTILS.BASIC.canConsume(this.target_adr, rs.getString("tip"), this.block))
            throw new Exception("Item can't be consumed, CConsumeItemPayload.java, 102");
         
         // Already consumed this item in the last 24 hours ?
