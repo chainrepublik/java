@@ -73,8 +73,8 @@ public class CMesPayload extends CPayload
             
              // Check energy
              this.checkEnergy();
-	    	
-	    // Check receiver ?
+             
+            // Check receiver ?
 	    if (UTILS.BASIC.isAdr(this.receiver_adr)==false)
 	   	throw new Exception("Invalid receiver address - CMesPayload.java");
 	    

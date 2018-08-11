@@ -97,6 +97,10 @@ public class CNewOrgPropPayload extends CPayload
         // Check energy
         this.checkEnergy();
         
+        // Citizen address ?
+        if (!UTILS.BASIC.isCitAdr(this.target_adr, this.block))
+           throw new Exception("Only citizens can do this action - CWorkPayload.java, 68");
+        
         // Valid orgID
         ResultSet rs=UTILS.DB.executeQuery("SELECT * "
                                            + "FROM orgs "
@@ -109,6 +113,40 @@ public class CNewOrgPropPayload extends CPayload
         // Load org data
         rs.next();
         
+        // Political party ?
+        if (rs.getString("type").equals("ID_POL_PARTY"))
+        {
+            // Address party
+            long party=Long.parseLong(UTILS.BASIC.getAdrData(this.target_adr, "pol_party"));
+            
+            // Member of organization ?
+            if (party!=this.orgID)
+               throw new Exception("Not a member of this org, CNewOrgPropPayload.java, 109");
+            
+            // Address political influence
+            double pol_inf=Double.parseDouble(UTILS.BASIC.getAdrData(this.target_adr, "pol_inf"));
+            
+            // Lower than 1000
+            if (pol_inf<1000)
+               throw new Exception("You need a minimum 1000 political influence, CNewOrgPropPayload.java, 109"); 
+        }
+        else
+        {
+            // Address mil unit
+            long mil_unit=Long.parseLong(UTILS.BASIC.getAdrData(this.target_adr, "mil_unit"));
+            
+            // Member of organization ?
+            if (mil_unit!=this.orgID)
+               throw new Exception("Not a member of this org, CNewOrgPropPayload.java, 109");
+            
+            // Address warpoints
+            long war_points=Long.parseLong(UTILS.BASIC.getAdrData(this.target_adr, "pol_inf"));
+            
+            // Lower than 1000
+            if (war_points<1000)
+               throw new Exception("You need a minimum 1000 war points, CNewOrgPropPayload.java, 109"); 
+        }
+        
         // Valid propID
         if (UTILS.BASIC.isID(propID))
             throw new Exception("Invalid propID, CNewOrgPropPayload.java, 116");
@@ -116,6 +154,7 @@ public class CNewOrgPropPayload extends CPayload
         // Prop type
         if (!this.prop_type.equals("ID_DONATE") && 
             !this.prop_type.equals("ID_CHG_DESC") && 
+            !this.prop_type.equals("ID_CHG_AVATAR") && 
             !this.prop_type.equals("ID_SET_ART_OFFICIAL"))
         throw new Exception("Invalid proposal type, CNewOrgPropPayload.java, 122");
         
@@ -150,6 +189,11 @@ public class CNewOrgPropPayload extends CPayload
                  throw new Exception("Invalid new description, CNewOrgPropPayload.java, 116");
         }
         
+        // Change avatar
+        if (this.prop_type.equals("ID_CHG_AVATAR"))
+            if (!UTILS.BASIC.isPic(this.par_1))
+                 throw new Exception("Invalid avatar, CNewOrgPropPayload.java, 116");
+        
         // Set art official
         if (this.prop_type.equals("ID_SET_ART_OFFICIAL"))
         {
@@ -170,7 +214,49 @@ public class CNewOrgPropPayload extends CPayload
                 Long.parseLong(UTILS.BASIC.getAdrData(rs.getString("adr"), "mil_unit"))!=this.orgID)
             throw new Exception("Invalid article ID, CNewOrgPropPayload.java, 116");
         }
-       
+        
+        // Expl
+        if (!UTILS.BASIC.isDesc(this.expl) || 
+            this.expl.length()>1000 || 
+            this.expl.length()<10)
+        throw new Exception("Invalid explanation, CNewOrgPropPayload.java, 116");
+        
+        // Another pending proposal ?
+        rs=UTILS.DB.executeQuery("SELECT * "
+                                 + "FROM orgs_props "
+                                + "WHERE adr='"+this.target_adr+"' "
+                                  + "AND orgID='"+this.orgID+"' "
+                                  + "AND status='ID_VOTING'");
+        
+        // Has data ?
+        if (UTILS.DB.hasData(rs))
+           throw new Exception("Yoy already have a pending proposal, CNewOrgPropPayload.java, 116");
+        
+        // Rejected proposal in the last 5 days ?
+        rs=UTILS.DB.executeQuery("SELECT * "
+                                 + "FROM orgs_props "
+                                + "WHERE adr='"+this.target_adr+"' "
+                                  + "AND orgID='"+this.orgID+"' "
+                                  + "AND status='ID_REJECTED' "
+                                  + "AND block>"+(this.block-7250));
+        
+        // Has data ?
+        if (UTILS.DB.hasData(rs))
+           throw new Exception("You have a rejected proposal in the last 5 days, CNewOrgPropPayload.java, 116");
+        
+        // Organization have at least 25 members ?
+        rs=UTILS.DB.executeQuery("SELECT COUNT(*) AS total "
+                                 + "FROM adr "
+                                + "WHERE pol_party='"+this.orgID+"' "
+                                   + "OR mil_unit='"+this.orgID+"'");
+        
+        // Next
+        rs.next();
+        
+        // Number
+        if (rs.getLong("total")<25)
+            throw new Exception("Minimum 25 members required, CNewOrgPropPayload.java, 116");
+        
         // Hash
  	String h=UTILS.BASIC.hash(this.getHash()+
                                   this.orgID+

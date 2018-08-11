@@ -42,20 +42,26 @@ public class CDonateItemPayload extends CPayload
         // Check energy
         this.checkEnergy();
         
+         // Sender and receiver registered ?
+        if (!UTILS.BASIC.isRegistered(this.target_adr, this.block) || 
+            !UTILS.BASIC.isRegistered(this.rec_adr, this.block))
+        throw new Exception("Invalid sender or receiver, CDonateItemPayload.java, 102");
+        
+        // Citizen address
+        if (!UTILS.BASIC.isCitAdr(this.target_adr, this.block) || 
+            !UTILS.BASIC.isCitAdr(this.rec_adr, this.block))
+        throw new Exception("Only citizens can donate / receive donations, CDonateItemPayload.java, 102");
+        
         // Receiver same as sender
         if (this.rec_adr.equals(this.target_adr))
             throw new Exception("Sender and receiver are the same, CDonateItemPayload.java, 102");
-        
-        // Item ID
-        if (!UTILS.BASIC.isID(itemID))
-            throw new Exception("Invalid itemID, CDonateItemPayload.java, 102");
         
         // Load itemID data
         ResultSet rs=UTILS.DB.executeQuery("SELECT * "
                                            + "FROM stocuri "
                                           + "WHERE stocID='"+this.itemID+"' "
                                             + "AND adr='"+this.target_adr+"' "
-                                            + "AND qty>=1");
+                                            + "AND qty=1");
         
         // Has data ?
         if (!UTILS.DB.hasData(rs))
@@ -64,14 +70,9 @@ public class CDonateItemPayload extends CPayload
         // Next
         rs.next();
         
-        // Energy product ?
-        if (!UTILS.BASIC.isEnergyProd(rs.getString("tip")))
+        // Rented ?
+        if (rs.getLong("rented_expires")>0)
            throw new Exception("Item can't be donated, CDonateItemPayload.java, 102");
-        
-        // Citizen address
-        if (!UTILS.BASIC.isCitAdr(this.target_adr, this.block) || 
-            !UTILS.BASIC.isCitAdr(this.rec_adr, this.block))
-        throw new Exception("Only citizens can donate / receive donations, CDonateItemPayload.java, 102");
         
         // Check hash
         String h=UTILS.BASIC.hash(this.getHash()+
@@ -91,12 +92,22 @@ public class CDonateItemPayload extends CPayload
          // Set item as rented
          UTILS.DB.executeUpdate("UPDATE stocuri "
                                  + "SET adr='"+this.rec_adr+"', "
-                                     + "in_use=0 "
+                                     + "in_use=0, "
+                                     + "rent_price=0 "
                                + "WHERE stocID='"+this.itemID+"'");
+         
+         // Refresh sender energy
+         UTILS.BASIC.refreshEnergy(this.target_adr);
+         
+         // Refresh receiver energy
+         UTILS.BASIC.refreshEnergy(this.rec_adr);
          
          // Event
          UTILS.BASIC.newEvent(this.rec_adr, 
                               "You have received a donation from "+UTILS.BASIC.getAdrData(this.target_adr, "name")+". Check your inventory.", 
                               this.block);
+         
+         // Clear trans
+         UTILS.ACC.clearTrans(this.hash, "ID_ALL", this.block);
     }
 }

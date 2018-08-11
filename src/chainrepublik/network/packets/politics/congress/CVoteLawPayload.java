@@ -43,6 +43,10 @@ public class CVoteLawPayload extends CPayload
         
         // Check energy
         this.checkEnergy();
+        
+        // Citizen address ?
+        if (!UTILS.BASIC.isCitAdr(this.target_adr, this.block))
+           throw new Exception("Only citizens can do this action - CWorkPayload.java, 68");
        
         // Vote type
         if (!this.vote_type.equals("ID_YES") &&
@@ -57,7 +61,8 @@ public class CVoteLawPayload extends CPayload
                                            + "FROM laws "
                                           + "WHERE lawID='"+this.lawID+"' "
                                             + "AND country='"+adr_cou+"' "
-                                            + "AND status='ID_VOTING'");
+                                            + "AND status='ID_VOTING' "
+                                            + "AND adr<>'"+this.target_adr+"'");
         
         // Has data ?
         if (!UTILS.DB.hasData(rs))
@@ -92,7 +97,7 @@ public class CVoteLawPayload extends CPayload
         // Superclass
         super.commit(block);
         
-        // Pol influence
+        // Pol endorsement
         double pol_endorsed=Double.parseDouble(UTILS.BASIC.getAdrData(this.target_adr, "pol_endorsed"));
         
         // Country
@@ -111,9 +116,9 @@ public class CVoteLawPayload extends CPayload
         while (rs.next()) 
                 total=total+rs.getDouble("pol_endorsed");
         
-        // Pol endorsed over 10%
-        if (pol_endorsed>total/10)
-            pol_endorsed=Math.round(total/10);
+        // Pol endorsed over 20%
+        if (pol_endorsed>total/5)
+            pol_endorsed=Math.round(total/5);
         
         // Insert vote
         UTILS.DB.executeUpdate("INSERT INTO laws_votes "

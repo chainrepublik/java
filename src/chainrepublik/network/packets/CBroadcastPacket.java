@@ -144,7 +144,8 @@ public class CBroadcastPacket extends CPacket
             
             // Address
             if (!this.tip.equals("ID_ADR_REGISTER_PACKET") && 
-                !this.tip.equals("ID_NEW_COMPANY_PACKET"))
+                !this.tip.equals("ID_NEW_COMPANY_PACKET") &&
+                !this.tip.equals("ID_NEW_REG_ASSET_MARKET_POS_PACKET"))
                 if (!payload.target_adr.equals(this.adr))
                    throw new Exception("Invalid payload address - CBroadcastPacket.java");
             

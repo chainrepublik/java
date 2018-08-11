@@ -37,6 +37,13 @@ public class CWthFundsPayload extends CPayload
    	// Super class
    	super.check(block);
         
+        // Energy
+        this.checkEnergy();
+        
+        // Citizen address ?
+        if (!UTILS.BASIC.isCitAdr(this.target_adr, this.block))
+           throw new Exception("Only citizens can do this action - CWorkPayload.java, 68");
+        
         // Company addrews
         String com_adr=UTILS.BASIC.getComAdr(this.comID);
         
@@ -48,7 +55,7 @@ public class CWthFundsPayload extends CPayload
         this.amount=UTILS.BASIC.round(this.amount, 4);
         
         // Amount
-        if (this.amount<0.01)
+        if (this.amount<0.1)
             throw new Exception("Invalid amount - CWthFundsPayload.java, 68");
         
         // Balance
@@ -70,7 +77,7 @@ public class CWthFundsPayload extends CPayload
         rs=UTILS.DB.executeQuery("SELECT * "
                                  + "FROM assets_owners "
                                 + "WHERE symbol='"+sym+"' "
-                                  + "AND qty>=0.01");
+                                  + "AND qty>=1");
         
         // Hash
         String h=UTILS.BASIC.hash(this.getHash()+
@@ -81,12 +88,12 @@ public class CWthFundsPayload extends CPayload
         if (!h.equals(this.hash))
             throw new Exception("Invalid hash - CWthFundsPayload.java, 68");
         
+        // Per share
+        double per_share=this.amount/10000;
+            
         // Loop
         while (rs.next())
         {
-            // Per share
-            double per_share=this.amount/10000;
-            
             // Amount
             double to_pay=rs.getDouble("qty")*per_share;
             

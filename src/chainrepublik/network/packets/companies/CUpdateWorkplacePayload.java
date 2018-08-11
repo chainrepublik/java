@@ -55,6 +55,12 @@ public class CUpdateWorkplacePayload extends CPayload
    	// Super class
    	super.check(block);
         
+        // Energy
+        this.checkEnergy();
+        
+        // Citizen address ?
+        if (!UTILS.BASIC.isCitAdr(this.target_adr, this.block))
+           throw new Exception("Only citizens can do this action - CWorkPayload.java, 68");
         
         // Load workplace data
         ResultSet work_rs=UTILS.DB.executeQuery("SELECT * "
@@ -74,11 +80,14 @@ public class CUpdateWorkplacePayload extends CPayload
         // Company addrews
         String com_adr=UTILS.BASIC.getComAdr(comID);
         
+        // Company owner ?
+        if (!UTILS.BASIC.isComOwner(this.target_adr, comID))
+             throw new Exception("Address is not company owner, CUpdateCompanyPayload.java, 74");
+        
         // Load company data
         ResultSet com_rs=UTILS.DB.executeQuery("SELECT * "
                                                + "FROM companies "
-                                              + "WHERE comID='"+comID+"' "
-                                                + "AND owner='"+this.target_adr+"'");
+                                              + "WHERE comID='"+comID+"'");
         
         // Has data ?
         if (!UTILS.DB.hasData(com_rs))
@@ -123,6 +132,11 @@ public class CUpdateWorkplacePayload extends CPayload
         
         // Building
         String build=rs.getString("prod");
+        
+        // Check status
+        if (!this.status.equals("ID_FREE") && 
+            !this.status.equals("ID_SUSPENDED"))
+            throw new Exception("Invalid status - CUpdateWorkplacePayload.java, 68");
         
          // Status active ?
         if (this.status.equals("ID_FREE"))
@@ -198,5 +212,8 @@ public class CUpdateWorkplacePayload extends CPayload
                                    + "wage='"+UTILS.FORMAT_4.format(this.wage)+"', "
                                    + "prod='"+this.prod+"' "
                              + "WHERE workplaceID='"+this.workplaceID+"'");
+       
+       // Clear transations
+       UTILS.ACC.clearTrans(this.hash, "ID_ALL", this.block);
     }
 }

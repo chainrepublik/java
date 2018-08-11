@@ -47,6 +47,10 @@ public class CFollowPayload extends CPayload
         // Check energy
        this.checkEnergy();
        
+       // Citizen address ?
+        if (!UTILS.BASIC.isCitAdr(this.target_adr, this.block))
+           throw new Exception("Only citizens can do this action - CWorkPayload.java, 68");
+       
        // Follow address same as target
        if (this.follow_adr.equals(this.target_adr))
            throw new Exception("Invalid follow address - CFollowPayload.java");

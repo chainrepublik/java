@@ -21,7 +21,7 @@ public class CWarsFighters extends CTable
             // Create
             UTILS.DB.executeUpdate("CREATE TABLE wars_fighters (ID BIGINT(20) AUTO_INCREMENT PRIMARY KEY, "
                                                              + "warID BIGINT(20) NOT NULL DEFAULT 0, "
-                                                             + "adr VARCHAR(250) NOT NULL DFAULT '', "
+                                                             + "adr VARCHAR(250) NOT NULL DEFAULT '', "
                                                              + "type VARCHAR(5) NOT NULL DEFAULT 'AT', "
                                                              + "damage BIGINT NOT NULL DEFAULT 0, "
                                                              + "weapon VARCHAR(100) NOT NULL DEFAULT '', "
@@ -45,7 +45,7 @@ public class CWarsFighters extends CTable
        // Load expired
        UTILS.DB.executeUpdate("DELETE "
                               + "FROM wars_fighters "
-                             + "WHERE block<='"+(block-1440)+"'");
+                             + "WHERE block<='"+(block-144000)+"'");
     }
     
     public void reorganize(long block, String chk_hash) throws Exception

@@ -43,6 +43,15 @@ public class CLaws
         target_type=UTILS.BASIC.base64_decode(target_type);
         targetID=UTILS.BASIC.base64_decode(targetID);
         
+        // Check target type
+        if (!UTILS.BASIC.isStringID(target_type))
+            throw new Exception("Invalid target type, CLaws.java, 48");
+        
+        // Check target ID
+        if (!UTILS.BASIC.isCountry(targetID) && 
+            !UTILS.BASIC.isLong(targetID))
+        throw new Exception("Invalid target ID, CLaws.java, 48");
+        
         // Get country
         String cou=this.getLawCou(lawID);
         
@@ -63,7 +72,7 @@ public class CLaws
         for (int a=0; a<=wlist.size()-1; a++)
         {
             // Weapon ID
-            long wID=Long.parseLong(wlist.get(a));
+            long wID=Long.parseLong(wlist.get(a).trim());
             
             // Weapon position
             Point w_pos=UTILS.BASIC.getWeaponPos(wID);
@@ -160,7 +169,7 @@ public class CLaws
                                                  + "stocID='"+(lawID+b)+"', "
                                                  + "war_loc_type='ID_SEA', "
                                                  + "war_locID='1528888939427', "
-                                                 + "war_loc_status='ID_READY', "
+                                                 + "war_status='ID_READY', "
                                                  + "block='"+block+"'");
             else
                 UTILS.DB.executeUpdate("INSERT INTO stocuri "
@@ -228,7 +237,7 @@ public class CLaws
         for (int a=0; a<=weapons.size()-1; a++)
         {
             // Weapon ID
-            long wID=Long.parseLong(weapons.get(a));
+            long wID=Long.parseLong(weapons.get(a).trim());
             
             // Load weapon data
             ResultSet rs=UTILS.DB.executeQuery("SELECT * "
@@ -263,7 +272,8 @@ public class CLaws
                                          + "adr='"+UTILS.BASIC.getCouAdr(cou)+"', "
                                          + "damage='"+damage+"', "
                                          + "type='"+side+"', "
-                                         + "lawID='"+lawID+"'");
+                                         + "lawID='"+lawID+"', "
+                                         + "block='"+block+"'");
     }
     
     public void implementStartWar(long lawID, 
@@ -275,7 +285,10 @@ public class CLaws
         String cou=this.getLawCou(lawID);
         
         // Check
-        if (!this.checkStartWarLaw(cou, UTILS.BASIC.base64_decode(defender), UTILS.BASIC.base64_decode(target)))
+        if (!this.checkStartWarLaw(cou, 
+                                   UTILS.BASIC.base64_decode(defender), 
+                                   UTILS.BASIC.base64_decode(target),
+                                   block))
         {
             this.lawErr(lawID, "Unexpected error", block);
             return;
@@ -414,7 +427,7 @@ public class CLaws
         for (int a=0; a<=players.size()-1; a++)
             UTILS.DB.executeUpdate("UPDATE adr "
                                     + "SET premium='"+block+"' "
-                                  + "WHERE name='"+players.get(a)+"'");
+                                  + "WHERE name='"+players.get(a).trim()+"'");
     }
     
     public void implementRemovePremium(String cou, 
@@ -430,7 +443,7 @@ public class CLaws
         for (int a=0; a<=players.size()-1; a++)
         UTILS.DB.executeUpdate("UPDATE adr "
                                 + "SET premium=0 "
-                              + "WHERE name='"+players.get(a)+"'");
+                              + "WHERE name='"+players.get(a).trim()+"'");
     }
     
     public void implementDonation(long lawID,
@@ -449,15 +462,12 @@ public class CLaws
             return;
         }
         
-        // Donation address
-        String adr=UTILS.BASIC.base64_decode(par_1);
-        
         // Country address
         String cou_adr=UTILS.BASIC.getCouAdr(cou);
                                 
         // Payment
         UTILS.ACC.newTransfer(cou_adr, 
-                              adr,
+                              par_1,
                               amount, 
                               "CRC", 
                               "State budget donation (law "+lawID+")", 
@@ -497,7 +507,7 @@ public class CLaws
         // Number of premium citizens
         ResultSet rs=UTILS.DB.executeQuery("SELECT COUNT(*) AS total "
                                            + "FROM adr "
-                                          + "WHERE cou='' "
+                                          + "WHERE cou='"+cou+"' "
                                             + "AND premium>0");
                                            
         // Next
@@ -515,7 +525,7 @@ public class CLaws
             // Load all premium citizens
             rs=UTILS.DB.executeQuery("SELECT * "
                                      + "FROM adr "
-                                    + "WHERE cou='' "
+                                    + "WHERE cou='"+cou+"' "
                                       + "AND premium>0");
                                                 
             while (rs.next())
@@ -564,6 +574,10 @@ public class CLaws
                                   double tax_amount, 
                                   String prod) throws Exception
     {
+        // Check target type
+        if (!UTILS.BASIC.isStringID(tax))
+            throw new Exception("Invalid tax, CLaws.java, 581");
+        
          // Max default tax
          if (tax_amount<0 || tax_amount>25) 
             return false;
@@ -583,6 +597,15 @@ public class CLaws
     
     public boolean isCit(String user, String cou) throws Exception
     {
+        // Check user
+        if (!UTILS.BASIC.isName(user))
+           throw new Exception("Invalid user, CLaws.java, 604");
+
+        // Check cou
+        if (!UTILS.BASIC.isCountry(cou))
+           throw new Exception("Invalid country, CLaws.java, 608");
+        
+        // Load citizen
         ResultSet rs=UTILS.DB.executeQuery("SELECT * "
                                            + "FROM adr "
                                           + "WHERE name='"+user+"' "
@@ -597,6 +620,13 @@ public class CLaws
     
     public boolean checkPremiumLaw(String cou, String list) throws Exception
     {
+        // Check cou
+        if (!UTILS.BASIC.isCountry(cou))
+           throw new Exception("Invalid country, CLaws.java, 608");
+        
+        // Remove spaces
+        list=list.replace(" ", "");
+        
         // Explode
         List<String> players = Arrays.asList(list.split(","));
         
@@ -604,7 +634,7 @@ public class CLaws
         for (int a=0; a<=players.size()-1; a++)
         {
             // Is address ?
-            if (!UTILS.BASIC.isDomain(players.get(a)))
+            if (!UTILS.BASIC.isName(players.get(a).trim()))
                 return false;
             
             // Citizen ?
@@ -616,8 +646,18 @@ public class CLaws
         return true;
     }
     
-    public boolean checkChgBonusLaw(String bonus, String prod, double amount) throws Exception
+    public boolean checkChgBonusLaw(String bonus, 
+                                    String prod, 
+                                    double amount) throws Exception
     {
+       // Check bonus format
+       if (!UTILS.BASIC.isStringID(bonus))
+           throw new Exception ("Invalid bonus, CUtils.java, line 1959"); 
+
+       // Check prod format
+       if (!UTILS.BASIC.isStringID(prod))
+           throw new Exception ("Invalid product, CUtils.java, line 1959"); 
+        
        // Min default bonus
        if (amount<0) 
           return false;
@@ -627,7 +667,7 @@ public class CLaws
             return false;
                                    
         // Product ?
-        if (!prod.equals(""))
+        if (bonus.equals("ID_BUY_BONUS"))
            if (!UTILS.BASIC.isProd(prod))
              return false;
         
@@ -635,8 +675,14 @@ public class CLaws
         return true;
     }
     
-    public boolean checkDonationLaw(String cou, String adr, double amount) throws Exception
+    public boolean checkDonationLaw(String cou, 
+                                    String adr, 
+                                    double amount) throws Exception
     {
+        // Check cou
+        if (!UTILS.BASIC.isCountry(cou))
+           throw new Exception("Invalid country, CLaws.java, 608");
+        
         // Check address
         if (!UTILS.BASIC.isAdr(adr))                  
             return false;
@@ -654,6 +700,10 @@ public class CLaws
     
     public boolean checkDistributeLaw(String cou, double amount) throws Exception
     {
+        // Check cou
+        if (!UTILS.BASIC.isCountry(cou))
+           throw new Exception("Invalid country, CLaws.java, 608");
+        
         // State budget
         double budget=UTILS.BASIC.getBudget(cou, "CRC");
                                   
@@ -667,14 +717,15 @@ public class CLaws
     
     public boolean checkStartWarLaw(String cou, 
                                     String defender, 
-                                    String target) throws Exception
+                                    String target,
+                                    long block) throws Exception
     {
         // Check countries
-        if (!UTILS.BASIC.isCou(defender))
+        if (!UTILS.BASIC.isCountry(defender))
             throw new Exception("Invalid country, CNewLawPayload.java, 307");
                                   
         // Check countries
-        if (!UTILS.BASIC.isCou(target))
+        if (!UTILS.BASIC.isCountry(target))
             throw new Exception("Invalid country, CNewLawPayload.java, 307");
                                   
         // Attack itself ?
@@ -684,16 +735,26 @@ public class CLaws
         // Load attacked country data
         ResultSet rs=UTILS.DB.executeQuery("SELECT * "
                                            + "FROM countries "
-                                          + "WHERE code='"+defender+"'");
+                                          + "WHERE code='"+target+"'");
         
         // Next
         rs.next();
+        
+        // Occupied
+        String occupied=rs.getString("occupied");
                                   
-        // Is occupied by attacked country or is a free country ?
-        if (!rs.getString("occupied").equals(defender) && 
-            !rs.getString("occupied").equals(rs.getString("code")))
-        throw new Exception("Invalid country, CNewLawPayload.java, 307");
-                                  
+        // Free country ?
+        if (defender.equals(target))
+        {
+           if (!occupied.equals(target))
+             throw new Exception("Invalid country, CNewLawPayload.java, 307");
+        }
+        else
+        {
+            if (!occupied.equals(defender))
+               throw new Exception("Invalid country, CNewLawPayload.java, 307");
+        }
+        
         // Already a pending war ?
         rs=UTILS.DB.executeQuery("SELECT * "
                                  + "FROM wars "
@@ -703,6 +764,13 @@ public class CLaws
         // Has data ?
         if (UTILS.DB.hasData(rs))
            throw new Exception("Defender already under attack, CNewLawPayload.java, 307");
+        
+        // Another war in the last 10 days ?
+        rs=UTILS.DB.executeQuery("SELECT * "
+                                 + "FROM wars "
+                                + "WHERE attacker='"+cou+"' "
+                                  + "AND target='"+target+"' "
+                                  + "AND block>'"+block+"'");
                                   
         // State budget
         double budget=UTILS.BASIC.getBudget(cou, "CRC");
@@ -717,6 +785,10 @@ public class CLaws
     
     public boolean ownsWeapon(String cou, long wID) throws Exception
     {
+        // Check countries
+        if (!UTILS.BASIC.isCountry(cou))
+            throw new Exception("Invalid country, CNewLawPayload.java, 307");
+        
         // Country address
         String cou_adr=UTILS.BASIC.getCouAdr(cou);
         
@@ -748,6 +820,23 @@ public class CLaws
                               String loc_type, 
                               String locID) throws Exception
     {
+        // Check countries
+        if (!UTILS.BASIC.isCountry(cou))
+            throw new Exception("Invalid country, CNewLawPayload.java, 824");
+        
+        // Check type
+        if (!UTILS.BASIC.isStringID(type))
+            throw new Exception("Invalid country, CNewLawPayload.java, 828");
+        
+        // Check countries
+        if (!UTILS.BASIC.isStringID(loc_type))
+            throw new Exception("Invalid loc type, CNewLawPayload.java, 832");
+        
+        // Check loc ID
+        if (!UTILS.BASIC.isCountry(locID))
+            if (!UTILS.BASIC.isLong(locID))
+                throw new Exception("Invalid loc ID, CNewLawPayload.java, 837");
+        
         ResultSet rs=UTILS.DB.executeQuery("SELECT SUM(qty) AS total "
                                            + "FROM stocuri "
                                           + "WHERE cou='"+cou+"' "
@@ -767,6 +856,19 @@ public class CLaws
                                  String target_type, 
                                  String targetID) throws Exception
     {
+        // Check countries
+        if (!UTILS.BASIC.isCountry(cou))
+            throw new Exception("Invalid country, CNewLawPayload.java, 307");
+        
+         // Check countries
+        if (!UTILS.BASIC.isStringID(target_type))
+            throw new Exception("Invalid loc type, CNewLawPayload.java, 832");
+        
+        // Check loc ID
+        if (!UTILS.BASIC.isCountry(targetID))
+            if (!UTILS.BASIC.isLong(targetID))
+                throw new Exception("Invalid target ID, CNewLawPayload.java, 837");
+        
         // Can move
         boolean allow=true;
         
@@ -908,8 +1010,23 @@ public class CLaws
         return allow;
     }
     
-    public boolean checkTarget(String cou, String target_type, String targetID) throws Exception
+    public boolean checkTarget(String cou, 
+                               String target_type, 
+                               String targetID) throws Exception
     {
+        // Check countries
+        if (!UTILS.BASIC.isCountry(cou))
+            throw new Exception("Invalid country, CNewLawPayload.java, 307");
+        
+         // Check countries
+        if (!UTILS.BASIC.isStringID(target_type))
+            throw new Exception("Invalid loc type, CNewLawPayload.java, 832");
+        
+        // Check loc ID
+        if (!UTILS.BASIC.isCountry(targetID))
+            if (!UTILS.BASIC.isLong(targetID))
+                throw new Exception("Invalid target ID, CNewLawPayload.java, 837");
+        
         // Check target type
         if (!target_type.equals("ID_LAND") && 
             !target_type.equals("ID_SEA") && 
@@ -964,6 +1081,19 @@ public class CLaws
                                        String target_type, 
                                        String targetID) throws Exception
     {
+        // Check countries
+        if (!UTILS.BASIC.isCountry(cou))
+            throw new Exception("Invalid country, CNewLawPayload.java, 307");
+        
+         // Check countries
+        if (!UTILS.BASIC.isStringID(target_type))
+            throw new Exception("Invalid loc type, CNewLawPayload.java, 832");
+        
+        // Check loc ID
+        if (!UTILS.BASIC.isCountry(targetID))
+            if (!UTILS.BASIC.isLong(targetID))
+                throw new Exception("Invalid target ID, CNewLawPayload.java, 837");
+        
         // Cost
         double cost=0;
         
@@ -978,7 +1108,7 @@ public class CLaws
         for (int a=0; a<=weapons.size()-1; a++)
         {
             // Weapon ID
-            long wID=Long.parseLong(weapons.get(a));
+            long wID=Long.parseLong(weapons.get(a).trim());
             
             // Owns weapon ?
             if (!this.ownsWeapon(cou, wID))
@@ -1017,6 +1147,10 @@ public class CLaws
                                   String par_2, 
                                   String par_3) throws Exception
     {
+        // Check countries
+        if (!UTILS.BASIC.isCountry(cou))
+            throw new Exception("Invalid country, CNewLawPayload.java, 307");
+       
         // Parameters
         String list=par_1;
         long warID=Long.parseLong(par_2);
@@ -1055,7 +1189,7 @@ public class CLaws
         for (int a=0; a<=weapons.size()-1; a++)
         {
             // Weapon ID
-            long wID=Long.parseLong(weapons.get(a));
+            long wID=Long.parseLong(weapons.get(a).trim());
             
             // Owns weapon ?
             if (!this.ownsWeapon(cou, wID))
@@ -1097,8 +1231,14 @@ public class CLaws
         return true;
     }
     
-    public boolean checkBuyLaw(String cou, String par_1, String par_2) throws Exception
+    public boolean checkBuyLaw(String cou, 
+                               String par_1, 
+                               String par_2) throws Exception
     {
+        // Check countries
+        if (!UTILS.BASIC.isCountry(cou))
+            throw new Exception("Invalid country, CNewLawPayload.java, 1240");
+        
         // Convert parameters
         long offerID=Long.parseLong(par_1);
         long qty=Long.parseLong(par_2);
@@ -1108,7 +1248,8 @@ public class CLaws
                                            + "FROM assets_mkts_pos AS amp "
                                            + "JOIN assets_mkts AS am ON am.mktID=amp.mktID "
                                           + "WHERE amp.orderID='"+offerID+"' "
-                                            + "AND amp.qty>=1");
+                                            + "AND amp.qty>=1 "
+                                            + "AND amp.tip='ID_SELL'");
         
         // Has data ?
         if (!UTILS.DB.hasData(rs))

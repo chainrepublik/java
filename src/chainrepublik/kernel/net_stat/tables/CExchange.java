@@ -36,7 +36,7 @@ public class CExchange extends CTable
                                                        +"block BIGINT NOT NULL DEFAULT 0)");
             
             // Indexes
-            UTILS.DB.executeUpdate("CREATE INDEX exchange_extID ON exchange(extID)");
+            UTILS.DB.executeUpdate("CREATE INDEX exchange_extID ON exchange(exID)");
             UTILS.DB.executeUpdate("CREATE INDEX exchange_adr ON exchange(adr)");
             UTILS.DB.executeUpdate("CREATE INDEX exchange_method ON exchange(method)");
             UTILS.DB.executeUpdate("CREATE INDEX exchange_block ON exchange(block)");  

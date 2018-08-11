@@ -34,6 +34,10 @@ public class CCloseRegMarketPosPayload  extends CPayload
         
          // Check energy
          this.checkEnergy();
+         
+         // Citizen address ?
+        if (!UTILS.BASIC.isCitAdr(this.target_adr, this.block))
+           throw new Exception("Only citizens can do this action - CWorkPayload.java, 68");
            
         // Load position details
         ResultSet rs_pos=UTILS.DB.executeQuery("SELECT amp.*, "
@@ -58,40 +62,50 @@ public class CCloseRegMarketPosPayload  extends CPayload
            
         // Ownership
         if (!this.target_adr.equals(rs_pos.getString("adr")))
-           throw new Exception("Invalid owner - CCloseRegMarketPosPayload.java");
-           
+        {
+            // Is company address ?
+            if (!UTILS.BASIC.isCompanyAdr(rs_pos.getString("adr")))
+               throw new Exception("Invalid owner - CCloseRegMarketPosPayload.java");
+            
+            // Company address
+            ResultSet rs_com=UTILS.DB.executeQuery("SELECT * "
+                                                   + "FROM companies "
+                                                  + "WHERE adr='"+rs_pos.getString("adr")+"'");
+            
+            // Load data
+            rs_com.next();
+            
+            // Owner ?
+            if (!rs_com.getString("owner").equals(this.target_adr))
+                throw new Exception("Invalid owner - CCloseRegMarketPosPayload.java");
+        }
+        
         if (rs_pos.getString("tip").equals("ID_SELL"))
-        {
-              // Insert coins
-              UTILS.ACC.newTrans(this.target_adr, 
-                                   "none",
-                                   rs_pos.getDouble("qty"), 
-                                   asset_symbol, 
-                                   "", 
-                                   "", 
-                                   rs_pos.getDouble("cost"),
-                                   hash, 
-                                   this.block,
-                                   false,
-                                   "",
-                                   "");
-        }
+            UTILS.ACC.newTrans(rs_pos.getString("adr"), 
+                                "none",
+                                rs_pos.getDouble("qty"), 
+                                asset_symbol, 
+                                "", 
+                                "", 
+                                rs_pos.getDouble("cost"),
+                                hash, 
+                                this.block,
+                                false,
+                                "",
+                                "");
         else
-        {
-            // Insert assets
-            UTILS.ACC.newTrans(this.target_adr, 
-                                   "none",
-                                   rs_pos.getDouble("qty")*rs_pos.getDouble("price"),
-                                   cur_symbol, 
-                                   "", 
-                                   "", 
-                                   0,
-                                   hash, 
-                                   this.block,
-                                   false,
-                                   "",
-                                   "");
-        }
+            UTILS.ACC.newTrans(rs_pos.getString("adr"), 
+                               "none",
+                               rs_pos.getDouble("qty")*rs_pos.getDouble("price"),
+                               cur_symbol, 
+                               "", 
+                               "", 
+                               0,
+                               hash, 
+                               this.block,
+                               false,
+                               "",
+                               "");
            
         // Hash
         String h=UTILS.BASIC.hash(this.getHash()+

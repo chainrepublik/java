@@ -60,12 +60,19 @@ public class CRentLicencePayload extends CPayload
    	// Super class
    	super.check(block);
         
+        // Energy
+        this.checkEnergy();
+        
+        // Citizen address ?
+        if (!UTILS.BASIC.isCitAdr(this.target_adr, this.block))
+           throw new Exception("Only citizens can do this action - CWorkPayload.java, 68");
+        
         // Company address
         String com_adr=UTILS.BASIC.getComAdr(this.comID);
         
         // Company address
         if (!UTILS.BASIC.isComOwner(this.target_adr, comID))
-           throw new Exception("Invalid company ID, CRentLicencePayload.java, 53");
+           throw new Exception("Address is not company owner, CRentLicencePayload.java, 53");
         
         // Licence
         if (!UTILS.BASIC.isStringID(this.lic))
@@ -73,12 +80,16 @@ public class CRentLicencePayload extends CPayload
         
         // Already has this licence ?
         if (UTILS.BASIC.hasProd(com_adr, this.lic))
-            throw new Exception("Company has this product already, CRentLicencePayload.java, 63");
+            throw new Exception("Company has this licence already, CRentLicencePayload.java, 63");
         
         // Valid ID
         if (UTILS.BASIC.isID(this.prod_stocID) || 
             UTILS.BASIC.isID(this.lic_stocID))
            throw new Exception("Invalid stoc ID, CRentLicencePayload.java, 72");
+        
+        // Days
+        if (days<30)
+            throw new Exception("Invalid days, CRentLicencePayload.java, 67");
         
         // Company type
         ResultSet rs=UTILS.DB.executeQuery("SELECT * "
@@ -94,15 +105,25 @@ public class CRentLicencePayload extends CPayload
         rs.next();
         
         // Price
-        double price=rs.getDouble("price")*days;
-        
-        // Days
-        if (days<30)
-            throw new Exception("Invalid days, CRentLicencePayload.java, 67");
+        double price=UTILS.CONST.lic_price*days;
         
         // Funds ?
         if (UTILS.ACC.getBalance(com_adr, "CRC", block)<price)
             throw new Exception("Insuficient funds, CRentLicencePayload.java, 77");
+        
+         // Take money
+        UTILS.ACC.newTransfer(com_adr, 
+                              "default", 
+                              price, 
+                              "CRC", 
+                              "You rented a licence for "+days+" days", 
+                              "", 
+                              0,
+                              this.hash, 
+                              this.block,
+                              false,
+                              "",
+                              "");
         
         // Hash
         String h=UTILS.BASIC.hash(this.getHash()+
@@ -116,19 +137,7 @@ public class CRentLicencePayload extends CPayload
         if (!h.equals(this.hash))
             throw new Exception("Invalid hash, CRentLicencePayload.java, 77");
         
-        // Take money
-        UTILS.ACC.newTransfer(com_adr, 
-                              "default", 
-                              price, 
-                              "CRC", 
-                              "You rented a licence for "+days+" days", 
-                              "", 
-                              0,
-                              this.hash, 
-                              this.block,
-                              false,
-                              "",
-                              "");
+       
    }
     
     public void commit(CBlockPayload block) throws Exception

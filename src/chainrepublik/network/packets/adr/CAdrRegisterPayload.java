@@ -185,7 +185,8 @@ public class CAdrRegisterPayload extends CPayload
    	    	                   + "pic='"+UTILS.BASIC.base64_encode(this.pic)+"', "
                                    + "expires='"+(this.block+this.days*1440)+"', "
                                    + "block='"+this.block+"', "
-      	                           + "created='"+this.block+"'");
+      	                           + "created='"+this.block+"' "
+                             + "WHERE adr='"+this.target_adr+"'");
     }
   
 }

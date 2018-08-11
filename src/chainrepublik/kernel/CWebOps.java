@@ -70,7 +70,9 @@ public class CWebOps
                        !op.equals("ID_NEW_ADR") &&
                        !op.equals("ID_ADD_PEER") &&
                        !op.equals("ID_REMOVE_PEER") &&
-                       !op.equals("ID_CHANGE_NODE_ADR"))
+                       !op.equals("ID_CHANGE_NODE_ADR") &&
+                       !op.equals("ID_NEW_REGULAR_MKT_POS") &&
+                       !op.equals("ID_UPDATE_COMPANY"))
                    {
                        // User valid ?
                        ResultSet rs_user=UTILS.DB.executeQuery("SELECT * "
@@ -219,17 +221,17 @@ public class CWebOps
                         
                    }
                    
-                   if (op.equals("ID_ADR_REGISTER_PACKET"))
+                   if (op.equals("ID_REGISTER_ADR"))
                    {
                         packet=new CAdrRegisterPacket(rs.getString("fee_adr"),
-                                                                        rs.getString("target_adr"),
-		                                                        rs.getString("par_1"), 
-		                                                        UTILS.BASIC.base64_decode(rs.getString("par_2")),
-                                                                        UTILS.BASIC.base64_decode(rs.getString("par_3")), 
-                                                                        rs.getString("par_4"),
-                                                                        rs.getString("par_5"), 
-                                                                        rs.getString("par_6"),
-                                                                        rs.getLong("days"));
+                                                      rs.getString("target_adr"),
+		                                      rs.getString("par_1"), 
+		                                      rs.getString("par_2"),
+                                                      rs.getString("par_3"), 
+                                                      rs.getString("par_4"),
+                                                      rs.getString("par_5"), 
+                                                      rs.getString("par_6"),
+                                                      rs.getLong("days"));
                     
                        
                    }
@@ -561,13 +563,13 @@ public class CWebOps
                    if (op.equals("ID_NEW_REGULAR_ASSET_MARKET"))
                    {
                         packet=new CNewRegMarketPacket(rs.getString("fee_adr"), 
-                                                                          rs.getString("target_adr"),
-                                                                          rs.getString("par_1"),
-                                                                          rs.getString("par_2"), 
-                                                                          rs.getString("par_3"),
-                                                                          rs.getString("par_4"), 
-                                                                          rs.getLong("par_5"),
-                                                                          rs.getLong("days"));
+                                                       rs.getString("target_adr"),
+                                                       rs.getString("par_1"),
+                                                       rs.getString("par_2"), 
+                                                       rs.getString("par_3"),
+                                                       rs.getString("par_4"), 
+                                                       rs.getLong("par_5"),
+                                                       rs.getLong("days"));
                        
                        
                    }
@@ -586,17 +588,16 @@ public class CWebOps
                    
                    // New regular asset market
                    if (op.equals("ID_NEW_REGULAR_MKT_POS"))
-                   {
                         packet=new CNewRegMarketPosPacket(rs.getString("fee_adr"), 
-                                                                                rs.getString("target_adr"),
-                                                                                rs.getLong("par_1"), 
-                                                                                rs.getString("par_2"),
-                                                                                rs.getDouble("par_3"),
-                                                                                rs.getDouble("par_4"),
-                                                                                rs.getLong("days"));
+                                                          rs.getString("target_adr"),
+                                                          rs.getLong("par_1"), 
+                                                          rs.getString("par_2"),
+                                                          rs.getDouble("par_3"),
+                                                          rs.getDouble("par_4"),
+                                                          rs.getLong("days"));
                        
                        
-                   }
+                   
                    
                    // Rent workplace
                    if (op.equals("ID_RENT_WORKPLACE"))
@@ -637,21 +638,18 @@ public class CWebOps
                    }
                    
                    if (op.equals("ID_NEW_TWEET"))
-                   {
                          packet=new CNewArticlePacket(rs.getString("fee_adr"), 
-                                                                   rs.getString("target_adr"),
-                                                                   UTILS.BASIC.base64_decode(rs.getString("par_1")), 
-		                                                   UTILS.BASIC.base64_decode(rs.getString("par_2")), 
-                                                                   rs.getString("par_3"),
-                                                                   rs.getString("par_4"),
-                                                                   UTILS.BASIC.base64_decode(rs.getString("par_6")),
-                                                                   rs.getLong("par_7"),
-                                                                   rs.getLong("par_8"),
-                                                                   rs.getLong("days"));
+                                                      rs.getString("target_adr"),
+                                                      rs.getString("par_1"), 
+		                                      rs.getString("par_2"), 
+                                                      rs.getString("par_3"),
+                                                      rs.getString("par_4"),
+                                                      rs.getString("par_5"),
+                                                      rs.getLong("par_6"),
+                                                      rs.getLong("par_7"),
+                                                      rs.getLong("days"));
                        
                         
-                   }
-                   
                    
                    // New tweet
                    if (op.equals("ID_NEW_COMMENT"))

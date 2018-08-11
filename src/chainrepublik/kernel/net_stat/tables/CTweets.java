@@ -40,7 +40,6 @@ public class CTweets extends CTable
              
             UTILS.DB.executeUpdate("CREATE UNIQUE INDEX tweets_tweetID ON tweets(tweetID)");
             UTILS.DB.executeUpdate("CREATE INDEX tweets_adr ON tweets(adr)");
-            UTILS.DB.executeUpdate("CREATE INDEX tweets_retweet_tweet_ID ON tweets(retweet_tweet_ID)");
             UTILS.DB.executeUpdate("CREATE INDEX tweets_expires ON tweets(expires)");
             
             // Confirm

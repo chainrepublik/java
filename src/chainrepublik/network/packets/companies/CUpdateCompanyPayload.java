@@ -57,12 +57,19 @@ public class CUpdateCompanyPayload extends CPayload
    	// Super class
    	super.check(block);
         
+        // Energy
+        this.checkEnergy();
+        
          // Company address
         String com_adr=UTILS.BASIC.getComAdr(this.comID);
         
+        // Citizen address ?
+        if (!UTILS.BASIC.isCitAdr(this.target_adr, this.block))
+           throw new Exception("Only citizens can do this action - CWorkPayload.java, 68");
+        
         // Company owner ?
         if (!UTILS.BASIC.isComOwner(this.target_adr, comID))
-             throw new Exception("Invalid company ID, CUpdateCompanyPayload.java, 74");
+             throw new Exception("Address is not company owner, CUpdateCompanyPayload.java, 74");
         
         // Name
         if (!UTILS.BASIC.isTitle(this.name))
@@ -104,6 +111,9 @@ public class CUpdateCompanyPayload extends CPayload
        UTILS.DB.executeUpdate("UPDATE adr "
                                + "SET pic='"+UTILS.BASIC.base64_encode(this.pic)+"' "
                              + "WHERE adr='"+UTILS.BASIC.getComAdr(this.comID)+"'");
+       
+       // Clear transations
+       UTILS.ACC.clearTrans(this.hash, "ID_ALL", this.block);
     }
     
 }

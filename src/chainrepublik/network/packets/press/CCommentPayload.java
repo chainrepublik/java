@@ -63,6 +63,10 @@ public class CCommentPayload extends CPayload
       
        // Check energy
        this.checkEnergy(1);
+       
+       // Citizen address ?
+        if (!UTILS.BASIC.isCitAdr(this.target_adr, this.block))
+           throw new Exception("Only citizens can do this action - CWorkPayload.java, 68");
       
       // ID
       if (UTILS.BASIC.isID(comID))

@@ -30,19 +30,16 @@ public class CUseItemPayload extends CPayload
    	// Super class
    	super.check(block);
         
-        // Registered
-        if (!UTILS.BASIC.isRegistered(this.target_adr, this.block))
-            throw new Exception("Target address is not registered, CRentPayload.java, 102");
-        
-        // Item ID
-        if (!UTILS.BASIC.isID(itemID))
-            throw new Exception("Invalid itemID, CUseItemPayload.java, 102");
+        // Citizen ?
+        if (!UTILS.BASIC.isCitAdr(this.target_adr, this.block))
+           throw new Exception("Target address is not a citizen, CRentPayload.java, 102");
         
         // Load itemID data
         ResultSet rs=UTILS.DB.executeQuery("SELECT * "
                                            + "FROM stocuri "
                                           + "WHERE stocID='"+this.itemID+"' "
-                                            + "AND (adr='"+this.target_adr+"' OR rented_to='"+this.target_adr+"') "
+                                            + "AND (adr='"+this.target_adr+"' "
+                                                 + "OR rented_to='"+this.target_adr+"') "
                                             + "AND qty=1");
         
         // Has data ?
@@ -52,9 +49,9 @@ public class CUseItemPayload extends CPayload
         // Next
         rs.next();
         
-        // Already rented ?
-        if (!rs.getString("rented_to").equals("") && 
-            !rs.getString("rented_to").equals(this.target_adr))
+        // Targte address owner ? ?
+        if (rs.getString("adr").equals(this.target_adr) && 
+            !rs.getString("rented_to").equals(""))
             throw new Exception("This item is rented, CUseItemPayload.java, 102");
         
         // Item can be used ?

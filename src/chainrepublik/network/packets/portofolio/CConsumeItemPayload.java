@@ -30,20 +30,20 @@ public class CConsumeItemPayload extends CPayload
    	// Super class
    	super.check(block);
         
+        // Citizen ?
+        if (!UTILS.BASIC.isCitAdr(this.target_adr, this.block))
+           throw new Exception("Target address is not a citizen, CRentPayload.java, 102");
+        
         // Registered
         if (!UTILS.BASIC.isRegistered(this.target_adr, this.block))
             throw new Exception("Target address is not registered, CRentPayload.java, 102");
-        
-        // Item ID
-        if (!UTILS.BASIC.isID(itemID))
-            throw new Exception("Invalid itemID, CConsumeItemPayload.java, 102");
         
         // Load itemID data
         ResultSet rs=UTILS.DB.executeQuery("SELECT * "
                                            + "FROM stocuri "
                                           + "WHERE stocID='"+this.itemID+"' "
                                             + "AND adr='"+this.target_adr+"' "
-                                            + "AND qty>=1");
+                                            + "AND qty=1");
         
         // Has data ?
         if (!UTILS.DB.hasData(rs))
@@ -106,5 +106,11 @@ public class CConsumeItemPayload extends CPayload
          // Set item as rented
          UTILS.DB.executeUpdate("DELETE FROM stocuri "
                                      + "WHERE stocID='"+this.itemID+"'");
+         
+         // More than 100 energy ?
+         UTILS.DB.executeUpdate("UPDATE adr "
+                                 + "SET energy=100 "
+                               + "WHERE adr='"+this.target_adr+"' "
+                                 + "AND energy>100");
     }
 }

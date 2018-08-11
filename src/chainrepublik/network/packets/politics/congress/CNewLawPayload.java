@@ -77,6 +77,10 @@ public class CNewLawPayload extends CPayload
          // Check energy
        this.checkEnergy();
        
+       // Citizen address ?
+        if (!UTILS.BASIC.isCitAdr(this.target_adr, this.block))
+           throw new Exception("Only citizens can do this action - CWorkPayload.java, 68");
+       
         // ID
         if (UTILS.BASIC.isID(lawID))
             throw new Exception("This ID already exist, CNewLawPayload.java, 102");
@@ -87,11 +91,28 @@ public class CNewLawPayload extends CPayload
         // Is governor ?
         if (!UTILS.BASIC.isCountryOwner(this.target_adr, cou))
         {
+            // Political endorsement
+            if (Long.parseLong(UTILS.BASIC.getAdrData(this.target_adr, "pol_endorsed"))<100)
+               throw new Exception("Minimum political endorsement is 100, CNewLawPayload.java, 102");
+                
+            // Governor ?
             if (!UTILS.BASIC.isGovernor(this.target_adr, cou))
                throw new Exception("Address is not a governor, CNewLawPayload.java, 102");
             
+            // Congress is active
             if (!UTILS.BASIC.isCongressActive(cou))
                throw new Exception("Congress is not active, CNewLawPayload.java, 102");
+            
+            // Rejected law in the last 5 days ?
+            ResultSet rs=UTILS.DB.executeQuery("SELECT * "
+                                               + "FROM laws "
+                                              + "WHERE adr='"+this.target_adr+"' "
+                                                + "AND status='ID_REJECTED' "
+                                                + "AND block>"+(this.block-7200));
+            
+            // Has data
+            if (UTILS.DB.hasData(rs))
+               throw new Exception("Rejected law found, CNewLawPayload.java, 102");
         }
         
         // Law type
@@ -117,6 +138,11 @@ public class CNewLawPayload extends CPayload
         // Has data
         if (UTILS.DB.hasData(rs))
             throw new Exception("You already have a pending law, CNewLawPayload.java, 102");
+        
+        // Explanations
+        if (!UTILS.BASIC.isDesc(this.expl) || 
+            this.expl.length()>1000)
+        throw new Exception("Invalid explanation, CNewLawPayload.java, 102");
         
         // Check new val against law type
         switch (this.law_type)
@@ -175,7 +201,10 @@ public class CNewLawPayload extends CPayload
             
             // Start war
             case "ID_START_WAR" : // Check
-                                  if (!UTILS.LAWS.checkStartWarLaw(cou, this.par_1, this.par_2))
+                                  if (!UTILS.LAWS.checkStartWarLaw(cou, 
+                                                                   this.par_1, 
+                                                                   this.par_2, 
+                                                                   this.block))
                                       throw new Exception("Check failed, CNewLawPayload.java, 102"); 
                                   
                                   break;

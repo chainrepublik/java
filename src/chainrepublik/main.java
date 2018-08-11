@@ -6,6 +6,23 @@ import chainrepublik.kernel.temp.CDump;
 import chainrepublik.kernel.temp.CStressTest;
 import chainrepublik.network.CCurBlock;
 import chainrepublik.network.CNetwork;
+import chainrepublik.network.packets.assets.reg_mkts.CCloseRegMarketPosPacket;
+import chainrepublik.network.packets.companies.CNewCompanyPacket;
+import chainrepublik.network.packets.companies.CNewWorkplacePacket;
+import chainrepublik.network.packets.companies.CUpdateCompanyPacket;
+import chainrepublik.network.packets.companies.CUpdateWorkplacePacket;
+import chainrepublik.network.packets.companies.CWorkPacket;
+import chainrepublik.network.packets.companies.CWthFundsPacket;
+import chainrepublik.network.packets.politics.congress.CEndorsePacket;
+import chainrepublik.network.packets.politics.congress.CNewLawPacket;
+import chainrepublik.network.packets.politics.congress.CVoteLawPacket;
+import chainrepublik.network.packets.politics.orgs.CJoinOrgPacket;
+import chainrepublik.network.packets.politics.orgs.CLeaveOrgPacket;
+import chainrepublik.network.packets.politics.orgs.CNewOrgPropPacket;
+import chainrepublik.network.packets.portofolio.CConsumeItemPacket;
+import chainrepublik.network.packets.portofolio.CDonateItemPacket;
+import chainrepublik.network.packets.portofolio.CSetRentPricePacket;
+import chainrepublik.network.packets.portofolio.CUseItemPacket;
 import chainrepublik.network.packets.press.*;
 import java.security.Security;
 import java.sql.ResultSet;
@@ -35,6 +52,7 @@ public class main
         // Utils
         CUtils utils=new CUtils();
         UTILS.BASIC=utils;
+      
         
         // Accounting
         CAcc acc=new CAcc();
@@ -54,6 +72,7 @@ public class main
         CDump dump=new CDump();
         //dump.polParties("LT", 10);
         //dump.dumpSeas();
+        
        
         UTILS.MINER_UTILS=new CCPUMinerUtils();
         
@@ -108,12 +127,18 @@ public class main
         else
             UTILS.SYNC.start();
         
-        
-        
         System.out.println("Wallet is up an running...");
         
-        UTILS.CBLOCK.startMiners(2);
+       UTILS.CBLOCK.startMiners(1);
        
+        /*CNewLawPacket packet=new CNewLawPacket("MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAENQYiiWVz9Qpn4/GKCqWXmtvmpTA0BGJyiuoRirsDNf7KGIP3rYxDrZ85ieW905o/IDIW0ZLi3GMpisYhGVvV+w==",
+                                               "MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAENQYiiWVz9Qpn4/GKCqWXmtvmpTA0BGJyiuoRirsDNf7KGIP3rYxDrZ85ieW905o/IDIW0ZLi3GMpisYhGVvV+w==", 
+                                               "ID_BUY_WEAPONS", 
+                                               "1532422445814",
+                                               "1",
+                                               "",
+                                               "Trebe taxe ma...");
+        UTILS.NETWORK.broadcast(packet);*/
     }
     
     

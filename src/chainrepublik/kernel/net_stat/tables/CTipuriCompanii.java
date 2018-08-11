@@ -66,7 +66,7 @@ public class CTipuriCompanii extends CTable
         UTILS.DB.executeUpdate("INSERT INTO tipuri_companii SET tip='ID_COM_JEWELRY', name='Jewelry', cladire='ID_BUILD_COM_JEWELRY', utilaje='ID_TOOLS_PROD_JEWELRY', pic='ID_INEL' ");
         UTILS.DB.executeUpdate("INSERT INTO tipuri_companii SET tip='ID_COM_SAND', name='Sand Company', cladire='ID_BUILD_COM_SAND', utilaje='ID_TOOLS_PROD_SAND', pic='ID_SAND' ");
         UTILS.DB.executeUpdate("INSERT INTO tipuri_companii SET tip='ID_COM_GLASS', name='Glass Production Company', cladire='ID_BUILD_COM_GLASS', utilaje='ID_TOOLS_PROD_GLASS', pic='ID_GLASS' ");
-        UTILS.DB.executeUpdate("INSERT INTO tipuri_companii SET tip='ID_COM_PLASTICS', name='Plastic Production cCompany', cladire='ID_BUILD_COM_PLASTIC', utilaje='ID_TOOLS_PROD_PLASTIC', pic='ID_PLASTIC' ");
+        UTILS.DB.executeUpdate("INSERT INTO tipuri_companii SET tip='ID_COM_PLASTICS', name='Plastic Production Company', cladire='ID_BUILD_COM_PLASTIC', utilaje='ID_TOOLS_PROD_PLASTIC', pic='ID_PLASTIC' ");
         UTILS.DB.executeUpdate("INSERT INTO tipuri_companii SET tip='ID_COM_CLAY', name='Claypit', cladire='ID_BUILD_COM_CLAY', utilaje='ID_TOOLS_PROD_CLAY', pic='ID_CLAY' ");
         UTILS.DB.executeUpdate("INSERT INTO tipuri_companii SET tip='ID_COM_BRICKS', name='Bricks Production Company', cladire='ID_BUILD_COM_BRICKS', utilaje='ID_TOOLS_PROD_BRICKS', pic='ID_BRICKS' ");
         UTILS.DB.executeUpdate("INSERT INTO tipuri_companii SET tip='ID_COM_CEMENT', name='Cement Production Company', cladire='ID_BUILD_COM_CEMENT', utilaje='ID_TOOLS_PROD_CEMENT', pic='ID_CEMENT' ");
@@ -76,10 +76,10 @@ public class CTipuriCompanii extends CTable
         UTILS.DB.executeUpdate("INSERT INTO tipuri_companii SET tip='ID_COM_BOTTLES', name='Bottles Company', cladire='ID_BUILD_COM_BOTTLES', utilaje='ID_TOOLS_PROD_BOTTLES', pic='ID_BOTTLE' ");
         UTILS.DB.executeUpdate("INSERT INTO tipuri_companii SET tip='ID_COM_WINE', name='Winery', cladire='ID_BUILD_COM_WINE', utilaje='ID_TOOLS_PROD_WINE', pic='ID_WINE' ");
         UTILS.DB.executeUpdate("INSERT INTO tipuri_companii SET tip='ID_COM_TRAVEL_TICKETS', name='Travel Tickets', cladire='ID_BUILD_COM_TRAVEL_TICKETS', utilaje='ID_TOOLS_PROD_TRAVEL_TICKETS', pic='ID_TRAVEL_TICKET' ");
-        UTILS.DB.executeUpdate("INSERT INTO tipuri_companii SET tip='ID_COM_SMALL_WEAPONS', name='Small Weapons Company', cladire='ID_BUILD_COM_SMALL_WEAPONS', utilaje='ID_TOOLS_PROD_SMALL_WEAPONS', pic='ID_SMALL_WEAPON' ");
+        UTILS.DB.executeUpdate("INSERT INTO tipuri_companii SET tip='ID_COM_SMALL_WEAPONS', name='Small Weapons Company', cladire='ID_BUILD_COM_SMALL_WEAPONS', utilaje='ID_TOOLS_PROD_SMALL_WEAPONS', pic='ID_PISTOL' ");
         UTILS.DB.executeUpdate("INSERT INTO tipuri_companii SET tip='ID_COM_AUTONOMOUS', name='Autonomous Corporation', cladire='ID_BUILD_COM_AUTONOMOUS', utilaje='ID_TOOLS_PROD_AUTONOMOUS', pic='ID_CHIP' ");
         UTILS.DB.executeUpdate("INSERT INTO tipuri_companii SET tip='ID_COM_GIFT', name='Gifts Company', cladire='ID_BUILD_COM_GIFTS', utilaje='ID_TOOLS_PROD_GIFTS', pic='ID_GIFT' ");
         UTILS.DB.executeUpdate("INSERT INTO tipuri_companii SET tip='ID_COM_TOOLS', name='Tools Production Company', cladire='ID_BUILD_COM_TOOLS', utilaje='ID_TOOLS_PROD_TOOLS', pic='ID_TOOLS' ");
         UTILS.DB.executeUpdate("INSERT INTO tipuri_companii SET tip='ID_COM_HEAVY_WEAPONS', name='Heavy Weapons and Ammunition Company', cladire='ID_BUILD_COM_HEAVY_WEAPONS', utilaje='ID_TOOLS_PROD_HEAVY_WEAPONS', pic='ID_HEAVY_WEAPON' ");
-    }
+}
 }

@@ -45,12 +45,19 @@ public class CNewWorkplacePayload extends CPayload
    	// Super class
    	super.check(block);
         
+        // Energy
+        this.checkEnergy();
+        
         // Company addrews
         String com_adr=UTILS.BASIC.getComAdr(this.comID);
         
+        // Citizen address ?
+        if (!UTILS.BASIC.isCitAdr(this.target_adr, this.block))
+           throw new Exception("Only citizens can do this action - CWorkPayload.java, 68");
+        
         // Company address
         if (!UTILS.BASIC.isComOwner(this.target_adr, this.comID))
-           throw new Exception("Invalid company address, CNewWorkplacePayload.java, 52");
+           throw new Exception("Address is not company owner, CNewWorkplacePayload.java, 52");
         
         // Workplace ID
         if (UTILS.BASIC.isID(this.workID))
@@ -59,10 +66,6 @@ public class CNewWorkplacePayload extends CPayload
         // Days
         if (days<30)
             throw new Exception("Invalid days, CNewWorkplacePayload.java, 60");
-        
-        // Has funds ?
-        if (UTILS.ACC.getBalance(com_adr, "CRC", block)<UTILS.CONST.wp_price*this.days)
-            throw new Exception("Insuficient funds, CNewWorkplacePayload.java, 60");
         
         // Company owns a production licence ?
         ResultSet rs=UTILS.DB.executeQuery("SELECT * "
@@ -74,16 +77,9 @@ public class CNewWorkplacePayload extends CPayload
         if (!UTILS.DB.hasData(rs))
            throw new Exception("Company has no production licence active, CNewWorkplacePayload.java, 60");
         
-        
-        // Hash
-        String h=UTILS.BASIC.hash(this.getHash()+
- 			          this.comID+
- 			          this.workID+
- 			          this.days);
-        
-        // Hash match ?
-        if (!h.equals(this.hash))
-            throw new Exception("Invalid hash, CNewWorkplacePayload.java, 70");
+        // Has funds ?
+        if (UTILS.ACC.getBalance(com_adr, "CRC", block)<UTILS.CONST.wp_price*this.days)
+            throw new Exception("Insuficient funds, CNewWorkplacePayload.java, 60");
         
          // Take money
         UTILS.ACC.newTransfer(com_adr, 
@@ -98,6 +94,16 @@ public class CNewWorkplacePayload extends CPayload
                               false,
                               "",
                               "");
+        
+        // Hash
+        String h=UTILS.BASIC.hash(this.getHash()+
+ 			          this.comID+
+ 			          this.workID+
+ 			          this.days);
+        
+        // Hash match ?
+        if (!h.equals(this.hash))
+            throw new Exception("Invalid hash, CNewWorkplacePayload.java, 70");
    }
     
   

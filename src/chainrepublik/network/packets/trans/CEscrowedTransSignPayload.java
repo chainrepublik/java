@@ -127,22 +127,35 @@ public class CEscrowedTransSignPayload extends CPayload
                            false,
                            "",
                            "");
-                 
-        // Close
-        
     }
 	   
     public void commit(CBlockPayload block) throws Exception
     {
         // Check payload
         this.check(block);
+        
+        // Load escrowed data
+        ResultSet rs=UTILS.DB.executeQuery("SELECT * "
+                                           + "FROM escrowed "
+                                          + "WHERE trans_hash='"+this.trans_hash+"'");
+        
+        // Next
+        rs.next();
               
+        // Currency
+        String cur=rs.getString("cur");
+        
         // Delete transaction
         UTILS.DB.executeUpdate("DELETE FROM escrowed "
                                     + "WHERE trans_hash='"+this.trans_hash+"'");
         
         // Clear transactions
         UTILS.ACC.clearTrans(hash, "ID_ALL", this.block);
+        
+        // Release ?
+        if (this.type.equals("ID_RELEASE"))
+            if (cur.length()==5)
+               UTILS.BASIC.checkComOwner(cur, this.block);
     }
 }
 

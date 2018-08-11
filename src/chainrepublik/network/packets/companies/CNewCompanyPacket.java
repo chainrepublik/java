@@ -36,7 +36,7 @@ public class CNewCompanyPacket extends CBroadcastPacket
 	this.payload=UTILS.SERIAL.serialize(dec_payload);
 					
         // Network fee
-	this.setFee(days*UTILS.CONST.com_price, "Company incorporation network fee");
+	this.setFee(0.0001, "Company incorporation network fee");
 			   
 	// Sign packet
 	this.sign();
@@ -56,7 +56,7 @@ public class CNewCompanyPacket extends CBroadcastPacket
    	  CNewCompanyPayload dec_payload=(CNewCompanyPayload) UTILS.SERIAL.deserialize(payload);
           
           // Check fee
-	  if (this.fee<dec_payload.days*0.1)
+	  if (this.fee<0.0001)
 	      throw new Exception("Invalid fee - CNewCompanyPacket.java");
           
           // Check payload

@@ -38,8 +38,8 @@ public class CRewards
        // Political Endorsment Reward 5%
        this.generalReward("ID_POL_END");
        
-       // Military 10%
-       this.ranksReward();
+       // Political Endorsment Reward 10%
+       this.generalReward("ID_WAR_POINTS");
        
        // Refferers Reward 10%
        this.refReward();
@@ -140,6 +140,20 @@ public class CRewards
                                 
                                   // Break
                                   break;
+                                  
+            // Political endorsment
+            case "ID_WAR_POINTS" :   rs=UTILS.DB.executeQuery("SELECT SUM(war_points) AS total "
+                                                              + "FROM adr "
+                                                             + "WHERE war_points>=1");
+            
+                                  // Min to activate
+                                  min=1;
+                                  
+                                  // Column
+                                  col="war_points";
+                                
+                                  // Break
+                                  break;
         }
         
         // Total pool
@@ -184,135 +198,7 @@ public class CRewards
         
     }
     
-    public long getRankNo(long min, long max) throws Exception
-    {
-        
-        // Rank 1
-        ResultSet rs=UTILS.DB.executeQuery("SELECT COUNT(*) AS total "
-                                           + "FROM adr "
-                                          + "WHERE war_points>"+min
-                                            + " AND war_points<="+max);
-        
-        // Next
-        rs.next();
-        
-        // Rank 1
-        return rs.getLong("total");
-    }
-    
-    public void payMilReward(long min, 
-                             long max, 
-                             double amount) throws Exception
-    {
-        ResultSet rs=UTILS.DB.executeQuery("SELECT * "
-                                           + "FROM adr "
-                                          + "WHERE war_points>"+min+" "
-                                            + "AND war_points<="+max);
-        
-        while (rs.next())
-        this.payReward(rs.getString("adr"), 
-                                   "ID_ADR", 
-                                   0, 
-                                   "ID_MILITARY", 
-                                   amount, 
-                                   rs.getDouble("war_points"));
-    }
-    
-    // Military 10%
-    public void ranksReward() throws Exception
-    {
-        // Amounts
-        double r1=0;
-        double r2=0;
-        double r3=0;
-        double r4=0;
-        double r5=0;
-        double r6=0;
-        double r7=0;
-        double r8=0;
-        double r9=0;
-        double r10=0;
-        
-        // Ranks
-        long n1=this.getRankNo(1000, 3000);
-        long n2=this.getRankNo(3000, 6000);
-        long n3=this.getRankNo(6000, 10000);
-        long n4=this.getRankNo(10000, 15000);
-        long n5=this.getRankNo(15000, 21000);
-        long n6=this.getRankNo(21000, 28000);
-        long n7=this.getRankNo(28000, 36000);
-        long n8=this.getRankNo(36000, 45000);
-        long n9=this.getRankNo(45000, 55000);
-        long n10=this.getRankNo(55000, 100000);
-        
-        // Pool
-        long pool=UTILS.BASIC.getRewardPool("ID_MILITARY");
-        
-        // Rewards
-        if (n1>1)
-          r1=UTILS.BASIC.round(pool/10/n1, 4);
-       
-         if (n2>1)
-            r2=UTILS.BASIC.round(pool/10/n2, 4);
-         
-         if (n3>1)
-            r3=UTILS.BASIC.round(pool/10/n3, 4);
-         
-         if (n4>1)
-            r4=UTILS.BASIC.round(pool/10/n4, 4);
-         
-         if (n5>1)
-            r5=UTILS.BASIC.round(pool/10/n5, 4);
-         
-         if (n6>1)
-            r6=UTILS.BASIC.round(pool/10/n6, 4);
-         
-         if (n7>1)
-            r7=UTILS.BASIC.round(pool/10/n7, 4);
-         
-         if (n8>1)
-            r8=UTILS.BASIC.round(pool/10/n8, 4);
-         
-         if (n9>1)
-            r9=UTILS.BASIC.round(pool/10/n9, 4);
-         
-         if (n10>1)
-            r10=UTILS.BASIC.round(pool/10/n10, 4);
-        
-        // Payments
-        if (r1>10) 
-            this.payMilReward(1000, 3000, r1);
-        
-        if (r2>9) 
-            this.payMilReward(3000, 6000, r2);
-        
-        if (r3>8) 
-            this.payMilReward(6000, 10000, r3);
-        
-        if (r4>7) 
-            this.payMilReward(10000, 15000, r4);
-        
-        if (r5>6) 
-            this.payMilReward(15000, 21000, r5);
-        
-        if (r6>5) 
-            this.payMilReward(21000, 28000, r6);
-        
-        if (r7>4) 
-            this.payMilReward(28000, 36000, r7);
-        
-        if (r8>3) 
-            this.payMilReward(36000, 45000, r8);
-        
-        if (r9>2) 
-            this.payMilReward(45000, 55000, r9);
-        
-        if (r10>1) 
-            this.payMilReward(55000, 100000, r10);
-    }
-    
-    
-    // Refferers Reward 10%
+     // Refferers Reward 10%
     public void refReward() throws Exception
     {
         // Load all refs energy
@@ -325,6 +211,10 @@ public class CRewards
         
         // Total energy
         long t_energy=Math.round(rs.getDouble("total"));
+        
+        // Total ?
+        if (t_energy<1)
+            return;
         
         // Pool
         long pool=UTILS.BASIC.getRewardPool("ID_REFS");
@@ -384,6 +274,10 @@ public class CRewards
         
         // Total energy
         long t_energy=Math.round(rs.getDouble("total"));
+        
+        // Min energy ?
+        if (t_energy<100)
+            return;
         
         // Pool
         long pool=UTILS.BASIC.getRewardPool("ID_NODES");
@@ -478,6 +372,10 @@ public class CRewards
         // Total
         double total=rs.getDouble("total");
         
+        // Total
+        if (total<1)
+            return;
+        
         // Loop voters
         rs=UTILS.DB.executeQuery("SELECT * "
                                  + "FROM votes "
@@ -535,6 +433,10 @@ public class CRewards
         
         // Total votes
         long total_power=rs.getLong("total");
+        
+        // Total power
+        if (total_power<1)
+            return;
         
         // Load distinct articles
         rs=UTILS.DB.executeQuery("SELECT DISTINCT(targetID) "
@@ -672,6 +574,10 @@ public class CRewards
         // Total
         long total_energy=Math.round(rs.getDouble("total"));
         
+        // Total energy
+        if (total_energy<1)
+            return;
+        
         // Load countries
         rs=UTILS.DB.executeQuery("SELECT * "
                                  + "FROM countries");
@@ -743,6 +649,10 @@ public class CRewards
         // Load
         long total_points=rs.getLong("total");
         
+        // Minimum war points ?
+        if (total_points<1)
+            return;
+        
         // Load military units
         rs=UTILS.DB.executeQuery("SELECT * "
                                  + "FROM orgs "
@@ -794,6 +704,11 @@ public class CRewards
         
         // Load
         long total_points=rs.getLong("total");
+        
+        
+        // Minimum points ?
+        if (total_points<1)
+            return;
         
         // Load military units
         rs=UTILS.DB.executeQuery("SELECT * "
@@ -857,7 +772,7 @@ public class CRewards
             case "ID_POL_END" : name="political endorsment reward"; break;
             
             // Military reward
-            case "ID_MILITARY" : name="military rank reward"; break;
+            case "ID_WAR_POINTS" : name="military rank reward"; break;
             
             // Referers
             case "ID_REF" : name="affiliates reward"; break;

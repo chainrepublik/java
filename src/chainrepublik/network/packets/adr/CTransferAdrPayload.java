@@ -182,6 +182,10 @@ public class CTransferAdrPayload extends CPayload
             
         // Check energy
         this.checkEnergy();
+        
+        // Citizen address ?
+        if (!UTILS.BASIC.isCitAdr(this.target_adr, this.block))
+           throw new Exception("Only citizens can do this action - CWorkPayload.java, 68");
 	    	
 	// Check
         if (UTILS.BASIC.traceAdr(this.to_adr))

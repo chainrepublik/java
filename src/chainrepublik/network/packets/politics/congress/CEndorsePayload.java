@@ -38,21 +38,21 @@ public class CEndorsePayload extends CPayload
    	// Super class
    	super.check(block);
         
-         // Check energy
-       this.checkEnergy();
+        // Check energy
+        this.checkEnergy();
        
-       // Type
-       if (!this.type.equals("ID_UP") && 
+        // Endorser citizen ?
+        if (!UTILS.BASIC.isCitAdr(this.target_adr, this.block))
+           throw new Exception("Only citizens can do this action - CWorkPayload.java, 68");
+        
+        // Endorsed citizen ?
+        if (!UTILS.BASIC.isCitAdr(this.endorsed, this.block))
+           throw new Exception("Only citizens can be endorsed - CWorkPayload.java, 68");
+       
+        // Type
+        if (!this.type.equals("ID_UP") && 
            !this.type.equals("ID_DOWN"))
            throw new Exception("Invalid type, CEndorsePayload.java, 102");
-        
-        // Registered endorser ?
-        if (!UTILS.BASIC.isRegistered(this.target_adr, this.block))
-            throw new Exception("Target address is already registered, CEndorsePayload.java, 102");
-        
-        // Registered endorsed ?
-        if (!UTILS.BASIC.isRegistered(this.endorsed, this.block))
-            throw new Exception("Target address is already registered, CEndorsePayload.java, 102");
         
         // Already endorse ?
         ResultSet rs=UTILS.DB.executeQuery("SELECT * "
@@ -108,6 +108,10 @@ public class CEndorsePayload extends CPayload
         // Endorser has any political influence ?
         if (endorser_rs.getLong("pol_inf")<25)
             throw new Exception("Not enough political influence, CEndorsePayload.java, 102");
+        
+        // Endorse yourself ?
+        if (this.target_adr.equals(this.endorsed))
+           throw new Exception("You can't endorse yourself, CEndorsePayload.java, 102");
         
         // Hash
  	String h=UTILS.BASIC.hash(this.getHash()+

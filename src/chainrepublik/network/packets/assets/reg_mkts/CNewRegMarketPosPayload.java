@@ -83,12 +83,12 @@ public class CNewRegMarketPosPayload extends CPayload
          // Super class
    	  super.check(block);
           
-          // Registered ?
+          // Citizen address ?
           if (!UTILS.BASIC.isRegistered(this.target_adr, this.block))
-             throw new Exception("Address not registered - CNewRegMarketPosPayload.java");
+             throw new Exception("Only citizens can do this action - CWorkPayload.java, 68");
           
-        // Check marketID
-        ResultSet rs=UTILS.DB.executeQuery("SELECT * "
+           // Check marketID
+           ResultSet rs=UTILS.DB.executeQuery("SELECT * "
                                            + "FROM assets_mkts "
                                           + "WHERE mktID='"+this.mktID+"'");
             
@@ -201,7 +201,7 @@ public class CNewRegMarketPosPayload extends CPayload
                                                asset, 
                                                "New short position on market "+rs.getString("mktID"), 
                                                "", 
-                                               qty,
+                                               qty*price,
                                                this.hash, 
                                                this.block,
                                                false,
@@ -308,7 +308,7 @@ public class CNewRegMarketPosPayload extends CPayload
                                               asset, 
                                               "New long position on market "+rs.getString("mktID"), 
                                               "", 
-                                              qty,
+                                              qty*price,
                                               this.hash, 
                                               this.block,
                                               false,
@@ -591,6 +591,9 @@ public class CNewRegMarketPosPayload extends CPayload
         // Clear
         UTILS.ACC.clearTrans(hash, "ID_ALL", this.block);
         
+        // Asset is share ?
+        if (asset.length()==5)
+            UTILS.BASIC.checkComOwner(asset, this.block);
     }      
     
     

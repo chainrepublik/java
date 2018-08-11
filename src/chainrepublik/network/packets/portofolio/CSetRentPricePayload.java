@@ -39,22 +39,18 @@ public class CSetRentPricePayload extends CPayload
    	super.check(block);
         
          // Check energy
-       this.checkEnergy();
+         this.checkEnergy();
         
-        // Registered
-        if (!UTILS.BASIC.isRegistered(this.target_adr, this.block))
-            throw new Exception("Target address is not registered, CRentPayload.java, 102");
-        
-        // Item ID
-        if (!UTILS.BASIC.isID(itemID))
-            throw new Exception("Invalid itemID, CRentPayload.java, 102");
-        
+        // Citizen address ?
+        if (!UTILS.BASIC.isCitAdr(this.target_adr, this.block))
+           throw new Exception("Only citizens can do this action - CWorkPayload.java, 68");
+      
         // Load itemID data
         ResultSet rs=UTILS.DB.executeQuery("SELECT * "
                                            + "FROM stocuri "
                                           + "WHERE stocID='"+this.itemID+"' "
                                             + "AND adr='"+this.target_adr+"' "
-                                            + "AND qty>=1 "
+                                            + "AND qty=1 "
                                             + "AND expires>"+(this.block+1440));
         
         // Has data ?
@@ -67,6 +63,10 @@ public class CSetRentPricePayload extends CPayload
         // Can rent ?
         if (!UTILS.BASIC.canRent(this.target_adr, rs.getString("tip")))
            throw new Exception("Item can't be rented, CRentPayload.java, 102");
+        
+        // Price
+        if (this.price<0.0001)
+           throw new Exception("Invalid price, CRentPayload.java, 102"); 
         
         // Check hash
         String h=UTILS.BASIC.hash(this.getHash()+

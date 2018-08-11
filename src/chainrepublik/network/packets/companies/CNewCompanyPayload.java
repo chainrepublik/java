@@ -90,23 +90,23 @@ public class CNewCompanyPayload extends CPayload
         // Days
         this.days=days;
         
-        // Shareholder adr
+        // Company address adr
         this.com_adr=com_adr;
         
         // Hash
  	hash=UTILS.BASIC.hash(this.getHash()+
- 			         this.type+
- 			         this.name+
-                                 this.desc+
- 			         this.symbol+
-                                 this.cou+
-                                 this.pic+
-                                 this.comID+
-                                 this.com_adr+
-                                 this.assetID+
-                                 this.assetMktID+
- 			         this.stocID+
-                                 this.days);
+ 			      this.type+
+ 			      this.name+
+                              this.desc+
+ 			      this.symbol+
+                              this.cou+
+                              this.pic+
+                              this.comID+
+                              this.com_adr+
+                              this.assetID+
+                              this.assetMktID+
+ 			      this.stocID+
+                              this.days);
     
     }
     
@@ -115,9 +115,12 @@ public class CNewCompanyPayload extends CPayload
    	// Super class
    	super.check(block);
         
-        // Registered owner
-        if (!UTILS.BASIC.isRegistered(this.target_adr, this.block))
-            throw new Exception("Target address is not registered, CNewCompanyPayload.java, 102");
+        // Energy
+        this.checkEnergy();
+        
+        // Citizen
+        if (!UTILS.BASIC.isCitAdr(this.target_adr, this.block))
+           throw new Exception("Target address is not a citizen, CNewCompanyPayload.java, 102");
         
         // Registered owner
         if (UTILS.BASIC.traceAdr(this.com_adr))
@@ -152,6 +155,10 @@ public class CNewCompanyPayload extends CPayload
         if (UTILS.BASIC.isAsset(symbol))
             throw new Exception("Invalid symbol, CNewCompanyPayload.java, 138");
         
+        // Name exist ?
+        if (UTILS.BASIC.isName(symbol))
+            throw new Exception("Invalid symbol, CNewCompanyPayload.java, 101");
+        
         // Pic
         if (!this.pic.equals(""))
           if (!UTILS.BASIC.isPic(this.pic))
@@ -160,6 +167,10 @@ public class CNewCompanyPayload extends CPayload
         // Country
         if (!UTILS.BASIC.isCountry(this.cou))
             throw new Exception("Invalid country, CNewCompanyPayload.java, 147");
+        
+        // Owner in the same country ?
+        if (!UTILS.BASIC.getAdrData(this.target_adr, "loc").equals(this.cou))
+            throw new Exception("Owner not in the same country, CNewCompanyPayload.java, 147");
         
         // Days
         if (this.days<30)
@@ -172,9 +183,26 @@ public class CNewCompanyPayload extends CPayload
             UTILS.BASIC.isID(this.stocID))
         throw new Exception("Invalid ID, CNewCompanyPayload.java, 101");
         
-        // Name exist ?
-        if (UTILS.BASIC.isName(symbol))
-            throw new Exception("Invalid symbol, CNewCompanyPayload.java, 101");
+        // Fee
+        double fee=UTILS.CONST.com_price*this.days;
+        
+        // Funds ?
+        if (UTILS.ACC.getBalance(this.target_adr, "CRC", block)<fee)
+            throw new Exception("Insuficient funds, CNewCompanyPayload.java, 101");
+        
+        // Transfer
+        UTILS.ACC.newTransfer(this.target_adr, 
+                              "default", 
+                              fee, 
+                              "CRC", 
+                              "You have paid the incorporation fee for a company", 
+                              "", 
+                              0, 
+                              this.hash, 
+                              this.block, 
+                              false,
+                              "", 
+                              "");
         
         // Hash
  	String h=UTILS.BASIC.hash(this.getHash()+
@@ -298,6 +326,9 @@ public class CNewCompanyPayload extends CPayload
                                          + "cou='"+this.cou+"', "
                                          + "expires='"+(this.block+this.days*1440)+"', "
                                          + "created='"+this.block+"'");
+       
+       // Clear transations
+       UTILS.ACC.clearTrans(this.hash, "ID_ALL", this.block);
     }
     
 }

@@ -33,6 +33,10 @@ public class CLeaveOrgPayload extends CPayload
         // Check energy
         this.checkEnergy();
         
+        // Citizen address ?
+        if (!UTILS.BASIC.isCitAdr(this.target_adr, this.block))
+           throw new Exception("Only citizens can do this action - CWorkPayload.java, 68");
+        
         // Org ID valid ?
         ResultSet rs=UTILS.DB.executeQuery("SELECT * "
                                            + "FROM orgs "
@@ -54,7 +58,8 @@ public class CLeaveOrgPayload extends CPayload
             throw new Exception("Invalid orgID, CLeavePartyPayload.java, 58");
         
         // Hash
- 	String h=UTILS.BASIC.hash(this.getHash());
+ 	String h=UTILS.BASIC.hash(this.getHash()+
+                                  this.orgID);
         
         // Hash match ?
         if (!h.equals(this.hash))
@@ -86,8 +91,8 @@ public class CLeaveOrgPayload extends CPayload
       
            // Remove endorsements
            UTILS.DB.executeUpdate("DELETE FROM endorsers "
-                                   + "WHERE endorser='"+this.target_adr+"' "
-                                      + "OR endorsed='"+this.target_adr+"'");
+                                      + "WHERE endorser='"+this.target_adr+"' "
+                                         + "OR endorsed='"+this.target_adr+"'");
         }
         else
         {

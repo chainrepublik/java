@@ -1067,8 +1067,9 @@ public class CAcc
     {
         // Product ?
         if (!prod.equals(""))
-            if (!UTILS.BASIC.isProd(prod))
-                return;
+            if (!UTILS.BASIC.isProd(prod) || 
+                adr.equals("default"))
+                   return;
         
         // Country
         String cou=UTILS.BASIC.getAdrData(adr, "cou");
@@ -1150,7 +1151,7 @@ public class CAcc
         String cou=UTILS.BASIC.getAdrData(adr, "cou");
         
         // Countru valid ?
-        if (!UTILS.BASIC.isCou(cou))
+        if (!UTILS.BASIC.isCountry(cou))
             throw new Exception("Invalid country, CAcc.java, 1157");
         
         // Load bous amount

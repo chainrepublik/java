@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import org.apache.commons.io.FileUtils;
 
@@ -160,15 +161,17 @@ public class CWallet
      {
          String ad;
          
-    	 for (int a=0; a<=this.addresses.adr.size()-1; a++)
-         {
-             ad=this.addresses.adr.get(a).pub_key;
-             
-             if (ad.equals(adr))
-                 return true;
-         }
-    		
-    	 return false;
+    	 // Load address
+    	 ResultSet rs=UTILS.DB.executeQuery("SELECT * "
+                                            + "FROM my_adr "
+                                           + "WHERE adr='"+adr+"'");
+         
+         // Has data ?
+         if (UTILS.DB.hasData(rs))
+             return true;
+         else
+             return false;
+         
      }
      
     

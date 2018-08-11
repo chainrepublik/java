@@ -421,7 +421,8 @@ public class CWorkPayload extends CPayload
          // Suspend workplaces
          UTILS.DB.executeUpdate("UPDATE workplaces "
                                  + "SET status='ID_SUSPENDED' "
-                               + "WHERE comID='"+comID+"'");
+                               + "WHERE comID='"+comID+"' "
+                                 + "AND status='ID_FREE'");
          
          // New event
          UTILS.BASIC.newEvent(adr, reason, this.block);

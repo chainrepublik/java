@@ -46,6 +46,10 @@ public class CUpdateProfilePayload extends CPayload
         if (!UTILS.BASIC.isRegistered(this.target_adr, this.block))
             throw new Exception("Address is not regisstered - CUpdateProfilePayload.java");
         
+        // Citizen address ?
+        if (!UTILS.BASIC.isCitAdr(this.target_adr, this.block))
+           throw new Exception("Only citizens can do this action - CWorkPayload.java, 68");
+        
         // Avatar 
         if (!this.img.equals(""))
              if (!UTILS.BASIC.isPic(this.img))

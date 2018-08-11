@@ -27,15 +27,16 @@ public class CStocuri extends CTable
                                                     + "cap bigint(20) NOT NULL DEFAULT '0', "
                                                     + "used DOUBLE(20,4) NOT NULL DEFAULT '0.0000', "
                                                     + "invested DOUBLE(20,4) NOT NULL DEFAULT '0.0000', "
-                                                    + "sale_qty DOUBLE(20,4) NOT NULL DEFAULT '0.0000', "
                                                     + "rented_to varchar(250) NOT NULL DEFAULT '', "
                                                     + "rented_expires bigint(20) NOT NULL DEFAULT '0', "
                                                     + "rent_price DOUBLE(20,4) NOT NULL DEFAULT '0.0000', "
                                                     + "in_use bigint(20) NOT NULL DEFAULT '0', "
                                                     + "stocID bigint(20) NOT NULL DEFAULT '0', "
                                                     + "energy DOUBLE(10,4) NOT NULL DEFAULT '0.0000',"
-                                                    + "loc_type VARCHAR(20) NOT NULL DEFAULT '',"
-                                                    + "locID VARCHAR(20) NOT NULL DEFAULT '',"
+                                                    + "war_loc_type VARCHAR(20) NOT NULL DEFAULT '',"
+                                                    + "war_locID VARCHAR(20) NOT NULL DEFAULT '',"
+                                                    + "war_status VARCHAR(20) NOT NULL DEFAULT '',"
+                                                    + "war_arrive BIGINT NOT NULL DEFAULT 0,"
                                                     + "block bigint(20) NOT NULL DEFAULT '0')");
 	
             // Indexes
@@ -46,8 +47,9 @@ public class CStocuri extends CTable
             UTILS.DB.executeUpdate("CREATE INDEX stocuri_rented_expires ON stocuri(rented_expires)");
             UTILS.DB.executeUpdate("CREATE UNIQUE INDEX stocuri_stocID ON stocuri(stocID)");
             UTILS.DB.executeUpdate("CREATE INDEX stocuri_in_use ON stocuri(in_use)");
-            UTILS.DB.executeUpdate("CREATE INDEX stocuri_loc_type ON stocuri(loc_type)");
-            UTILS.DB.executeUpdate("CREATE INDEX stocuri_locID ON stocuri(locID)");
+            UTILS.DB.executeUpdate("CREATE INDEX stocuri_loc_type ON stocuri(war_loc_type)");
+            UTILS.DB.executeUpdate("CREATE INDEX stocuri_war_status ON stocuri(war_status)");
+            UTILS.DB.executeUpdate("CREATE INDEX stocuri_locID ON stocuri(war_locID)");
             UTILS.DB.executeUpdate("CREATE INDEX stocuri_block ON stocuri(block)");
             
             // Populate

@@ -58,7 +58,7 @@ public class CCrons
        String attacker_adr=UTILS.BASIC.getCouAdr(attacker);
        
        // Defender adr
-       String defender_adr=UTILS.BASIC.getCouAdr(attacker);
+       String defender_adr=UTILS.BASIC.getCouAdr(defender);
        
        // Attacker winner ?
        if (rs.getLong("attacker_points")>rs.getLong("defender_points"))
@@ -73,7 +73,7 @@ public class CCrons
                                    + "SET adr='"+attacker_adr+"' "
                                  + "WHERE war_loc_type='ID_LAND' "
                                    + "AND war_locID='"+target+"' "
-                                   + "AND status='ID_READY'");
+                                   + "AND war_status='ID_READY'");
        }
        else
        {
@@ -159,7 +159,7 @@ public class CCrons
            // Donation law 
            case "ID_DONATION" : UTILS.LAWS.implementDonation(lawID, 
                                                              cou, 
-                                                             rs.getString("par_1"), 
+                                                             UTILS.BASIC.base64_decode(rs.getString("par_1")), 
                                                              rs.getString("par_2"), 
                                                              block);
                                 break;
@@ -358,7 +358,7 @@ public class CCrons
        // Load wars data
        ResultSet rs=UTILS.DB.executeQuery("SELECT * "
                                           + "FROM wars "
-                                         + "WHERE status='ID_PENDING' "
+                                         + "WHERE status='ID_ACTIVE' "
                                            + "AND block<"+(block-1440));
        
        // Parse
@@ -380,7 +380,7 @@ public class CCrons
            if (rs.getLong("yes")>rs.getLong("no"))
               this.implementOrgProp(rs.getLong("propID"), block);
            else
-                UTILS.DB.executeUpdate("UPDATE props "
+                UTILS.DB.executeUpdate("UPDATE orgs_props "
                                       + "SET status='ID_REJECTED' "
                                     + "WHERE propID='"+rs.getLong("propID")+"'");
        }

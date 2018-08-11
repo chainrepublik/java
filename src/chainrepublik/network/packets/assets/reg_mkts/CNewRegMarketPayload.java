@@ -88,6 +88,10 @@ public class CNewRegMarketPayload extends CPayload
         
          // Check energy
        this.checkEnergy();
+       
+       // Citizen address ?
+        if (!UTILS.BASIC.isRegistered(this.target_adr, this.block))
+           throw new Exception("Only citizens can do this action - CWorkPayload.java, 68");
          
         // Asset symbol 
         if (!UTILS.BASIC.isAsset(asset_symbol))

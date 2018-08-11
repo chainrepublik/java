@@ -58,7 +58,11 @@ public class CRenewPayload extends CPayload
         super.check(block);
         
          // Check energy
-       this.checkEnergy();
+        this.checkEnergy();
+       
+       // Citizen address ?
+        if (!UTILS.BASIC.isCitAdr(this.target_adr, this.block))
+           throw new Exception("Only citizens can do this action - CWorkPayload.java, 68");
         
         // Target type
         if (!this.target_type.equals("ID_ADR")
@@ -253,10 +257,31 @@ public class CRenewPayload extends CPayload
                               break;
                             
            // Address
-            case "ID_COM" : UTILS.DB.executeUpdate("UPDATE companies "
+            case "ID_COM" : // Load company data
+                            ResultSet rs=UTILS.DB.executeQuery("SELECT * "
+                                                               + "FROM companies "
+                                                              + "WHERE comID='"+this.targetID+"'");
+                            
+                            // Next
+                            rs.next();
+                            
+                            // Renew company
+                            UTILS.DB.executeUpdate("UPDATE companies "
                                                         + "SET expires=expires+"+(this.days*1440)+" "
                                                       + "WHERE comID='"+this.targetID+"'");
-                                break;
+                            
+                            // Renew asset
+                            UTILS.DB.executeUpdate("UPDATE assets "
+                                                        + "SET expires=expires+"+(this.days*1440)+" "
+                                                      + "WHERE symbol='"+rs.getString("symbol")+"'");
+                            
+                            // Renew asset markets
+                            UTILS.DB.executeUpdate("UPDATE assets_mkts "
+                                                    + "SET expires=expires+"+(this.days*1440)+" "
+                                                  + "WHERE asset='"+rs.getString("asset")+"' "
+                                                    + "AND cur='CRC'");
+                            
+                             break;
                             
             // Address
             case "ID_WORKPLACE" : UTILS.DB.executeUpdate("UPDATE workplaces "

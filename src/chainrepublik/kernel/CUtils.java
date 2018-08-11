@@ -213,10 +213,20 @@ public class CUtils
                return true;
         }
         
+        // Input is a valid signer ?
+        public boolean isLong(String num) throws Exception
+        {
+            // Check letters
+            if (!num.matches("[0-9]{0,25}"))
+               return false;
+            else
+               return true;
+        }
+        
         
         
         // Input is a valid signer ?
-        public boolean isCou(String symbol) throws Exception
+        private boolean isCou(String symbol) throws Exception
         {
             // Check letters
             if (!symbol.matches("[A-Z]{2}"))
@@ -269,10 +279,6 @@ public class CUtils
         // Description with predefined length
         public boolean isDesc(String desc, long max_length) throws Exception
         {
-            // String ?
-            if (!this.isString(desc))
-                return false;
-        
             // Length
             if (desc.length()<5 || desc.length()>max_length)
                 return false;
@@ -756,8 +762,15 @@ public class CUtils
     
     public boolean isCitAdr(String adr, long block) throws Exception
     {
+        // Name ?
+        adr=this.adrFromName(adr);
+        
         // Adr
         if (!this.isAdr(adr))
+            throw new Exception("Invalid address, CUtils.java, 644");
+        
+        // Registered ?
+        if (!this.isRegistered(adr, block))
             throw new Exception("Invalid address, CUtils.java, 644");
         
         // Not government or citizen adr ?
@@ -948,11 +961,18 @@ public class CUtils
         if (!UTILS.BASIC.isCountry(cou))
             throw new Exception("Invalid country");
         
+        // Political endorsement
+        double pol_endorsed=Double.parseDouble(UTILS.BASIC.getAdrData(adr, "pol_endorsed"));
+        
+        // Minimum 1 ?
+        if (pol_endorsed<1)
+            return false;
+        
         // Address exist ?
         ResultSet rs_adr=UTILS.DB.executeQuery("SELECT * "
-                                           + "FROM adr "
-                                          + "WHERE adr='"+adr+"' "
-                                             + "AND cou='"+cou+"'");
+                                               + "FROM adr "
+                                              + "WHERE adr='"+adr+"' "
+                                                + "AND cou='"+cou+"'");
         
         // Exist ?
         if (!UTILS.DB.hasData(rs_adr))
@@ -960,7 +980,7 @@ public class CUtils
         
         // Address data
         rs_adr.next();
-        
+       
         // Has voting rights ?
         ResultSet rs=UTILS.DB.executeQuery("SELECT COUNT(*) AS total "
                                            + "FROM adr "
@@ -1190,6 +1210,15 @@ public class CUtils
         // Has data ?
         if (UTILS.DB.hasData(rs))
             return "ID_GUV";
+        
+         // Is org adr ?
+        rs=UTILS.DB.executeQuery("SELECT * "
+                                 + "FROM orgs "
+                                + "WHERE adr='"+adr+"'");
+        
+        // Has data ?
+        if (UTILS.DB.hasData(rs))
+            return "ID_ORG";
         
         // Is company adr ?
         rs=UTILS.DB.executeQuery("SELECT * "
@@ -1693,8 +1722,8 @@ public class CUtils
                              break;
 
             // Military 10%
-            case "ID_MILITARY" : amount=Math.round(daily*0.1); 
-                                 break;
+            case "ID_WAR_POINTS" : amount=Math.round(daily*0.1); 
+                                   break;
                                
             // Referers 10%
             case "ID_REFS" : amount=Math.round(daily*0.1); 
@@ -1741,7 +1770,7 @@ public class CUtils
         // Check reward
         if (!reward.equals("ID_ENERGY") && 
             !reward.equals("ID_REF") && 
-            !reward.equals("ID_MILITARY") && 
+            !reward.equals("ID_WAR_POINTS") && 
             !reward.equals("ID_POL_INF") && 
             !reward.equals("ID_POL_END"))
         throw new Exception("Invalid bonus - CUtils.java");
@@ -1836,57 +1865,6 @@ public class CUtils
         return str;
     }
     
-     public void checkNewTransIPN(String target_adr, 
-                                  String dest, 
-                                  double amount, 
-                                  String cur, 
-                                  String mes, 
-                                  String hash, 
-                                  long block) throws Exception
-         {
-            // IPN
-            ResultSet rs=UTILS.DB.executeQuery("SELECT * "
-                                               + "FROM ipn "
-                                              + "WHERE adr='"+dest+"'");
-                 
-            if (UTILS.DB.hasData(rs) && UTILS.WALLET.isMine(dest))
-            {
-                   // Next
-                   rs.next();
-                   
-                   // creates loader thread
-                   CLoader loader=new CLoader(rs.getString("web_link"), rs.getString("web_pass"));
-                   
-                   // Source
-                   loader.addParam("src", target_adr);
-                   
-                   // Dest
-                   loader.addParam("dest", dest);
-                   
-                   // Amount
-                   loader.addParam("amount", String.valueOf(amount));
-                   
-                   // Currency
-                   loader.addParam("currency", cur);
-                   
-                   // Message
-                   String message="";
-                   if (mes!=null)
-                       message=mes;
-                    
-                   loader.addParam("mes", message);
-                   
-                   // transaction hash
-                   loader.addParam("tx_hash", hash);
-                   
-                   // Block
-                   loader.addParam("block", String.valueOf(block));
-                   
-                   // Start
-                   loader.start();
-            }
-         
-         }
      
      public long userFromAdr(String adr) throws Exception
      {
@@ -2599,6 +2577,10 @@ public class CUtils
       
     public boolean isBonus(String bonus) throws Exception
     {
+        // String ID
+        if (!this.isStringID(bonus))
+           throw new Exception ("Invalid bonus, CUtils.java, line 1959");
+        
         // Load bonus
         ResultSet rs=UTILS.DB.executeQuery("SELECT * "
                                            + "FROM bonuses "
@@ -2814,6 +2796,45 @@ public class CUtils
         
         // Return
         return false;
+    }
+    
+    public void checkComOwner(String symbol, long block) throws Exception
+    {
+        // Valid symbol
+        if (!this.isSymbol(symbol, 5))
+           throw new Exception ("Invalid address, CUtils.java, line 1959");
+        
+        // Load asset owners
+        ResultSet rs=UTILS.DB.executeQuery("SELECT * "
+                                           + "FROM assets_owners "
+                                          + "WHERE asset='"+symbol+"' "
+                                          + "ORDER qty DESC");
+        
+        // Next
+        rs.next();
+        
+        // Top owner
+        String top_owner=rs.getString("owner");
+        
+        // Load company data
+        rs=UTILS.DB.executeQuery("SELECT * "
+                                 + "FROM companies "
+                                + "WHERE symbol='"+symbol+"'");
+        
+        // Next
+        rs.next();
+        
+        // Changed owner ?
+        if (!rs.getString("owner").equals(top_owner))
+        {
+            // Update new company owner
+            UTILS.DB.executeUpdate("UPDATE companies "
+                                    + "SET owner='"+top_owner+"' "
+                                  + "WHERE symbol='"+symbol+"'");
+            
+            // Post event
+            UTILS.BASIC.newEvent(top_owner, "Congratulations ! You are the new owner of "+symbol, block);
+        }
     }
     
 }

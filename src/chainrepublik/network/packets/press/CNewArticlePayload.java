@@ -102,6 +102,10 @@ public class CNewArticlePayload extends CPayload
         
          // Check energy
        this.checkEnergy(5);
+       
+       // Citizen address ?
+        if (!UTILS.BASIC.isCitAdr(this.target_adr, this.block))
+           throw new Exception("Only citizens can do this action - CWorkPayload.java, 68");
         
         // Days
         if (days<30)
@@ -112,7 +116,8 @@ public class CNewArticlePayload extends CPayload
            throw new Exception("Invalid tweetID - CNewTweetPayload.java");
         
         // Language
-        if (!UTILS.BASIC.isCou(this.cou))
+        if (!this.cou.equals("EN"))
+          if (!UTILS.BASIC.isCountry(this.cou))
             throw new Exception("Invalid language - CNewTweetPayload.java");
         
         // Title
@@ -120,7 +125,7 @@ public class CNewArticlePayload extends CPayload
             throw new Exception("Invalid title - CNewTweetPayload.java");
         
         // Message
-        if (!UTILS.BASIC.isDesc(this.mes))
+        if (!UTILS.BASIC.isDesc(this.mes, 50000))
             throw new Exception("Invalid message - CNewTweetPayload.java");
         
         // Pic

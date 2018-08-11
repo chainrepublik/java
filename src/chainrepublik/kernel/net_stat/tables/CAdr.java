@@ -157,19 +157,19 @@ public class CAdr extends CTable
     public void populate() throws Exception
     {
         // Default
-        UTILS.DB.executeUpdate("INSERT INTO adr SET adr='default', balance='20000000', block='0', cou='RO'");
+        UTILS.DB.executeUpdate("INSERT INTO adr SET adr='default', balance='9000000', block='0', cou='RO'");
         
         
         // Main addresses
-        UTILS.DB.executeUpdate("INSERT INTO adr SET adr='MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEEpn9tcO9qb55dKKTCroSy6fa8mhyhChMYLdJer+WYnVR8Is9l1864vi9Z9eVXTkk3xo1ARNfY+fM0DWI0Wo7+g==', balance='100000', block='0', cou='RO', name='devteam1'");
-        UTILS.DB.executeUpdate("INSERT INTO adr SET adr='MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEnynu3qRdoQkslCGdgajJJL0cyToq2CNrOcPKRBY+bqlAC16dfWS9pqjtc9cxhcDL88QlxsXYSqSxn54Lwkq2LQ==', balance='100000', block='0', cou='RO', name='devteam2'");
-        UTILS.DB.executeUpdate("INSERT INTO adr SET adr='MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEiNlB+/HYqGqFm/jF3jLePnD+YZ/6iIH/OzMh+aKAyAzD4KAk4bocCm38x2sFx1rxKQQYY6JKTbssUKsZKmk/xw==', balance='100000', block='0', cou='RO', name='devteam3'");
-        UTILS.DB.executeUpdate("INSERT INTO adr SET adr='MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAERipiohgRY+exIa8naisHpe/1ZNfPzjsdN0V5kPI9gMyVMcrJbfS/RxuOqVHMgmqp7B3omAG0Vb+elXxyIrWU7g==', balance='100000', block='0', cou='RO', name='devteam4'");
-        UTILS.DB.executeUpdate("INSERT INTO adr SET adr='MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEIfhPhsjZ06QbAf45FMmDQuznOw/I9ob7ZR9bCUmxLAakhmzoz06mUylMa5o1iX3PvMV7DwDYZxOR18q89ljtyg==', balance='100000', block='0', cou='RO', name='devteam5'");
-        UTILS.DB.executeUpdate("INSERT INTO adr SET adr='MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEuTaBUEiPRcc3E9Re9UzVlo0VYkksRPp/DO7IMxxC/0JLaFqcs01gSbBC/VMVq8Jbl8SBf8NiE8nmTvHwxJABOA==', balance='100000', block='0', cou='RO', name='devteam6'");
-        UTILS.DB.executeUpdate("INSERT INTO adr SET adr='MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAE8jW0Y6JCgLwv30tZFSWejL13jJ2MJLPs/77P5/yKcdJik6Q3abSr4cuyXP6aQa52FBc7ptOYsG6NwHO5P9wyxA==', balance='100000', block='0', cou='RO', name='devteam7'");
-        UTILS.DB.executeUpdate("INSERT INTO adr SET adr='MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEoKdl/E8VU9XAXWPI7+ct/aBnNCyJoRzoYgIuNjAlbcSE6WFXtoyiYET6j5XWaODXP4PPhcQX5EHRoEPKpZTq0w==', balance='100000', block='0', cou='RO', name='devteam8'");
-        UTILS.DB.executeUpdate("INSERT INTO adr SET adr='MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEBMSQ0Fso7nFoGiA+bBb0FtNApYqVXMRLIwAXuie04DZ8dXbsVktdqqzqUeHdACBXr1saEPWm0ueNnmoilq8lMg==', balance='100000', block='0', cou='RO', name='devteam9'");
-        UTILS.DB.executeUpdate("INSERT INTO adr SET adr='MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAE5QJZYCQz+/vegCpTenLEyNtlBTx2xyLaFqsGestQp5iE/jl2JJ0Rq7YQ2OtyPREHXboiqFxTOu51kEyMi8f1hg==', balance='100000', block='0', cou='RO', name='devteam10'");
+        UTILS.DB.executeUpdate("INSERT INTO adr SET adr='MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEEpn9tcO9qb55dKKTCroSy6fa8mhyhChMYLdJer+WYnVR8Is9l1864vi9Z9eVXTkk3xo1ARNfY+fM0DWI0Wo7+g==', balance='100000', block='0', cou='RO', name='devteam1', expires=1000000");
+        UTILS.DB.executeUpdate("INSERT INTO adr SET adr='MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEnynu3qRdoQkslCGdgajJJL0cyToq2CNrOcPKRBY+bqlAC16dfWS9pqjtc9cxhcDL88QlxsXYSqSxn54Lwkq2LQ==', balance='100000', block='0', cou='RO', name='devteam2', expires=1000000");
+        UTILS.DB.executeUpdate("INSERT INTO adr SET adr='MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEiNlB+/HYqGqFm/jF3jLePnD+YZ/6iIH/OzMh+aKAyAzD4KAk4bocCm38x2sFx1rxKQQYY6JKTbssUKsZKmk/xw==', balance='100000', block='0', cou='RO', name='devteam3', expires=1000000");
+        UTILS.DB.executeUpdate("INSERT INTO adr SET adr='MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAERipiohgRY+exIa8naisHpe/1ZNfPzjsdN0V5kPI9gMyVMcrJbfS/RxuOqVHMgmqp7B3omAG0Vb+elXxyIrWU7g==', balance='100000', block='0', cou='RO', name='devteam4', expires=1000000");
+        UTILS.DB.executeUpdate("INSERT INTO adr SET adr='MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEIfhPhsjZ06QbAf45FMmDQuznOw/I9ob7ZR9bCUmxLAakhmzoz06mUylMa5o1iX3PvMV7DwDYZxOR18q89ljtyg==', balance='100000', block='0', cou='RO', name='devteam5', expires=1000000");
+        UTILS.DB.executeUpdate("INSERT INTO adr SET adr='MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEuTaBUEiPRcc3E9Re9UzVlo0VYkksRPp/DO7IMxxC/0JLaFqcs01gSbBC/VMVq8Jbl8SBf8NiE8nmTvHwxJABOA==', balance='100000', block='0', cou='RO', name='devteam6', expires=1000000");
+        UTILS.DB.executeUpdate("INSERT INTO adr SET adr='MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAE8jW0Y6JCgLwv30tZFSWejL13jJ2MJLPs/77P5/yKcdJik6Q3abSr4cuyXP6aQa52FBc7ptOYsG6NwHO5P9wyxA==', balance='100000', block='0', cou='RO', name='devteam7', expires=1000000");
+        UTILS.DB.executeUpdate("INSERT INTO adr SET adr='MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEoKdl/E8VU9XAXWPI7+ct/aBnNCyJoRzoYgIuNjAlbcSE6WFXtoyiYET6j5XWaODXP4PPhcQX5EHRoEPKpZTq0w==', balance='100000', block='0', cou='RO', name='devteam8', expires=1000000");
+        UTILS.DB.executeUpdate("INSERT INTO adr SET adr='MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEBMSQ0Fso7nFoGiA+bBb0FtNApYqVXMRLIwAXuie04DZ8dXbsVktdqqzqUeHdACBXr1saEPWm0ueNnmoilq8lMg==', balance='100000', block='0', cou='RO', name='devteam9', expires=1000000");
+        UTILS.DB.executeUpdate("INSERT INTO adr SET adr='MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAE5QJZYCQz+/vegCpTenLEyNtlBTx2xyLaFqsGestQp5iE/jl2JJ0Rq7YQ2OtyPREHXboiqFxTOu51kEyMi8f1hg==', balance='100000', block='0', cou='RO', name='devteam10', expires=1000000");
     }
 }

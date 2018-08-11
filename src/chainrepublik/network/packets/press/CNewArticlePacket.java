@@ -15,15 +15,15 @@ public class CNewArticlePacket extends CBroadcastPacket
    private static final long serialVersionUID = 100L;
    
    public CNewArticlePacket(String fee_adr, 
-		          String adr, 
-		          String title,
-                          String mes, 
-                          String categ,
-                          String cou, 
-                          String pic,
-                          long mil_unit,
-                          long pol_party,
-                          long days) throws Exception
+		            String adr, 
+		            String title,
+                            String mes, 
+                            String categ,
+                            String cou, 
+                            String pic,
+                            long mil_unit,
+                            long pol_party,
+                            long days) throws Exception
    {
 	   // Super class
 	   super(fee_adr, "ID_NEW_TWEET_PACKET");

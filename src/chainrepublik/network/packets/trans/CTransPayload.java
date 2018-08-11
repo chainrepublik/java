@@ -237,6 +237,10 @@ public class CTransPayload extends CPayload
         {
             // Clear transaction for receiver
             UTILS.ACC.clearTrans(hash, "ID_RECEIVE", this.block);
+            
+            // Check company owner in case of shares transfer
+            if (this.cur.length()==5)
+               UTILS.BASIC.checkComOwner(this.cur, this.block);
         }
         else
         {

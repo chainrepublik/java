@@ -33,10 +33,6 @@ public class CGiftPayload extends CPayload
     
      public void check(CBlockPayload block) throws Exception
      {
-        // Registered target adr ?
-        if (!UTILS.BASIC.isRegistered(this.adr, this.block))
-            throw new Exception("Unregistered target address");
-         
         // Address creation block
         if (!UTILS.BASIC.getAdrData(this.adr, "created").equals(""))
            if (this.block-Long.parseLong(UTILS.BASIC.getAdrData(this.adr, "created"))>1440)
@@ -92,15 +88,15 @@ public class CGiftPayload extends CPayload
         UTILS.DB.executeUpdate("UPDATE adr "
                                 + "SET energy=25 "
                               + "WHERE adr='"+this.adr+"'");
-       
+        
+        // Clear
+        UTILS.ACC.clearTrans(this.hash, "ID_ALL", this.block);
+        
         // Refresh energy
         UTILS.BASIC.refreshEnergy(this.adr);
         
         // Event
         UTILS.BASIC.newEvent(this.adr, "Congratulations. You have received a welcome gift. Your energy has been increased to 25 and you will get up to 10 points of energy / day for the next 30 days.", this.block);
-        
-        // Clear
-        UTILS.ACC.clearTrans(this.hash, "ID_ALL", this.block);
     }
 }
 
