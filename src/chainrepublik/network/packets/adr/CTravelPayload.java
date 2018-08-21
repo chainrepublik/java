@@ -44,6 +44,13 @@ public class CTravelPayload extends CPayload
          // Check energy
         this.checkEnergy(e);
         
+        // Already travelling ?
+        long travel=Long.parseLong(UTILS.BASIC.getAdrData(this.target_adr, "travel"));
+        
+        // Check
+        if (travel>this.block)   
+            throw new Exception("Adress is already travelling - CWorkPayload.java, 68");
+        
         // Citizen address ?
         if (!UTILS.BASIC.isCitAdr(this.target_adr, this.block))
            throw new Exception("Only citizens can do this action - CWorkPayload.java, 68");
@@ -68,21 +75,13 @@ public class CTravelPayload extends CPayload
             ticket="ID_TRAVEL_TICKET_Q1";
         
         // Less tha 2000
-        else if (dist>=1000 && dist<3000)
+        else if (dist>=1000 && dist<5000)
             ticket="ID_TRAVEL_TICKET_Q2";
         
         // Less tha 3000
-        else if (dist>=3000 && dist<5000)
+        else if (dist>=5000)
             ticket="ID_TRAVEL_TICKET_Q3";
         
-        // Less tha 4000
-        else if (dist>=5000 && dist<7000)
-            ticket="ID_TRAVEL_TICKET_Q4";
-        
-        // Less tha 5000
-        else if (dist>=7000)
-            ticket="ID_TRAVEL_TICKET_Q5";
-            
         // Has ticket ?
         ResultSet rs=UTILS.DB.executeQuery("SELECT * "
                                            + "FROM stocuri "
@@ -134,21 +133,13 @@ public class CTravelPayload extends CPayload
             ticket="ID_TRAVEL_TICKET_Q1";
         
         // Less tha 2000
-        else if (dist>=1000 && dist<3000)
+        else if (dist>=1000 && dist<5000)
             ticket="ID_TRAVEL_TICKET_Q2";
         
         // Less tha 3000
-        else if (dist>=3000 && dist<5000)
+        else if (dist>=5000)
             ticket="ID_TRAVEL_TICKET_Q3";
         
-        // Less tha 4000
-        else if (dist>=5000 && dist<7000)
-            ticket="ID_TRAVEL_TICKET_Q4";
-        
-        // Less tha 5000
-        else if (dist>=7000)
-            ticket="ID_TRAVEL_TICKET_Q5";
-       
         // Load ticket ?
         ResultSet rs=UTILS.DB.executeQuery("SELECT * "
                                            + "FROM stocuri "

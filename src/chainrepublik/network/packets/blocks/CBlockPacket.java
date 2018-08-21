@@ -333,8 +333,9 @@ public class CBlockPacket extends CPacket
        // Load all addresses havin the balance over 0.0001
        ResultSet rs=UTILS.DB.executeQuery("SELECT COUNT(*) AS total "
                                           + "FROM adr "
-                                         + "WHERE balance<0.1 "
-                                           + "AND balance>=0.0001");
+                                         + "WHERE balance<1 "
+                                           + "AND balance>=0.0001 "
+                                           + "AND expires<"+block);
        
        // Next
        rs.next();
@@ -345,19 +346,35 @@ public class CBlockPacket extends CPacket
        // Total fee
        double total_fee=total*0.0001;
        
-       // Decrease addresses balances
-       UTILS.DB.executeUpdate("UPDATE adr "
-                               + "SET balance=balance-0.0001, "
-                                   + "block='"+block+"' "
-                             + "WHERE balance<0.1 "
-                               + "AND balance>=0.0001");
-       
        // Move funds to default
        UTILS.DB.executeUpdate("UPDATE adr "
                                + "SET balance=balance+"+total_fee+", "
                                    + "block='"+block+"' "
                              + "WHERE adr='default'");
        
-      
+        // Load data
+        rs=UTILS.DB.executeQuery("SELECT * "
+                                 + "FROM adr "
+                                + "WHERE balance<1 "
+                                  + "AND balance>=0.0001 "
+                                  + "AND expires<"+block);
+        
+        // Loop
+        while (rs.next())
+            UTILS.ACC.newTransfer(rs.getString("adr"), 
+                                   "default", 
+                                   0.0001, 
+                                   "CRC", 
+                                   "Daily network fee", 
+                                   "", 
+                                   0, 
+                                   UTILS.BASIC.hash(String.valueOf(block)), 
+                                   block, 
+                                   false, 
+                                   "", 
+                                   "");
+        
+        // Clear
+        UTILS.ACC.clearTrans(UTILS.BASIC.hash(String.valueOf(block)), "ID_ALL", block);
    }
 }

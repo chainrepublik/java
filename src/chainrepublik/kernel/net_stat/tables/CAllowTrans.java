@@ -121,7 +121,7 @@ public class CAllowTrans extends CTable
         UTILS.DB.executeUpdate("INSERT INTO allow_trans SET receiver_type='ID_COM_WOOD', prod='ID_OIL', can_buy='YES', can_sell='NO', max_hold='0', is_limited='NO', can_rent='NO', buy_split='NO', can_donate=''");
         UTILS.DB.executeUpdate("INSERT INTO allow_trans SET receiver_type='ID_COM_WOOD', prod='ID_GAS', can_buy='YES', can_sell='NO', max_hold='0', is_limited='NO', can_rent='NO', buy_split='NO', can_donate=''");
         UTILS.DB.executeUpdate("INSERT INTO allow_trans SET receiver_type='ID_COM_WOOD', prod='ID_WOOD', can_buy='NO', can_sell='YES', max_hold='0', is_limited='NO', can_rent='NO', buy_split='NO', can_donate=''");
-        UTILS.DB.executeUpdate("INSERT INTO allow_trans SET receiver_type='ID_COM_WOOD', prod='ID_BUILD_COM_WOOD', can_buy='YES', can_sell='NO', max_hold='0', is_limited='NO', can_rent='NO', buy_split='NO', can_donate=''");
+        UTILS.DB.executeUpdate("INSERT INTO allow_trans SET receiver_type='ID_COM_WOOD', prod='ID_BUILD_COM_WOOD', can_buy='YES', can_sell='NO', max_hold='1', is_limited='YES', can_rent='NO', buy_split='NO', can_donate=''");
         UTILS.DB.executeUpdate("INSERT INTO allow_trans SET receiver_type='ID_COM_WOOD', prod='ID_TOOLS_PROD_WOOD', can_buy='YES', can_sell='NO', max_hold='1', is_limited='YES', can_rent='NO', buy_split='NO', can_donate=''");
         UTILS.DB.executeUpdate("INSERT INTO allow_trans SET receiver_type='ID_COM_COTTON', prod='ID_ELECTRICITY', can_buy='YES', can_sell='NO', max_hold='0', is_limited='NO', can_rent='NO', buy_split='NO', can_donate=''");
         UTILS.DB.executeUpdate("INSERT INTO allow_trans SET receiver_type='ID_COM_COTTON', prod='ID_OIL', can_buy='YES', can_sell='NO', max_hold='0', is_limited='NO', can_rent='NO', buy_split='NO', can_donate=''");
@@ -491,8 +491,6 @@ public class CAllowTrans extends CTable
         UTILS.DB.executeUpdate("INSERT INTO allow_trans SET receiver_type='ID_COM_TOOLS', prod='ID_WOOD', can_buy='YES', can_sell='NO', max_hold='0', is_limited='NO', can_rent='NO', buy_split='NO', can_donate='NO'");
         UTILS.DB.executeUpdate("INSERT INTO allow_trans SET receiver_type='ID_COM_TOOLS', prod='ID_PLASTIC', can_buy='YES', can_sell='NO', max_hold='0', is_limited='NO', can_rent='NO', buy_split='NO', can_donate='NO'");
         UTILS.DB.executeUpdate("INSERT INTO allow_trans SET receiver_type='ID_COM_TOOLS', prod='ID_GLASS', can_buy='YES', can_sell='NO', max_hold='0', is_limited='NO', can_rent='NO', buy_split='NO', can_donate='NO'");
-        UTILS.DB.executeUpdate("INSERT INTO allow_trans SET receiver_type='ID_COM_TOOLS', prod='ID_BUILD_COM_PRODUCTION_TOOLS', can_buy='YES', can_sell='NO', max_hold='1', is_limited='YES', can_rent='NO', buy_split='NO', can_donate='NO'");
-        UTILS.DB.executeUpdate("INSERT INTO allow_trans SET receiver_type='ID_CIT', prod='ID_WINE', can_buy='YES', can_sell='NO', max_hold='0', is_limited='NO', can_rent='NO', buy_split='YES', can_donate='NO'");
         UTILS.DB.executeUpdate("INSERT INTO allow_trans SET receiver_type='ID_CIT', prod='ID_BULLETS_AKM', can_buy='YES', can_sell='NO', max_hold='0', is_limited='NO', can_rent='NO', buy_split='NO', can_donate='NO'");
         UTILS.DB.executeUpdate("INSERT INTO allow_trans SET receiver_type='ID_CIT', prod='ID_BULLETS_SHOTGUN', can_buy='YES', can_sell='NO', max_hold='0', is_limited='NO', can_rent='NO', buy_split='NO', can_donate='NO'");
         UTILS.DB.executeUpdate("INSERT INTO allow_trans SET receiver_type='ID_CIT', prod='ID_BULLETS_SNIPER', can_buy='YES', can_sell='NO', max_hold='0', is_limited='NO', can_rent='NO', buy_split='NO', can_donate='NO'");
@@ -511,7 +509,6 @@ public class CAllowTrans extends CTable
         UTILS.DB.executeUpdate("INSERT INTO allow_trans SET receiver_type='ID_COM_GIFT', prod='ID_GIFT', can_buy='NO', can_sell='YES', max_hold='0', is_limited='NO', can_rent='NO', buy_split='NO', can_donate='NO'");
         UTILS.DB.executeUpdate("INSERT INTO allow_trans SET receiver_type='ID_COM_GIFT', prod='ID_BUILD_COM_GIFTS', can_buy='YES', can_sell='NO', max_hold='1', is_limited='YES', can_rent='NO', buy_split='NO', can_donate='NO'");
         UTILS.DB.executeUpdate("INSERT INTO allow_trans SET receiver_type='ID_COM_GIFT', prod='ID_TOOLS_PROD_GIFTS', can_buy='YES', can_sell='NO', max_hold='1', is_limited='YES', can_rent='NO', buy_split='NO', can_donate='NO'");
-        UTILS.DB.executeUpdate("INSERT INTO allow_trans SET receiver_type='ID_CIT', prod='ID_GIFT', can_buy='YES', can_sell='YES', max_hold='0', is_limited='NO', can_rent='NO', buy_split='NO', can_donate='NO'");
         UTILS.DB.executeUpdate("INSERT INTO allow_trans SET receiver_type='ID_COM_ELECTRICITY', prod='ID_BUILD_COM_ELECTRICITY', can_buy='YES', can_sell='NO', max_hold='1', is_limited='YES', can_rent='NO', buy_split='NO', can_donate='NO'");
         UTILS.DB.executeUpdate("INSERT INTO allow_trans SET receiver_type='ID_COM_SUGAR', prod='ID_SUGARCANE', can_buy='YES', can_sell='NO', max_hold='0', is_limited='NO', can_rent='NO', buy_split='NO', can_donate='NO'");
         UTILS.DB.executeUpdate("INSERT INTO allow_trans SET receiver_type='ID_COM_ALCOHOOL', prod='ID_SUGARCANE', can_buy='YES', can_sell='NO', max_hold='0', is_limited='NO', can_rent='NO', buy_split='NO', can_donate='NO'");
@@ -594,6 +591,20 @@ public class CAllowTrans extends CTable
         UTILS.DB.executeUpdate("INSERT INTO allow_trans SET receiver_type='ID_COM_HEAVY_WEAPONS', prod='ID_TOOLS_PROD_BIG_WEAPONS', can_buy='YES', can_sell='NO', max_hold='1', is_limited='YES', can_rent='NO', buy_split='NO', can_donate='NO'");
         UTILS.DB.executeUpdate("INSERT INTO allow_trans SET receiver_type='ID_COM_HEAVY_WEAPONS', prod='ID_NAVY_DESTROYER', can_buy='NO', can_sell='YES', max_hold='0', is_limited='NO', can_rent='NO', buy_split='NO', can_donate='NO'");
         UTILS.DB.executeUpdate("INSERT INTO allow_trans SET receiver_type='ID_COM_HEAVY_WEAPONS', prod='ID_JET_FIGHTER', can_buy='NO', can_sell='YES', max_hold='0', is_limited='NO', can_rent='NO', buy_split='NO', can_donate='NO'");
+        UTILS.DB.executeUpdate("INSERT INTO allow_trans SET receiver_type='ID_COM_GUNPOWDER', prod='ID_ELECTRICITY', can_buy='YES', can_sell='NO', max_hold='0', is_limited='NO', can_rent='NO', buy_split='NO', can_donate='NO'");
+        UTILS.DB.executeUpdate("INSERT INTO allow_trans SET receiver_type='ID_COM_GUNPOWDER', prod='ID_OIL', can_buy='YES', can_sell='NO', max_hold='0', is_limited='NO', can_rent='NO', buy_split='NO', can_donate='NO'");
+        UTILS.DB.executeUpdate("INSERT INTO allow_trans SET receiver_type='ID_COM_GUNPOWDER', prod='ID_GUNPOWDER', can_buy='NO', can_sell='YES', max_hold='0', is_limited='NO', can_rent='NO', buy_split='NO', can_donate='NO'");
+        UTILS.DB.executeUpdate("INSERT INTO allow_trans SET receiver_type='ID_COM_GUNPOWDER', prod='ID_BUILD_COM_GUNPOWDER', can_buy='YES', can_sell='NO', max_hold='1', is_limited='YES', can_rent='NO', buy_split='NO', can_donate='NO'");
+        UTILS.DB.executeUpdate("INSERT INTO allow_trans SET receiver_type='ID_COM_GUNPOWDER', prod='ID_TOOLS_PROD_GUNPOWDER', can_buy='YES', can_sell='NO', max_hold='1', is_limited='YES', can_rent='NO', buy_split='NO', can_donate='NO'");
+        UTILS.DB.executeUpdate("INSERT INTO allow_trans SET receiver_type='ID_CIT', prod='ID_WINE', can_buy='YES', can_sell='NO', max_hold='25', is_limited='YES', can_rent='NO', buy_split='NO', can_donate='YES'");
+        UTILS.DB.executeUpdate("INSERT INTO allow_trans SET receiver_type='ID_COM_PRECIOUS_METALS', prod='ID_PLATINUM', can_buy='NO', can_sell='YES', max_hold='0', is_limited='NO', can_rent='NO', buy_split='NO', can_donate='NO'");
+        UTILS.DB.executeUpdate("INSERT INTO allow_trans SET receiver_type='ID_COM_TOOLS', prod='ID_BUILD_COM_TOOLS', can_buy='YES', can_sell='NO', max_hold='1', is_limited='YES', can_rent='NO', buy_split='NO', can_donate='NO'");
+        UTILS.DB.executeUpdate("INSERT INTO allow_trans SET receiver_type='ID_CIT', prod='ID_GIFT', can_buy='YES', can_sell='NO', max_hold='0', is_limited='NO', can_rent='NO', buy_split='YES', can_donate='YES'");
+        UTILS.DB.executeUpdate("INSERT INTO allow_trans SET receiver_type='ID_COM_TOOLS', prod='ID_TOOLS_PROD_GIFTS', can_buy='NO', can_sell='YES', max_hold='0', is_limited='NO', can_rent='NO', buy_split='NO', can_donate='NO'");
+        UTILS.DB.executeUpdate("INSERT INTO allow_trans SET receiver_type='ID_COM_TOOLS', prod='ID_TOOLS_PROD_BIG_WEAPONS', can_buy='NO', can_sell='YES', max_hold='0', is_limited='NO', can_rent='NO', buy_split='NO', can_donate='NO'");
+        UTILS.DB.executeUpdate("INSERT INTO allow_trans SET receiver_type='ID_COM_CONSTRUCTION', prod='ID_BUILD_COM_GIFTS', can_buy='NO', can_sell='YES', max_hold='0', is_limited='NO', can_rent='NO', buy_split='NO', can_donate='NO'");
+        UTILS.DB.executeUpdate("INSERT INTO allow_trans SET receiver_type='ID_COM_CONSTRUCTION', prod='ID_BUILD_COM_BIG_WEAPONS', can_buy='NO', can_sell='YES', max_hold='0', is_limited='NO', can_rent='NO', buy_split='NO', can_donate='NO'");
+        UTILS.DB.executeUpdate("INSERT INTO allow_trans SET receiver_type='ID_COM_TOOLS', prod='ID_TOOLS_PROD_TRAVEL_TICKETS', can_buy='NO', can_sell='YES', max_hold='0', is_limited='NO', can_rent='NO', buy_split='NO', can_donate='NO'");
 
     }
 }

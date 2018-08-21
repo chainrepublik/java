@@ -5,9 +5,10 @@ import java.util.Random;
 
 public class CAcc 
 {
-    public CAcc()
+    public CAcc() throws Exception
     {
-        
+        // Clears trans pool
+        UTILS.DB.executeUpdate("DELETE FROM trans_pool");
     }
     
     public void clearTrans(String hash, String tip, long block) throws Exception
@@ -949,7 +950,7 @@ public class CAcc
         public long getEnergyProdBalance(String adr, String prod) throws Exception
         {
             // Valid address ?
-            if (UTILS.BASIC.isAdr(adr))
+            if (!UTILS.BASIC.isAdr(adr))
                 throw new Exception("Invalid address");
             
             // Energy prod ?
@@ -957,7 +958,7 @@ public class CAcc
                 throw new Exception("Invalid product");
             
             // Load data
-            ResultSet rs=UTILS.DB.executeQuery("SELECT COUNT(*) AS total "
+            ResultSet rs=UTILS.DB.executeQuery("SELECT SUM(qty) AS total "
                                                + "FROM stocuri "
                                               + "WHERE adr='"+adr+"' "
                                                 + "AND tip='"+prod+"'");

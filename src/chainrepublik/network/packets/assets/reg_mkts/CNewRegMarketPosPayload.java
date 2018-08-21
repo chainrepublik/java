@@ -28,7 +28,9 @@ public class CNewRegMarketPosPayload extends CPayload
     // Order ID
     long orderID;
     
-                                         
+    // Serial
+    private static final long serialVersionUID = 100L;
+    
     public CNewRegMarketPosPayload(String adr,
                                    long mktID,
                                    String tip,

@@ -73,6 +73,11 @@ public class CVoteOrgPropPayload extends CPayload
         if (UTILS.DB.hasData(rs))
             throw new Exception("You already voted this proposal, CNewOrgPropPayload.java, 116");
         
+        // Vote type
+        if (!this.vote.equals("ID_YES") && 
+            !this.vote.equals("ID_NO"))
+        throw new Exception("Invalid vote, CNewOrgPropPayload.java, 116");
+        
         // Hash
  	String h=UTILS.BASIC.hash(this.getHash()+
                                   this.propID+
@@ -89,10 +94,30 @@ public class CVoteOrgPropPayload extends CPayload
         // Superclass
         super.commit(block);
 
-        // Vote power
-        double power=Double.parseDouble(UTILS.BASIC.getAdrData(this.target_adr, "pol_inf"));
+        // Load org data
+        ResultSet rs=UTILS.DB.executeQuery("SELECT * "
+                                           + "FROM orgs_props "
+                                          + "WHERE propID='"+this.propID+"'");
         
-        // Insert proposal
+        // Next
+        rs.next();
+        
+        // Load org data
+        rs=UTILS.DB.executeQuery("SELECT * "
+                                 + "FROM orgs "
+                                + "WHERE orgID='"+rs.getLong("orgID")+"'");
+        
+        // Next
+        rs.next();
+        
+        // Vote power ?
+        double power=0;
+        if (rs.getString("type").equals("ID_POL_PARTY"))
+           power=Double.parseDouble(UTILS.BASIC.getAdrData(this.target_adr, "pol_inf"));
+        else
+           power=Double.parseDouble(UTILS.BASIC.getAdrData(this.target_adr, "war_points"));
+        
+        // Insert vote
         UTILS.DB.executeUpdate("INSERT INTO orgs_props_votes "
                                      + "SET adr='"+this.target_adr+"', "
                                          + "propID='"+this.propID+"', "

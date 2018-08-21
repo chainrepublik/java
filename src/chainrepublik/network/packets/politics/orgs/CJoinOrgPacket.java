@@ -12,7 +12,7 @@ public class CJoinOrgPacket extends CBroadcastPacket
                              long orgID) throws Exception
     {
         // Constructor
-        super(fee_adr, "ID_JOIN_PARTY_PACKET");
+        super(fee_adr, "ID_JOIN_ORG_PACKET");
         
         // Builds the payload class
 	CJoinOrgPayload dec_payload=new CJoinOrgPayload(adr,
@@ -22,7 +22,7 @@ public class CJoinOrgPacket extends CBroadcastPacket
 	this.payload=UTILS.SERIAL.serialize(dec_payload);
 					
         // Network fee
-	this.setFee(0.0001, "Join party network fee");
+	this.setFee(0.0001, "Join organization network fee");
 			   
 	// Sign packet
 	this.sign();
@@ -35,7 +35,7 @@ public class CJoinOrgPacket extends CBroadcastPacket
    	  super.check(block);
    	  
    	  // Check type
-   	  if (!this.tip.equals("ID_JOIN_PARTY_PACKET")) 
+   	  if (!this.tip.equals("ID_JOIN_ORG_PACKET")) 
              throw new Exception("Invalid packet type - CEndorsePacket.java");
    	  
           // Check fee

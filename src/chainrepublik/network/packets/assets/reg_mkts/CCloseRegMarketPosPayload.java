@@ -13,6 +13,8 @@ public class CCloseRegMarketPosPayload  extends CPayload
     /// UID
     long orderID;
     
+    // Serial
+    private static final long serialVersionUID = 100L;
     
     public CCloseRegMarketPosPayload(String adr, long orderID) throws Exception
     {

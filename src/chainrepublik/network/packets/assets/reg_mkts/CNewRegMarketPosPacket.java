@@ -11,6 +11,9 @@ import java.sql.ResultSet;
 
 public class CNewRegMarketPosPacket extends CBroadcastPacket
 {
+    // Serial
+    private static final long serialVersionUID = 100L;
+    
     public CNewRegMarketPosPacket(String fee_adr,
                                   String adr,
                                   long mktID,

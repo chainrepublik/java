@@ -48,7 +48,7 @@ public class CAdrChgCitPayload extends CPayload
             throw new Exception("Invalid country - CAdrChgCitPayload.java");
         
         // Same country ?
-        if (!this.cou.equals(UTILS.BASIC.getAdrData(this.target_adr, "cou")))
+        if (this.cou.equals(UTILS.BASIC.getAdrData(this.target_adr, "cou")))
             throw new Exception("Invalid country - CAdrChgCitPayload.java");
         
         // Location 

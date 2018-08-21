@@ -10,6 +10,9 @@ import chainrepublik.network.packets.blocks.CBlockPayload;
 
 public class CCloseRegMarketPosPacket extends CBroadcastPacket
 {
+     // Serial
+     private static final long serialVersionUID = 100L;
+    
      public CCloseRegMarketPosPacket(String fee_adr,
                                     String adr,
                                     long orderID) throws Exception

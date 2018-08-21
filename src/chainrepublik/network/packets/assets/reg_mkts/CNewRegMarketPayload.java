@@ -33,6 +33,8 @@ public class CNewRegMarketPayload extends CPayload
     // Market ID
     long mktID;
                                         
+    // Serial
+    private static final long serialVersionUID = 100L;
     
     public CNewRegMarketPayload(String adr, 
                                 String asset_symbol,
@@ -59,10 +61,10 @@ public class CNewRegMarketPayload extends CPayload
         // Description
         this.description=desc;
     
-        // Fee address
+        // Decimals
         this.decimals=decimals;
         
-        // Fee
+        // Days
         this.days=days;
         
         // Market ID
@@ -146,6 +148,23 @@ public class CNewRegMarketPayload extends CPayload
         if (!this.hash.equals(h))
              throw new Exception("Invalid hash - CNewRegMarketPayload.java");
         
+        // Funds
+        if (UTILS.ACC.getBalance(this.target_adr, "CRC", block)<this.days*0.0001)
+           throw new Exception("Insuficient funds - CNewRegMarketPayload.java");
+        
+        // Transfer fee
+        UTILS.ACC.newTransfer(this.target_adr, 
+                              "default", 
+                              days*0.0001, 
+                              "CRC", 
+                              "New market fee", 
+                              "", 
+                              0, 
+                              this.hash, 
+                              this.block, 
+                              false, 
+                              "", 
+                              "");
     }
     
     public void commit(CBlockPayload block) throws Exception

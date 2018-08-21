@@ -65,7 +65,7 @@ public class CFightPayload extends CPayload
        
         // Has data
         if (!UTILS.DB.hasData(rs))
-          throw new Exception("Target address is not registered, CFightPayload.java, 102");  
+          throw new Exception("Invalid warID, CFightPayload.java, 102");  
         
         // Next
         rs.next();

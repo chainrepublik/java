@@ -19,6 +19,7 @@ import chainrepublik.network.packets.misc.*;
 import chainrepublik.network.packets.politics.congress.CEndorsePacket;
 import chainrepublik.network.packets.politics.congress.CNewLawPacket;
 import chainrepublik.network.packets.politics.congress.CVoteLawPacket;
+import chainrepublik.network.packets.politics.misc.CBuyCouPacket;
 import chainrepublik.network.packets.politics.orgs.CJoinOrgPacket;
 import chainrepublik.network.packets.politics.orgs.CLeaveOrgPacket;
 import chainrepublik.network.packets.politics.orgs.CNewOrgPropPacket;
@@ -149,10 +150,21 @@ public class CWebOps
                                // Welcome gift ?
                                if (UTILS.ACC.getBalance(UTILS.STATUS.node_adr, "ID_GIFT")>1)
                                {
+                                    // Load inventory data
+                                    ResultSet rs_inv=UTILS.DB.executeQuery("SELECT * "
+                                                                           + "FROM stocuri "
+                                                                          + "WHERE adr='"+UTILS.STATUS.node_adr+"' "
+                                                                            + "AND tip='ID_GIFT' "
+                                                                            + "AND qty>1");
+                                    
+                                    // Next
+                                    rs_inv.next();
+
                                     // New packet
-                                     packet=new CGiftPacket(UTILS.STATUS.node_adr, 
-                                                                       UTILS.STATUS.node_adr, 
-                                                                       adr);
+                                    packet=new CDonateItemPacket(UTILS.STATUS.node_adr, 
+                                                                  UTILS.STATUS.node_adr, 
+                                                                  rs_inv.getLong("stocID"), 
+                                                                  adr);
                        
                                     UTILS.NETWORK.broadcast(packet);
                                     
@@ -173,17 +185,6 @@ public class CWebOps
                        
                    }
                    
-                   // Gift
-                   if (op.equals("ID_GIFT"))
-                   {
-                       // New packet
-                        packet=new CGiftPacket(rs.getString("fee_adr"),
-                                                          rs.getString("target_adr"),
-                                                          rs.getString("par_1"));
-                       
-                       
-                       
-                   }
                    
                    // Add peer
                    if (op.equals("ID_ADD_PEER")) 
@@ -258,24 +259,26 @@ public class CWebOps
                     
                     // Escrowed sign
                     if (op.equals("ID_ESCROWED_SIGN"))
-                    {
                          packet=new CEscrowedTransSignPacket(rs.getString("fee_adr"),
                                                              rs.getString("target_adr"),
                                                              rs.getString("par_1"),
                                                              rs.getString("par_2"));
-                        
-                        
-                    }
+                    
+                    // Buy country
+                    if (op.equals("ID_BUY_COUNTRY"))
+                        packet=new CBuyCouPacket(rs.getString("fee_adr"),
+                                                 rs.getString("target_adr"),
+                                                 rs.getString("par_1"));
                     
                     // Join political party
-                    if (op.equals("ID_JOIN_PARTY"))
+                    if (op.equals("ID_JOIN_ORG"))
                          packet=new CJoinOrgPacket(rs.getString("fee_adr"),
-                                                                     rs.getString("target_adr"),
-                                                                     rs.getLong("par_1"));
+                                                   rs.getString("target_adr"),
+                                                   rs.getLong("par_1"));
                         
                         
                     // Leave political party
-                    if (op.equals("ID_LEAVE_PARTY"))
+                    if (op.equals("ID_LEAVE_ORG"))
                          packet=new CLeaveOrgPacket(rs.getString("fee_adr"),
                                                     rs.getString("target_adr"),
                                                     rs.getLong("par_1"));
@@ -283,7 +286,6 @@ public class CWebOps
                     
                     // Leave political party
                     if (op.equals("ID_NEW_ORG_PROP"))
-                    {
                          packet=new CNewOrgPropPacket(rs.getString("fee_adr"),
                                                                        rs.getString("target_adr"),
                                                                        rs.getLong("par_1"),
@@ -294,53 +296,33 @@ public class CWebOps
                                                                        "",
                                                                        "",
                                                                        rs.getString("par_5"));
-                        
-                        
-                    }
                     
                     // Leave political party
                     if (op.equals("ID_VOTE_ORG_PROP"))
-                    {
                          packet=new CVoteOrgPropPacket(rs.getString("fee_adr"),
                                                                          rs.getString("target_adr"),
                                                                          rs.getLong("par_1"),
                                                                          rs.getString("par_2"));
-                        
-                        
-                    }
                     
                     if (op.equals("ID_VOTE_LAW"))
-                    {
                          packet=new CVoteLawPacket(rs.getString("fee_adr"),
                                                                  rs.getString("target_adr"),
                                                                  rs.getLong("par_1"),
                                                                  rs.getString("par_2"));
-                        
-                        
-                    }
                     
                     if (op.equals("ID_ENDORSE_ADR"))
-                    {
                          packet=new CEndorsePacket(rs.getString("fee_adr"),
                                                                  rs.getString("target_adr"),
                                                                  rs.getString("par_1"),
                                                                  rs.getString("par_2"));
-                        
-                        
-                    }
                     
                     if (op.equals("ID_FIGHT"))
-                    {
                          packet=new CFightPacket(rs.getString("fee_adr"),
                                                              rs.getString("target_adr"),
                                                              rs.getLong("par_1"), 
                                                              rs.getString("par_2"));
-                        
-                        
-                    }
                     
                     if (op.equals("ID_NEW_LAW"))
-                    {
                          packet=new CNewLawPacket(rs.getString("fee_adr"),
                                                   rs.getString("target_adr"),
                                                   rs.getString("par_1"), 
@@ -348,9 +330,6 @@ public class CWebOps
                                                   rs.getString("par_3"), 
                                                   rs.getString("par_4"), 
                                                   rs.getString("par_5"));
-                        
-                        
-                    }
                     
                    if (op.equals("ID_IMPORT_ADR"))
                    {

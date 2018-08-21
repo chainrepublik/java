@@ -337,7 +337,6 @@ public class CComProds extends CTable
         UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_JEWELRY', prod='ID_COLIER_Q3', type='ID_FINITE', buy_split='ID_NO' ");
         UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_JEWELRY', prod='ID_PLATINUM_RING', type='ID_FINITE', buy_split='ID_NO' ");
         UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_JEWELRY', prod='ID_CEAS_Q3', type='ID_FINITE', buy_split='ID_NO' ");
-        UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_JEWELRY', prod='ID_BUILD_COM_JEWELRY', type='ID_TOOLS', buy_split='ID_NO' ");
         UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_JEWELRY', prod='ID_TOOLS_PROD_JEWELRY', type='ID_TOOLS', buy_split='ID_NO' ");
         UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_CARS', prod='ID_ELECTRICITY', type='ID_RAW', buy_split='ID_NO' ");
         UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_CARS', prod='ID_OIL', type='ID_RAW', buy_split='ID_NO' ");
@@ -402,7 +401,6 @@ public class CComProds extends CTable
         UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_CONSTRUCTION', prod='ID_BUILD_COM_WINE', type='ID_FINITE', buy_split='ID_NO' ");
         UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_CONSTRUCTION', prod='ID_BUILD_COM_TRAVEL_TICKETS', type='ID_FINITE', buy_split='ID_NO' ");
         UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_CONSTRUCTION', prod='ID_BUILD_COM_WEAPONS', type='ID_FINITE', buy_split='ID_NO' ");
-        UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_CONSTRUCTION', prod='ID_BUILD_COM_AMMUNITION', type='ID_FINITE', buy_split='ID_NO' ");
         UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_TOOLS', prod='ID_TOOLS_PROD_OIL', type='ID_FINITE', buy_split='ID_NO' ");
         UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_TOOLS', prod='ID_TOOLS_PROD_ELECTRICITY', type='ID_FINITE', buy_split='ID_NO' ");
         UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_TOOLS', prod='ID_TOOLS_PROD_GAS', type='ID_FINITE', buy_split='ID_NO' ");
@@ -465,7 +463,6 @@ public class CComProds extends CTable
         UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_ALCOHOOL', prod='ID_SUGARCANE', type='ID_RAW', buy_split='ID_NO' ");
         UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_DYNAMITE', prod='ID_GUNPOWDER', type='ID_RAW', buy_split='ID_NO' ");
         UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_JEWELRY', prod='ID_INEL_Q1', type='ID_FINITE', buy_split='ID_NO' ");
-        UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_JEWELRY', prod='ID_INEL_Q2', type='ID_RAW', buy_split='ID_NO' ");
         UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_JEWELRY', prod='ID_INEL_Q3', type='ID_FINITE', buy_split='ID_NO' ");
         UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_TRAVEL_TICKETS', prod='ID_ELECTRICITY', type='ID_RAW', buy_split='ID_NO' ");
         UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_TRAVEL_TICKETS', prod='ID_PAPER', type='ID_RAW', buy_split='ID_NO' ");
@@ -519,6 +516,22 @@ public class CComProds extends CTable
         UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_HEAVY_WEAPONS', prod='ID_TOOLS_PROD_BIG_WEAPONS', type='ID_TOOLS', buy_split='ID_NO' ");
         UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_HEAVY_WEAPONS', prod='ID_BUILD_COM_BIG_WEAPONS', type='ID_BUILDING', buy_split='ID_NO' ");
         UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_HEAVY_WEAPONS', prod='ID_JET_FIGHTER', type='ID_FINITE', buy_split='ID_NO' ");
+        UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_GUNPOWDER', prod='ID_ELECTRICITY', type='ID_RAW', buy_split='ID_NO' ");
+        UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_GUNPOWDER', prod='ID_OIL', type='ID_RAW', buy_split='ID_NO' ");
+        UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_GUNPOWDER', prod='ID_GUNPOWDER', type='ID_FINITE', buy_split='ID_NO' ");
+        UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_GUNPOWDER', prod='ID_BUILD_COM_GUNPOWDER', type='ID_BUILDING', buy_split='ID_NO' ");
+        UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_GUNPOWDER', prod='ID_TOOLS_PROD_GUNPOWDER', type='ID_TOOLS', buy_split='ID_NO' ");
+        UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_JEWELRY', prod='ID_INEL_Q2', type='ID_FINITE', buy_split='ID_NO' ");
+        UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_JEWELRY', prod='ID_BUILD_COM_JEWELRY', type='ID_BUILDING', buy_split='ID_NO' ");
+        UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_CONSTRUCTION', prod='ID_BUILD_COM_CONSTRUCTION', type='ID_BUILDING', buy_split='ID_NO' ");
+        UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_TOOLS', prod='ID_BUILD_COM_TOOLS', type='ID_BUILDING', buy_split='ID_NO' ");
+        UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_TOOLS', prod='ID_TOOLS_PROD_GIFTS', type='ID_FINITE', buy_split='ID_NO' ");
+        UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_TOOLS', prod='ID_TOOLS_PROD_SMALL_WEAPONS', type='ID_FINITE', buy_split='ID_NO' ");
+        UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_TOOLS', prod='ID_TOOLS_PROD_BIG_WEAPONS', type='ID_FINITE', buy_split='ID_NO' ");
+        UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_TOOLS', prod='ID_TOOLS_PROD_TRAVEL_TICKETS', type='ID_FINITE', buy_split='ID_NO' ");
+        UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_CONSTRUCTION', prod='ID_BUILD_COM_GIFTS', type='ID_FINITE', buy_split='ID_NO' ");
+        UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_CONSTRUCTION', prod='ID_BUILD_COM_BIG_WEAPONS', type='ID_FINITE', buy_split='ID_NO' ");
+        UTILS.DB.executeUpdate("INSERT INTO com_prods SET com_type='ID_COM_CONSTRUCTION', prod='ID_BUILD_COM_SMALL_WEAPONS', type='ID_FINITE', buy_split='ID_NO' ");
 
     }
 }

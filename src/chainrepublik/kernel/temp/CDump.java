@@ -201,12 +201,12 @@ public class CDump
         }
     }
     
-    public void dumpPolParties() throws Exception
+    public void dumpOrgs() throws Exception
     {
         ResultSet rs=UTILS.DB.executeQuery("SELECT * FROM orgs");
         
         while (rs.next())
-            System.out.println("UTILS.DB.executeUpdate(\"INSERT INTO pol_parties SET adr='"+rs.getString("adr")+"', orgID='"+rs.getString("orgID")+"', type='"+rs.getString("type")+"', name='"+rs.getString("name")+"', description='"+rs.getString("description")+"', mil_unit_level='"+rs.getString("mil_unit_level")+"', country='"+rs.getString("country")+"', avatar='"+rs.getString("avatar")+"'\");");
+            System.out.println("UTILS.DB.executeUpdate(\"INSERT INTO orgs SET adr='"+rs.getString("adr")+"', orgID='"+rs.getString("orgID")+"', type='"+rs.getString("type")+"', name='"+rs.getString("name")+"', description='"+rs.getString("description")+"', mil_unit_level='"+rs.getString("mil_unit_level")+"', country='"+rs.getString("country")+"', avatar='"+rs.getString("avatar")+"'\");");
     }
     
     public void dumpSeas() throws Exception

@@ -19,7 +19,6 @@ import chainrepublik.network.packets.exchange.CRemoveExOffertPacket;
 import chainrepublik.network.packets.market.CRentPacket;
 import chainrepublik.network.packets.mes.CMesPacket;
 import chainrepublik.network.packets.misc.CDelVotePacket;
-import chainrepublik.network.packets.misc.CGiftPacket;
 import chainrepublik.network.packets.misc.CRenewPacket;
 import chainrepublik.network.packets.politics.congress.CEndorsePacket;
 import chainrepublik.network.packets.politics.orgs.CJoinOrgPacket;
@@ -152,15 +151,7 @@ public class CStressTest
         return r.nextBoolean(); 
     }
     
-    public String getRandRef(String adr) throws Exception
-    {
-       ResultSet rs=UTILS.DB.executeQuery("SELECT * "
-                                          + "FROM adr "
-                                         + "WHERE ref_adr='"+adr+"' "
-                                      + "ORDER BY RAND()");
-        rs.next();
-        return rs.getString("adr");    
-    }
+    
     
     public String getRandCou() throws Exception
     {
@@ -208,7 +199,7 @@ public class CStressTest
     public String getRandAdr() throws Exception
     {
         ResultSet rs=UTILS.DB.executeQuery("SELECT * "
-                                           + "FROM my_adr "
+                                           + "FROM adr "
                                        + "ORDER BY RAND()");
         rs.next();
         return rs.getString("adr");
@@ -285,7 +276,7 @@ public class CStressTest
         String adr=this.getRandAdr();
         
         // Country
-        String cou=this.getRandCou();
+        String cou=this.getRandCou(); 
         
         // Packet
         CAdrChgCitPacket packet=new CAdrChgCitPacket(adr,
@@ -350,7 +341,7 @@ public class CStressTest
         String rec=this.getRandAdr();
         
         // Ref
-        String ref=this.getRandRef(adr);
+        String ref=this.getRandAdr();
         
         // Packet
         CSendRefPacket packet=new CSendRefPacket(adr, 
@@ -950,8 +941,8 @@ public class CStressTest
         else
            esc=this.getRandAdr();
         
-        CTransPacket packet=new CTransPacket("MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEsFuiYIeB1SdngubghNJ47RnzDeDGPl2iqe73JA4PFm8owX21b9rApqieLXNhXSHB801iFs7cYIeinBFjZh8u3g==", 
-			                     "MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEsFuiYIeB1SdngubghNJ47RnzDeDGPl2iqe73JA4PFm8owX21b9rApqieLXNhXSHB801iFs7cYIeinBFjZh8u3g==", 
+        CTransPacket packet=new CTransPacket("MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEEpn9tcO9qb55dKKTCroSy6fa8mhyhChMYLdJer+WYnVR8Is9l1864vi9Z9eVXTkk3xo1ARNfY+fM0DWI0Wo7+g==", 
+			                     "MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEEpn9tcO9qb55dKKTCroSy6fa8mhyhChMYLdJer+WYnVR8Is9l1864vi9Z9eVXTkk3xo1ARNfY+fM0DWI0Wo7+g==", 
 	                                     rec, 
 	    	                             amount, 
 			                     cur,
@@ -987,18 +978,6 @@ public class CStressTest
          UTILS.NETWORK.broadcast(packet);
     }
     
-    public void testGift() throws Exception
-    {
-        // Adr
-        String adr=this.getRandAdr();
-        
-        CGiftPacket packet=new CGiftPacket("MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEEpn9tcO9qb55dKKTCroSy6fa8mhyhChMYLdJer+WYnVR8Is9l1864vi9Z9eVXTkk3xo1ARNfY+fM0DWI0Wo7+g==",
-                                           "MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEEpn9tcO9qb55dKKTCroSy6fa8mhyhChMYLdJer+WYnVR8Is9l1864vi9Z9eVXTkk3xo1ARNfY+fM0DWI0Wo7+g==", 
-                                           adr);
-        
-        // Send 
-         UTILS.NETWORK.broadcast(packet);
-    }
     
     public void testNewArt() throws Exception
     {
@@ -1179,25 +1158,46 @@ public class CStressTest
        
         if (started)
         {
-           this.testTrans();
+           //this.testTrans();
            
-           if (t%2==0)
-               this.testVote();
+           //if (t%2==0)
+           //    this.testVote();
            
-           if (t%3==0)
-               this.testNewArt();
+           //if (t%3==0)
+           //    this.testNewArt();
            
-           if (t%4==0)
-               this.testGift();
+           //if (t%4==0)
+           //    this.testGift();
            
-           if (t%5==0)
-               this.testNewComment();
+           //if (t%5==0)
+           //    this.testNewComment();
            
-           if (t%6==0)
-               this.testFollow();
+           //if (t%6==0)
+           //    this.testFollow();
            
-           if (t%7==0)
-               this.testUnfollow();
+           //if (t%7==0)
+           //    this.testUnfollow();
+           
+           //if (t%8==0)
+           //    this.testAddAttr();
+           
+           //if (t%9==0)
+           //    this.testChgcit();
+           
+           //if (t%10==0)
+           //    this.testAdrReg();
+           
+           //if (t%11==0)
+           //    this.testSendRef();
+           
+           //if (t%12==0)
+           //    this.testTransferAdr();
+           
+           //if (t%2==0)
+           //    this.testTravel();
+           
+           //if (t%14==0)
+           //    this.testUpdateProfile();
         }
     }
 }

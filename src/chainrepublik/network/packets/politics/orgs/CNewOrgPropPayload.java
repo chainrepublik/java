@@ -127,8 +127,8 @@ public class CNewOrgPropPayload extends CPayload
             double pol_inf=Double.parseDouble(UTILS.BASIC.getAdrData(this.target_adr, "pol_inf"));
             
             // Lower than 1000
-            if (pol_inf<1000)
-               throw new Exception("You need a minimum 1000 political influence, CNewOrgPropPayload.java, 109"); 
+            if (pol_inf<250)
+               throw new Exception("You need a minimum 250 political influence, CNewOrgPropPayload.java, 109"); 
         }
         else
         {
@@ -140,10 +140,10 @@ public class CNewOrgPropPayload extends CPayload
                throw new Exception("Not a member of this org, CNewOrgPropPayload.java, 109");
             
             // Address warpoints
-            long war_points=Long.parseLong(UTILS.BASIC.getAdrData(this.target_adr, "pol_inf"));
+            double war_points=Long.parseLong(UTILS.BASIC.getAdrData(this.target_adr, "war_points"));
             
             // Lower than 1000
-            if (war_points<1000)
+            if (war_points<250)
                throw new Exception("You need a minimum 1000 war points, CNewOrgPropPayload.java, 109"); 
         }
         
@@ -191,8 +191,15 @@ public class CNewOrgPropPayload extends CPayload
         
         // Change avatar
         if (this.prop_type.equals("ID_CHG_AVATAR"))
+        {
+            // Valid pic ?
             if (!UTILS.BASIC.isPic(this.par_1))
-                 throw new Exception("Invalid avatar, CNewOrgPropPayload.java, 116");
+                throw new Exception("Invalid avatar, CNewOrgPropPayload.java, 116");
+            
+            // Org is military unit ?
+            if (!rs.getString("type").equals("ID_MIL_UNIT"))
+               throw new Exception("Invalid org type, CNewOrgPropPayload.java, 116");
+        }
         
         // Set art official
         if (this.prop_type.equals("ID_SET_ART_OFFICIAL"))

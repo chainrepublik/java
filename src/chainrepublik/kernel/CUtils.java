@@ -1616,7 +1616,19 @@ public class CUtils
             || prod.equals("ID_HOUSE_Q1")
             || prod.equals("ID_HOUSE_Q2")
             || prod.equals("ID_HOUSE_Q3")
-            || prod.equals("ID_GIFT"))
+            || prod.equals("ID_GIFT") 
+            || prod.equals("ID_KNIFE") 
+            || prod.equals("ID_PISTOL") 
+            || prod.equals("ID_REVOLVER") 
+            || prod.equals("ID_SHOTGUN") 
+            || prod.equals("ID_MACHINE_GUN") 
+            || prod.equals("ID_SNIPER") 
+            || prod.equals("ID_GLOVES") 
+            || prod.equals("ID_GOGGLES") 
+            || prod.equals("ID_HELMET") 
+            || prod.equals("ID_BOOTS") 
+            || prod.equals("ID_VEST") 
+            || prod.equals("ID_SHIELD"))
         return true;
         else
         return false;
@@ -2283,40 +2295,40 @@ public class CUtils
         switch (weapon)
         {
             // Knife
-            case "ID_KNIFE" :  damage=100; break;
+            case "ID_KNIFE" :  damage=10; break;
             
             // Pistoc
-            case "ID_PISTOL" :  damage=200; break;
+            case "ID_PISTOL" :  damage=20; break;
             
             // Revolver
-            case "ID_REVOLVER" :  damage=300; break;
+            case "ID_REVOLVER" :  damage=30; break;
             
             // Riffle
-            case "ID_RIFFLE" :  damage=400; break;
+            case "ID_RIFFLE" :  damage=40; break;
             
             // Machine gun
-            case "ID_MACHINE_GUN" :  damage=500; break;
+            case "ID_MACHINE_GUN" :  damage=50; break;
             
             // Grenade launcher
-            case "ID_GRENADE_LAUNCHER" :  damage=600; break;
+            case "ID_GRENADE_LAUNCHER" :  damage=60; break;
             
             // Gloves
-            case "ID_GLOVES" :  damage=100; break;
+            case "ID_GLOVES" :  damage=10; break;
             
             // Glasses
-            case "ID_GLASSES" :  damage=200; break;
+            case "ID_GLASSES" :  damage=20; break;
             
             // Helmet
-            case "ID_HELMET" :  damage=300; break;
+            case "ID_HELMET" :  damage=30; break;
             
             // Boots
-            case "ID_BOOTS" :  damage=400; break;
+            case "ID_BOOTS" :  damage=40; break;
             
             // Vest
-            case "ID_VEST" :  damage=500; break;
+            case "ID_VEST" :  damage=50; break;
             
             // Schield
-            case "ID_SHIELD" :  damage=600; break;
+            case "ID_SHIELD" :  damage=60; break;
         }
         
         return damage;
@@ -2539,9 +2551,9 @@ public class CUtils
          
          // Load inventory
          ResultSet rs=UTILS.DB.executeQuery("SELECT * "
-                               + "FROM stocuri "
-                              + "WHERE adr='"+adr+"' "
-                                + "AND in_use>0");
+                                            + "FROM stocuri "
+                                           + "WHERE adr='"+adr+"' "
+                                             + "AND in_use>0");
          
          while (rs.next())
             if (this.isAttackWeapon(rs.getString("tip")))
@@ -2807,8 +2819,8 @@ public class CUtils
         // Load asset owners
         ResultSet rs=UTILS.DB.executeQuery("SELECT * "
                                            + "FROM assets_owners "
-                                          + "WHERE asset='"+symbol+"' "
-                                          + "ORDER qty DESC");
+                                          + "WHERE symbol='"+symbol+"' "
+                                          + "ORDER BY qty DESC");
         
         // Next
         rs.next();

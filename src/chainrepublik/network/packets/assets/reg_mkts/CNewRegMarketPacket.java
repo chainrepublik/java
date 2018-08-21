@@ -10,6 +10,9 @@ import chainrepublik.network.packets.blocks.CBlockPayload;
 
 public class CNewRegMarketPacket extends CBroadcastPacket 
 {
+    // Serial
+    private static final long serialVersionUID = 100L;
+    
      public CNewRegMarketPacket(String fee_adr,
                                 String adr, 
                                 String asset_symbol,
@@ -34,7 +37,7 @@ public class CNewRegMarketPacket extends CBroadcastPacket
 	   this.payload=UTILS.SERIAL.serialize(dec_payload);
            
 	   // Network fee
-	  this.setFee(0.0001*days, "New asset market network fee");
+	  this.setFee(0.0001, "New asset market network fee");
 	   
 	   // Sign packet
 	   this.sign();
@@ -54,7 +57,7 @@ public class CNewRegMarketPacket extends CBroadcastPacket
    	  CNewRegMarketPayload dec_payload=(CNewRegMarketPayload) UTILS.SERIAL.deserialize(payload);
           
           // Check fee
-	  if (this.fee<dec_payload.days*0.0001)
+	  if (this.fee<0.0001)
 	      throw new Exception("Invalid fee - CIssueMoreAssetsPacket.java");
           
           // Check payload

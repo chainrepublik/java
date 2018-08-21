@@ -6,7 +6,10 @@ import chainrepublik.kernel.temp.CDump;
 import chainrepublik.kernel.temp.CStressTest;
 import chainrepublik.network.CCurBlock;
 import chainrepublik.network.CNetwork;
+import chainrepublik.network.packets.adr.CTravelPacket;
+import chainrepublik.network.packets.assets.CIssueAssetPacket;
 import chainrepublik.network.packets.assets.reg_mkts.CCloseRegMarketPosPacket;
+import chainrepublik.network.packets.assets.reg_mkts.CNewRegMarketPacket;
 import chainrepublik.network.packets.companies.CNewCompanyPacket;
 import chainrepublik.network.packets.companies.CNewWorkplacePacket;
 import chainrepublik.network.packets.companies.CUpdateCompanyPacket;
@@ -19,11 +22,13 @@ import chainrepublik.network.packets.politics.congress.CVoteLawPacket;
 import chainrepublik.network.packets.politics.orgs.CJoinOrgPacket;
 import chainrepublik.network.packets.politics.orgs.CLeaveOrgPacket;
 import chainrepublik.network.packets.politics.orgs.CNewOrgPropPacket;
+import chainrepublik.network.packets.politics.orgs.CVoteOrgPropPacket;
 import chainrepublik.network.packets.portofolio.CConsumeItemPacket;
 import chainrepublik.network.packets.portofolio.CDonateItemPacket;
 import chainrepublik.network.packets.portofolio.CSetRentPricePacket;
 import chainrepublik.network.packets.portofolio.CUseItemPacket;
 import chainrepublik.network.packets.press.*;
+import chainrepublik.network.packets.war.CFightPacket;
 import java.security.Security;
 import java.sql.ResultSet;
 
@@ -70,8 +75,8 @@ public class main
         
         // Dump
         CDump dump=new CDump();
-        //dump.polParties("LT", 10);
-        //dump.dumpSeas();
+        //dump.polParties("MK", 4);
+        
         
        
         UTILS.MINER_UTILS=new CCPUMinerUtils();
@@ -120,7 +125,7 @@ public class main
         
         // Stress test
         UTILS.STRESS=new CStressTest();
-        //UTILS.STRESS.start();
+        UTILS.STRESS.start();
         
         if (UTILS.SETTINGS.seed_mode)
             UTILS.STATUS.setEngineStatus("ID_ONLINE");
@@ -129,16 +134,8 @@ public class main
         
         System.out.println("Wallet is up an running...");
         
-       UTILS.CBLOCK.startMiners(1);
-       
-        /*CNewLawPacket packet=new CNewLawPacket("MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAENQYiiWVz9Qpn4/GKCqWXmtvmpTA0BGJyiuoRirsDNf7KGIP3rYxDrZ85ieW905o/IDIW0ZLi3GMpisYhGVvV+w==",
-                                               "MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAENQYiiWVz9Qpn4/GKCqWXmtvmpTA0BGJyiuoRirsDNf7KGIP3rYxDrZ85ieW905o/IDIW0ZLi3GMpisYhGVvV+w==", 
-                                               "ID_BUY_WEAPONS", 
-                                               "1532422445814",
-                                               "1",
-                                               "",
-                                               "Trebe taxe ma...");
-        UTILS.NETWORK.broadcast(packet);*/
+        UTILS.CBLOCK.startMiners(1);
+        
     }
     
     

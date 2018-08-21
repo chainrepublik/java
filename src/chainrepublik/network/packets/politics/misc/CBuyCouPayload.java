@@ -44,7 +44,8 @@ public class CBuyCouPayload extends CPayload
         ResultSet rs=UTILS.DB.executeQuery("SELECT * "
                                            + "FROM countries "
                                           + "WHERE private='YES' "
-                                            + "AND owner='default'");
+                                            + "AND owner='default' "
+                                            + "AND code='"+this.cou+"'");
         
         // Has records ?
         if (!UTILS.DB.hasData(rs))
@@ -73,6 +74,10 @@ public class CBuyCouPayload extends CPayload
         
         // Price
         long price=50*no;
+        
+        // Min price
+        if (price<50)
+            price=50;
         
         // Funds ?
         if (UTILS.ACC.getBalance(this.target_adr, "CRC", block)<price)
@@ -114,6 +119,7 @@ public class CBuyCouPayload extends CPayload
         // Change cit
         UTILS.DB.executeUpdate("UPDATE adr "
                                 + "SET cou='"+this.cou+"', "
+                                    + "loc='"+this.cou+"', "
                                     + "pol_inf=0, "
                                     + "pol_party=0, "
                                     + "mil_unit=0, "

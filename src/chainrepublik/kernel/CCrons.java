@@ -87,7 +87,7 @@ public class CCrons
                                    + "SET adr='"+defender_adr+"' "
                                  + "WHERE war_loc_type='ID_LAND' "
                                    + "AND war_locID='"+target+"' "
-                                   + "AND status='ID_READY'");
+                                   + "AND war_status='ID_READY'");
        }
        
        // End war
@@ -254,7 +254,7 @@ public class CCrons
                                     // State budget
                                     double budget=UTILS.ACC.getBalance(org_adr, cur);
                                   
-                                    // Only 5% of budget can be donated
+                                    // Funds ?
                                     if (budget>amount)
                                     {
                                         // Payment
@@ -287,6 +287,14 @@ public class CCrons
                                 UTILS.DB.executeUpdate("UPDATE orgs "
                                                         + "SET description='"+rs.getString("par_1")+"' "
                                                       + "WHERE orgID='"+rs.getLong("orgID")+"'");
+               
+                                break;
+                                
+            // Change description
+           case "ID_CHG_AVATAR" : // Change
+                                  UTILS.DB.executeUpdate("UPDATE orgs "
+                                                          + "SET avatar='"+rs.getString("par_1")+"' "
+                                                        + "WHERE orgID='"+rs.getLong("orgID")+"'");
                
                                 break;
            
@@ -493,7 +501,7 @@ public class CCrons
                                  + "SET pol_inf=pol_inf-pol_inf*0.01"
                                + "WHERE pol_inf>=1");
              
-             // Set pi to zero
+             // Set influence to zero
              UTILS.DB.executeUpdate("UPDATE adr "
                                      + "SET pol_inf=0 "
                                    + "WHERE pol_inf<1");
@@ -501,7 +509,7 @@ public class CCrons
              // Exclude from parties memebrs having a pi lower than 25
              UTILS.DB.executeUpdate("UPDATE adr "
                                      + "SET pol_party=0 "
-                                   + "WHERE pol_inf<25");
+                                   + "WHERE pol_inf<10");
          }
      }
      
@@ -601,6 +609,10 @@ public class CCrons
             UTILS.DB.executeUpdate("UPDATE adr "
                                     + "SET war_points=0 "
                                   + "WHERE war_points<1");
+            
+            UTILS.DB.executeUpdate("UPDATE adr "
+                                    + "SET mil_unit=0 "
+                                  + "WHERE war_points<10");
          }
      }
      
