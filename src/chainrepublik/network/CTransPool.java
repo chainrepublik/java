@@ -12,9 +12,7 @@ public class CTransPool
 {
 	public CTransPool()  throws Exception
 	{
-		UTILS.DB.executeUpdate("DELETE "+
-				           "FROM trans_pool "+
-				          "WHERE block<"+(UTILS.NET_STAT.last_block+1));
+		
 	}
 	
 	public void addTrans(String src, 

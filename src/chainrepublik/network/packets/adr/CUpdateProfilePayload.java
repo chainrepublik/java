@@ -41,6 +41,11 @@ public class CUpdateProfilePayload extends CPayload
         
          // Check energy
         this.checkEnergy();
+        
+        // Check for null
+        if (this.img==null ||
+            this.description==null)
+        throw new Exception("Null assertion failed - CUpdateProfilePayload.java, 68");
    	
         // Registered ?
         if (!UTILS.BASIC.isRegistered(this.target_adr, this.block))

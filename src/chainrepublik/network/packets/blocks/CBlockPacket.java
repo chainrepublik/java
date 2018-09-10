@@ -151,7 +151,7 @@ public class CBlockPacket extends CPacket
                                                this.net_dif))
               {
                  System.out.println("Invalid POW");
-                 //return false;
+                 return false;
               }
               
             // Payload size
@@ -210,7 +210,7 @@ public class CBlockPacket extends CPacket
 	   	
 	   	// Superclass
 	   	super.commit(block_payload);
-	   	
+                
 	   	// Commit payload
 	   	block_payload.commit();
 	   	 
@@ -253,7 +253,6 @@ public class CBlockPacket extends CPacket
         
        // Refresh
        UTILS.TABLES.refresh(block, this.hash);
-       
    }
    
    public void payReward(String adr) throws Exception
@@ -330,34 +329,12 @@ public class CBlockPacket extends CPacket
        // 100th block
        if (block%1440!=0) return;
        
-       // Load all addresses havin the balance over 0.0001
-       ResultSet rs=UTILS.DB.executeQuery("SELECT COUNT(*) AS total "
-                                          + "FROM adr "
-                                         + "WHERE balance<1 "
-                                           + "AND balance>=0.0001 "
-                                           + "AND expires<"+block);
-       
-       // Next
-       rs.next();
-       
-       // Total
-       long total=rs.getLong("total");
-       
-       // Total fee
-       double total_fee=total*0.0001;
-       
-       // Move funds to default
-       UTILS.DB.executeUpdate("UPDATE adr "
-                               + "SET balance=balance+"+total_fee+", "
-                                   + "block='"+block+"' "
-                             + "WHERE adr='default'");
-       
         // Load data
-        rs=UTILS.DB.executeQuery("SELECT * "
-                                 + "FROM adr "
-                                + "WHERE balance<1 "
-                                  + "AND balance>=0.0001 "
-                                  + "AND expires<"+block);
+        ResultSet rs=UTILS.DB.executeQuery("SELECT * "
+                                           + "FROM adr "
+                                          + "WHERE balance<1 "
+                                            + "AND balance>=0.0001 "
+                                            + "AND expires<"+block);
         
         // Loop
         while (rs.next())

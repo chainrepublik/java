@@ -45,14 +45,7 @@ public class CLawsVotes extends CTable
    
    public void reorganize(long block, String chk_hash) throws Exception
    {
-       // Meesage
-       System.out.println("Reorganizing laws_votes...");
-        
-       // Delete
-       UTILS.DB.executeUpdate("DELETE FROM laws_votes "
-                                  + "WHERE block>"+block);
-       
-       // Meesage
-       System.out.print("Done");
+       // Load checkpoint
+       loadCheckpoint(chk_hash);
    }
 }

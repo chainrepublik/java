@@ -40,14 +40,7 @@ public class CDelegatesLog extends CTable
    
    public void reorganize(long block, String chk_hash) throws Exception
    {
-       // Meesage
-       System.out.println("Reorganizing delegates_log...");
-        
        // Load checkpoint
-       UTILS.DB.executeUpdate("DELETE FROM delegates_log "
-                                  + "WHERE block>"+block);
-       
-       // Meesage
-        System.out.print("Done");
+       loadCheckpoint(chk_hash);
    }
 }

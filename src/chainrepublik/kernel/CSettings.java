@@ -96,6 +96,10 @@ public class CSettings
           if (settings.containsKey("db_pass")) 
               this.db_pass=settings.getProperty("db_pass");
           
+          // Db name
+          if (settings.containsKey("db_name")) 
+              this.db_name=settings.getProperty("db_name");
+          
           // Close
           in.close();
       }

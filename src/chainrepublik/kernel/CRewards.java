@@ -602,7 +602,7 @@ public class CRewards
                 double p=ce*100/total_energy;
                 
                 // Amount
-                double amount=UTILS.BASIC.round(p*100/ce, 4);
+                double amount=UTILS.BASIC.round(p*pool/100, 4);
                 
                 // Occupied ?
                 if (!rs.getString("occupied").equals("") &&

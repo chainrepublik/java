@@ -127,17 +127,24 @@ public class CAddAttrPayload extends CPayload
        // Check energy
        this.checkEnergy();
        
+       // Check for null
+       if (this.attr==null ||
+           this.s1==null ||
+           this.s2==null ||
+           this.s3==null)
+       throw new Exception("Null assertion failed - CWorkPayload.java, 135");
+       
        // Citizen address ?
         if (!UTILS.BASIC.isCitAdr(this.target_adr, this.block))
-           throw new Exception("Only citizens can do this action - CWorkPayload.java, 68");
+           throw new Exception("Only citizens can do this action - CWorkPayload.java, 139");
        
        // Attribute ?
        if (!this.attr.equals("ID_TRUST_ASSET"))
-          throw new Exception("Invalid attribute - CAddAttrPayload.java");
+          throw new Exception("Invalid attribute - CAddAttrPayload.java, 143");
         
         // Has attribute ?
         if (UTILS.BASIC.hasAttr(this.target_adr, this.attr, this.s1))
-           throw new Exception("Already has this attribute - CAddAttrPayload.java");
+           throw new Exception("Already has this attribute - CAddAttrPayload.java, 146");
         
         // Days
         if (this.days<1)

@@ -7,8 +7,7 @@ public class CAcc
 {
     public CAcc() throws Exception
     {
-        // Clears trans pool
-        UTILS.DB.executeUpdate("DELETE FROM trans_pool");
+        
     }
     
     public void clearTrans(String hash, String tip, long block) throws Exception
@@ -750,8 +749,7 @@ public class CAcc
             double new_balance;
             
             // New stoc ID
-            Random r=new Random();
-            long stocID=UTILS.BASIC.hashToLong(hash);
+            long stocID=UTILS.BASIC.getFreeID(UTILS.BASIC.hashToLong(hash));
             
             // Already exist ?
             if (UTILS.BASIC.isID(stocID))
@@ -814,14 +812,18 @@ public class CAcc
                 if (UTILS.BASIC.buySplit(adr, prod, amount))
                 {
                     for (int a=1; a<=amount; a++)
-                    UTILS.DB.executeUpdate("INSERT INTO stocuri "
+                    {
+                        long stID=UTILS.BASIC.getFreeID(stocID+1);
+                        
+                        UTILS.DB.executeUpdate("INSERT INTO stocuri "
                                                   + "SET adr='"+adr+"', "
                                                       + "tip='"+prod+"', "
                                                       + "qty='1', "
                                                       + "invested="+(invested/amount)+", "
                                                       + "expires='"+expires+"', "
-                                                      + "stocID='"+(stocID+a)+"', "
+                                                      + "stocID='"+stID+"', "
                                                       + "block='"+block+"'");
+                    }
                 }
                 else
                      UTILS.DB.executeUpdate("INSERT INTO stocuri "

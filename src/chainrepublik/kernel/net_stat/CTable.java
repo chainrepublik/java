@@ -3,6 +3,9 @@ package chainrepublik.kernel.net_stat;
 
 import java.sql.ResultSet;
 import chainrepublik.kernel.UTILS;
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class CTable 
 {
@@ -58,11 +61,19 @@ public class CTable
     
     public void flush(long block, String block_hash) throws Exception
     {
-          // Load file ?
-           UTILS.DB.executeQuery("SELECT * FROM "+this.name+" INTO OUTFILE '"+UTILS.DB.fileLoc+"chk_"+this.name+"_"+block_hash+".table'");
+        // File name
+        String f_name=UTILS.DB.fileLoc+"chk_"+this.name+"_"+block_hash+".table";
         
-           // Checkpoint
-           this.checkpoint(block, block_hash);
+        // Remove if exist
+        File f = new File(f_name);
+        if (f.exists())
+            Files.delete(Paths.get(f_name));
+        
+        // Load file ?
+        UTILS.DB.executeQuery("SELECT * FROM "+this.name+" INTO OUTFILE '"+f_name+"'");
+        
+        // Checkpoint
+        this.checkpoint(block, block_hash);
     }
    
     public void checkpoint(long block, String hash) throws Exception

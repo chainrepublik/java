@@ -11,19 +11,19 @@ import chainrepublik.network.packets.blocks.CBlockPayload;
 public class CPayload  implements java.io.Serializable
 {
 	// Hash
-	public String hash="";
+	public String hash;
 	
 	// Block target address
-        public String target_adr="";
+        public String target_adr;
 	
 	// Signature
-	public String sign="";
+	public String sign;
 	
 	// Tstamp
-	public long tstamp=0;
+	public long tstamp;
 	
 	// Tstamp
-        public long block=0;
+        public long block;
         
 	// Constructor
         public CPayload() throws Exception
@@ -65,13 +65,18 @@ public class CPayload  implements java.io.Serializable
         // Check
         public void check(CBlockPayload block) throws Exception
         {
+           // Null hash ?
+           if (this.hash==null)
+               throw new Exception("Null assertion failed - CPayload");
+           
            // Hash
            if (!UTILS.BASIC.isHash(this.hash)) 
                 throw new Exception("Invalid hash - CPayload");
             
-           // Target adr
-            if (!this.target_adr.equals(""))
-               if (!UTILS.BASIC.isAdr(this.target_adr))
+            // Target adr
+            if (this.target_adr!=null)
+               if (!this.target_adr.equals(""))
+                 if (!UTILS.BASIC.isAdr(this.target_adr))
                   throw new Exception("Invalid target address - CPayload");
            
            // Block number

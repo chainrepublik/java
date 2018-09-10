@@ -127,7 +127,8 @@ public class CNetwork extends Thread
                           packet.tip.equals("ID_REQ_CON_RESPONSE_PACKET") || 
                           packet.tip.equals("ID_REQ_DATA_PACKET") || 
                           packet.tip.equals("ID_NETSTAT_PACKET") ||
-                          packet.tip.equals("ID_PING_PACKET"))
+                          packet.tip.equals("ID_PING_PACKET") ||
+                          packet.tip.equals("ID_PUT_BLOCK_PACKET"))
                       packet.check(sender);
                   }
                   else
@@ -170,10 +171,17 @@ public class CNetwork extends Thread
                       System.out.println(ex.getMessage()+" CNetwork.java - 165");
                       
                       // Update passed status
-                      UTILS.DB.executeUpdate("UPDATE rec_packets "
-                                              + "SET passed='N', "
-                                                  + "reason='"+UTILS.BASIC.base64_encode(ex.getMessage())+"' "
-                                            + "WHERE hash='"+packet.hash+"'");
+                      try
+                      {
+                          UTILS.DB.executeUpdate("UPDATE rec_packets "
+                                                  + "SET passed='N', "
+                                                      + "reason='"+UTILS.BASIC.base64_encode(ex.getMessage())+"' "
+                                                + "WHERE hash='"+packet.hash+"'");
+                      }
+                      catch (Exception e)
+                      {
+                          System.out.println("Could not execute the update query");
+                      }
                   }
 	  }
 	  

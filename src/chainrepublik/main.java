@@ -75,8 +75,7 @@ public class main
         
         // Dump
         CDump dump=new CDump();
-        //dump.polParties("MK", 4);
-        
+        //dump.dumpOrgs();
         
        
         UTILS.MINER_UTILS=new CCPUMinerUtils();
@@ -132,10 +131,10 @@ public class main
         else
             UTILS.SYNC.start();
         
+        System.out.println("Current timestamp is "+UTILS.BASIC.tstamp());
         System.out.println("Wallet is up an running...");
         
         UTILS.CBLOCK.startMiners(1);
-        
     }
     
     

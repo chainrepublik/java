@@ -64,19 +64,12 @@ public class CWorkProcs extends CTable
        // Load expired
        UTILS.DB.executeUpdate("DELETE "
                               + "FROM work_procs "
-                             + "WHERE block<'"+(block-1440)+"'");
+                             + "WHERE block<'"+(block-14400)+"'");
     }
     
     public void reorganize(long block, String chk_hash) throws Exception
     {
-       // Meesage
-       System.out.println("Reorganizing work_procs...");
-        
-       // Delete
-       UTILS.DB.executeUpdate("DELETE FROM work_procs "
-                                  + "WHERE block>"+block);
-       
-       // Meesage
-       System.out.print("Done");
+       // Load checkpoint
+       loadCheckpoint(chk_hash);
     }
 }

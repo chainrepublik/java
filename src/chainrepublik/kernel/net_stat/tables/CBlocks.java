@@ -36,8 +36,7 @@ public class CBlocks extends CTable
 	    
             // Indexes
 	    UTILS.DB.executeUpdate("CREATE UNIQUE INDEX blocks_hash ON blocks(hash)");
-            UTILS.DB.executeUpdate("CREATE UNIQUE INDEX blocks_payload_hash ON blocks(payload_hash)");
-	    UTILS.DB.executeUpdate("CREATE INDEX blocks_block ON blocks(block)");
+            UTILS.DB.executeUpdate("CREATE INDEX blocks_block ON blocks(block)");
 	    UTILS.DB.executeUpdate("CREATE INDEX blocks_signer ON blocks(signer)");
             UTILS.DB.executeUpdate("CREATE INDEX blocks_prev_hash ON blocks(prev_hash)");
             

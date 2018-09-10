@@ -122,12 +122,26 @@ public class CCloseRegMarketPosPayload  extends CPayload
         // Constructor
         super.commit(block);
         
+        // Load position details
+        ResultSet rs_pos=UTILS.DB.executeQuery("SELECT amp.*, "
+                                                    + "am.asset, "
+                                                    + "am.cur "
+                                           + "FROM assets_mkts_pos AS amp "
+                                           + "JOIN assets_mkts AS am ON am.mktID=amp.mktID "
+                                          + "WHERE amp.orderID='"+this.orderID+"'");
+        
+        // Next
+        rs_pos.next();
+        
         // Remove
         UTILS.DB.executeUpdate("DELETE FROM assets_mkts_pos "
-                                     + "WHERE orderID='"+this.orderID+"'");     
+                                     + "WHERE orderID='"+this.orderID+"'"); 
         
         // Position type
         UTILS.ACC.clearTrans(hash, "ID_ALL", this.block);
-       
+        
+        // Shares ?
+        if (rs_pos.getString("asset").length()==5)
+           UTILS.BASIC.checkComOwner(rs_pos.getString("asset"), this.block);
     }        
 }

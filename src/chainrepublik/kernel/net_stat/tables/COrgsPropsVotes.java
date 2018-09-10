@@ -45,14 +45,7 @@ public class COrgsPropsVotes extends CTable
    
    public void reorganize(long block, String chk_hash) throws Exception
    {
-       // Meesage
-       System.out.println("Reorganizing orgs_props_votes...");
-        
-       // Delete
-       UTILS.DB.executeUpdate("DELETE FROM orgs_props_votes "
-                                  + "WHERE block>"+block);
-       
-       // Meesage
-       System.out.print("Done");
+       // Load checkpoint
+       loadCheckpoint(chk_hash);
    }
 }

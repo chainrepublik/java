@@ -53,7 +53,6 @@ public class CAds extends CTable
     public void reorganize(long block, String chk_hash) throws Exception
     {
        // Load checkpoint
-       UTILS.DB.executeUpdate("DELETE FROM ads "
-                                  + "WHERE block>"+block);
+       loadCheckpoint(chk_hash);
     }
 }

@@ -43,15 +43,8 @@ public class CItemsConsumed extends CTable
    
     public void reorganize(long block, String chk_hash) throws Exception
     {
-       // Meesage
-       System.out.println("Reorganizing items_consumed...");
-        
-       // Delete
-       UTILS.DB.executeUpdate("DELETE FROM items_consumed "
-                                  + "WHERE block>"+block);
-       
-       // Meesage
-       System.out.print("Done");
+       // Load checkpoint
+       loadCheckpoint(chk_hash);
        
     }
 }

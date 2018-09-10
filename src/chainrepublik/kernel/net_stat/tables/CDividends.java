@@ -35,19 +35,12 @@ public class CDividends extends CTable
    public void expired(long block) throws Exception
    {
        UTILS.DB.executeUpdate("DELETE FROM dividends "
-                                  + "WHERE block<"+(block-100000));
+                                  + "WHERE block<"+(block-144000));
    }
    
    public void reorganize(long block, String chk_hash) throws Exception
     {
-       // Meesage
-       System.out.println("Reorganizing delegates_log...");
-        
-       // Delete
-       UTILS.DB.executeUpdate("DELETE FROM dividends "
-                                  + "WHERE block>"+block);
-       
-       // Meesage
-        System.out.print("Done");
+       // Load checkpoint
+       loadCheckpoint(chk_hash);
     }
 }

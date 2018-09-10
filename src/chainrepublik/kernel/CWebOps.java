@@ -13,6 +13,7 @@ import chainrepublik.network.packets.assets.*;
 import chainrepublik.network.packets.assets.reg_mkts.*;
 import chainrepublik.network.packets.companies.*;
 import chainrepublik.network.packets.exchange.CNewExOffertPacket;
+import chainrepublik.network.packets.exchange.CRemoveExOffertPacket;
 import chainrepublik.network.packets.market.CRentPacket;
 import chainrepublik.network.packets.mes.*;
 import chainrepublik.network.packets.misc.*;
@@ -207,6 +208,12 @@ public class CWebOps
                        
                    }
                    
+                   // Transfer Address
+                   if (op.equals("ID_TRANSFER_ADR"))
+                       packet=new CTransferAdrPacket(rs.getString("fee_adr"),
+                                                     rs.getString("target_adr"),
+		                                     rs.getString("par_1"));
+                   
                    // New transaction
                    if (op.equals("ID_TRANSACTION")) 
                    {
@@ -367,7 +374,8 @@ public class CWebOps
                           
                           // Update users
                           UTILS.DB.executeUpdate("UPDATE web_users "
-                                                  + "SET adr='"+rs.getString("par_1")+"'");
+                                                  + "SET adr='"+rs.getString("par_1")+"' "
+                                                + "WHERE adr='"+old_adr+"'");
                        }
                        else
                        {
@@ -459,6 +467,10 @@ public class CWebOps
                                                      rs.getString("par_10"),
                                                      rs.getLong("days"));
                    
+                   if (op.equals("ID_REMOVE_EX_ORDER"))
+                       packet=new CRemoveExOffertPacket(rs.getString("fee_adr"),
+		                                        rs.getString("target_adr"),
+                                                        rs.getLong("par_1"));
                    
                    if (op.equals("ID_NEW_AD"))
                    {

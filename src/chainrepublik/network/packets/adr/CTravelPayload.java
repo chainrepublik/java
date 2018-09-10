@@ -32,6 +32,10 @@ public class CTravelPayload extends CPayload
    	// Super class
     	super.check(block);
         
+        // Check for null
+        if (this.cou==null)
+        throw new Exception("Null assertion failed - CTravelPayload.java, 68");
+        
          // Distance
         double dist=UTILS.BASIC.getCouDist(UTILS.BASIC.getAdrData(this.target_adr, "loc"), this.cou);
        
@@ -49,11 +53,11 @@ public class CTravelPayload extends CPayload
         
         // Check
         if (travel>this.block)   
-            throw new Exception("Adress is already travelling - CWorkPayload.java, 68");
+            throw new Exception("Adress is already travelling - CTravelPayload.java, 68");
         
         // Citizen address ?
         if (!UTILS.BASIC.isCitAdr(this.target_adr, this.block))
-           throw new Exception("Only citizens can do this action - CWorkPayload.java, 68");
+           throw new Exception("Only citizens can do this action - CTravelPayload.java, 68");
    	
         // Registered ?
         if (!UTILS.BASIC.isRegistered(this.target_adr, this.block))

@@ -10,9 +10,6 @@ import chainrepublik.network.packets.blocks.CBlockPayload;
 
 public class CAdrRegisterPayload extends CPayload 
 {
-   // Target address
-   String adr;
-   
    // Country
    String cou;
    
@@ -85,6 +82,15 @@ public class CAdrRegisterPayload extends CPayload
    {
    	// Super class
    	super.check(block);
+        
+        // Check for null
+        if (this.cou==null ||
+            this.name==null ||
+            this.description==null ||
+            this.ref_adr==null ||
+            this.node_adr==null ||
+            this.pic==null)
+        throw new Exception("Null assertion failed - CAdrChgCitPayload.java, 68");
    	  
         // Already registered ?
         if (UTILS.BASIC.isRegistered(this.target_adr, this.block))

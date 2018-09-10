@@ -692,12 +692,15 @@ public class CTables
     
         // Adr
         this.adr.refresh(block, hash);
+        
+        // Ads
+        this.ads.refresh(block, hash);
+        
+        // Agents log
+        this.agents_log.refresh(block, hash);
     
         // Adr attr
         this.adr_attr.refresh(block, hash);
-    
-        // Allow trans
-        this.allow_trans.refresh(block, hash);
     
         // Assets
         this.assets.refresh(block, hash);
@@ -708,14 +711,14 @@ public class CTables
         // Assets mkts pos
         this.assets_mkts_pos.refresh(block, hash);
         
+        // Assets mkts trades
+        this.assets_mkts_trades.refresh(block, hash);
+        
         // Assets owners
         this.assets_owners.refresh(block, hash);
     
         // Bonuses
         this.bonuses.refresh(block, hash);
-    
-        // Com prods
-        this.com_prods.refresh(block, hash);
     
         // Comments
         this.comments.refresh(block, hash);
@@ -729,14 +732,35 @@ public class CTables
         // Delegates
         this.delegates.refresh(block, hash);
         
+        // Delegates log
+        this.delegates_log.refresh(block, hash);
+        
+        // Del votes
+        this.del_votes.refresh(block, hash);
+        
+        // Dividends
+        this.dividends.refresh(block, hash);
+        
         // Escrowed
         this.escrowed.refresh(block, hash);
         
         // Exchange
         this.exchange.refresh(block, hash);
+        
+        // Endorsers
+        this.endorsers.refresh(block, hash);
+        
+        // Events
+        this.events.refresh(block, hash);
+        
+        // Items consumed
+        this.items_consumed.refresh(block, hash);
     
         // Laws
         this.laws.refresh(block, hash);
+        
+        // Laws votes
+        this.laws_votes.refresh(block, hash);
     
         // Orgs
         this.orgs.refresh(block, hash);
@@ -744,20 +768,38 @@ public class CTables
         // Orgs props
         this.orgs_props.refresh(block, hash);
         
-        // Rent contracts
-        this.rent_contracts.refresh(block, hash);
-    
+        // Orgs props votes
+        this.orgs_props_votes.refresh(block, hash);
+        
         // Stocuri
         this.stocuri.refresh(block, hash);
+        
+        // Rent contracts
+        this.rent_contracts.refresh(block, hash);
+        
+        // Rewards
+        this.rewards.refresh(block, hash);
         
         // Taxes
         this.taxes.refresh(block, hash);
     
         // Tweets
         this.tweets.refresh(block, hash);
+        
+        // Tweets follow
+        this.tweets_follow.refresh(block, hash);
+        
+        // Votes
+        this.votes.refresh(block, hash);
     
         // Wars
         this.wars.refresh(block, hash);
+        
+        // Wars fighters
+        this.wars_fighters.refresh(block, hash);
+        
+        // Wark procs
+        this.work_procs.refresh(block, hash);
     
         // Workplaces
         this.workplaces.refresh(block, hash);

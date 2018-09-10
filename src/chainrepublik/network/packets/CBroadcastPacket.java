@@ -20,7 +20,8 @@ public class CBroadcastPacket extends CPacket
          
          // Fee expl
          public String fee_expl;
-	   
+	 
+         
 	public CBroadcastPacket(String adr, String tip)  throws Exception
 	{
 	    // Constructor
@@ -44,13 +45,17 @@ public class CBroadcastPacket extends CPacket
         
         public void checkFee(CBlockPayload block) throws Exception
         {
-            // Min fee
+           // Min fee
             if (this.fee<0.0001)
                throw new Exception("Invalid fee, CBroadcastPAcket.java, line 62");
                 
             // Balance
             if (UTILS.ACC.getBalance(this.adr, "CRC", block)<this.fee)
                 throw new Exception("Insuficient funds to pay the network fee, CBroadcastPAcket.java, line 62");
+            
+            // Pay expl
+            if (this.fee_expl.length()>1000)
+               throw new Exception("Invalid fee description, CBroadcastPAcket.java, line 62");
             
              // New trans
             UTILS.ACC.newTransfer(this.adr, 

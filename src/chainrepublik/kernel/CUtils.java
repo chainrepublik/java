@@ -1470,9 +1470,9 @@ public class CUtils
             case "ID_INEL_Q3" : e=3; break;
 	    
             // Cercel
-            case "ID_CERCEL_Q1" : e=2; break;
-            case "ID_CERCEL_Q2" : e=3; break;
-            case "ID_CERCEL_Q3" : e=4; break;
+            case "ID_CERCEI_Q1" : e=2; break;
+            case "ID_CERCEI_Q2" : e=3; break;
+            case "ID_CERCEI_Q3" : e=4; break;
 	    
             // Colier
             case "ID_COLIER_Q1" : e=3; break;
@@ -1551,9 +1551,9 @@ public class CUtils
             || prod.equals("ID_INEL_Q1")
             || prod.equals("ID_INEL_Q2")
             || prod.equals("ID_INEL_Q3")
-            || prod.equals("ID_CERCEL_Q1")
-            || prod.equals("ID_CERCEL_Q2")
-            || prod.equals("ID_CERCEL_Q3")
+            || prod.equals("ID_CERCEI_Q1")
+            || prod.equals("ID_CERCEI_Q2")
+            || prod.equals("ID_CERCEI_Q3")
             || prod.equals("ID_COLIER_Q1")
             || prod.equals("ID_COLIER_Q2")
             || prod.equals("ID_COLIER_Q3")
@@ -1598,9 +1598,9 @@ public class CUtils
             || prod.equals("ID_INEL_Q1")
             || prod.equals("ID_INEL_Q2")
             || prod.equals("ID_INEL_Q3")
-            || prod.equals("ID_CERCEL_Q1")
-            || prod.equals("ID_CERCEL_Q2")
-            || prod.equals("ID_CERCEL_Q3")
+            || prod.equals("ID_CERCEI_Q1")
+            || prod.equals("ID_CERCEI_Q2")
+            || prod.equals("ID_CERCEI_Q3")
             || prod.equals("ID_COLIER_Q1")
             || prod.equals("ID_COLIER_Q2")
             || prod.equals("ID_COLIER_Q3")
@@ -1696,6 +1696,18 @@ public class CUtils
         
         return Long.parseLong(num);
     }
+    
+    public long getFreeID(long ID) throws Exception
+    {
+        if (this.isID(ID))
+        {
+           while (this.isID(ID))
+              ID++;
+        }
+        
+        return ID;
+    }
+    
     
     // Returns the balance of default address
     public long uCoins() throws Exception
@@ -2077,7 +2089,7 @@ public class CUtils
      
      public void checkpoint()
      {
-         System.out.println(System.currentTimeMillis()-this.time+" miliseconds");
+         System.out.println("Processed in "+(System.currentTimeMillis()-this.time)+" miliseconds");
          this.time=System.currentTimeMillis();
      }
      
@@ -2176,8 +2188,8 @@ public class CUtils
         long total_endorsed=rs.getLong("total");
         
         // Return
-        if (total_cit>100 && 
-            total_pol_inf>10000 && 
+        if (total_cit>25 && 
+            total_pol_inf>250 && 
             total_endorsed>25)
         return true;
         else

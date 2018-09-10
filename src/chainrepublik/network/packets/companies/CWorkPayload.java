@@ -269,7 +269,8 @@ public class CWorkPayload extends CPayload
         // Worked 8 hours today ?
         rs=UTILS.DB.executeQuery("SELECT SUM(end-start) AS total "
                                  + "FROM work_procs "
-                                + "WHERE adr='"+this.target_adr+"'");
+                                + "WHERE adr='"+this.target_adr+"' "
+                                  + "AND block>"+(this.block-1440));
         
         // Next
         rs.next();

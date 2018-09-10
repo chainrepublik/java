@@ -183,9 +183,13 @@ public class CTransferAdrPayload extends CPayload
         // Check energy
         this.checkEnergy();
         
+        // Check for null
+        if (this.to_adr==null)
+        throw new Exception("Null assertion failed - CTransferAdrPayload.java, 68");
+        
         // Citizen address ?
         if (!UTILS.BASIC.isCitAdr(this.target_adr, this.block))
-           throw new Exception("Only citizens can do this action - CWorkPayload.java, 68");
+           throw new Exception("Only citizens can do this action - CTransferAdrPayload.java, 68");
 	    	
 	// Check
         if (UTILS.BASIC.traceAdr(this.to_adr))
@@ -211,6 +215,10 @@ public class CTransferAdrPayload extends CPayload
             
             // Transfer
             this.transfer(this.target_adr, this.to_adr);
+            
+            // Remove from my adr
+            UTILS.DB.executeUpdate("DELETE FROM my_adr "
+                                       + "WHERE adr='"+this.target_adr+"'");
         
             // Position type
             UTILS.ACC.clearTrans(hash, "ID_ALL", this.block);

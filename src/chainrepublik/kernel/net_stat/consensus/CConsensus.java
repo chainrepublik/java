@@ -50,6 +50,8 @@ public class CConsensus
    
    public synchronized void blockReceived(CBlockPacket block) throws Exception
    {
+       UTILS.BASIC.startTimer();
+       
        try
        {
           // Begin
@@ -67,6 +69,9 @@ public class CConsensus
              // Store
              this.store(block);
              
+             // Commit
+             UTILS.DB.commit();
+             
              // Return
              return;
           }
@@ -75,16 +80,19 @@ public class CConsensus
            this.setStatus("ID_PROCESSING");
        
            // Block exist ?
-           if (this.blockExist(block.hash))
+           if (this.inBlockchain(block.hash))
            {
               // Print
               System.out.println("Block already in blockchain....");
            
               // Remove from pool
-              this.removeFromPool(block.hash);
+              this.removeFromPool(block.hash, block.block);
            
               // Waiting
               this.setStatus("ID_WAITING");
+              
+              // Commit
+              UTILS.DB.commit();
            
               // Return
               return;
@@ -102,14 +110,14 @@ public class CConsensus
                UTILS.NETWORK.broadcast(block);
                
           // Unknown parent
-          if (!this.blockExist(block.prev_hash)) 
+          if (!this.inBlockchain(block.prev_hash) &&
+              !this.inPool(block.prev_hash)) 
           {
-              System.out.println("No prev hash found...");
+              // Message
+              System.out.println("No prev hash found for block "+block.block+"...");
               
-              if (!UTILS.STATUS.status.equals("ID_SYNC"))
-                  this.addToPool(block);
-              else 
-                  throw new Exception("Prev block not found");
+              // Add to pool
+              this.addToPool(block);
           }
           else
           {
@@ -135,18 +143,17 @@ public class CConsensus
             }  
             else if (block.block>UTILS.NET_STAT.last_block+1)
             {
+                // Message
                 System.out.println("Block number bigger than (last_block+1)...");
                 
-                if (!UTILS.STATUS.status.equals("ID_SYNC"))
-                   this.addToPool(block);
-                else
-                   throw new Exception("Invalid block");
+                // Add to pool
+                this.addToPool(block);
             }
             else 
             {
                 System.out.println("Block number behind or equal to last block...");
                 
-                if (this.blockExist(block.block))
+                if (this.inBlockchain(block.block))
                    this.addBlock(block);
                 else
                    this.commitBlock(block);
@@ -156,9 +163,14 @@ public class CConsensus
         // Commit
         UTILS.DB.commit();
         
+        // Stats
+        UTILS.BASIC.checkpoint();
+        
          // Status
         this.setStatus("ID_WAITING");
         
+        // Cons
+        UTILS.DB.clearCons();
        }
        catch (Exception ex)
        {
@@ -169,7 +181,7 @@ public class CConsensus
            UTILS.DB.rollback();
            
            // Remove from pool
-           this.removeFromPool(block.hash);
+           this.removeFromPool(block.hash, block.block);
           
            // New status
            this.setStatus("ID_WAITING");
@@ -315,8 +327,8 @@ public class CConsensus
           for (int a=this.chain.size()-1; a>=0; a--)
           {
               // Load block
-              CBlockPacket b=this.loadBlock(this.chain.get(a));
-           
+              CBlockPacket b=this.loadBlock(this.chain.get(a), 0);
+              
               // Commit
               this.commitBlock(b);
           }
@@ -373,7 +385,7 @@ public class CConsensus
        System.out.println("Added to pool - "+block.hash);
    }
    
-   public boolean blockExist(String hash) throws Exception
+   public boolean inBlockchain(String hash) throws Exception
    {
        // Found
        boolean found=false;
@@ -389,13 +401,13 @@ public class CConsensus
         
        // Exist ?
        if (UTILS.DB.hasData(rs))
-            found=true;
+        found=true;
        
        // Return
        return found;
     }
    
-   public boolean blockExist(long block) throws Exception
+   public boolean inBlockchain(long block) throws Exception
    {
        // Found
        boolean found=false;
@@ -448,16 +460,16 @@ public class CConsensus
                                         + "size='"+block.payload.length+"'");
   
         // Remove
-        this.removeFromPool(block.hash);
+        this.removeFromPool(block.hash, block.block);
        
         // Debug
         System.out.println("Added to blockchain - "+block.hash);
    }
    
-   public void removeFromPool(String hash) throws Exception
+   public void removeFromPool(String hash, long block) throws Exception
    {
       // Out
-       System.out.println("Removing from pool "+hash);
+       System.out.println("Removing from pool block "+block+", "+hash);
        
        // Hash
        if (!UTILS.BASIC.isHash(hash))
@@ -476,7 +488,7 @@ public class CConsensus
         oos.close();
    }
    
-   public CBlockPacket loadBlock(String hash) throws Exception
+   public CBlockPacket loadBlock(String hash, long block) throws Exception
    {
        // Finds the block
        File f = new File(UTILS.WRITEDIR+"blocks/"+hash+".block");
@@ -504,7 +516,7 @@ public class CConsensus
            System.out.println("Could not find block on disk. Removing from pool.");
            
            // Remove
-           this.removeFromPool(hash);
+           this.removeFromPool(hash, block);
            
            // Return
            return null;
@@ -537,14 +549,15 @@ public class CConsensus
            {
                // Delete from pool expired blocks
                UTILS.DB.executeUpdate("DELETE FROM blocks_pool "
-                                          + "WHERE tstamp<"+(UTILS.BASIC.tstamp()-600));
+                                          + "WHERE tstamp<"+(UTILS.BASIC.tstamp()-600)+" "
+                                            + "AND tstamp>0");
                
                
                // Check pool
                ResultSet rs=UTILS.DB.executeQuery("SELECT * "
                                                   + "FROM blocks_pool "
-                                              + "ORDER BY block ASC "
-                                                 + "LIMIT 0,1");
+                                              + "ORDER BY block ASC"); 
+             
                
                // Has data
                if (UTILS.DB.hasData(rs))
@@ -553,12 +566,13 @@ public class CConsensus
                     rs.next();
                     
                     // Block
-                    CBlockPacket b=loadBlock(rs.getString("hash"));
+                    CBlockPacket b=loadBlock(rs.getString("hash"), rs.getLong("block"));
                       
                     // Not null ?
                     if (b!=null)
                     {
-                       if (!blockExist(b.prev_hash))
+                       if (!inBlockchain(b.prev_hash) && 
+                           !inPool(b.prev_hash))
                        {
                            // Request missing block
                            CGetBlockPacket packet=new CGetBlockPacket(b.prev_hash);

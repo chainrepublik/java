@@ -24,6 +24,7 @@ public class CPacket implements java.io.Serializable
    // Payload 
    public byte[] payload=null;
    
+   // Version
    static final long serialVersionUID=1L;
    
    
@@ -58,6 +59,11 @@ public class CPacket implements java.io.Serializable
    
    public void basicCheck() throws Exception
    {
+       // Null
+       if (this.tip==null ||
+           this.hash==null)
+       throw new Exception("Null asertion falied - CPacket.java, 65");
+       
        // Tip
        if (!UTILS.BASIC.isStringID(this.tip))
            throw new Exception("Invalid packet type - CPacket.java, 65");

@@ -5,7 +5,6 @@ import chainrepublik.kernel.UTILS;
 import chainrepublik.network.packets.adr.CAddAttrPacket;
 import chainrepublik.network.packets.adr.CAdrChgCitPacket;
 import chainrepublik.network.packets.adr.CAdrRegisterPacket;
-import chainrepublik.network.packets.adr.CSendRefPacket;
 import chainrepublik.network.packets.adr.CTransferAdrPacket;
 import chainrepublik.network.packets.adr.CTravelPacket;
 import chainrepublik.network.packets.adr.CUpdateProfilePacket;
@@ -332,26 +331,7 @@ public class CStressTest
         UTILS.NETWORK.broadcast(packet);
     }
     
-    public void testSendRef() throws Exception
-    {
-        // Adr
-        String adr=this.getRandAdr();
-        
-        // Rec
-        String rec=this.getRandAdr();
-        
-        // Ref
-        String ref=this.getRandAdr();
-        
-        // Packet
-        CSendRefPacket packet=new CSendRefPacket(adr, 
-		                                 adr, 
-		                                 rec,
-                                                 ref);
-        
-        // Send 
-        UTILS.NETWORK.broadcast(packet);
-    }
+    
     
     public void testTransferAdr() throws Exception
     {

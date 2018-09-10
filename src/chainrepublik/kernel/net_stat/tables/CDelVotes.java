@@ -49,15 +49,8 @@ public class CDelVotes extends CTable
     
     public void reorganize(long block, String chk_hash) throws Exception
     {
-       // Meesage
-        System.out.println("Reorganizing del_votes...");
-        
-        // Remove
-        UTILS.DB.executeUpdate("DELETE FROM del_votes "
-                                   + "WHERE block>"+block);
-        
-        // Meesage
-        System.out.print("Done");
+       // Load checkpoint
+       loadCheckpoint(chk_hash);
     }
     
     public void populate() throws Exception
@@ -75,7 +68,7 @@ public class CDelVotes extends CTable
                                          + "block='0'");
         
         UTILS.DB.executeUpdate("INSERT INTO del_votes "
-                                     + "SET adr='MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEIfhPhsjZ06QbAf45FMmDQuznOw/I9ob7ZR9bCUmxLAakhmzoz06mUylMa5o1iX3PvMV7DwDYZxOR18q89ljtyg==', "
+                                     + "SET adr='MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEiNlB+/HYqGqFm/jF3jLePnD+YZ/6iIH/OzMh+aKAyAzD4KAk4bocCm38x2sFx1rxKQQYY6JKTbssUKsZKmk/xw==', "
                                          + "delegate='MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEi/crmAw+sTWpVYM6Ip/qNv2qrscmV2TYsnbm16td8EJw53xA22iQG+mv3PF5gmLnCI++hOT9e+x0Q75/S4ioGw==', "
                                          + "type='ID_UP', "
                                          + "block='0'");

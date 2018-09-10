@@ -96,11 +96,17 @@ public class CDB
       
       // Size limit ?
       if (UTILS.NETWORK!=null)
-      {
-         if (cons.size()>25000 && 
-             UTILS.NETWORK.CONSENSUS.status.equals("ID_WAITING")) 
-         {
-              for (int a=0; a<=100; a++)
+        this.clearCons();
+          
+      return rs;
+   }
+   
+   public void clearCons() throws Exception
+   {
+        if (cons.size()>20000 && 
+            UTILS.NETWORK.CONSENSUS.status.equals("ID_WAITING")) 
+        {
+            for (int a=0; a<=cons.size()-10000; a++)
             {
               // Close
               Statement st=cons.get(a);
@@ -111,12 +117,8 @@ public class CDB
               // Remove
               cons.remove(a);
             }
-        }
-      }
-      
-      return rs;
+        }    
    }
-   
    
     // Checks if result set contains any data 
     public boolean hasData(ResultSet rs) throws Exception
