@@ -10,6 +10,9 @@ public class CLeaveOrgPayload extends CPayload
     // Org ID
     long orgID;
     
+    // Serial
+    private static final long serialVersionUID = 100L;
+    
     public CLeaveOrgPayload(String adr, long orgID) throws Exception
     {
         // Superclass

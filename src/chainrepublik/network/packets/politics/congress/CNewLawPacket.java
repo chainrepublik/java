@@ -7,6 +7,9 @@ import chainrepublik.network.packets.blocks.CBlockPayload;
 
 public class CNewLawPacket extends CBroadcastPacket
 {
+     // Serial
+    private static final long serialVersionUID = 100L;
+    
     public CNewLawPacket(String fee_adr,
                          String adr, 
                          String law_type, 

@@ -267,10 +267,26 @@ public class CAssetsMkts extends CTable
     public void expired(long block) throws Exception
     {
         // Load  markets
-        UTILS.DB.executeUpdate("DELETE "
-                               + "FROM assets_mkts  "
-                              + "WHERE expires<="+block+" "
-                                + "AND expires>0");
+        ResultSet rs=UTILS.DB.executeQuery("SELECT * "
+                                           + "FROM assets_mkts "
+                                          + "WHERE expires<"+block+" "
+                                            + "AND expires>0");
+        
+        // Parse
+        while (rs.next())
+        {
+            // Mkt ID
+            long mktID=rs.getLong("mktID");
+            
+            // Remove positions
+            UTILS.DB.executeUpdate("DELETE FROM assets_mkts_pos "
+                                       + "WHERE mktID='"+mktID+"'");
+            
+            // Remove markets
+            UTILS.DB.executeUpdate("DELETE "
+                                   + "FROM assets_mkts  "
+                                  + "WHERE mktID='"+mktID+"'");
+        }
     }
     
     public void reorganize(long block, String chk_hash) throws Exception

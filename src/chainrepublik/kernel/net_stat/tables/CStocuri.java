@@ -95,9 +95,20 @@ public class CStocuri extends CTable
              // Rented to
              String rented_to=rs.getString("rented_to");
              
+             // Stoc ID
+             long stocID=rs.getLong("stocID");
+             
              // Remove
              UTILS.DB.executeUpdate("DELETE FROM stocuri "
-                                        + "WHERE stocID='"+rs.getLong("stocID")+"'");
+                                        + "WHERE stocID='"+stocID+"'");
+             
+             // Remove rent contracts
+             UTILS.DB.executeUpdate("DELETE FROM rent_contracts "
+                                        + "WHERE stocID='"+stocID+"'");
+             
+             // Remove weapons
+             UTILS.DB.executeUpdate("DELETE FROM stocuri "
+                                        + "WHERE war_locID='"+stocID+"'");
              
              // Usable ?
              if (UTILS.BASIC.isUsable(tip))
@@ -110,7 +121,43 @@ public class CStocuri extends CTable
                     UTILS.BASIC.refreshEnergy(rented_to);
                  
                  // Event
-                 UTILS.BASIC.newEvent(rs.getString("adr"), "One of your items has expired. Check your portofolio.", block);
+                 UTILS.BASIC.newEvent(rs.getString("adr"), 
+                                      "One of your items has expired. Check your portofolio.", 
+                                      block);
+            }
+             
+            // Production tools or building ?
+            if (tip.indexOf("BUILD_COM")>0)
+            {
+                // Load company data
+                ResultSet rs_com=UTILS.DB.executeQuery("SELECT * "
+                                                       + "FROM companies "
+                                                      + "WHERE adr='"+adr+"'");
+                
+                // Has data ?
+                if (UTILS.DB.hasData(rs_com))
+                {
+                   // Next
+                   rs_com.next();
+                    
+                   // Company ID
+                   long comID=rs_com.getLong("comID");
+                   
+                   // Company address
+                   String com_adr=rs_com.getString("adr");
+                   
+                   // Disable workplaces
+                   UTILS.DB.executeUpdate("UPDATE workplaces "
+                                           + "SET status='ID_SUSPENDED' "
+                                         + "WHERE comID='"+comID+"'");
+                   
+                   // Event
+                   UTILS.BASIC.newEvent(com_adr, 
+                                        "The company productions building has expired. All workplaces were disabled.", 
+                                        block);
+                }
+                
+                
             }
                  
          }

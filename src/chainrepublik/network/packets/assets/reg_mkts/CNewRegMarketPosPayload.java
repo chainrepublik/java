@@ -85,6 +85,10 @@ public class CNewRegMarketPosPayload extends CPayload
          // Super class
    	  super.check(block);
           
+        // Check for null
+        if (this.tip==null)
+            throw new Exception("Null assertion failed - CNewRegMarketPosPayload.java, 68");
+          
           // Citizen address ?
           if (!UTILS.BASIC.isRegistered(this.target_adr, this.block))
              throw new Exception("Only citizens can do this action - CWorkPayload.java, 68");
@@ -174,7 +178,7 @@ public class CNewRegMarketPosPayload extends CPayload
                                     + "WHERE mktID='"+this.mktID+"' "
                                       + "AND tip='ID_BUY' "
                                       + "AND price>="+this.price+" "
-                                 + "ORDER BY price DESC");
+                                 + "ORDER BY price DESC, ID DESC");
                 
             // Sold
             double remain=this.qty;
@@ -216,7 +220,8 @@ public class CNewRegMarketPosPayload extends CPayload
                                                    asset, 
                                                    qty, 
                                                    this.block, 
-                                                   hash);
+                                                   hash,
+                                                   block);
                       
                          // Receive coins
                          UTILS.ACC.newTrans(this.target_adr,
@@ -266,7 +271,7 @@ public class CNewRegMarketPosPayload extends CPayload
                                         + "WHERE mktID='"+this.mktID+"' "
                                           + "AND tip='ID_SELL' "
                                           + "AND price<="+this.price+" "
-                                     + "ORDER BY price ASC");
+                                     + "ORDER BY price ASC, orderID DESC");
                 
                // Sold
                double remain=this.qty;
@@ -323,7 +328,8 @@ public class CNewRegMarketPosPayload extends CPayload
                                                    asset, 
                                                    qty, 
                                                    this.block, 
-                                                   hash);
+                                                   hash, 
+                                                   block);
                          
                         // Remain
                         remain=remain-qty;
@@ -396,7 +402,7 @@ public class CNewRegMarketPosPayload extends CPayload
                                     + "WHERE mktID='"+this.mktID+"' "
                                       + "AND tip='ID_BUY' "
                                       + "AND price>="+this.price+" "
-                                 + "ORDER BY price DESC");
+                                 + "ORDER BY price DESC, orderID DESC");
                 
                 
             // Qty
@@ -455,7 +461,7 @@ public class CNewRegMarketPosPayload extends CPayload
                                  + "WHERE mktID='"+this.mktID+"' "
                                    + "AND tip='ID_SELL' "
                                    + "AND price<="+this.price+" "
-                              + "ORDER BY price ASC");
+                              + "ORDER BY price ASC, orderID DESC");
                 
                // Qty
                double qty=0;

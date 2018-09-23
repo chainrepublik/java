@@ -12,7 +12,7 @@ import chainrepublik.network.packets.blocks.CBlockPayload;
 public class CFollowPacket extends CBroadcastPacket 
 {
    // Serial
-   private static final long serialVersionUID = 1L;
+   private static final long serialVersionUID = 100L;
    
    public CFollowPacket(String fee_adr,
                         String adr, 

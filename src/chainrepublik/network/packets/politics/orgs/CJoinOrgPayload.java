@@ -10,6 +10,9 @@ public class CJoinOrgPayload extends CPayload
     // Party ID
     long orgID;
     
+    // Serial
+    private static final long serialVersionUID = 100L;
+    
     public CJoinOrgPayload(String adr, 
                              long orgID) throws Exception
     {

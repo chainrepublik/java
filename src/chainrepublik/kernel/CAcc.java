@@ -150,21 +150,6 @@ public class CAcc
 		    		                  block);
             }
             
-            // Mine ?
-	    if (UTILS.WALLET.isMine(adr))
-            {
-	        UTILS.DB.executeUpdate("INSERT INTO my_trans "
-                                             + "SET userID='"+this.getAdrUserID(adr)+"', "
-                                                 + "adr='"+adr+"', "
-                                                 + "amount='"+UTILS.FORMAT_8.format(amount)+"', "
-                                                 + "cur='"+prod+"', "
-                                                 + "expl='"+expl+"', "
-                                                 + "hash='"+hash+"', "
-                                                 + "block='"+block+"', "
-                                                 + "block_hash='"+UTILS.NET_STAT.actual_block_hash+"', "
-                                                 + "tstamp='"+UTILS.BASIC.tstamp()+"'");
-            }
-            
             // Insert into transactions
             UTILS.DB.executeUpdate("INSERT INTO trans "
                                              + "SET src='"+adr+"', "
@@ -295,57 +280,10 @@ public class CAcc
                 
             }
             
-            if (fee<0) fee=0;
+            // Fee
+            if (fee<0) 
+                fee=0;
             
-            // Mine ?
-	    if (UTILS.WALLET.isMine(adr))
-	    {
-                // Insert into my transactions
-                UTILS.DB.executeUpdate("INSERT INTO my_trans "
-                                             + "SET userID='"+this.getAdrUserID(adr)+"', "
-                                                 + "adr='"+adr+"', "
-                                                 + "adr_assoc='"+adr_assoc+"', "
-                                                 + "amount='"+UTILS.FORMAT_8.format(amount)+"', "
-                                                 + "cur='"+cur+"', "
-                                                 + "expl='"+expl+"', "
-                                                 + "escrower='"+escrower+"', "
-                                                 + "hash='"+hash+"', "
-                                                 + "block='"+block+"', "
-                                                 + "block_hash='"+UTILS.NET_STAT.actual_block_hash+"', "
-                                                 + "tstamp='"+UTILS.BASIC.tstamp()+"'");
-                
-                if (fee>0)
-                {
-                    // Extract the fee
-                    UTILS.DB.executeUpdate("INSERT INTO my_trans "
-                                             + "SET userID='"+this.getAdrUserID(adr)+"', "
-                                                 + "adr='"+adr+"', "
-                                                 + "adr_assoc='"+fee_adr+"', "
-                                                 + "amount='"+UTILS.FORMAT_8.format(-fee)+"', "
-                                                 + "cur='"+cur+"', "
-                                                 + "expl='"+expl+"', "
-                                                 + "hash='"+hash+"', "
-                                                 + "block='"+block+"', "
-                                                 + "block_hash='"+UTILS.NET_STAT.actual_block_hash+"', "
-                                                 + "tstamp='"+UTILS.BASIC.tstamp()+"'");
-                
-                    // Deposit the fee
-                    if (!fee_adr.equals("default"))
-                    UTILS.DB.executeUpdate("INSERT INTO my_trans "
-                                             + "SET userID='"+this.getAdrUserID(fee_adr)+"', "
-                                                 + "adr='"+fee_adr+"', "
-                                                 + "adr_assoc='"+adr+"', "
-                                                 + "amount='"+UTILS.FORMAT_8.format(fee)+"', "
-                                                 + "cur='"+cur+"', "
-                                                 + "expl='"+expl+"', "
-                                                 + "hash='"+hash+"', "
-                                                 + "block='"+block+"', "
-                                                 + "block_hash='"+UTILS.NET_STAT.actual_block_hash+"', "
-                                                 + "tstamp='"+UTILS.BASIC.tstamp()+"'");
-                }
-              
-           }
-               
             // Insert into transactions
             UTILS.DB.executeUpdate("INSERT INTO trans "
                                              + "SET src='"+adr+"', "
@@ -455,24 +393,7 @@ public class CAcc
             }
             
             
-            // Mine ?
-	    if (UTILS.WALLET.isMine(adr))
-	    {
-                // Insert into my transactions
-                UTILS.DB.executeUpdate("INSERT INTO my_trans "
-                                             + "SET userID='"+this.getAdrUserID(adr)+"', "
-                                                 + "adr='"+adr+"', "
-                                                 + "adr_assoc='"+adr_assoc+"', "
-                                                 + "amount='"+UTILS.FORMAT_8.format(amount)+"', "
-                                                 + "cur='"+cur+"', "
-                                                 + "expl='"+expl+"', "
-                                                 + "escrower='"+escrower+"', "
-                                                 + "hash='"+hash+"', "
-                                                 + "block='"+block+"', "
-                                                 + "block_hash='"+UTILS.NET_STAT.actual_block_hash+"', "
-                                                 + "tstamp='"+UTILS.BASIC.tstamp()+"'");
-           }
-               
+              
             // Insert into transactions
             UTILS.DB.executeUpdate("INSERT INTO trans "
                                              + "SET src='"+adr+"', "
@@ -853,15 +774,23 @@ public class CAcc
                 
                 // Buy split ?
                 if (UTILS.BASIC.buySplit(adr, prod, amount))
-                for (int a=1; a<=amount; a++)
-                    UTILS.DB.executeUpdate("INSERT INTO stocuri "
+                {
+                   for (int a=1; a<=amount; a++)
+                   {
+                       // Unique ID
+                       long stID=UTILS.BASIC.getFreeID(stocID+1);
+                       
+                       // Insert
+                       UTILS.DB.executeUpdate("INSERT INTO stocuri "
                                                   + "SET adr='"+adr+"', "
                                                       + "tip='"+prod+"', "
                                                       + "qty='1', "
                                                       + "invested="+(invested/amount)+", "
                                                       + "expires='"+expires+"', "
-                                                      + "stocID='"+(stocID+a)+"', "
+                                                      + "stocID='"+stID+"', "
                                                       + "block='"+block+"'");
+                    }
+                }
             }
                       
             // Source balance update
@@ -1082,7 +1011,7 @@ public class CAcc
         
         // Value
         t=UTILS.BASIC.round(income*t/100, 4);
-                             
+        
         // Pay
         if (t>0.0001)
         {
@@ -1111,20 +1040,6 @@ public class CAcc
                                                  + "block_hash='"+UTILS.NET_STAT.actual_block_hash+"', "
                                                  + "tstamp='"+UTILS.BASIC.tstamp()+"', "
                                                  + "status='ID_PENDING'");
-            
-            // Mine ?
-	    if (UTILS.WALLET.isMine(adr))
-                UTILS.DB.executeUpdate("INSERT INTO my_trans "
-                                             + "SET userID='"+this.getAdrUserID(adr)+"', "
-                                                 + "adr='"+adr+"', "
-                                                 + "amount='"+UTILS.FORMAT_8.format(t)+"', "
-                                                 + "cur='"+prod+"', "
-                                                 + "expl='WW91IHBhaWQgYSB0YXggdG8gc3RhdGUgYnVkZ2V0', "
-                                                 + "hash='"+hash+"', "
-                                                 + "block='"+block+"', "
-                                                 + "block_hash='"+UTILS.NET_STAT.actual_block_hash+"', "
-                                                 + "tstamp='"+UTILS.BASIC.tstamp()+"'");
-            
         }
     }
     
@@ -1132,7 +1047,8 @@ public class CAcc
                             String prod, 
                             double qty,
                             long block,
-                            String hash) throws Exception
+                            String hash,
+                            CBlockPayload block_payload) throws Exception
     {
         // Adr
         if (!UTILS.BASIC.isAdr(adr)) 
@@ -1166,20 +1082,9 @@ public class CAcc
             // Bonus amount
             bonus=bonus*qty;
         
-            // Budget ?
-            if (UTILS.BASIC.getBudget(cou, "CRC")<bonus)
-            {
-                // Post event
-                UTILS.BASIC.newEvent(adr, "State budget run out of cash. All bonuses where reset to zero.", block);
-            
-                // Set all bonuses on zero
-                UTILS.DB.executeUpdate("UPDATE bonuses "
-                                        + "SET amount=0 "
-                                      + "WHERE cou='"+cou+"'");
-            }
-        
             // Premium citizen or company ?
-            if (UTILS.BASIC.isCompanyAdr(adr) ||
+            if (UTILS.BASIC.getBudget(cou, "CRC", block_payload)>bonus)
+                if (UTILS.BASIC.isCompanyAdr(adr) ||
                 Long.parseLong(UTILS.BASIC.getAdrData(adr, "premium"))>0)
                 UTILS.ACC.newTransfer(UTILS.BASIC.getCouAdr(cou), 
                                       adr,

@@ -13,6 +13,9 @@ public class CEndorsePayload extends CPayload
     // Type
     String type;
     
+     // Serial
+    private static final long serialVersionUID = 100L;
+    
     public CEndorsePayload(String adr, 
                            String endorsed,
                            String type) throws Exception
@@ -37,6 +40,11 @@ public class CEndorsePayload extends CPayload
     {
    	// Super class
    	super.check(block);
+        
+         // Check for null
+        if (this.endorsed==null ||
+            this.type==null)
+        throw new Exception("Null assertion failed - CDelVotePayload.java, 68");
         
         // Check energy
         this.checkEnergy();

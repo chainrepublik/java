@@ -7,7 +7,10 @@ import chainrepublik.network.packets.blocks.CBlockPayload;
 
 public class CEndorsePacket extends CBroadcastPacket 
 {
-     public CEndorsePacket(String fee_adr,
+     // Serial
+    private static final long serialVersionUID = 100L;
+    
+    public CEndorsePacket(String fee_adr,
                            String adr,
                            String endorsed,
                            String type) throws Exception

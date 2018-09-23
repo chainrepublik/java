@@ -7,7 +7,10 @@ import chainrepublik.network.packets.blocks.CBlockPayload;
 
 public class CNewOrgPropPacket extends CBroadcastPacket 
 {
-     public CNewOrgPropPacket(String fee_adr,
+    // Serial
+    private static final long serialVersionUID = 100L;
+    
+    public CNewOrgPropPacket(String fee_adr,
                               String adr, 
                               long orgID,
                               String prop_type, 

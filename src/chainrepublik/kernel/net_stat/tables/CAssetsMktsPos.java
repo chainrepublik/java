@@ -506,64 +506,64 @@ public class CAssetsMktsPos extends CTable
         UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519476900023', tip='ID_SELL', qty='1000', price='3.9', orderID='1519679469726', expires='0' ");
         
         // Silver rings market
-        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519477161201', tip='ID_SELL', qty='100', price='0.6', orderID='1519679479777', expires='0' ");
-        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519477161201', tip='ID_SELL', qty='200', price='0.7', orderID='1519679479778', expires='0' ");
-        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519477161201', tip='ID_SELL', qty='300', price='0.8', orderID='1519679479719', expires='0' ");
-        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519477161201', tip='ID_SELL', qty='400', price='0.9', orderID='1519679479720', expires='0' ");
-        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519477161201', tip='ID_SELL', qty='500', price='1', orderID='1519679467921', expires='0' ");
-        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519477161201', tip='ID_SELL', qty='600', price='1.1', orderID='1519679479722', expires='0' ");
-        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519477161201', tip='ID_SELL', qty='700', price='1.2', orderID='1519678479723', expires='0' ");
-        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519477161201', tip='ID_SELL', qty='800', price='1.3', orderID='1519679479724', expires='0' ");
-        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519477161201', tip='ID_SELL', qty='900', price='1.4', orderID='1519679479725', expires='0' ");
-        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519477161201', tip='ID_SELL', qty='1000', price='1.5', orderID='1519679769726', expires='0' ");
+        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519477161201', tip='ID_SELL', qty='100', price='1', orderID='1519679479777', expires='0' ");
+        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519477161201', tip='ID_SELL', qty='200', price='1.1', orderID='1519679479778', expires='0' ");
+        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519477161201', tip='ID_SELL', qty='300', price='1.2', orderID='1519679479719', expires='0' ");
+        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519477161201', tip='ID_SELL', qty='400', price='1.3', orderID='1519679479720', expires='0' ");
+        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519477161201', tip='ID_SELL', qty='500', price='1.4', orderID='1519679467921', expires='0' ");
+        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519477161201', tip='ID_SELL', qty='600', price='1.5', orderID='1519679479722', expires='0' ");
+        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519477161201', tip='ID_SELL', qty='700', price='1.6', orderID='1519678479723', expires='0' ");
+        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519477161201', tip='ID_SELL', qty='800', price='1.7', orderID='1519679479724', expires='0' ");
+        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519477161201', tip='ID_SELL', qty='900', price='1.8', orderID='1519679479725', expires='0' ");
+        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519477161201', tip='ID_SELL', qty='1000', price='1.9', orderID='1519679769726', expires='0' ");
          
         // Silver earings market
-        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519477343065', tip='ID_SELL', qty='100', price='1.2', orderID='1518679479777', expires='0' ");
-        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519477343065', tip='ID_SELL', qty='200', price='1.3', orderID='1518679479778', expires='0' ");
-        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519477343065', tip='ID_SELL', qty='300', price='1.4', orderID='1518679479719', expires='0' ");
-        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519477343065', tip='ID_SELL', qty='400', price='1.5', orderID='1518679479720', expires='0' ");
-        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519477343065', tip='ID_SELL', qty='500', price='1.6', orderID='1518679467921', expires='0' ");
-        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519477343065', tip='ID_SELL', qty='600', price='1.7', orderID='1518679479722', expires='0' ");
-        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519477343065', tip='ID_SELL', qty='700', price='1.8', orderID='1518678479723', expires='0' ");
-        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519477343065', tip='ID_SELL', qty='800', price='1.9', orderID='1518679479724', expires='0' ");
-        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519477343065', tip='ID_SELL', qty='900', price='2.0', orderID='1518679479725', expires='0' ");
-        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519477343065', tip='ID_SELL', qty='1000', price='2.1', orderID='1518679769726', expires='0' ");
+        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519477343065', tip='ID_SELL', qty='100', price='2', orderID='1518679479777', expires='0' ");
+        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519477343065', tip='ID_SELL', qty='200', price='2.1', orderID='1518679479778', expires='0' ");
+        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519477343065', tip='ID_SELL', qty='300', price='2.2', orderID='1518679479719', expires='0' ");
+        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519477343065', tip='ID_SELL', qty='400', price='2.3', orderID='1518679479720', expires='0' ");
+        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519477343065', tip='ID_SELL', qty='500', price='2.4', orderID='1518679467921', expires='0' ");
+        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519477343065', tip='ID_SELL', qty='600', price='2.5', orderID='1518679479722', expires='0' ");
+        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519477343065', tip='ID_SELL', qty='700', price='2.6', orderID='1518678479723', expires='0' ");
+        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519477343065', tip='ID_SELL', qty='800', price='2.7', orderID='1518679479724', expires='0' ");
+        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519477343065', tip='ID_SELL', qty='900', price='2.8', orderID='1518679479725', expires='0' ");
+        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519477343065', tip='ID_SELL', qty='1000', price='2.9', orderID='1518679769726', expires='0' ");
          
         // Silver pandant market
-        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519476942672', tip='ID_SELL', qty='100', price='1.8', orderID='1517679479777', expires='0' ");
-        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519476942672', tip='ID_SELL', qty='200', price='1.9', orderID='1517679479778', expires='0' ");
-        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519476942672', tip='ID_SELL', qty='300', price='2', orderID='1517679479719', expires='0' ");
-        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519476942672', tip='ID_SELL', qty='400', price='2.1', orderID='1517679479720', expires='0' ");
-        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519476942672', tip='ID_SELL', qty='500', price='2.2', orderID='1517679467921', expires='0' ");
-        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519476942672', tip='ID_SELL', qty='600', price='2.3', orderID='1517679479722', expires='0' ");
-        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519476942672', tip='ID_SELL', qty='700', price='2.4', orderID='1517678479723', expires='0' ");
-        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519476942672', tip='ID_SELL', qty='800', price='2.5', orderID='1517679479724', expires='0' ");
-        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519476942672', tip='ID_SELL', qty='900', price='2.6', orderID='1517679479725', expires='0' ");
-        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519476942672', tip='ID_SELL', qty='1000', price='2.7', orderID='1517679769726', expires='0' ");
+        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519476942672', tip='ID_SELL', qty='100', price='3', orderID='1517679479777', expires='0' ");
+        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519476942672', tip='ID_SELL', qty='200', price='3.1', orderID='1517679479778', expires='0' ");
+        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519476942672', tip='ID_SELL', qty='300', price='3.2', orderID='1517679479719', expires='0' ");
+        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519476942672', tip='ID_SELL', qty='400', price='3.3', orderID='1517679479720', expires='0' ");
+        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519476942672', tip='ID_SELL', qty='500', price='3.4', orderID='1517679467921', expires='0' ");
+        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519476942672', tip='ID_SELL', qty='600', price='3.5', orderID='1517679479722', expires='0' ");
+        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519476942672', tip='ID_SELL', qty='700', price='3.6', orderID='1517678479723', expires='0' ");
+        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519476942672', tip='ID_SELL', qty='800', price='3.7', orderID='1517679479724', expires='0' ");
+        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519476942672', tip='ID_SELL', qty='900', price='3.8', orderID='1517679479725', expires='0' ");
+        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519476942672', tip='ID_SELL', qty='1000', price='3.9', orderID='1517679769726', expires='0' ");
         
         // Silver watch market
-        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519476879764', tip='ID_SELL', qty='100', price='2.4', orderID='1516679479777', expires='0' ");
-        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519476879764', tip='ID_SELL', qty='200', price='2.5', orderID='1516679479778', expires='0' ");
-        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519476879764', tip='ID_SELL', qty='300', price='2.6', orderID='1516679479719', expires='0' ");
-        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519476879764', tip='ID_SELL', qty='400', price='2.7', orderID='1516679479720', expires='0' ");
-        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519476879764', tip='ID_SELL', qty='500', price='2.8', orderID='1516679467921', expires='0' ");
-        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519476879764', tip='ID_SELL', qty='600', price='2.9', orderID='1516679479722', expires='0' ");
-        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519476879764', tip='ID_SELL', qty='700', price='3.0', orderID='1516678479723', expires='0' ");
-        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519476879764', tip='ID_SELL', qty='800', price='3.1', orderID='1516679479724', expires='0' ");
-        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519476879764', tip='ID_SELL', qty='900', price='3.2', orderID='1516679479725', expires='0' ");
-        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519476879764', tip='ID_SELL', qty='1000', price='3.3', orderID='1516679769726', expires='0' ");
+        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519476879764', tip='ID_SELL', qty='100', price='4', orderID='1516679479777', expires='0' ");
+        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519476879764', tip='ID_SELL', qty='200', price='4.1', orderID='1516679479778', expires='0' ");
+        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519476879764', tip='ID_SELL', qty='300', price='4.2', orderID='1516679479719', expires='0' ");
+        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519476879764', tip='ID_SELL', qty='400', price='4.3', orderID='1516679479720', expires='0' ");
+        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519476879764', tip='ID_SELL', qty='500', price='4.4', orderID='1516679467921', expires='0' ");
+        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519476879764', tip='ID_SELL', qty='600', price='4.5', orderID='1516679479722', expires='0' ");
+        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519476879764', tip='ID_SELL', qty='700', price='4.6', orderID='1516678479723', expires='0' ");
+        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519476879764', tip='ID_SELL', qty='800', price='4.7', orderID='1516679479724', expires='0' ");
+        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519476879764', tip='ID_SELL', qty='900', price='4.8', orderID='1516679479725', expires='0' ");
+        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519476879764', tip='ID_SELL', qty='1000', price='4.9', orderID='1516679769726', expires='0' ");
           
-        // Silver watch market
-        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519476777632', tip='ID_SELL', qty='100', price='3', orderID='1516779479777', expires='0' ");
-        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519476777632', tip='ID_SELL', qty='200', price='3.1', orderID='1516779479778', expires='0' ");
-        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519476777632', tip='ID_SELL', qty='300', price='3.2', orderID='1516779479719', expires='0' ");
-        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519476777632', tip='ID_SELL', qty='400', price='3.3', orderID='1516779479720', expires='0' ");
-        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519476777632', tip='ID_SELL', qty='500', price='3.4', orderID='1516779467921', expires='0' ");
-        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519476777632', tip='ID_SELL', qty='600', price='3.5', orderID='1516779479722', expires='0' ");
-        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519476777632', tip='ID_SELL', qty='700', price='3.6', orderID='1516778479723', expires='0' ");
-        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519476777632', tip='ID_SELL', qty='800', price='3.7', orderID='1516779479724', expires='0' ");
-        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519476777632', tip='ID_SELL', qty='900', price='3.8', orderID='1516779479725', expires='0' ");
-        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519476777632', tip='ID_SELL', qty='1000', price=3.9', orderID='1516779769726', expires='0' ");
+        // Silver bracelet market
+        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519476777632', tip='ID_SELL', qty='100', price='5', orderID='1516779479777', expires='0' ");
+        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519476777632', tip='ID_SELL', qty='200', price='5.1', orderID='1516779479778', expires='0' ");
+        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519476777632', tip='ID_SELL', qty='300', price='5.2', orderID='1516779479719', expires='0' ");
+        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519476777632', tip='ID_SELL', qty='400', price='5.3', orderID='1516779479720', expires='0' ");
+        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519476777632', tip='ID_SELL', qty='500', price='5.4', orderID='1516779467921', expires='0' ");
+        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519476777632', tip='ID_SELL', qty='600', price='5.5', orderID='1516779479722', expires='0' ");
+        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519476777632', tip='ID_SELL', qty='700', price='5.6', orderID='1516778479723', expires='0' ");
+        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519476777632', tip='ID_SELL', qty='800', price='5.7', orderID='1516779479724', expires='0' ");
+        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519476777632', tip='ID_SELL', qty='900', price='5.8', orderID='1516779479725', expires='0' ");
+        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519476777632', tip='ID_SELL', qty='1000', price=5.9', orderID='1516779769726', expires='0' ");
                
         // Cars
         UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519477499667', tip='ID_SELL', qty='10', price='5', orderID='1526779479787', expires='0' ");
@@ -710,11 +710,11 @@ public class CAssetsMktsPos extends CTable
         UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519476977358', tip='ID_SELL', qty='500', price='6.4', orderID='5926789479777', expires='0' ");
         
         // Navy destroyer 
-        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519477643862', tip='ID_SELL', qty='10', price='100', orderID='1532422601950', expires='0' ");
-        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519477643862', tip='ID_SELL', qty='10', price='200', orderID='1532422929923', expires='0' ");
-        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519477643862', tip='ID_SELL', qty='10', price='300', orderID='1532422169728', expires='0' ");
-        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519477643862', tip='ID_SELL', qty='10', price='400', orderID='1532423067375', expires='0' ");
-        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519477643862', tip='ID_SELL', qty='10', price='500', orderID='1532422332166', expires='0' ");
+        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519477643862', tip='ID_SELL', qty='10', price='50', orderID='1532422601950', expires='0' ");
+        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519477643862', tip='ID_SELL', qty='10', price='100', orderID='1532422929923', expires='0' ");
+        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519477643862', tip='ID_SELL', qty='10', price='150', orderID='1532422169728', expires='0' ");
+        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519477643862', tip='ID_SELL', qty='10', price='200', orderID='1532423067375', expires='0' ");
+        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519477643862', tip='ID_SELL', qty='10', price='250', orderID='1532422332166', expires='0' ");
         
         // Carrier 
         UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519477254018', tip='ID_SELL', qty='10', price='100', orderID='1532422216421', expires='0' ");
@@ -724,11 +724,11 @@ public class CAssetsMktsPos extends CTable
         UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519477254018', tip='ID_SELL', qty='10', price='500', orderID='1532422276844', expires='0' ");
        
         // Jet fighters 
-        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519477254321', tip='ID_SELL', qty='10', price='100', orderID='1532422799349', expires='0' ");
-        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519477254321', tip='ID_SELL', qty='10', price='200', orderID='1532422771631', expires='0' ");
-        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519477254321', tip='ID_SELL', qty='10', price='300', orderID='1532422519227', expires='0' ");
-        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519477254321', tip='ID_SELL', qty='10', price='400', orderID='1532423032361', expires='0' ");
-        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519477254321', tip='ID_SELL', qty='10', price='500', orderID='1532422282741', expires='0' ");
+        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519477254321', tip='ID_SELL', qty='10', price='25', orderID='1532422799349', expires='0' ");
+        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519477254321', tip='ID_SELL', qty='10', price='50', orderID='1532422771631', expires='0' ");
+        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519477254321', tip='ID_SELL', qty='10', price='75', orderID='1532422519227', expires='0' ");
+        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519477254321', tip='ID_SELL', qty='10', price='100', orderID='1532423032361', expires='0' ");
+        UTILS.DB.executeUpdate("INSERT INTO assets_mkts_pos SET adr='default', mktID='1519477254321', tip='ID_SELL', qty='10', price='125', orderID='1532422282741', expires='0' ");
        
         
         // Tanks 

@@ -34,7 +34,7 @@ public class CTravelPayload extends CPayload
         
         // Check for null
         if (this.cou==null)
-        throw new Exception("Null assertion failed - CTravelPayload.java, 68");
+            throw new Exception("Null assertion failed - CTravelPayload.java, 68");
         
          // Distance
         double dist=UTILS.BASIC.getCouDist(UTILS.BASIC.getAdrData(this.target_adr, "loc"), this.cou);

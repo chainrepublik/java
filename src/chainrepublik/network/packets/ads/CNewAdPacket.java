@@ -11,7 +11,10 @@ import chainrepublik.network.packets.blocks.CBlockPayload;
 
 public class CNewAdPacket extends CBroadcastPacket 
 {
-   public CNewAdPacket(String fee_adr, 
+    // Serial
+    private static final long serialVersionUID = 100L;
+    
+    public CNewAdPacket(String fee_adr, 
 		       String adr, 
 		       String title, 
 		       String mes, 

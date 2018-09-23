@@ -13,6 +13,9 @@ public class CWorkPayload extends CPayload
     // Status
     long minutes;
     
+    // Serial
+    //private static final long serialVersionUID = 100L;
+    
     public CWorkPayload(String adr,
                         long workplaceID,
                         long minutes) throws Exception
@@ -169,7 +172,19 @@ public class CWorkPayload extends CPayload
         // Company has funds ?
         if (com_balance<sal)
             return;
-            
+        
+        // Has licence ?
+        ResultSet lic_rs=UTILS.DB.executeQuery("SELECT * "
+                                               + "FROM stocuri AS st "
+                                               + "JOIN tipuri_licente AS tl ON st.tip=tl.tip "
+                                              + "WHERE st.adr='"+com_adr+"' "
+                                                + "AND st.qty=1 "
+                                                + "AND tl.prod='"+work_rs.getString("prod")+"'");
+        
+        // Has data ?
+        if (!UTILS.DB.hasData(lic_rs))
+            throw new Exception("Company has no licence - CWorkPayload.java, 68");
+        
         // Load product data
         ResultSet prod_rs=UTILS.DB.executeQuery("SELECT * "
                                                 + "FROM tipuri_produse "

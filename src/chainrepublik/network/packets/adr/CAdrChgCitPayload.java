@@ -32,6 +32,10 @@ public class CAdrChgCitPayload extends CPayload
    	// Super class
    	super.check(block);
         
+        // Check for null
+        if (this.cou==null)
+            throw new Exception("Null assertion failed - CAdrChgCitPayload.java, 135");
+        
          // Check energy
         this.checkEnergy();
         

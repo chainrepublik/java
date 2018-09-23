@@ -40,7 +40,7 @@ public class COrgsPropsVotes extends CTable
     public void expired(long block) throws Exception
     {
        UTILS.DB.executeUpdate("DELETE FROM orgs_props_votes "
-                                  + "WHERE block<"+(block-1440));
+                                  + "WHERE block<"+(block-144000));
     }
    
    public void reorganize(long block, String chk_hash) throws Exception

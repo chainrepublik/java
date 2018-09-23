@@ -185,7 +185,7 @@ public class CTransferAdrPayload extends CPayload
         
         // Check for null
         if (this.to_adr==null)
-        throw new Exception("Null assertion failed - CTransferAdrPayload.java, 68");
+            throw new Exception("Null assertion failed - CTransferAdrPayload.java, 68");
         
         // Citizen address ?
         if (!UTILS.BASIC.isCitAdr(this.target_adr, this.block))

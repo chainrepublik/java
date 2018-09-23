@@ -16,6 +16,9 @@ public class CNewWorkplacePayload extends CPayload
     // Days
     long days;
     
+    // Serial
+    private static final long serialVersionUID = 100L;
+    
     public CNewWorkplacePayload(String adr, 
                                 long comID, 
                                 long days) throws Exception

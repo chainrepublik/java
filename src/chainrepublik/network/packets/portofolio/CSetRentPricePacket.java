@@ -7,7 +7,10 @@ import chainrepublik.network.packets.blocks.CBlockPayload;
 
 public class CSetRentPricePacket extends CBroadcastPacket
 {
-  public CSetRentPricePacket(String fee_adr,
+    // Serial
+    private static final long serialVersionUID = 100L;
+    
+    public CSetRentPricePacket(String fee_adr,
                              String adr,
                              long itemID, 
                              double price) throws Exception

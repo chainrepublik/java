@@ -50,23 +50,49 @@ public class CAssets extends CTable
         }
     }
     
-    public void expiresd(long block) throws Exception
+    public void expired(long block) throws Exception
     {
        // Load expiresd
        ResultSet rs=UTILS.DB.executeQuery("SELECT * "
-                             + "FROM assets "
-                            + "WHERE expires<"+block+" "
-                              + "AND expires>0");
+                                          + "FROM assets "
+                                         + "WHERE expires<"+block+" "
+                                           + "AND expires>0");
        
        while (rs.next())
        {
+           // Symbol
+           String symbol=rs.getString("symbol");
+           
            // Owners
            UTILS.DB.executeUpdate("DELETE FROM assets_owners "
-                                       + "WHERE asset='"+rs.getString("symbol")+"'");
+                                       + "WHERE symbol='"+symbol+"'");
+           
+           // Assets markets
+           ResultSet rs_mkt=UTILS.DB.executeQuery("SELECT * "
+                                                  + "FROM assets_mkts "
+                                                 + "WHERE asset='"+symbol+"'");
+           // Parse
+           while (rs_mkt.next())
+           {
+                // Mkt ID
+                long mktID=rs_mkt.getLong("mktID");
+               
+                // Removes positions
+                UTILS.DB.executeUpdate("DELETE FROM assets_mkts_pos "
+                                         + "WHERE mktID='"+mktID+"'");    
+               
+                // Removes market
+                UTILS.DB.executeUpdate("DELETE FROM assets_mkts "
+                                         + "WHERE mktID='"+mktID+"'");    
+           }
+           
+           // Escrowed transactions
+           UTILS.DB.executeUpdate("DELETE FROM escrowed "
+                                      + "WHERE cur='"+symbol+"'");
            
            // Remove asset
            UTILS.DB.executeUpdate("DELETE FROM assets "
-                                      + "WHERE symbol='"+rs.getString("symbol")+"'");
+                                      + "WHERE symbol='"+symbol+"'");
        }
     }
     

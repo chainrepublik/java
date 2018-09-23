@@ -20,6 +20,8 @@ public class CUpdateCompanyPayload extends CPayload
     // Pic
     String pic;
     
+    // Serial
+    private static final long serialVersionUID = 100L;
     
     public CUpdateCompanyPayload(String adr,
                                  long comID, 
@@ -56,6 +58,12 @@ public class CUpdateCompanyPayload extends CPayload
    {
    	// Super class
    	super.check(block);
+        
+        // Check for null
+        if (this.name==null ||
+            this.desc==null ||
+            this.pic==null)
+        throw new Exception("Null assertion failed - CRentLicencePayload.java, 68");
         
         // Energy
         this.checkEnergy();

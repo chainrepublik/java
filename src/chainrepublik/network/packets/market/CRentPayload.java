@@ -13,6 +13,9 @@ public class CRentPayload extends CPayload
     // Days
     long days;
     
+    // Serial
+    private static final long serialVersionUID = 100L;
+    
     public CRentPayload(String adr, 
                         long itemID, 
                         long days) throws Exception

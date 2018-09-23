@@ -90,6 +90,15 @@ public class CLaws
                                         + "war_status='ID_TRANSIT', "
                                         + "war_arrive='"+(block+dist)+"' "
                                   + "WHERE stocID='"+wID+"'");
+            
+            // Navy destroyer or aircraft carrier ?
+            UTILS.DB.executeUpdate("UPDATE stocuri "
+                                    + "SET war_status='ID_TRANSIT', "
+                                        + "war_arrive='"+(block+dist)+"' "
+                                  + "WHERE war_locID='"+wID+"'");
+            
+            
+            
         }
      
         // Pay
@@ -688,7 +697,7 @@ public class CLaws
             return false;
                                   
         // State budget
-        double budget=UTILS.BASIC.getBudget(cou, "CRC");
+        double budget=UTILS.BASIC.getBudget(cou, "CRC", null);
                                   
         // Only 5% of budget can be donated
         if (budget/20<amount)
@@ -705,7 +714,7 @@ public class CLaws
            throw new Exception("Invalid country, CLaws.java, 608");
         
         // State budget
-        double budget=UTILS.BASIC.getBudget(cou, "CRC");
+        double budget=UTILS.BASIC.getBudget(cou, "CRC", null);
                                   
         // Only 25% of budget can be distributed
         if (budget/4<amount)
@@ -773,7 +782,7 @@ public class CLaws
                                   + "AND block>'"+block+"'");
                                   
         // State budget
-        double budget=UTILS.BASIC.getBudget(cou, "CRC");
+        double budget=UTILS.BASIC.getBudget(cou, "CRC", null);
                                   
         // Funds ?
         if (budget<1)
@@ -837,12 +846,17 @@ public class CLaws
             if (!UTILS.BASIC.isLong(locID))
                 throw new Exception("Invalid loc ID, CNewLawPayload.java, 837");
         
+        // Address
+        String adr=UTILS.BASIC.getCouAdr(cou);
+        
+        // Load data
         ResultSet rs=UTILS.DB.executeQuery("SELECT SUM(qty) AS total "
                                            + "FROM stocuri "
-                                          + "WHERE cou='"+cou+"' "
+                                          + "WHERE adr='"+adr+"' "
                                             + "AND tip='"+type+"' "
-                                            + "AND loc_type='"+loc_type+"' "
-                                            + "AND locID='"+locID+"'");
+                                            + "AND war_loc_type='"+loc_type+"' "
+                                            + "AND war_locID='"+locID+"' "
+                                            + "AND war_status='ID_READY'");
         
         // Next
         rs.next();
@@ -887,7 +901,9 @@ public class CLaws
         switch (weapon)
         {
             // Tanks
-            case "ID_TANK" : if (!target_type.equals("ID_LAND")) allow=false; break;
+            case "ID_TANK" : if (!target_type.equals("ID_LAND")) 
+                                allow=false; 
+                             break;
             
             // Tank rounds
             case "ID_TANK_ROUND" : if (!target_type.equals("ID_LAND")) 
@@ -905,55 +921,48 @@ public class CLaws
                                                                   target_type, 
                                                                   targetID);
                                    
-                                   // Max 10 rounds / tank
-                                   if (tanks*25<rounds)
+                                   // Max 100 rounds / tank
+                                   if (tanks*100<=rounds)
                                        allow=false;
             
                                    break;
             
             // Missile air soil
-            case "ID_MISSILE_AIR_SOIL" : if (!target_type.equals("ID_LAND") && 
-                                             !target_type.equals("ID_AIRCRAFT_CARRIER")) allow=false; 
+            case "ID_MISSILE_AIR_SOIL" : if (!target_type.equals("ID_LAND") &&
+                                             !target_type.equals("ID_AIRCRAFT_CARRIER")) 
+                                         allow=false; 
             
                                          // Tanks no
                                          long aircrafts=this.getWeaponsQty(cou, 
-                                                                 "ID_AIRCRAFT", 
-                                                                 target_type, 
-                                                                 targetID);
+                                                                           "ID_JET_FIGHTER", 
+                                                                           target_type, 
+                                                                           targetID);
                                    
                                         // Missiles
                                         long missiles=this.getWeaponsQty(cou, 
-                                                                  "ID_MISSILE_AIR_SOIL", 
-                                                                  target_type, 
-                                                                  targetID);
+                                                                         "ID_MISSILE_AIR_SOIL", 
+                                                                         target_type, 
+                                                                         targetID);
                                    
-                                        // Max 10 rounds / tank
-                                        if (aircrafts*10<missiles)
+                                        // Max 25 missiles / fighter
+                                        if (aircrafts*25<=missiles)
                                             allow=false;
                                          
                                         break;
                                              
             // Missile soil soil
-            case "ID_MISSILE_SOIL_SOIL" : if (!target_type.equals("ID_LAND") && 
-                                             !target_type.equals("ID_NAVY_DESTROYER")) allow=false; 
-            
-                                          // Navy destroyer ?
-                                          if (target_type.equals("ID_NAVY_DESTROYER"))
-                                          {
-                                              rs=UTILS.DB.executeQuery("SELECT SUM(qty) AS total "
-                                                                       + "FROM stocuri "
-                                                                      + "WHERE war_loc_type='ID_NAVY_DESTROYER' "
-                                                                        + "AND war_locID='"+targetID+"'");
-                                              
-                                              // Next
-                                              rs.next();
-                                              
-                                              // Total
-                                              long total=rs.getLong("total");
-                                              
-                                              if (total>250)
-                                                  allow=false;
-                                          }
+            case "ID_MISSILE_SOIL_SOIL" :   if (!target_type.equals("ID_NAVY_DESTROYER")) 
+                                                allow=false; 
+                                            
+                                            // Missiles
+                                            long missiles_ss=this.getWeaponsQty(cou, 
+                                                                                "ID_MISSILE_SOIL_SOIL", 
+                                                                                target_type, 
+                                                                                targetID);
+                                   
+                                            // Max 10 rounds / tank
+                                            if (missiles_ss>=100)
+                                                 allow=false;
                                           
                                           break;  
                                              
@@ -985,26 +994,22 @@ public class CLaws
             case "ID_JET_FIGHTER" : if (!target_type.equals("ID_LAND") && 
                                         !target_type.equals("ID_AIRCRAFT_CARRIER")) 
                                      allow=false;
-            
-                                     // Carieri ?
-                                     if (target_type.equals("ID_AIRCRAFT_CARRIER"))
-                                     {
-                                        rs=UTILS.DB.executeQuery("SELECT SUM(qty) AS total "
-                                                                 + "FROM stocuri "
-                                                                + "WHERE war_loc_type='ID_AIRCRAFT_CARRIER' "
-                                                                  + "AND war_locID='"+targetID+"'");
-                                              
-                                        // Next
-                                        rs.next();
-                                              
-                                        // Total
-                                        long total=rs.getLong("total");
-                                              
-                                        if (total>50)
-                                            allow=false;
-                                      }
                                      
-                                      break;
+                                    // Move to sea ?
+                                    if (target_type.equals("ID_AIRCRAFT_CARRIER"))
+                                    {
+                                        // Missiles
+                                        long fighters=this.getWeaponsQty(cou, 
+                                                                        "ID_JET_FIGHTER", 
+                                                                        target_type, 
+                                                                        targetID);
+                                   
+                                        // Max 100 jets / carrier 
+                                        if (fighters>=100)
+                                            allow=false;
+                                    }
+                                    
+                                    break;
         }
         
         return allow;
@@ -1030,8 +1035,8 @@ public class CLaws
         // Check target type
         if (!target_type.equals("ID_LAND") && 
             !target_type.equals("ID_SEA") && 
-            !target_type.equals("ID_AIRCRAFT_CARRIER") && 
-            !target_type.equals("ID_NAVY_DESTROYER"))
+            !target_type.equals("ID_NAVY_DESTROYER") && 
+            !target_type.equals("ID_AIRCRAFT_CARRIER"))
         return false;
 
         // Check land
@@ -1053,18 +1058,18 @@ public class CLaws
                return false;
         
         // Airraft carrier or destroyer
-        if (target_type.equals("ID_AIRCRAFT_CARRIER") || 
-            target_type.equals("ID_NAVY_DESTROYER"))
+        if (target_type.equals("ID_NAVY_DESTROYER") || 
+            target_type.equals("ID_AIRCRAFT_CARRIER"))
         {
             // Country adress;
             String cou_adr=UTILS.BASIC.getCouAdr(cou);
             
-             ResultSet rs=UTILS.DB.executeQuery("SELECT * "
+            // Load data
+            ResultSet rs=UTILS.DB.executeQuery("SELECT * "
                                                + "FROM stocuri "
                                               + "WHERE adr='"+cou_adr+"' "
                                                 + "AND tip='"+target_type+"' "
-                                                + "AND stocID='"+targetID+"' "
-                                                + "AND qty>0");
+                                                + "AND stocID='"+targetID+"'");
             
             // Has data ?
             if (!UTILS.DB.hasData(rs))
@@ -1112,7 +1117,7 @@ public class CLaws
             
             // Owns weapon ?
             if (!this.ownsWeapon(cou, wID))
-                throw new Exception("Insufucuent weapon ID, CNewLawPayload.java, 102"); 
+                throw new Exception("Invalid weapon ID, CNewLawPayload.java, 102"); 
             
             // Can move it to target
             if (!this.canMoveWeapon(cou, wID, target_type, targetID))
@@ -1132,7 +1137,7 @@ public class CLaws
         }
         
         // Check balance
-        double budget=UTILS.BASIC.getBudget(cou, "CRC");
+        double budget=UTILS.BASIC.getBudget(cou, "CRC", null);
         
         // Funds ?
         if (cost>budget)
@@ -1140,6 +1145,42 @@ public class CLaws
         
         // Return
         return cost;
+    }
+    
+    public boolean canUse(String cou, 
+                          String ammo, 
+                          String loc_type, 
+                          String locID) throws Exception
+    {
+        if (loc_type=="ID_LAND")
+        {
+            // Owner
+            String adr=UTILS.BASIC.getCouAdr(cou);
+            
+            // Ammo type
+            if (ammo.equals("ID_TANK_ROUND"))
+            {
+                // Tanks in area ? 
+                ResultSet rs_area=UTILS.DB.executeQuery("SELECT * "
+                                                        + "FROM stocuri "
+                                                       + "WHERE tip='ID_TANK' "
+                                                         + "AND adr='"+adr+"' "
+                                                         + "AND war_loc_type='"+loc_type+"' "
+                                                         + "AND war_locID='"+locID+"'");
+            
+                // Has data ?
+                if (!UTILS.DB.hasData(rs_area))
+                   return false;
+            }
+        
+            // Ammo type
+            if (ammo.equals("ID_MISSILE_AIR_SOIL") || 
+                ammo.equals("ID_MISSILE_SOIL_SOIL"))
+            return false;
+            
+        }
+            
+        return true;
     }
     
     public boolean checkAttackLaw(String cou,
@@ -1210,8 +1251,16 @@ public class CLaws
             if (!UTILS.BASIC.isAmmo(ammo))
                 throw new Exception("Item is not ammunition, CNewLawPayload.java, 102");
             
+            // Can be used ?
+            if (!this.canUse(cou, 
+                             ammo, 
+                             rs_ammo.getString("war_loc_type"), 
+                             rs_ammo.getString("war_locID")))
+            throw new Exception("Weapon can't be used, CNewLawPayload.java, 102");     
+            
             // Get ammo position
-            Point ammo_pos=UTILS.BASIC.getLocPos(rs_ammo.getString("war_loc_type"), rs_ammo.getString("war_locID"));
+            Point ammo_pos=UTILS.BASIC.getLocPos(rs_ammo.getString("war_loc_type"), 
+                                                 rs_ammo.getString("war_locID"));
             
             // Target pos
             Point target_pos=UTILS.BASIC.getCouPos(rs_war.getString("target"));
@@ -1270,7 +1319,7 @@ public class CLaws
         double price=qty*rs.getDouble("price");
         
         // Budget
-        double budget=UTILS.BASIC.getBudget(cou, "CRC");
+        double budget=UTILS.BASIC.getBudget(cou, "CRC", null);
         
         // Funds ?
         if (price>budget)

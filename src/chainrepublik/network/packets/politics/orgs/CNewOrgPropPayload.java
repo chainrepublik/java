@@ -34,6 +34,9 @@ public class CNewOrgPropPayload extends CPayload
     // Expl
     String expl;
     
+    // Serial
+    private static final long serialVersionUID = 100L;
+    
     public CNewOrgPropPayload(String adr, 
                               long orgID,
                               String prop_type, 
@@ -94,12 +97,17 @@ public class CNewOrgPropPayload extends CPayload
    	// Super class
    	super.check(block);
         
+        // Check for null
+        if (this.prop_type==null ||
+            this.expl==null)
+            throw new Exception("Null assertion failed - CNewOrgPropPayload.java, 68");
+        
         // Check energy
         this.checkEnergy();
         
         // Citizen address ?
         if (!UTILS.BASIC.isCitAdr(this.target_adr, this.block))
-           throw new Exception("Only citizens can do this action - CWorkPayload.java, 68");
+           throw new Exception("Only citizens can do this action - CNewOrgPropPayload.java, 68");
         
         // Valid orgID
         ResultSet rs=UTILS.DB.executeQuery("SELECT * "
@@ -261,7 +269,7 @@ public class CNewOrgPropPayload extends CPayload
         rs.next();
         
         // Number
-        if (rs.getLong("total")<25)
+        if (rs.getLong("total")<10)
             throw new Exception("Minimum 25 members required, CNewOrgPropPayload.java, 116");
         
         // Hash

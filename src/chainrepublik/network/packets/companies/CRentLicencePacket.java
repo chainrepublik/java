@@ -7,6 +7,10 @@ import chainrepublik.network.packets.blocks.CBlockPayload;
 
 public class CRentLicencePacket extends CBroadcastPacket
 {
+    // Serial
+    private static final long serialVersionUID = 100L;
+    
+    
     public CRentLicencePacket(String fee_adr,
                               String adr, 
                               long comID, 

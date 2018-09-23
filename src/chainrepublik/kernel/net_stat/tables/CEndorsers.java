@@ -44,8 +44,14 @@ public class CEndorsers extends CTable
                                            + "WHERE adr.pol_inf<25");
          
          while (rs.next())
+         {
+             // Endorser
+             String endorser=rs.getString("endorser");
+             
+             // Remove
              UTILS.DB.executeUpdate("DELETE FROM endorsers "
-                                        + "WHERE endorser='"+rs.getString("endorser")+"'");
+                                        + "WHERE endorser='"+endorser+"'");
+         }
     }
      
     public void reorganize(long block, String chk_hash) throws Exception

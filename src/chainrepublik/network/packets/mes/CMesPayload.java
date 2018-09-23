@@ -7,29 +7,26 @@ import chainrepublik.kernel.CAddress;
 import chainrepublik.kernel.UTILS;
 import chainrepublik.network.packets.CPayload;
 import chainrepublik.network.packets.blocks.CBlockPayload;
-import java.security.SecureRandom;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+
 
 public class CMesPayload extends CPayload 
 {
     // Receiver
-	String receiver_adr;
+    String receiver_adr;
 	
-	// Subj
-	String subj;
+    // Subj
+    String subj;
 	
-	// Mes
-	String mes;
+    // Mes
+    String mes;
 	
-	// Key
-	String key;
+    // Key
+    String key;
         
-        // Serial
-   private static final long serialVersionUID = 100L;
+    // Serial
+    private static final long serialVersionUID = 100L;
 	
-	public CMesPayload(String sender_adr, 
+    public CMesPayload(String sender_adr, 
 			   String receiver_adr, 
 			   String subj, 
 			   String mes)  throws Exception
@@ -70,6 +67,14 @@ public class CMesPayload extends CPayload
 	{
             // Constructor
             super.check(block);
+            
+            // Check for null
+            if (this.receiver_adr==null ||
+                this.subj==null ||
+                this.mes==null ||
+                this.key==null ||
+                this.receiver_adr==null)
+            throw new Exception("Null assertion failed - CMesPayload.java, 68");
             
              // Check energy
              this.checkEnergy();

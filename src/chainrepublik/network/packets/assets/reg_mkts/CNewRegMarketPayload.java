@@ -88,6 +88,14 @@ public class CNewRegMarketPayload extends CPayload
         // Parent
         super.check(block);
         
+        // Check for null
+        if (this.adr==null ||
+            this.asset_symbol==null ||
+            this.cur_symbol==null ||
+            this.title==null ||
+            this.description==null)
+        throw new Exception("Null assertion failed - CWorkPayload.java, 68");
+        
          // Check energy
        this.checkEnergy();
        
@@ -103,6 +111,10 @@ public class CNewRegMarketPayload extends CPayload
         if (!this.cur_symbol.equals("CRC"))
            if (!UTILS.BASIC.isAsset(cur_symbol))
              throw new Exception("Invalid currency symbol - CNewRegMarketPayload.java");
+        
+        // Asset and currency symbol the same ?
+        if (this.asset_symbol.equals(this.cur_symbol))
+            throw new Exception("Asset and currency are the same - CNewRegMarketPayload.java");
          
         // Market ID
         if (UTILS.BASIC.isID(mktID))

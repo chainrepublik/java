@@ -7,6 +7,9 @@ import chainrepublik.network.packets.blocks.CBlockPayload;
 
 public class CLeaveOrgPacket  extends CBroadcastPacket 
 {
+    // Serial
+    private static final long serialVersionUID = 100L;
+    
     public CLeaveOrgPacket(String fee_adr,
                            String adr,
                            long orgID) throws Exception

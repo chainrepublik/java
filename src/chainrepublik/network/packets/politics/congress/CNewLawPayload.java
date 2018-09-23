@@ -27,6 +27,9 @@ public class CNewLawPayload extends CPayload
     
     // Expl
     String expl;
+    
+     // Serial
+    private static final long serialVersionUID = 100L;
 
     
     public CNewLawPayload(String adr, 
@@ -74,10 +77,15 @@ public class CNewLawPayload extends CPayload
    	// Super class
    	super.check(block);
         
-         // Check energy
-       this.checkEnergy();
+         // Check for null
+        if (this.law_type==null ||
+            this.expl==null)
+        throw new Exception("Null assertion failed - CDelVotePayload.java, 68");
+        
+        // Check energy
+        this.checkEnergy();
        
-       // Citizen address ?
+        // Citizen address ?
         if (!UTILS.BASIC.isCitAdr(this.target_adr, this.block))
            throw new Exception("Only citizens can do this action - CWorkPayload.java, 68");
        

@@ -13,6 +13,9 @@ public class CDonateItemPayload extends CPayload
     // Target adr
     String rec_adr;
     
+    // Serial
+    private static final long serialVersionUID = 100L;
+    
      // Item ID
     public CDonateItemPayload(String adr, 
                               long itemID,
@@ -38,6 +41,13 @@ public class CDonateItemPayload extends CPayload
     {
    	// Super class
    	super.check(block);
+        
+        // Check for null
+        if (this.rec_adr==null)
+            throw new Exception("Null assertion failed - CDonateItemPayload.java, 68");
+        
+        // Energy
+        this.checkEnergy();
         
         // Load itemID data
         ResultSet rs=UTILS.DB.executeQuery("SELECT * "

@@ -7,7 +7,10 @@ import chainrepublik.network.packets.blocks.CBlockPayload;
 
 public class CWthFundsPacket extends CBroadcastPacket
 {
-  public CWthFundsPacket(String fee_adr,
+    // Serial
+    private static final long serialVersionUID = 100L;
+    
+    public CWthFundsPacket(String fee_adr,
                          String adr,
                          long comID,
                          double amount) throws Exception

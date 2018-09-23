@@ -41,9 +41,9 @@ public class CActions extends CTable
         }
     }
     
-    public void expired() throws Exception
+    public void expired(long block) throws Exception
     {
         UTILS.DB.executeUpdate("DELETE FROM actions "
-                                   + "WHERE tstamp<"+(UTILS.BASIC.tstamp()-864000));
+                                   + "WHERE tstamp<="+(UTILS.BASIC.tstamp()-864000));
     }
 }

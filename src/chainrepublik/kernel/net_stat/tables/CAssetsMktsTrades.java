@@ -44,7 +44,7 @@ public class CAssetsMktsTrades extends CTable
     public void expired(long block) throws Exception
     {
         UTILS.DB.executeUpdate("DELETE FROM assets_mkts_trades "
-                                   + "WHERE block<"+(block-14400));
+                                   + "WHERE block<"+(block-144000));
     }
     
     

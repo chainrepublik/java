@@ -22,7 +22,7 @@ public class CRenewPayload extends CPayload
     long days;
     
     // Serial
-   private static final long serialVersionUID = 100L;
+    private static final long serialVersionUID = 100L;
                                            
     public CRenewPayload(String adr, 
                          String target_type,
@@ -56,6 +56,10 @@ public class CRenewPayload extends CPayload
          
         // Constructor
         super.check(block);
+        
+        // Check for null
+        if (this.target_type==null)
+            throw new Exception("Null assertion failed - CWorkPayload.java, 68");
         
          // Check energy
         this.checkEnergy();

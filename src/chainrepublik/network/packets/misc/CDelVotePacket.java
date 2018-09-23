@@ -7,8 +7,8 @@ import chainrepublik.network.packets.blocks.CBlockPayload;
 
 public class CDelVotePacket extends CBroadcastPacket
 {
-     // Serial
-   private static final long serialVersionUID = 100L;
+    // Serial
+    private static final long serialVersionUID = 100L;
    
     public CDelVotePacket(String fee_adr,
                           String adr, 

@@ -18,7 +18,7 @@ public class CFollowPayload extends CPayload
    long days;
    
    // Serial
-   private static final long serialVersionUID = 1;
+   private static final long serialVersionUID = 100L;
    
    public CFollowPayload(String adr, 
 		         String follow_adr,
@@ -44,12 +44,16 @@ public class CFollowPayload extends CPayload
        // Super class
        super.check(block);
        
-        // Check energy
+       // Check for null
+      if (this.follow_adr==null)
+         throw new Exception("Null assertion failed - CFollowPayload.java, 68");
+      
+       // Check energy
        this.checkEnergy();
        
        // Citizen address ?
         if (!UTILS.BASIC.isCitAdr(this.target_adr, this.block))
-           throw new Exception("Only citizens can do this action - CWorkPayload.java, 68");
+           throw new Exception("Only citizens can do this action - CFollowPayload.java, 68");
        
        // Follow address same as target
        if (this.follow_adr.equals(this.target_adr))

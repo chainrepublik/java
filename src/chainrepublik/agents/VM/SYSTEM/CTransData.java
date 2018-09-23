@@ -1,6 +1,5 @@
 package chainrepublik.agents.VM.SYSTEM;
 
-import chainrepublik.network.packets.trans.CMesDetails;
 
 public class CTransData 
 {

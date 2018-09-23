@@ -45,10 +45,28 @@ public class CWars extends CTable
    
     public void expired(long block) throws Exception
     {
-       // Load expired
-       UTILS.DB.executeUpdate("DELETE "
-                              + "FROM wars "
-                             + "WHERE block<='"+(block-144000)+"'");
+       // Load wars
+       ResultSet rs=UTILS.DB.executeQuery("SELECT * "
+                                          + "FROM wars "
+                                         + "WHERE block<="+(block-144000));
+       
+       // Parse
+       while (rs.next())
+       {
+          // War ID
+          long warID=rs.getLong("warID");
+          
+          // Delete
+          UTILS.DB.executeUpdate("DELETE "
+                                 + "FROM wars "
+                                + "WHERE warID='"+warID+"'");
+          
+          // Remove fighters
+          UTILS.DB.executeUpdate("DELETE FROM wars_fighters "
+                                     + "WHERE warID='"+warID+"'");
+       }
+       
+       
     }
     
     public void reorganize(long block, String chk_hash) throws Exception

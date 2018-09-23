@@ -12,6 +12,9 @@ public class CFightPayload extends CPayload
    
    // Type
    String type;
+   
+    // Serial
+    private static final long serialVersionUID = 100L;
     
    public CFightPayload(String adr, 
                          long warID, 
@@ -37,9 +40,13 @@ public class CFightPayload extends CPayload
    	// Super class
    	super.check(block);
         
+        // Check for null
+        if (this.type==null)
+            throw new Exception("Null assertion failed - CFightPayload.java, 68");
+        
         // Citizen address ?
         if (!UTILS.BASIC.isCitAdr(this.target_adr, this.block))
-           throw new Exception("Only citizens can do this action - CWorkPayload.java, 68");
+           throw new Exception("Only citizens can do this action - CFightPayload.java, 68");
         
         // Address country
         String adr_cou=UTILS.BASIC.getAdrData(this.target_adr, "cou");

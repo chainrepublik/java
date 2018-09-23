@@ -13,6 +13,9 @@ public class CWthFundsPayload extends CPayload
     // Amount
     double amount;
     
+    // Serial
+    private static final long serialVersionUID = 100L;
+    
     public CWthFundsPayload(String adr,
                             long comID,
                             double amount) throws Exception
@@ -48,7 +51,7 @@ public class CWthFundsPayload extends CPayload
         String com_adr=UTILS.BASIC.getComAdr(this.comID);
         
         // Owns company ?
-        if (UTILS.BASIC.isComOwner(this.target_adr, comID))
+        if (!UTILS.BASIC.isComOwner(this.target_adr, comID))
             throw new Exception("Invalid company ID - CWthFundsPayload.java, 68");
         
         // Amount

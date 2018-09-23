@@ -7,6 +7,9 @@ import chainrepublik.network.packets.blocks.CBlockPayload;
 
 public class CConsumeItemPacket extends CBroadcastPacket
 {
+    // Serial
+    private static final long serialVersionUID = 100L;
+    
     public CConsumeItemPacket(String fee_adr,
                               String adr,
                               long itemID) throws Exception

@@ -124,6 +124,12 @@ public class CAddAttrPayload extends CPayload
        // Parent
        super.check(block);
        
+        // Check for null
+        if (this.s1==null || 
+           this.s2==null ||
+           this.s3==null)
+        throw new Exception("Null assertion failed - CWorkPayload.java, 135");
+       
        // Check energy
        this.checkEnergy();
        

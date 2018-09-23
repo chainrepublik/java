@@ -10,6 +10,9 @@ public class CUseItemPayload extends CPayload
     // Item ID
     long itemID;
     
+    // Serial
+    private static final long serialVersionUID = 100L;
+    
     public CUseItemPayload(String adr, 
                            long itemID) throws Exception
     {

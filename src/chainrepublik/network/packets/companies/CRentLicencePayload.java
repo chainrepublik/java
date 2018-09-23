@@ -22,6 +22,9 @@ public class CRentLicencePayload extends CPayload
     // Licence stoc ID
     long lic_stocID;
     
+    // Serial
+    private static final long serialVersionUID = 100L;
+    
     public CRentLicencePayload(String adr, 
                                long comID, 
                                String lic, 
@@ -60,12 +63,16 @@ public class CRentLicencePayload extends CPayload
    	// Super class
    	super.check(block);
         
+        // Check for null
+        if (this.lic==null)
+            throw new Exception("Null assertion failed - CRentLicencePayload.java, 68");
+        
         // Energy
         this.checkEnergy();
         
         // Citizen address ?
         if (!UTILS.BASIC.isCitAdr(this.target_adr, this.block))
-           throw new Exception("Only citizens can do this action - CWorkPayload.java, 68");
+           throw new Exception("Only citizens can do this action - CRentLicencePayload.java, 68");
         
         // Company address
         String com_adr=UTILS.BASIC.getComAdr(this.comID);

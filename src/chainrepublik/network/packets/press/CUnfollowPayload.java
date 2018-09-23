@@ -17,7 +17,7 @@ public class CUnfollowPayload extends CPayload
    String unfollow_adr;
    
    // Serial
-   private static final long serialVersionUID = 1;
+   private static final long serialVersionUID = 100L;
    
    public CUnfollowPayload(String adr, 
                            String unfollow_address) throws Exception
@@ -39,12 +39,16 @@ public class CUnfollowPayload extends CPayload
         // Super class
         super.check(block);
         
+        // Check for null
+        if (this.unfollow_adr==null)
+            throw new Exception("Null assertion failed - CUnfollowPayload.java, 68");
+        
          // Check energy
        this.checkEnergy();
        
        // Citizen address ?
         if (!UTILS.BASIC.isCitAdr(this.target_adr, this.block))
-           throw new Exception("Only citizens can do this action - CWorkPayload.java, 68");
+           throw new Exception("Only citizens can do this action - CUnfollowPayload.java, 68");
    	
    	// Follow address valid
         if (!UTILS.BASIC.isAdr(this.unfollow_adr))

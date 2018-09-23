@@ -9,6 +9,9 @@ import chainrepublik.network.packets.portofolio.CUseItemPayload;
 
 public class CFightPacket extends CBroadcastPacket
 {
+     // Serial
+    private static final long serialVersionUID = 100L;
+    
    public CFightPacket(String fee_adr,
                        String adr,
                        long warID,

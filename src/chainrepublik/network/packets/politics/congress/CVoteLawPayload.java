@@ -7,14 +7,14 @@ import java.sql.ResultSet;
 
 public class CVoteLawPayload extends CPayload
 {
-    // Address
-    String adr;
-    
     // Law ID
     long lawID;
     
     // Vote
     String vote_type;
+    
+     // Serial
+    private static final long serialVersionUID = 100L;
     
     public CVoteLawPayload(String adr, 
                           long lawID, 
@@ -40,6 +40,10 @@ public class CVoteLawPayload extends CPayload
     {
    	// Super class
    	super.check(block);
+        
+         // Check for null
+        if (this.vote_type==null)
+           throw new Exception("Null assertion failed - CDelVotePayload.java, 68");
         
         // Check energy
         this.checkEnergy();

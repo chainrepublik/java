@@ -7,7 +7,10 @@ import chainrepublik.network.packets.blocks.CBlockPayload;
 
 public class CVoteOrgPropPacket extends CBroadcastPacket 
 {
-     public CVoteOrgPropPacket(String fee_adr,
+    // Serial
+    private static final long serialVersionUID = 100L;
+    
+    public CVoteOrgPropPacket(String fee_adr,
                                String adr, 
                                long propID,
                                String vote) throws Exception

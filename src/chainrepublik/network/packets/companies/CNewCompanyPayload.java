@@ -42,7 +42,11 @@ public class CNewCompanyPayload extends CPayload
     long days;
     
     // ID's
-    long stocID;         
+    long stocID;   
+    
+    // Serial
+    private static final long serialVersionUID = 100L;
+    
                                       
     public CNewCompanyPayload(String adr, 
                               String type, 
@@ -114,6 +118,16 @@ public class CNewCompanyPayload extends CPayload
     {
    	// Super class
    	super.check(block);
+        
+        // Check for null
+        if (this.com_adr==null ||
+            this.cou==null ||
+            this.name==null ||
+            this.desc==null ||
+            this.pic==null ||
+            this.symbol==null ||
+            this.target_adr==null)
+        throw new Exception("Null assertion failed - CNewCompanyPayload.java, 68");
         
         // Energy
         this.checkEnergy();

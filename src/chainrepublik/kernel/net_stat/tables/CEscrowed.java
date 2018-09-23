@@ -55,6 +55,9 @@ public class CEscrowed extends CTable
        // Remove
        while (rs.next())
        {
+            // Trans hash
+            String hash=rs.getString("trans_hash");
+           
             // Return the funds
             UTILS.ACC.newTrans(rs.getString("sender_adr"), 
                                "", 
@@ -63,18 +66,20 @@ public class CEscrowed extends CTable
                                "Escrowed funds returned", 
                                "", 
                                0,
-                               UTILS.BASIC.hash(rs.getString("hash")), 
+                               UTILS.BASIC.hash(hash), 
                                block,
                                false,
                                "",
                                "");
        
             // Clear
-            UTILS.ACC.clearTrans(UTILS.BASIC.hash(rs.getString("hash")), "ID_ALL", block);
+            UTILS.ACC.clearTrans(UTILS.BASIC.hash(hash), 
+                                 "ID_ALL", 
+                                 block);
        
             // Remove
             UTILS.DB.executeUpdate("DELETE FROM escrowed "
-                                       + "WHERE ID='"+rs.getLong("ID")+"'");
+                                       + "WHERE trans_hash='"+hash+"'");
        }
     }
    

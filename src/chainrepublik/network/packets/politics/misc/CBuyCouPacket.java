@@ -8,7 +8,10 @@ import chainrepublik.network.packets.portofolio.CConsumeItemPayload;
 
 public class CBuyCouPacket extends CBroadcastPacket
 {
- public CBuyCouPacket(String fee_adr,
+    // Serial
+    private static final long serialVersionUID = 100L;
+    
+    public CBuyCouPacket(String fee_adr,
                       String adr,
                       String cou) throws Exception
     {

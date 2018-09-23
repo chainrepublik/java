@@ -135,6 +135,16 @@ public class main
         System.out.println("Wallet is up an running...");
         
         UTILS.CBLOCK.startMiners(1);
+        
+        
+        /*CNewLawPacket packet=new CNewLawPacket("MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAE6Giy9CTfYBgtrVsRSqiF6a8+MfBHOBHqkQi/QBbtOUjZpZsl2Ra7lrFlvcm8knEjO3ZNoLBD6xV6l5XoWYhLlA==",
+                                               "MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAE6Giy9CTfYBgtrVsRSqiF6a8+MfBHOBHqkQi/QBbtOUjZpZsl2Ra7lrFlvcm8knEjO3ZNoLBD6xV6l5XoWYhLlA==", 
+                                               "ID_ATTACK", 
+                                               "1537354767029", 
+                                               "1537609352203",
+                                               "ID_AT",
+                                               "Trebe mutate ma...");
+        UTILS.NETWORK.broadcast(packet);*/
     }
     
     

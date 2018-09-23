@@ -47,6 +47,9 @@ public class CIssueAssetPayload extends CPayload
         
     // Transaction fee
     double trans_fee;
+    
+    // Serial
+    private static final long serialVersionUID = 100L;
         
 	
     public CIssueAssetPayload(String adr,
@@ -121,12 +124,22 @@ public class CIssueAssetPayload extends CPayload
         // Super class
         super.check(block);
         
+        // Check for null
+        if (this.symbol==null ||
+            this.title==null ||
+            this.description==null ||
+            this.how_buy==null ||
+            this.how_sell==null ||
+            this.web_page==null ||
+            this.pic==null)
+        throw new Exception("Null assertion failed - CIssueAssetPayload.java, 68");
+        
         // Check energy
         this.checkEnergy();
         
          // Citizen address ?
         if (!UTILS.BASIC.isCitAdr(this.target_adr, this.block))
-           throw new Exception("Only citizens can do this action - CWorkPayload.java, 68");
+           throw new Exception("Only citizens can do this action - CIssueAssetPayload.java, 68");
         
         // Asset ID
         if (UTILS.BASIC.isID(this.assetID))

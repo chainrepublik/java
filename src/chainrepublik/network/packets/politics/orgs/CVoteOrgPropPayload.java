@@ -13,6 +13,9 @@ public class CVoteOrgPropPayload extends CPayload
     // Law type
     String vote;
     
+    // Serial
+    private static final long serialVersionUID = 100L;
+    
     public CVoteOrgPropPayload(String adr, 
                               long propID,
                               String vote) throws Exception
@@ -38,12 +41,16 @@ public class CVoteOrgPropPayload extends CPayload
    	// Super class
    	super.check(block);
         
+        // Check for null
+        if (this.vote==null)
+            throw new Exception("Null assertion failed - CNewOrgPropPayload.java, 68");
+        
         // Check energy
         this.checkEnergy();
         
         // Citizen address ?
         if (!UTILS.BASIC.isCitAdr(this.target_adr, this.block))
-           throw new Exception("Only citizens can do this action - CWorkPayload.java, 68");
+           throw new Exception("Only citizens can do this action - CNewOrgPropPayload.java, 68");
         
         // Valid propID
         ResultSet rs=UTILS.DB.executeQuery("SELECT * "

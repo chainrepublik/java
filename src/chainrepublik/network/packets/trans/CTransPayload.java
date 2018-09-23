@@ -71,6 +71,10 @@ public class CTransPayload extends CPayload
 	        CAddress ecc=new CAddress(dest);
 	        this.mes_key=ecc.encrypt(k);
            }
+           else
+           {
+               this.mes_key="";
+           }
            
            // Digest
            this.hash=UTILS.BASIC.hash(this.getHash()+
@@ -87,16 +91,24 @@ public class CTransPayload extends CPayload
     {
         // Super class
 	super.check(block);
+        
+        // Check for null
+        if (this.cur==null ||
+            this.dest==null ||
+            this.escrower==null ||
+            this.mes==null ||
+            this.mes_key==null)
+        throw new Exception("Null assertion failed - CTransPayload.java, 68");
 	     
 	// Free address
         if (UTILS.BASIC.isCompanyAdr(this.target_adr) || 
             UTILS.BASIC.isGovAdr(this.target_adr) ||
             UTILS.BASIC.isOrgAdr(this.target_adr))
-            throw new Exception("Source can't spend funds - CTransPayload");
+            throw new Exception("Source can't spend funds - CTransPayload.java");
              
         // Check dest
 	if (!UTILS.BASIC.isAdr(this.dest))
-	   throw new Exception("Invalid destination address - CTransPayload");
+	   throw new Exception("Invalid destination address - CTransPayload.java");
              
         // Source and destination the same
         if (this.target_adr.equals(this.dest))

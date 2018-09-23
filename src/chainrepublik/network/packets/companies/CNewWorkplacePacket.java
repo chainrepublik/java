@@ -7,7 +7,10 @@ import chainrepublik.network.packets.blocks.CBlockPayload;
 
 public class CNewWorkplacePacket extends CBroadcastPacket
 {
-  public CNewWorkplacePacket(String fee_adr,
+    // Serial
+    private static final long serialVersionUID = 100L;
+    
+    public CNewWorkplacePacket(String fee_adr,
                              String adr, 
                              long comID, 
                              long days) throws Exception

@@ -466,7 +466,7 @@ public class CCrons
          
          // Decrease energy
          UTILS.DB.executeUpdate("UPDATE adr "
-                                 + "SET energy=energy-energy*0.0008 "
+                                 + "SET energy=energy-energy*0.0005 "
                                + "WHERE energy>=1");
      }
      
@@ -618,11 +618,14 @@ public class CCrons
      
      public void checkForFreeze() throws Exception
      {
-         ResultSet rs=UTILS.DB.executeQuery("SELECT * FROM web_sys_data");
+         ResultSet rs=UTILS.DB.executeQuery("SELECT * "
+                                            + "FROM web_sys_data");
          rs.next();
          long online=rs.getLong("uptime");
          
-         rs=UTILS.DB.executeQuery("SELECT * FROM blocks WHERE block='"+UTILS.NET_STAT.last_block+"'");
+         rs=UTILS.DB.executeQuery("SELECT * "
+                                  + "FROM blocks "
+                                 + "WHERE block='"+UTILS.NET_STAT.last_block+"'");
          rs.next();
          long last_block=rs.getLong("tstamp");
          
@@ -633,6 +636,21 @@ public class CCrons
              System.out.println("System frozen. Exiting.");
              System.exit(0);
          }
+     }
+     
+     public void checkBonuses(long block) throws Exception
+     {
+         // Load budgets under 1
+         ResultSet rs=UTILS.DB.executeQuery("SELECT adr.*, cou.code "
+                                            + "FROM countries AS cou "
+                                            + "JOIN adr ON adr.adr=cou.adr "
+                                           + "WHERE adr.balance<1");
+         
+         // Parse
+         while (rs.next())
+             UTILS.DB.executeUpdate("UPDATE bonuses "
+                                     + "SET amount=0 "
+                                   + "WHERE cou='"+rs.getString("code")+"'");
      }
      
      public void runBlockCrons(long block) throws Exception
@@ -669,6 +687,9 @@ public class CCrons
          
          // Weapons move
          this.checkWeaponsMove(block);
+         
+         // Check bonuses
+         this.checkBonuses(block);
      }
      
      class RemindTask extends TimerTask 

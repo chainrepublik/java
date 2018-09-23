@@ -119,6 +119,15 @@ public class CNewExOffertPayload extends CPayload
     {
         // Constructor
         super.check(block);
+        
+        // Check for null
+        if (this.side==null ||
+            this.price_type==null ||
+            this.method==null ||
+            this.details==null ||
+            this.pay_info==null ||
+            this.contact==null)
+        throw new Exception("Null assertion failed - CRentLicencePayload.java, 68");
             
         // Check energy
         this.checkEnergy();

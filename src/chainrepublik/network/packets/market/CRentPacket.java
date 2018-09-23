@@ -7,7 +7,10 @@ import chainrepublik.network.packets.blocks.CBlockPayload;
 
 public class CRentPacket extends CBroadcastPacket
 {
-  public CRentPacket(String fee_adr,
+    // Serial
+    private static final long serialVersionUID = 100L;
+    
+    public CRentPacket(String fee_adr,
                      String adr,
                      long itemID,
                      long days) throws Exception

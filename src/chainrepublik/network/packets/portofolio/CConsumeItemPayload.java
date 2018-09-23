@@ -9,6 +9,9 @@ public class CConsumeItemPayload extends CPayload
 {
    // Item ID
    long itemID;
+   
+   // Serial
+   private static final long serialVersionUID = 100L;
  
    public CConsumeItemPayload(String adr, 
                               long itemID) throws Exception

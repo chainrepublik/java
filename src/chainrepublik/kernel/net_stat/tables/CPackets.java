@@ -90,6 +90,6 @@ public class CPackets extends CTable
     public void expired(long block) throws Exception
     {
         UTILS.DB.executeUpdate("DELETE FROM packets "
-                                   + "WHERE block<"+(block-1440));
+                                   + "WHERE block<"+(block-144000));
     }
 }

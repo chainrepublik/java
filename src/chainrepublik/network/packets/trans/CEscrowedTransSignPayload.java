@@ -44,6 +44,11 @@ public class CEscrowedTransSignPayload extends CPayload
     {
         // Check
         super.check(block);
+        
+        // Check for null
+        if (this.trans_hash==null ||
+            this.type==null)
+            throw new Exception("Null assertion failed - CEscrowedtransSignPayload.java, 68");
 	        
         // Check type ?
 	if (!this.type.equals("ID_RELEASE") && 

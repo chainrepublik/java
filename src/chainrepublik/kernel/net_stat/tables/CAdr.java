@@ -81,6 +81,10 @@ public class CAdr extends CTable
     
     public boolean hasRecords(String adr) throws Exception
     {
+        // Adr attr ?
+        if (this.hasTableRecords("adr_attr", "adr", adr)) 
+            return true;
+        
         // Ads ?
         if (this.hasTableRecords("ads", "adr", adr)) 
             return true;
@@ -89,34 +93,77 @@ public class CAdr extends CTable
         if (this.hasTableRecords("assets", "adr", adr)) 
             return true;
         
-        // Assets owners
-        if (this.hasTableRecords("assets_owners", "owner", adr)) 
-            return true;
-        
-        // Del votes
-        if (this.hasTableRecords("del_votes", "adr", adr)) 
-            return true;
-        
-        // Escrowed
-        if (this.hasTableRecords("escrowed", "sender_adr", adr)) 
-            return true;
-        
-        if (this.hasTableRecords("escrowed", "rec_adr", adr)) 
-            return true;
-        
-        if (this.hasTableRecords("escrowed", "escrower", adr)) 
-            return true;
-        
         // Assets markets
         if (this.hasTableRecords("assets_mkts", "adr", adr)) 
             return true;
         
-        // Assets markets pos
+        // Assets mkts pos
         if (this.hasTableRecords("assets_mkts_pos", "adr", adr)) 
             return true;
         
         // Comments
         if (this.hasTableRecords("comments", "adr", adr)) 
+            return true;
+        
+        // Companies
+        if (this.hasTableRecords("companies", "adr", adr) ||
+            this.hasTableRecords("companies", "owner", adr)) 
+            return true;
+        
+        // Countries
+        if (this.hasTableRecords("countries", "adr", adr)) 
+            return true;
+        
+        // Delegates
+        if (this.hasTableRecords("delegates", "delegate", adr)) 
+            return true;
+        
+        // Endorsers
+        if (this.hasTableRecords("endorsers", "endorsed", adr) || 
+            this.hasTableRecords("endorsers", "endorser", adr)) 
+            return true;
+        
+        // Escrowed
+        if (this.hasTableRecords("escrowed", "sender_adr", adr) || 
+            this.hasTableRecords("escrowed", "rec_adr", adr) || 
+            this.hasTableRecords("escrowed", "escrower", adr)) 
+            return true;
+        
+        // Exchange
+        if (this.hasTableRecords("exchange", "adr", adr)) 
+            return true;
+        
+        // Laws
+        if (this.hasTableRecords("laws", "adr", adr)) 
+            return true;
+        
+        // Laws votes
+        if (this.hasTableRecords("laws_votes", "adr", adr)) 
+            return true;
+        
+        // Orgs
+        if (this.hasTableRecords("orgs", "adr", adr)) 
+            return true;
+        
+        // Orgs props
+        if (this.hasTableRecords("orgs_props", "adr", adr)) 
+            return true;
+        
+        // Orgs props votes
+        if (this.hasTableRecords("orgs_props_votes", "adr", adr)) 
+            return true;
+        
+        // Rent contracts
+        if (this.hasTableRecords("rent_contracts", "from_adr", adr) || 
+            this.hasTableRecords("rent_contracts", "to_adr", adr))  
+            return true;
+        
+        // Rewards
+        if (this.hasTableRecords("rewards", "adr", adr))  
+            return true;
+        
+        // Stocuri
+        if (this.hasTableRecords("stocuri", "adr", adr))  
             return true;
         
         // Votes
@@ -131,6 +178,10 @@ public class CAdr extends CTable
         if (this.hasTableRecords("tweets_follow", "adr", adr)) 
             return true;
         
+        // Wars fighters
+        if (this.hasTableRecords("wars_fighters", "adr", adr)) 
+            return true;
+        
         // Ok to delete
         return false;
     }
@@ -140,7 +191,7 @@ public class CAdr extends CTable
         ResultSet rs=UTILS.DB.executeQuery("SELECT * "
                                            + "FROM adr "
                                           + "WHERE balance<=0.0001 "
-                                            + "AND cou=''");
+                                            + "AND expires<"+block);
         
         while (rs.next())
            if (!this.hasRecords(rs.getString("adr")))

@@ -12,6 +12,9 @@ public class CSetRentPricePayload extends CPayload
 
    // Price
    double price;
+   
+   // Serial
+    private static final long serialVersionUID = 100L;
     
    public CSetRentPricePayload(String adr, 
                                long itemID, 

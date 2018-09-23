@@ -19,6 +19,8 @@ public class CUpdateWorkplacePayload extends CPayload
     // Prod
     String prod;
     
+    // Serial
+    private static final long serialVersionUID = 100L;
     
     public CUpdateWorkplacePayload(String adr,
                                    long workplaceID,
@@ -183,7 +185,7 @@ public class CUpdateWorkplacePayload extends CPayload
                                   + "JOIN tipuri_licente AS tl ON tl.tip=st.tip "
                                  + "WHERE st.adr='"+com_rs.getString("adr")+"' "
                                    + "AND tl.prod='"+this.prod+"' "
-                                   + "AND st.qty>=1");
+                                   + "AND st.qty=1");
          
          // Has data
          if (!UTILS.DB.hasData(rs))

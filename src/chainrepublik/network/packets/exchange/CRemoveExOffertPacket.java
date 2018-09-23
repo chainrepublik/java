@@ -8,7 +8,10 @@ import chainrepublik.network.packets.mes.CMesPayload;
 
 public class CRemoveExOffertPacket extends CBroadcastPacket
 {
-  public CRemoveExOffertPacket(String fee_adr, 
+    // Serial
+    private static final long serialVersionUID = 100L;
+    
+    public CRemoveExOffertPacket(String fee_adr, 
 		               String adr, 
 		               long exID) throws Exception
   {

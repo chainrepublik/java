@@ -8,7 +8,10 @@ import chainrepublik.network.packets.mes.CMesPayload;
 
 public class CNewExOffertPacket extends CBroadcastPacket
 {
-  public CNewExOffertPacket(String fee_adr, 
+    // Serial
+    private static final long serialVersionUID = 100L;
+    
+    public CNewExOffertPacket(String fee_adr, 
 		            String adr, 
 		            String side,
                             String price_type,

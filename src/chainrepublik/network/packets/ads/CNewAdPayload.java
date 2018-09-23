@@ -24,6 +24,9 @@ public class CNewAdPayload extends CPayload
    
    // Expires
    public long hours;
+   
+   // Serial
+   private static final long serialVersionUID = 100L;
 	
    public CNewAdPayload(String adr,
 		        String title, 
@@ -64,6 +67,12 @@ public class CNewAdPayload extends CPayload
    {
            // Super class
    	  super.check(block);
+          
+          // Check for null
+        if (this.title==null ||
+            this.mes==null ||
+            this.link==null)
+            throw new Exception("Null assertion failed - CWorkPayload.java, 68");
           
            // Check energy
            this.checkEnergy();

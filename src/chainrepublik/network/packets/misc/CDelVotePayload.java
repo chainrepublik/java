@@ -13,6 +13,9 @@ public class CDelVotePayload extends CPayload
     // Type
     String type;
     
+    // Serial
+    private static final long serialVersionUID = 100L;
+    
     public CDelVotePayload(String adr, 
                            String delegate,
                            String type) throws Exception
@@ -38,20 +41,25 @@ public class CDelVotePayload extends CPayload
         // Constructor
         super.check(block);
         
-         // Check energy
-       this.checkEnergy();
+        // Check for null
+            if (this.delegate==null ||
+                this.type==null)
+            throw new Exception("Null assertion failed - CDelVotePayload.java, 68");
+        
+       // Check energy
+        this.checkEnergy();
        
        // Citizen address ?
         if (!UTILS.BASIC.isCitAdr(this.target_adr, this.block))
-           throw new Exception("Only citizens can do this action - CWorkPayload.java, 68");
+           throw new Exception("Only citizens can do this action - CDelVotePayload.java, 68");
         
         // Delegate valid
         if (!UTILS.BASIC.isAdr(this.delegate))
-            throw new Exception("Invalid delegate address");
+            throw new Exception("Invalid delegate address, CDelVotePayload.java");
         
         // Balance
         if (UTILS.ACC.getBalance(this.target_adr, "CRC")<10)
-            throw new Exception("Minimum balance is 10 CRC");
+            throw new Exception("Minimum balance is 10 CRC, CDelVotePayload.java");
         
         // Type
         if (!this.type.equals("ID_UP") && 
@@ -67,7 +75,7 @@ public class CDelVotePayload extends CPayload
         
         // Has data ?
         if (UTILS.DB.hasData(rs))
-            throw new Exception("You aready voted this delegate"); 
+            throw new Exception("You aready voted this delegate, CDelVotePayload.java, 83"); 
         
         // Max 10 votes
         rs=UTILS.DB.executeQuery("SELECT COUNT(*) AS total "

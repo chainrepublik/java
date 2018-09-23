@@ -21,7 +21,7 @@ public class CVotePayload extends CPayload
    String type;
    
    // Serial
-   private static final long serialVersionUID = 100L;
+   private static final long serialVersionUID = 100;
    	
    public CVotePayload(String adr, 
                        String target_type,
@@ -53,12 +53,16 @@ public class CVotePayload extends CPayload
        // Super class
        super.check(block);
        
+       // Check for null
+        if (this.type==null)
+            throw new Exception("Null assertion failed - CVotePayload.java, 68");
+       
         // Check energy
        this.checkEnergy(1);
        
        // Citizen address ?
         if (!UTILS.BASIC.isCitAdr(this.target_adr, this.block))
-           throw new Exception("Only citizens can do this action - CWorkPayload.java, 68");
+           throw new Exception("Only citizens can do this action - CVotePayload.java, 68");
        
        // Type
        if (!this.type.equals("ID_UP") && 

@@ -45,17 +45,20 @@ public class CRentContracts extends CTable
        ResultSet rs=UTILS.DB.executeQuery("SELECT * "
                                             + "FROM rent_contracts "
                                            + "WHERE expires>0 "
-                                             + "AND expires="+block);
+                                             + "AND expires<="+block);
          
          // Loop
          while (rs.next())
          {
+             // Stoc ID
+             long stocID=rs.getLong("stocID");
+             
              // Update stocuri
              UTILS.DB.executeUpdate("UPDATE stocuri "
                                      + "SET rented_to='', "
                                          + "rented_expires=0, "
                                          + "in_use=0 "
-                                   + "WHERE stocID='"+rs.getLong("stocID")+"'");
+                                   + "WHERE stocID='"+stocID+"'");
              
              // Refresh energy
              UTILS.BASIC.refreshEnergy(rs.getString("to_adr"));
@@ -64,6 +67,9 @@ public class CRentContracts extends CTable
              UTILS.BASIC.newEvent(rs.getString("to_adr"), 
                                   "One of your rent contracts has expired. Check your portofolio.", 
                                   block);
+             
+             // Remove
+             UTILS.DB.executeUpdate("DELETE FROM rent_contracts WHERE stocID='"+stocID+"'");
          }
     }
    

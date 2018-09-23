@@ -13,9 +13,6 @@ public class CTables
     // Adr
     public CAdr adr;
     
-    // Adr trace
-    public CAdrTrace adr_trace;
-    
     // Adr attr
     public CAdrAttr adr_attr;
     
@@ -123,9 +120,6 @@ public class CTables
     
     // My adr
     public CMyAdr my_adr;
-    
-    // My trans
-    public CMyTrans my_trans;
     
     // Net Stat
     public CNetStatTable net_stat;
@@ -242,9 +236,6 @@ public class CTables
     
         // Adr attr
         this.adr_attr=new CAdrAttr();
-        
-        // Adr trace
-        this.adr_trace=new CAdrTrace();
     
         // Ads
         this.ads=new CAds();
@@ -350,9 +341,6 @@ public class CTables
     
         // My adr
         this.my_adr=new CMyAdr();
-    
-        // My trans
-        this.my_trans=new CMyTrans();
         
         // Orgs
         this.orgs=new COrgs();
@@ -474,9 +462,6 @@ public class CTables
         // Ads
         this.ads.create();
         
-        // Adr trace
-        this.adr_trace.create();
-        
         // Agents Log
         this.agents_log.create();
     
@@ -576,8 +561,6 @@ public class CTables
         // My adr
         this.my_adr.create();
     
-        // My trans
-        this.my_trans.create();
     
         // Net Stat
         this.net_stat.create();
@@ -819,9 +802,6 @@ public class CTables
         // Adr attr
         this.adr_attr.reorganize(block, hash);
         
-        // Adr trace
-        this.adr_trace.reorganize(block, hash);
-    
         // Ads
         this.ads.reorganize(block, hash);
         
@@ -921,8 +901,6 @@ public class CTables
         // My adr
         this.my_adr.reorganize(block, hash);
     
-        // My trans
-        this.my_trans.reorganize(block, hash);
     
         // Net Stat
         this.net_stat.reorganize(block, hash);
@@ -1140,8 +1118,6 @@ public class CTables
         // My adr
         this.my_adr.expired(block);
     
-        // My trans
-        this.my_trans.expired(block);
     
         // Net Stat
         this.net_stat.expired(block);
@@ -1359,8 +1335,6 @@ public class CTables
         // My adr
         this.my_adr.fullResync();
     
-        // My trans
-        this.my_trans.fullResync();
     
         // Net Stat
         this.net_stat.fullResync();

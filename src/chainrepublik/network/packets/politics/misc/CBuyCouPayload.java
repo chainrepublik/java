@@ -9,6 +9,9 @@ public class CBuyCouPayload extends CPayload
 {
    // Country
    String cou;
+   
+   // Serial
+    private static final long serialVersionUID = 100L;
  
    public CBuyCouPayload(String adr, 
                          String cou) throws Exception
@@ -29,16 +32,20 @@ public class CBuyCouPayload extends CPayload
    	// Super class
    	super.check(block);
         
+        // Check for null
+        if (this.cou==null)
+            throw new Exception("Null assertion failed - CBuyCouPayload.java, 68");
+        
         // Energy
         this.checkEnergy();
         
         // Citizen address ?
         if (!UTILS.BASIC.isCitAdr(this.target_adr, this.block))
-           throw new Exception("Only citizens can do this action - CWorkPayload.java, 68");
+           throw new Exception("Only citizens can do this action - CBuyCouPayload.java, 68");
         
         // Registered
         if (!UTILS.BASIC.isRegistered(this.target_adr, this.block))
-            throw new Exception("Target address is not registered, CRentPayload.java, 102");
+            throw new Exception("Target address is not registered, CBuyCouPayload.java, 102");
         
         // Country is for sale ?
         ResultSet rs=UTILS.DB.executeQuery("SELECT * "
@@ -49,7 +56,7 @@ public class CBuyCouPayload extends CPayload
         
         // Has records ?
         if (!UTILS.DB.hasData(rs))
-            throw new Exception("Country is not for sale, CRentPayload.java, 102");
+            throw new Exception("Country is not for sale, CBuyCouPayload.java, 102");
         
         // Address owns another country ?
         rs=UTILS.DB.executeQuery("SELECT * "
@@ -58,7 +65,7 @@ public class CBuyCouPayload extends CPayload
         
         // Has records
         if (UTILS.DB.hasData(rs))
-            throw new Exception("Address already owns a country, CRentPayload.java, 102");
+            throw new Exception("Address already owns a country, CBuyCouPayload.java, 102");
         
         // Finds price
         rs=UTILS.DB.executeQuery("SELECT COUNT(*) AS total "
@@ -81,7 +88,7 @@ public class CBuyCouPayload extends CPayload
         
         // Funds ?
         if (UTILS.ACC.getBalance(this.target_adr, "CRC", block)<price)
-            throw new Exception("Insuficient funds, CRentPayload.java, 102");
+            throw new Exception("Insuficient funds, CBuyCouPayload.java, 102");
         
         // Transfer
         UTILS.ACC.newTransfer(this.target_adr, 
@@ -103,7 +110,7 @@ public class CBuyCouPayload extends CPayload
         
         // Hash match ?
         if (!h.equals(this.hash))
-           throw new Exception("Invalid hash, CConsumeItemPayload.java, 102");
+           throw new Exception("Invalid hash, CBuyCouPayload.java.java, 102");
     }
     
     public void commit(CBlockPayload block) throws Exception

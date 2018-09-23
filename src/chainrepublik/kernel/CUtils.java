@@ -2093,13 +2093,13 @@ public class CUtils
          this.time=System.currentTimeMillis();
      }
      
-     public double getBudget(String cou, String cur) throws Exception
+     public double getBudget(String cou, String cur, CBlockPayload block) throws Exception
      {
          // Country address
          String cou_adr=UTILS.BASIC.getCouAdr(cou);
          
          // Balance
-         double balance=UTILS.ACC.getBalance(cou_adr, cur);
+         double balance=UTILS.ACC.getBalance(cou_adr, cur, block);
          
          // Return
          return balance;
@@ -2190,7 +2190,7 @@ public class CUtils
         // Return
         if (total_cit>25 && 
             total_pol_inf>250 && 
-            total_endorsed>25)
+            total_endorsed>10)
         return true;
         else
         return true;

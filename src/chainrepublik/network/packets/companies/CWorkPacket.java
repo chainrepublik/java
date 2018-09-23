@@ -7,6 +7,9 @@ import chainrepublik.network.packets.blocks.CBlockPayload;
 
 public class CWorkPacket extends CBroadcastPacket
 {
+    // Serial
+    //private static final long serialVersionUID = 100L;
+    
     public CWorkPacket(String fee_adr,
                        String adr,
                        long workplaceID,

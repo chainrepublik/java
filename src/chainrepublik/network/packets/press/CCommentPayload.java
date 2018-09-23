@@ -26,7 +26,7 @@ public class CCommentPayload extends CPayload
    long comID;
    
    // Serial
-   private static final long serialVersionUID = 1;
+   private static final long serialVersionUID = 100;
    	
    public CCommentPayload(String adr, 
                           String parent_type,
@@ -61,12 +61,17 @@ public class CCommentPayload extends CPayload
       // Super class
       super.check(block);
       
+      // Check for null
+      if (this.parent_type==null ||
+          this.mes==null)
+      throw new Exception("Null assertion failed - CTweetMesPayload.java, 68");
+      
        // Check energy
        this.checkEnergy(1);
        
        // Citizen address ?
         if (!UTILS.BASIC.isCitAdr(this.target_adr, this.block))
-           throw new Exception("Only citizens can do this action - CWorkPayload.java, 68");
+           throw new Exception("Only citizens can do this action - CTweetMesPayload.java, 68");
       
       // ID
       if (UTILS.BASIC.isID(comID))

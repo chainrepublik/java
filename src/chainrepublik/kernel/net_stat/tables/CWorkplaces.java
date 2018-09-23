@@ -43,12 +43,31 @@ public class CWorkplaces extends CTable
     }
     
      public void expired(long block) throws Exception
-    {
-       // Load expired
-       UTILS.DB.executeUpdate("DELETE "
-                             + "FROM workplaces "
-                            + "WHERE expires<='"+block+"'");
-    }
+     {
+        // Load expired
+        ResultSet rs=UTILS.DB.executeQuery("SELECT * "
+                                           + "FROM workplaces "
+                                          + "WHERE expires<"+block);
+        
+        while (rs.next())
+        {
+            // Company address
+            String com_adr=UTILS.BASIC.getComAdr(rs.getLong("comID"));
+            
+            // Workplace ID
+            long wID=rs.getLong("workplaceID");
+            
+            // Remove
+            UTILS.DB.executeUpdate("DELETE "
+                                   + "FROM workplaces "
+                                  + "WHERE workplaceID='"+wID+"'");   
+            
+            // Event
+            UTILS.BASIC.newEvent(com_adr, "One of company workplaces expired.", block);
+        }
+        
+       
+     }
     
     public void reorganize(long block, String chk_hash) throws Exception
     {

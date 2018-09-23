@@ -39,7 +39,7 @@ public class CNewArticlePayload extends CPayload
    long days;
    
    // Serial
-   private static final long serialVersionUID = 1L;
+   private static final long serialVersionUID = 100;
    
    public CNewArticlePayload(String adr, 
 		             String title, 
@@ -100,12 +100,20 @@ public class CNewArticlePayload extends CPayload
         // Check
         super.check(block);
         
-         // Check energy
-       this.checkEnergy(5);
+        // Check for null
+        if (this.categ==null ||
+            this.cou==null ||
+            this.mes==null ||
+            this.pic==null ||
+            this.title==null)
+         throw new Exception("Null assertion failed - CNewTweetPayload.java, 68");
+        
+        // Check energy
+        this.checkEnergy(5);
        
        // Citizen address ?
         if (!UTILS.BASIC.isCitAdr(this.target_adr, this.block))
-           throw new Exception("Only citizens can do this action - CWorkPayload.java, 68");
+           throw new Exception("Only citizens can do this action - CNewTweetPayload.java, 68");
         
         // Days
         if (days<30)
