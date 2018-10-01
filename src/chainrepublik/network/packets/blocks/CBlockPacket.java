@@ -202,17 +202,16 @@ public class CBlockPacket extends CPacket
                 UTILS.NET_STAT.actual_block_no=this.block;
                 
                 // Delete
-                UTILS.DB.executeUpdate("DELETE FROM my_trans WHERE block_hash='' OR block_hash='"+this.hash+"'");
                 UTILS.DB.executeUpdate("DELETE FROM trans WHERE block_hash='' OR block_hash='"+this.hash+"'");
                         
                 // Deserialize transaction data
-	   	CBlockPayload block_payload=(CBlockPayload) UTILS.SERIAL.deserialize(payload);
+	   	        CBlockPayload block_payload=(CBlockPayload) UTILS.SERIAL.deserialize(payload);
 	   	
-	   	// Superclass
-	   	super.commit(block_payload);
+	   	       // Superclass
+	           super.commit(block_payload);
                 
-	   	// Commit payload
-	   	block_payload.commit();
+	   	       // Commit payload
+	           block_payload.commit();
 	   	 
                 // After block
                 this.afterBlock(block);

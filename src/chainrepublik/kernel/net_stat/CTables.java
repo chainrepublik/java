@@ -100,6 +100,9 @@ public class CTables
     // Exchange
     public CExchange exchange;
     
+    // Emails
+    public CEmails emails;
+    
     // Hidden
     public CHidden hidden;
     
@@ -318,6 +321,9 @@ public class CTables
         // Events
         this.events=new CEvents();
         
+        // Emails
+        this.emails=new CEmails();
+        
         // Exchange
         this.exchange=new CExchange();
         
@@ -530,6 +536,9 @@ public class CTables
     
         // ErrorLog
         this.error_log.create();
+        
+        // Emails
+        this.emails.create();
     
         // Escrowed
         this.escrowed.create();

@@ -229,7 +229,7 @@ public class CTransPayload extends CPayload
     	        String dec_mes=UTILS.AES.decrypt(mes, dec_key);
     	   
                 // Update
-                UTILS.DB.executeUpdate("UPDATE my_trans "
+                UTILS.DB.executeUpdate("UPDATE trans "
                                         + "SET mes='"+UTILS.BASIC.base64_encode(dec_mes)+"' "
                                       + "WHERE hash='"+this.hash+"'");  
             }

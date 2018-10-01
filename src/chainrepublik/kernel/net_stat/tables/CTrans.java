@@ -28,6 +28,7 @@ public class CTrans extends CTable
                                                      + "block BIGINT(20) NOT NULL DEFAULT '0', "
                                                      + "block_hash VARCHAR(100) NOT NULL DEFAULT '', "
                                                      + "status VARCHAR(20) NOT NULL DEFAULT '', "
+                                                     + "mes VARCHAR(1000) NOT NULL DEFAULT '', "
                                                      + "tstamp BIGINT(20) NOT NULL DEFAULT '0', "
                                                      + "expl VARCHAR(1000) DEFAULT NULL)");
             

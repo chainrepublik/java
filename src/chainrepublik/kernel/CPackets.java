@@ -57,6 +57,9 @@ public class CPackets
        // Payload size
        this.payload_size=packet.payload.length;
        
+       // Fee src
+       this.fee_src=packet.adr;
+       
        // Block
        this.block=packet.block;
        

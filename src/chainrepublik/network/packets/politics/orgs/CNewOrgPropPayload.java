@@ -163,6 +163,7 @@ public class CNewOrgPropPayload extends CPayload
         if (!this.prop_type.equals("ID_DONATE") && 
             !this.prop_type.equals("ID_CHG_DESC") && 
             !this.prop_type.equals("ID_CHG_AVATAR") && 
+            !this.prop_type.equals("ID_CHG_NAME") && 
             !this.prop_type.equals("ID_SET_ART_OFFICIAL"))
         throw new Exception("Invalid proposal type, CNewOrgPropPayload.java, 122");
         
@@ -195,6 +196,21 @@ public class CNewOrgPropPayload extends CPayload
             // Length
             if (this.par_1.length()>250)
                  throw new Exception("Invalid new description, CNewOrgPropPayload.java, 116");
+        }
+        
+        // Change description
+        if (this.prop_type.equals("ID_CHG_NAME"))
+        {
+            if (rs.getString("type").equals("ID_POL_PARTY"))
+                throw new Exception("Political parties name can't be changed, CNewOrgPropPayload.java, 116");
+                
+            // Valid ?
+            if (!UTILS.BASIC.isDesc(this.par_1))
+                 throw new Exception("Invalid name, CNewOrgPropPayload.java, 116");
+            
+            // Length
+            if (this.par_1.length()>50)
+                 throw new Exception("Invalid name, CNewOrgPropPayload.java, 116");
         }
         
         // Change avatar
@@ -269,7 +285,7 @@ public class CNewOrgPropPayload extends CPayload
         rs.next();
         
         // Number
-        if (rs.getLong("total")<10)
+        if (rs.getLong("total")<25)
             throw new Exception("Minimum 25 members required, CNewOrgPropPayload.java, 116");
         
         // Hash

@@ -118,10 +118,6 @@ public class CTransferAdrPayload extends CPayload
         // My adr
         this.replace("my_adr", "adr");
         
-        // My trans
-        this.replace("my_trans", "adr");
-        this.replace("my_trans", "adr_assoc");
-        
         // Orgs
         this.replace("orgs", "adr");
         

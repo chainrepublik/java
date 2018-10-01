@@ -186,15 +186,21 @@ public class CWallet
     	 throw new Exception("Address doesn't exist");
      }
      
-     public void list()
+     public void list(String lookup)
      {
          System.out.println(this.addresses.adr.size()+" total addressess");
          
          for (int a=0; a<=this.addresses.adr.size()-1; a++)
          {
-            CAdr adr=this.addresses.adr.get(a);
-            System.out.println("Address : "+adr.pub_key);
-            System.out.println("-------------------------------------------");
+             CAdr adr=this.addresses.adr.get(a);
+             
+             if (lookup.equals("") || 
+                (!lookup.equals("") && lookup.equals(adr.pub_key)))
+             {
+                System.out.println("Pub key : "+adr.pub_key);
+                System.out.println("Pvt Key : "+adr.priv_key);
+                System.out.println("-------------------------------------------");
+             }
          }
      }
      

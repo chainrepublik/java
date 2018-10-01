@@ -125,7 +125,6 @@ public class CNewExOffertPayload extends CPayload
             this.price_type==null ||
             this.method==null ||
             this.details==null ||
-            this.pay_info==null ||
             this.contact==null)
         throw new Exception("Null assertion failed - CRentLicencePayload.java, 68");
             

@@ -90,8 +90,7 @@ public class CUseItemPayload extends CPayload
          UTILS.DB.executeUpdate("UPDATE stocuri "
                                  + "SET in_use=0 "
                                + "WHERE adr='"+this.target_adr+"' "
-                                 + "AND tip LIKE '%"+prod+"%' "
-                                 + "AND in_use>0");
+                                 + "AND tip LIKE '%"+prod+"%'");
          
          // Set item as used
          UTILS.DB.executeUpdate("UPDATE stocuri "

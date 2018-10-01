@@ -1882,8 +1882,8 @@ public class CUtils
         
         // Strip quality
         String str=prod.replace("_Q1", "");
-        str=prod.replace("_Q2", "");
-        str=prod.replace("_Q3", "");
+        str=str.replace("_Q2", "");
+        str=str.replace("_Q3", "");
         
         // Return
         return str;
@@ -2188,9 +2188,9 @@ public class CUtils
         long total_endorsed=rs.getLong("total");
         
         // Return
-        if (total_cit>25 && 
-            total_pol_inf>250 && 
-            total_endorsed>10)
+        if (total_cit>100 && 
+            total_pol_inf>10000 && 
+            total_endorsed>25)
         return true;
         else
         return true;
@@ -2372,22 +2372,22 @@ public class CUtils
          switch (ammo)
          {
              // Tank round
-             case "ID_TANK_ROUND" : damage=500; break;
+             case "ID_TANK_ROUND" : damage=100; break;
              
              // Air to soil missile
-             case "ID_MISSILE_AIR_SOIL" : damage=5000; break;
+             case "ID_MISSILE_AIR_SOIL" : damage=1000; break;
              
              // Soil to soil missile
-             case "ID_MISSILE_SOIL_SOIL" : damage=5000; break;
+             case "ID_MISSILE_SOIL_SOIL" : damage=1000; break;
              
              // Balistic short
-             case "ID_MISSILE_BALISTIC_SHORT" : damage=10000; break;
+             case "ID_MISSILE_BALISTIC_SHORT" : damage=2500; break;
              
              // Balistic medium
-             case "ID_MISSILE_BALISTIC_MEDIUM" : damage=10000; break;
+             case "ID_MISSILE_BALISTIC_MEDIUM" : damage=5000; break;
              
              // Balistic long
-             case "ID_MISSILE_BALISTIC_LONG" : damage=10000; break;
+             case "ID_MISSILE_BALISTIC_LONG" : damage=7500; break;
              
              // Balistic intercontinental
              case "ID_MISSILE_BALISTIC_INTERCONTINENTAL" : damage=10000; break;
@@ -2743,11 +2743,6 @@ public class CUtils
         
         // My adr
         if (this.hasRecords(adr, "my_adr", "adr"))
-            return true;
-        
-        // My trans
-        if (this.hasRecords(adr, "my_trans", "adr") || 
-            this.hasRecords(adr, "my_trans", "adr_assoc"))
             return true;
         
         // Orgs

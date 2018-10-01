@@ -291,6 +291,14 @@ public class CCrons
                                 break;
                                 
             // Change description
+           case "ID_CHG_NAME" : // Change
+                                UTILS.DB.executeUpdate("UPDATE orgs "
+                                                        + "SET name='"+rs.getString("par_1")+"' "
+                                                      + "WHERE orgID='"+rs.getLong("orgID")+"'");
+               
+                                break;
+                                
+            // Change description
            case "ID_CHG_AVATAR" : // Change
                                   UTILS.DB.executeUpdate("UPDATE orgs "
                                                           + "SET avatar='"+rs.getString("par_1")+"' "

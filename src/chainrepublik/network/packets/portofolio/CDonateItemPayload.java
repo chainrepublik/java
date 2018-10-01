@@ -46,9 +46,6 @@ public class CDonateItemPayload extends CPayload
         if (this.rec_adr==null)
             throw new Exception("Null assertion failed - CDonateItemPayload.java, 68");
         
-        // Energy
-        this.checkEnergy();
-        
         // Load itemID data
         ResultSet rs=UTILS.DB.executeQuery("SELECT * "
                                            + "FROM stocuri "

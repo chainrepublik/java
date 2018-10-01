@@ -85,7 +85,6 @@ public class CPayload  implements java.io.Serializable
                throw new Exception("Invalid block number - CPayload");
            
            // Delete previous trans
-           UTILS.DB.executeUpdate("DELETE FROM my_trans WHERE hash='"+this.hash+"'");
            UTILS.DB.executeUpdate("DELETE FROM trans WHERE hash='"+this.hash+"'");
         }
         

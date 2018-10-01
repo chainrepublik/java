@@ -6,6 +6,7 @@ import chainrepublik.kernel.temp.CDump;
 import chainrepublik.kernel.temp.CStressTest;
 import chainrepublik.network.CCurBlock;
 import chainrepublik.network.CNetwork;
+import chainrepublik.network.packets.adr.CAdrRegisterPacket;
 import chainrepublik.network.packets.adr.CTravelPacket;
 import chainrepublik.network.packets.assets.CIssueAssetPacket;
 import chainrepublik.network.packets.assets.reg_mkts.CCloseRegMarketPosPacket;
@@ -75,7 +76,7 @@ public class main
         
         // Dump
         CDump dump=new CDump();
-        //dump.dumpOrgs();
+        //dump.dumpCountries();
         
        
         UTILS.MINER_UTILS=new CCPUMinerUtils();
@@ -134,17 +135,7 @@ public class main
         System.out.println("Current timestamp is "+UTILS.BASIC.tstamp());
         System.out.println("Wallet is up an running...");
         
-        UTILS.CBLOCK.startMiners(1);
-        
-        
-        /*CNewLawPacket packet=new CNewLawPacket("MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAE6Giy9CTfYBgtrVsRSqiF6a8+MfBHOBHqkQi/QBbtOUjZpZsl2Ra7lrFlvcm8knEjO3ZNoLBD6xV6l5XoWYhLlA==",
-                                               "MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAE6Giy9CTfYBgtrVsRSqiF6a8+MfBHOBHqkQi/QBbtOUjZpZsl2Ra7lrFlvcm8knEjO3ZNoLBD6xV6l5XoWYhLlA==", 
-                                               "ID_ATTACK", 
-                                               "1537354767029", 
-                                               "1537609352203",
-                                               "ID_AT",
-                                               "Trebe mutate ma...");
-        UTILS.NETWORK.broadcast(packet);*/
+        //UTILS.CBLOCK.startMiners(1);
     }
     
     

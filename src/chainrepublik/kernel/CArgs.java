@@ -104,7 +104,7 @@ public class CArgs
         if (this.late_op.equals("list_adr"))
         {
             // Full resync
-            UTILS.WALLET.list();
+            UTILS.WALLET.list("");
             
             // Exit
             System.exit(0);

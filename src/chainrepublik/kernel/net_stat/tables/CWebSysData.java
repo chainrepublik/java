@@ -61,6 +61,7 @@ public class CWebSysData extends CTable
                                                              +"cpu_23_power DOUBLE(20, 8) NOT NULL DEFAULT '0', "
                                                              +"cpu_24_power DOUBLE(20, 8) NOT NULL DEFAULT '0', "
                                                              +"version VARCHAR(20) NOT NULL DEFAULT '0.0.1', "
+                                                             +"host VARCHAR(250) NOT NULL DEFAULT '', "
                                                              +"engine_status VARCHAR(20) NOT NULL DEFAULT 'ID_ONLINE', "
                                                              +"coin_price DOUBLE(9,4) NOT NULL DEFAULT 0)");
             // Populate

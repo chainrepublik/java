@@ -29,7 +29,7 @@ public class CSettings
   public String db_pass="";
   
   // Wallet file pass
-  public String wallet_pass="wallet";
+  public String wallet_pass="";
   
   // Min peers
   public int min_peers=3;

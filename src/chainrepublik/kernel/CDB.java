@@ -93,18 +93,13 @@ public class CDB
       
       // Adds to pool
       cons.add(s);
-      
-      // Size limit ?
-      if (UTILS.NETWORK!=null)
-        this.clearCons();
           
       return rs;
    }
    
    public void clearCons() throws Exception
    {
-        if (cons.size()>20000 && 
-            UTILS.NETWORK.CONSENSUS.status.equals("ID_WAITING")) 
+        if (cons.size()>20000) 
         {
             for (int a=0; a<=cons.size()-10000; a++)
             {

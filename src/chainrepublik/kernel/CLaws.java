@@ -43,6 +43,10 @@ public class CLaws
         target_type=UTILS.BASIC.base64_decode(target_type);
         targetID=UTILS.BASIC.base64_decode(targetID);
         
+        // Target type
+        if (target_type.equals("ID_WEAPON"))
+           target_type=this.getTargetType(target_type, Long.parseLong(targetID));
+        
         // Check target type
         if (!UTILS.BASIC.isStringID(target_type))
             throw new Exception("Invalid target type, CLaws.java, 48");
@@ -264,6 +268,20 @@ public class CLaws
             UTILS.DB.executeUpdate("DELETE FROM stocuri "
                                        + "WHERE stocID='"+wID+"'");
         }
+        
+        // Load war data
+        ResultSet rs=UTILS.DB.executeQuery("SELECT * "
+                                           + "FROM wars "
+                                          + "WHERE warID='"+warID+"'");
+        
+        // Next
+        rs.next();
+        
+        // Damage compensation
+        long p=Math.round((block-rs.getLong("block"))*0.05);
+         
+        // Adjust damage
+        damage=Math.round(damage-damage*p/100);
         
         // Apply damage
         if (side.equals("ID_AT"))
@@ -1081,6 +1099,38 @@ public class CLaws
         return true;
     }
     
+    public String getTargetType(String target_type, long targetID) throws Exception
+    {
+        // Target weapon ?
+        if (target_type.equals("ID_WEAPON"))
+        {
+            // Load stoc
+            ResultSet rs=UTILS.DB.executeQuery("SELECT * "
+                                               + "FROM stocuri "
+                                              + "WHERE stocID='"+targetID+"'");
+            
+            // Has data?
+            if (UTILS.DB.hasData(rs))
+            {
+                // Next
+                rs.next();
+                
+                // Navy destroyer or aircraft carrier ?
+                if (!rs.getString("tip").equals("ID_NAVY_DESTROYER") &&
+                    !rs.getString("tip").equals("ID_AIRCRAFT_CARRIER"))
+                throw new Exception ("Invalid target type");
+                
+                // Change target type
+                target_type=rs.getString("tip");
+                
+                // Return
+                return target_type;
+            }
+            throw new Exception ("Invalid target type");
+        }
+        else return target_type;
+    }
+    
     public double checkMoveWeaponsLaw(String cou,
                                        String list, 
                                        String target_type, 
@@ -1101,6 +1151,10 @@ public class CLaws
         
         // Cost
         double cost=0;
+        
+        // Target type
+        if (target_type.equals("ID_WEAPON"))
+           target_type=this.getTargetType(target_type, Long.parseLong(targetID));
         
         // Check target
         if (!this.checkTarget(cou, target_type, targetID))

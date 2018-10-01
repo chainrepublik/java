@@ -35,7 +35,7 @@ public class CDump
         ResultSet rs=UTILS.DB.executeQuery("SELECT * FROM countries");
         
         while (rs.next())
-            System.out.println("UTILS.DB.executeUpdate(\"INSERT INTO countries SET adr='"+rs.getString("adr")+"', private='"+rs.getString("private")+"', owner='"+rs.getString("owner")+"', country='"+rs.getString("country")+"', code='"+rs.getString("code")+"', x='"+rs.getLong("x")+"', y='"+rs.getLong("y")+"', area='"+rs.getLong("area")+"', occupied='"+rs.getString("occupied")+"' \");");
+            System.out.println("UTILS.DB.executeUpdate(\"INSERT INTO countries SET adr='"+rs.getString("adr")+"', private='"+rs.getString("private")+"', owner='default', country='"+rs.getString("country")+"', code='"+rs.getString("code")+"', x='"+rs.getLong("x")+"', y='"+rs.getLong("y")+"', area='"+rs.getLong("area")+"', occupied='"+rs.getString("code")+"' \");");
     }
     
     public void dumpDelegates() throws Exception
