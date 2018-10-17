@@ -32,6 +32,10 @@ public class CPeersPool extends CTable
             UTILS.DB.executeUpdate("CREATE INDEX peers_pool_port ON peers_pool(port)");
             UTILS.DB.executeUpdate("CREATE INDEX peers_pool_last_seen ON peers_pool(last_seen)");
             
+            // Populate
+           if (!this.reorg)
+              this.populate();
+            
             // Confirm
             System.out.println("Done.");
         }
@@ -40,9 +44,8 @@ public class CPeersPool extends CTable
     public void populate() throws Exception
     {
          // Insert primary nodes
-         UTILS.DB.executeUpdate("INSERT INTO peers_pool SET peer='45.76.42.171', port='10000'");
-         UTILS.DB.executeUpdate("INSERT INTO peers_pool SET peer='45.76.133.87', port='10000'");
-         UTILS.DB.executeUpdate("INSERT INTO peers_pool SET peer='45.76.85.194', port='10000'");
-         UTILS.DB.executeUpdate("INSERT INTO peers_pool SET peer='108.61.177.6', port='10000'");
+         UTILS.DB.executeUpdate("INSERT INTO peers_pool SET peer='209.250.249.184', port='10000'");
+         UTILS.DB.executeUpdate("INSERT INTO peers_pool SET peer='104.207.130.140', port='10000'");
+         UTILS.DB.executeUpdate("INSERT INTO peers_pool SET peer='199.247.10.91', port='10000'");
     }
 }

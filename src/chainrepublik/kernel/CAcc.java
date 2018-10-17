@@ -819,10 +819,11 @@ public class CAcc
                                            + " WHERE adr='"+adr+"' "
                                               + "AND tip='"+prod+"'");
             }
-            
-             UTILS.DB.executeUpdate("UPDATE web_users "
-                                        + "SET unread_trans=unread_trans+1 "
-                                      + "WHERE ID='"+getAdrUserID(adr)+"' ");
+             
+             if (UTILS.STATUS.status.equals("ID_ONLINE"))
+                 UTILS.DB.executeUpdate("UPDATE web_users "
+                                         + "SET unread_trans=unread_trans+1 "
+                                       + "WHERE ID='"+getAdrUserID(adr)+"' ");
                  
             }
         

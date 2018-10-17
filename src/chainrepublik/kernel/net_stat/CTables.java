@@ -226,6 +226,9 @@ public class CTables
     // Workplaces
     public CWorkplaces workplaces;
     
+    // Wth
+    public CWth wth;
+    
     public CTables()
     {
         // Actions
@@ -449,6 +452,9 @@ public class CTables
     
         // Workplaces
         this.workplaces=new CWorkplaces();
+        
+        // Wth
+        this.wth=new CWth();
     }
     
     public void createTables() throws Exception
@@ -675,6 +681,9 @@ public class CTables
     
         // Workplaces
         this.workplaces.create();
+        
+        // Wth
+        this.wth.create();
     }
     
     public void refresh(long block, String hash) throws Exception
@@ -1365,9 +1374,6 @@ public class CTables
     
         // Peers
         this.peers.fullResync();
-    
-        // Peers pool
-        this.peers_pool.fullResync();
     
         // Rec Packets
         this.rec_packets.fullResync();

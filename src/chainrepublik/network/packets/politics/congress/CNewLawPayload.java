@@ -108,7 +108,7 @@ public class CNewLawPayload extends CPayload
                throw new Exception("Address is not a governor, CNewLawPayload.java, 102");
             
             // Congress is active
-            if (!UTILS.BASIC.isCongressActive(cou))
+            if (!UTILS.BASIC.isCongressActive(cou, this.block))
                throw new Exception("Congress is not active, CNewLawPayload.java, 102");
             
             // Rejected law in the last 5 days ?

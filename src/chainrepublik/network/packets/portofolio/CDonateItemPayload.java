@@ -81,8 +81,29 @@ public class CDonateItemPayload extends CPayload
         if (rs.getLong("rented_expires")>0)
            throw new Exception("Item can't be donated, CDonateItemPayload.java, 102");
         
+        // Tip
+        String tip=rs.getString("tip");
+        
+        // Weapons ?
+        if (this.block>25000)
+        {
+            if (UTILS.BASIC.isAttackWeapon(tip) || 
+                UTILS.BASIC.isDefenseWeapon(tip))
+            {
+                // Fought in the last 24 hours ?
+                rs=UTILS.DB.executeQuery("SELECT * "
+                                         + "FROM wars_fighters "
+                                        + "WHERE adr='"+this.target_adr+"' "
+                                          + "AND block>"+(this.block-1440));
+                
+                // Has data ?
+                if (UTILS.DB.hasData(rs))
+                    throw new Exception("Sender fought in the last 24 hours, CDonateItemPayload.java, 102");
+            }
+        }
+        
         // Gift ?
-        if (rs.getString("tip").equals("ID_GIFT"))
+        if (tip.equals("ID_GIFT"))
         {
             // Sender has at least 2 gifts in inventory
             if (UTILS.ACC.getEnergyProdBalance(this.target_adr, "ID_GIFT")<2)
@@ -160,12 +181,16 @@ public class CDonateItemPayload extends CPayload
                                            + "rent_price=0 "
                                      + "WHERE stocID='"+this.itemID+"'");
          
-            // Refresh sender energy
-            UTILS.BASIC.refreshEnergy(this.target_adr);
+            // Bug fixing
+            if (this.block<=27360)
+            {
+               // Refresh sender energy
+               UTILS.BASIC.refreshEnergy(this.target_adr);
          
-            // Refresh receiver energy
-            UTILS.BASIC.refreshEnergy(this.rec_adr);
-         
+               // Refresh receiver energy
+               UTILS.BASIC.refreshEnergy(this.rec_adr);
+            }
+            
             // Event
             UTILS.BASIC.newEvent(this.rec_adr, 
                                  "You have received a donation from "+UTILS.BASIC.getAdrData(this.target_adr, "name")+". Check your inventory.", 
@@ -179,6 +204,16 @@ public class CDonateItemPayload extends CPayload
          
             // Clear trans
             UTILS.ACC.clearTrans(this.hash, "ID_ALL", this.block);
+            
+            // Bug fixing
+            if (this.block>27360)
+            {
+               // Refresh sender energy
+               UTILS.BASIC.refreshEnergy(this.target_adr);
+         
+               // Refresh receiver energy
+               UTILS.BASIC.refreshEnergy(this.rec_adr);
+            }
         }
     }
 }

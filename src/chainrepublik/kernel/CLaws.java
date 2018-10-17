@@ -332,6 +332,32 @@ public class CLaws
                                          + "status='ID_ACTIVE', "
                                          + "lawID='"+lawID+"', "
                                          + "block='"+block+"'");
+        
+        // Fee
+        if (block>25000)
+        {
+            // Country address
+            String cou_adr=UTILS.BASIC.getCouAdr(cou);
+                                
+            // Payment
+            UTILS.ACC.newTransfer(cou_adr, 
+                                  "default",
+                                  1, 
+                                  "CRC", 
+                                  "Start war fee (law "+lawID+")", 
+                                  "", 
+                                  0,
+                                  UTILS.BASIC.hash(String.valueOf(block)), 
+                                  block,
+                                  false,
+                                  "",
+                                  "");  
+            
+            // Clear
+            UTILS.ACC.clearTrans(UTILS.BASIC.hash(String.valueOf(block)), 
+                                                  "ID_ALL", 
+                                                   block);
+        }
     }
     
     public void lawErr(long lawID, String reason, long block) throws Exception

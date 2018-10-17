@@ -631,8 +631,8 @@ public class CWebOps
                    if (op.equals("ID_NEW_TWEET"))
                          packet=new CNewArticlePacket(rs.getString("fee_adr"), 
                                                       rs.getString("target_adr"),
-                                                      rs.getString("par_1"), 
-		                                      rs.getString("par_2"), 
+                                                      UTILS.BASIC.base64_decode(rs.getString("par_1")), 
+		                                      UTILS.BASIC.base64_decode(rs.getString("par_2")), 
                                                       rs.getString("par_3"),
                                                       rs.getString("par_4"),
                                                       rs.getString("par_5"),
@@ -649,7 +649,7 @@ public class CWebOps
                                                                  rs.getString("target_adr"),
 		                                                 rs.getString("par_1"),
                                                                  rs.getLong("par_2"),
-                                                                 rs.getString("par_3"));
+                                                                 UTILS.BASIC.base64_decode(rs.getString("par_3")));
                        
                        
                    }
@@ -840,3 +840,4 @@ public class CWebOps
      
     
 }
+

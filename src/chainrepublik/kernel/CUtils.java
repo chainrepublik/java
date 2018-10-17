@@ -925,6 +925,10 @@ public class CUtils
         if (!this.isAdr(adr))
             throw new Exception("Invalid address");
         
+        // Sync ?
+        if (!UTILS.STATUS.status.equals("ID_ONLINE"))
+           return;
+        
         // Insert
         UTILS.DB.executeUpdate("INSERT INTO events "
                                      + "SET adr='"+adr+"', "
@@ -1647,7 +1651,7 @@ public class CUtils
             return false;
     }
     
-    public double getProdEnergy(long itemID) throws Exception
+    public double getProdEnergy(long itemID, long block) throws Exception
     {
         // Is ID
         if (!this.isID(itemID))
@@ -1673,7 +1677,15 @@ public class CUtils
              throw new Exception("Invalid item ID");
         
         // Returns energy
-        return this.getProdEnergy(rs.getString("tip"));
+        if (rs.getString("tip").equals("ID_WINE"))
+        {
+            if (block>25000)
+               return (rs.getDouble("energy")+5);
+            else
+               return 5;
+        }
+        else
+            return this.getProdEnergy(rs.getString("tip"));
     }
     
     public long hashToLong(String hash)
@@ -2151,7 +2163,7 @@ public class CUtils
              return false;
      }
      
-     public boolean isCongressActive(String cou) throws Exception
+     public boolean isCongressActive(String cou, long block) throws Exception
      {
         // Number of citizens minim 100 
         ResultSet rs=UTILS.DB.executeQuery("SELECT COUNT(*) AS total "
@@ -2188,12 +2200,16 @@ public class CUtils
         long total_endorsed=rs.getLong("total");
         
         // Return
-        if (total_cit>100 && 
-            total_pol_inf>10000 && 
-            total_endorsed>25)
-        return true;
-        else
-        return true;
+        if (block>25000)
+        {
+            if (total_cit>100 && 
+                total_pol_inf>10000 && 
+                total_endorsed>25)
+            return true;
+                else
+            return false;
+        }
+        else return true;
      }
      
      public double getBonus(String cou, String bonus, String prod) throws Exception

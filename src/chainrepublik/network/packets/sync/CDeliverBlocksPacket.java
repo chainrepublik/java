@@ -127,6 +127,17 @@ public class CDeliverBlocksPacket extends CPacket
                
 	       // Send to consensus
                UTILS.NETWORK.CONSENSUS.blockReceived(block);
+               
+               // Ping
+               if (block.block%100==0)
+               {
+                   // Ping signal
+                   UTILS.NETWORK.broadcast(new CPing());
+                   
+                   // Update last seen
+                   UTILS.DB.executeUpdate("UPDATE peers "
+                                           + "SET last_seen="+UTILS.BASIC.tstamp());
+               }
             }
 				   
 	    // Delete from sync

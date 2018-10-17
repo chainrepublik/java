@@ -24,6 +24,7 @@ import chainrepublik.network.packets.politics.orgs.CJoinOrgPacket;
 import chainrepublik.network.packets.politics.orgs.CLeaveOrgPacket;
 import chainrepublik.network.packets.politics.orgs.CNewOrgPropPacket;
 import chainrepublik.network.packets.politics.orgs.CVoteOrgPropPacket;
+import chainrepublik.network.packets.portofolio.CDonateItemPacket;
 import chainrepublik.network.packets.press.CCommentPacket;
 import chainrepublik.network.packets.press.CFollowPacket;
 import chainrepublik.network.packets.press.CNewArticlePacket;
@@ -47,9 +48,12 @@ public class CStressTest
     
     public long getRandArt() throws Exception
     {
-       ResultSet rs=UTILS.DB.executeQuery("SELECT * "
-                                          + "FROM tweets "
-                                      + "ORDER BY RAND()");
+       ResultSet rs=UTILS.DB.executeQuery("SELECT tw.* "
+                                          + "FROM tweets AS tw "
+                                          + "JOIN web_users AS us ON us.adr=tw.adr "
+                                         + "WHERE tw.block>"+(UTILS.NET_STAT.last_block-1440)
+                                      + " ORDER BY RAND()");
+       
         rs.next();
         return rs.getLong("tweetID");  
     }
@@ -57,8 +61,10 @@ public class CStressTest
     public long getRandComment() throws Exception
     {
         ResultSet rs=UTILS.DB.executeQuery("SELECT * "
-                                          + "FROM comments "
-                                      + "ORDER BY RAND()");
+                                          + "FROM comments AS com "
+                                          + "JOIN web_users AS us ON us.adr=com.adr "
+                                         + "WHERE com.block>"+(UTILS.NET_STAT.last_block-1440)
+                                      + " ORDER BY RAND()");
         rs.next();
         return rs.getLong("comID");  
     }
@@ -198,7 +204,7 @@ public class CStressTest
     public String getRandAdr() throws Exception
     {
         ResultSet rs=UTILS.DB.executeQuery("SELECT * "
-                                           + "FROM adr "
+                                           + "FROM my_adr "
                                        + "ORDER BY RAND()");
         rs.next();
         return rs.getString("adr");
@@ -1111,6 +1117,64 @@ public class CStressTest
         UTILS.NETWORK.broadcast(packet);
     }
     
+    public void testArtVotes() throws Exception
+    {
+        // Address
+        String adr=this.getRandAdr();
+        
+        // Random article
+        long artID=this.getRandArt();
+        
+        // Voted ?
+        ResultSet rs=UTILS.DB.executeQuery("SELECT * "
+                                           + "FROM votes "
+                                          + "WHERE adr='"+adr+"' "
+                                            + "AND target_type='ID_TWEET' "
+                                            + "AND targetID='"+artID+"'");
+        
+        // Has data
+        if (!UTILS.DB.hasData(rs))
+        {
+             CVotePacket packet=new CVotePacket(adr,
+                                                adr,
+                                                "ID_TWEET",
+                                                artID,
+                                                "ID_UP");
+             
+             if (UTILS.STATUS.status.equals("ID_ONLINE"))
+                UTILS.NETWORK.broadcast(packet);
+        }
+    }
+    
+    public void testComVotes() throws Exception
+    {
+        // Address
+        String adr=this.getRandAdr();
+        
+        // Random article
+        long comID=this.getRandComment();
+        
+        // Voted ?
+        ResultSet rs=UTILS.DB.executeQuery("SELECT * "
+                                           + "FROM votes "
+                                          + "WHERE adr='"+adr+"' "
+                                            + "AND target_type='ID_COM' "
+                                            + "AND targetID='"+comID+"'");
+        
+        // Has data
+        if (!UTILS.DB.hasData(rs))
+        {
+             CVotePacket packet=new CVotePacket(adr,
+                                                adr,
+                                                "ID_COM",
+                                                comID,
+                                                "ID_UP");
+             
+             if (UTILS.STATUS.status.equals("ID_ONLINE"))
+                UTILS.NETWORK.broadcast(packet);
+        }
+    }
+    
     public void testUnfollow() throws Exception
     {
         // Adr
@@ -1127,6 +1191,65 @@ public class CStressTest
         UTILS.NETWORK.broadcast(packet);
     }
     
+    public void StressDonate() throws Exception
+    {
+        ResultSet rs=UTILS.DB.executeQuery("SELECT * "
+                                           + "FROM adr ORDER BY RAND() "
+                                          + "LIMIT 0,1");
+        
+        // Next
+        rs.next();
+ 
+        // Adr
+        String adr=rs.getString("adr");
+        
+        // Has cigars
+        rs=UTILS.DB.executeQuery("SELECT * "
+                                 + "FROM stocuri "
+                                + "WHERE adr='"+adr+"' "
+                                  + "AND tip='ID_CIG_CHURCHILL'");
+        
+        // Has cigars
+        boolean has_cigars=false;
+        if (UTILS.DB.hasData(rs))
+            has_cigars=true;
+        
+        // Has gift
+        rs=UTILS.DB.executeQuery("SELECT * "
+                                 + "FROM stocuri "
+                                + "WHERE adr='"+adr+"' "
+                                  + "AND tip='ID_GIFT'");
+        
+        // Has cigars
+        boolean has_gift=false;
+        if (UTILS.DB.hasData(rs))
+            has_gift=true;
+            
+        
+        // Has cigars
+        if (!has_cigars && has_gift)
+        {
+            // Item ID
+            rs=UTILS.DB.executeQuery("SELECT * "
+                                     + "FROM stocuri "
+                                    + "WHERE adr='MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAELGXABty98wVa/ZfJf9whISSqlwaz01+c7j4bphz4PcTDfeC6zgyllKhPyrp71eb2zLaz4m0JD3m4D99c8exUzQ==' "
+                                      + "AND tip='ID_CIG_CHURCHILL' "
+                                 + "ORDER BY RAND() "
+                                    + "LIMIT 0,1");
+            
+            rs.next();
+            
+            long itemID=rs.getLong("stocID");
+            
+            CDonateItemPacket packet=new CDonateItemPacket("MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAELGXABty98wVa/ZfJf9whISSqlwaz01+c7j4bphz4PcTDfeC6zgyllKhPyrp71eb2zLaz4m0JD3m4D99c8exUzQ==",
+                                                           "MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAELGXABty98wVa/ZfJf9whISSqlwaz01+c7j4bphz4PcTDfeC6zgyllKhPyrp71eb2zLaz4m0JD3m4D99c8exUzQ==",
+                                                           itemID,
+                                                           adr);
+            
+            UTILS.NETWORK.broadcast(packet);
+        }
+    }
+    
     public void start()
     {
         this.started=true;
@@ -1140,44 +1263,15 @@ public class CStressTest
         {
            //this.testTrans();
            
-           //if (t%2==0)
-           //    this.testVote();
+           if (t%10==0)
+           {
+               this.testArtVotes();
+               this.testComVotes();
+           }
            
-           //if (t%3==0)
-           //    this.testNewArt();
+           if (t%5==0)
+               this.StressDonate();
            
-           //if (t%4==0)
-           //    this.testGift();
-           
-           //if (t%5==0)
-           //    this.testNewComment();
-           
-           //if (t%6==0)
-           //    this.testFollow();
-           
-           //if (t%7==0)
-           //    this.testUnfollow();
-           
-           //if (t%8==0)
-           //    this.testAddAttr();
-           
-           //if (t%9==0)
-           //    this.testChgcit();
-           
-           //if (t%10==0)
-           //    this.testAdrReg();
-           
-           //if (t%11==0)
-           //    this.testSendRef();
-           
-           //if (t%12==0)
-           //    this.testTransferAdr();
-           
-           //if (t%2==0)
-           //    this.testTravel();
-           
-           //if (t%14==0)
-           //    this.testUpdateProfile();
         }
     }
 }

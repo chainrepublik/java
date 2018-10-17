@@ -159,10 +159,10 @@ public class CConsensus
                    this.commitBlock(block);
             }
         }
-         
+        
         // Commit
         UTILS.DB.commit();
-        
+         
         // Stats
         UTILS.BASIC.checkpoint();
         
@@ -171,8 +171,6 @@ public class CConsensus
         
         // Cons
         UTILS.DB.clearCons();
-        
-        
        }
        catch (Exception ex)
        {

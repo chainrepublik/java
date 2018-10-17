@@ -59,7 +59,8 @@ public class CWallet
 	    // Insert address
             UTILS.DB.executeUpdate("INSERT INTO my_adr "
                                          + "SET userID='1', "
-                                             + "adr='"+adr.getPublic()+"'");
+                                             + "adr='"+adr.getPublic()+"', "
+                                             + "description='"+UTILS.BASIC.base64_encode("No description provided")+"'");
 			    
 	    // Save wallet
 	    save();

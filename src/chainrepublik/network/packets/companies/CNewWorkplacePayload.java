@@ -89,7 +89,7 @@ public class CNewWorkplacePayload extends CPayload
                               "default", 
                               UTILS.CONST.wp_price*this.days, 
                               "CRC", 
-                              "You rented a licence for "+days+" days", 
+                              "You rented a workplace for "+days+" days", 
                               "", 
                               0,
                               this.hash, 

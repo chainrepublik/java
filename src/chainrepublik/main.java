@@ -125,7 +125,6 @@ public class main
         
         // Stress test
         UTILS.STRESS=new CStressTest();
-        UTILS.STRESS.start();
         
         if (UTILS.SETTINGS.seed_mode)
             UTILS.STATUS.setEngineStatus("ID_ONLINE");
@@ -133,9 +132,11 @@ public class main
             UTILS.SYNC.start();
         
         System.out.println("Current timestamp is "+UTILS.BASIC.tstamp());
+        
         System.out.println("Wallet is up an running...");
         
-        //UTILS.CBLOCK.startMiners(1);
+        
+        UTILS.CBLOCK.startMiners(1);
     }
     
     

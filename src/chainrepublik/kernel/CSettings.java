@@ -29,7 +29,7 @@ public class CSettings
   public String db_pass="";
   
   // Wallet file pass
-  public String wallet_pass="";
+  public String wallet_pass="wallet";
   
   // Min peers
   public int min_peers=3;
@@ -42,6 +42,7 @@ public class CSettings
   
   // Seed
   public boolean seed_mode=false;
+  
   
   // Start mining
   public boolean start_mining=false;

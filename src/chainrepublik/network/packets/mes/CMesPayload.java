@@ -114,9 +114,10 @@ public class CMesPayload extends CPayload
     	                                         + "tstamp='"+String.valueOf(UTILS.BASIC.tstamp())+"'");
                 
                 // Update unread mes
-                UTILS.DB.executeUpdate("UPDATE web_users "
-                                        + "SET unread_mes=unread_mes+1 "
-                                      + "WHERE ID='"+UTILS.BASIC.getUserID(this.receiver_adr)+"'");
+                if (UTILS.STATUS.status.equals("ID_ONLINE"))
+                    UTILS.DB.executeUpdate("UPDATE web_users "
+                                            + "SET unread_mes=unread_mes+1 "
+                                          + "WHERE ID='"+UTILS.BASIC.getUserID(this.receiver_adr)+"'");
             }
            
             // Check hash

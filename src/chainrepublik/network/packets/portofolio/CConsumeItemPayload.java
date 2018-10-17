@@ -99,7 +99,7 @@ public class CConsumeItemPayload extends CPayload
                                           + "block='"+this.block+"'");
          
          // Energy
-         double energy=UTILS.BASIC.getProdEnergy(this.itemID);
+         double energy=UTILS.BASIC.getProdEnergy(this.itemID, this.block);
          
          // Update energy
          UTILS.DB.executeUpdate("UPDATE adr "
