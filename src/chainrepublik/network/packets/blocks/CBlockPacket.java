@@ -168,9 +168,7 @@ public class CBlockPacket extends CPacket
 	// Check 
 	public void check() throws Exception
 	{
-            
-            
-             // Precheck
+            // Precheck
             if (!this.preCheck())
                 throw new Exception("Invalid block - CBlockPacket.java");
                     

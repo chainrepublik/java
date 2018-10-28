@@ -23,7 +23,7 @@ public class CWebUsers extends CTable
                                                              +"user VARCHAR(50) NOT NULL DEFAULT '', "
                                                              +"pass VARCHAR(100) NOT NULL DEFAULT '', "
                                                              +"email VARCHAR(100) NOT NULL DEFAULT '', "
-                                                             +"IP VARCHAR(20) NOT NULL DEFAULT '', "
+                                                             +"IP VARCHAR(100) NOT NULL DEFAULT '', "
                                                              +"cou VARCHAR(20) NOT NULL DEFAULT 'US', "
                                                              +"status VARCHAR(50) NOT NULL DEFAULT '', "
                                                              +"api_key VARCHAR(100) NOT NULL DEFAULT '', "

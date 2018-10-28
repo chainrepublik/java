@@ -176,7 +176,7 @@ public class CRenewPayload extends CPayload
             // Valid company
             ResultSet rs=UTILS.DB.executeQuery("SELECT * "
                                                + "FROM stocuri AS st "
-                                               + "JOIN companies AS com ON com.adr=st.adr"
+                                               + "JOIN companies AS com ON com.adr=st.adr "
                                               + "WHERE stocID='"+this.targetID+"' "
                                                 + "AND com.owner='"+this.target_adr+"'");
             
@@ -282,7 +282,7 @@ public class CRenewPayload extends CPayload
                             // Renew asset markets
                             UTILS.DB.executeUpdate("UPDATE assets_mkts "
                                                     + "SET expires=expires+"+(this.days*1440)+" "
-                                                  + "WHERE asset='"+rs.getString("asset")+"' "
+                                                  + "WHERE asset='"+rs.getString("symbol")+"' "
                                                     + "AND cur='CRC'");
                             
                              break;

@@ -734,7 +734,7 @@ public class CAcc
                 {
                     for (int a=1; a<=amount; a++)
                     {
-                        long stID=UTILS.BASIC.getFreeID(stocID+1);
+                        long stID=UTILS.BASIC.getFreeID(stocID+a);
                         
                         UTILS.DB.executeUpdate("INSERT INTO stocuri "
                                                   + "SET adr='"+adr+"', "
@@ -778,7 +778,7 @@ public class CAcc
                    for (int a=1; a<=amount; a++)
                    {
                        // Unique ID
-                       long stID=UTILS.BASIC.getFreeID(stocID+1);
+                       long stID=UTILS.BASIC.getFreeID(stocID+a);
                        
                        // Insert
                        UTILS.DB.executeUpdate("INSERT INTO stocuri "

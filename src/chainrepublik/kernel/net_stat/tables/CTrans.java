@@ -48,7 +48,7 @@ public class CTrans extends CTable
     public void expired(long block) throws Exception
     {
         UTILS.DB.executeUpdate("DELETE FROM trans "
-                                   + "WHERE block<"+(block-144400));
+                                   + "WHERE block<"+(block-50000));
     }
     
     public void reorganize(long block, String chk_hash) throws Exception

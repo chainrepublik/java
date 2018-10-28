@@ -13,6 +13,7 @@ import chainrepublik.network.packets.assets.CIssueAssetPacket;
 import chainrepublik.network.packets.assets.reg_mkts.CCloseRegMarketPosPacket;
 import chainrepublik.network.packets.assets.reg_mkts.CNewRegMarketPacket;
 import chainrepublik.network.packets.assets.reg_mkts.CNewRegMarketPosPacket;
+import chainrepublik.network.packets.companies.CWorkPacket;
 import chainrepublik.network.packets.exchange.CNewExOffertPacket;
 import chainrepublik.network.packets.exchange.CRemoveExOffertPacket;
 import chainrepublik.network.packets.market.CRentPacket;
@@ -24,6 +25,7 @@ import chainrepublik.network.packets.politics.orgs.CJoinOrgPacket;
 import chainrepublik.network.packets.politics.orgs.CLeaveOrgPacket;
 import chainrepublik.network.packets.politics.orgs.CNewOrgPropPacket;
 import chainrepublik.network.packets.politics.orgs.CVoteOrgPropPacket;
+import chainrepublik.network.packets.portofolio.CConsumeItemPacket;
 import chainrepublik.network.packets.portofolio.CDonateItemPacket;
 import chainrepublik.network.packets.press.CCommentPacket;
 import chainrepublik.network.packets.press.CFollowPacket;
@@ -1250,6 +1252,233 @@ public class CStressTest
         }
     }
     
+    public void testWork() throws Exception
+    {
+        // Adr
+        String adr=this.getRandAdr();
+        
+        // Worked in the last 4 hours ?
+        ResultSet rs=UTILS.DB.executeQuery("SELECT * "
+                                           + "FROM work_procs "
+                                          + "WHERE adr='"+adr+"' "
+                                            + "AND block>"+(UTILS.NET_STAT.last_block-180));
+        
+        // Has data ?
+        if (!UTILS.DB.hasData(rs))
+        {
+            // Random workplace
+            long wID=this.getRandWorkplace();
+            
+            // Work 1 hour
+            CWorkPacket packet=new CWorkPacket(adr,
+                                               adr,
+                                               wID,
+                                               60);
+            
+            UTILS.NETWORK.broadcast(packet);
+        }
+    }
+    
+    public void testConsume() throws Exception
+    {
+        // Adr
+        String adr=this.getRandAdr();
+        
+        // Random item
+        ResultSet rs=UTILS.DB.executeQuery("SELECT * "
+                                           + "FROM stocuri "
+                                          + "WHERE adr='"+adr+"' "
+                                       + "ORDER BY RAND()");
+        
+        if (UTILS.DB.hasData(rs))
+        {
+            // Next
+            rs.next();
+            
+            // Energy booster ?
+            if (UTILS.BASIC.isEnergyBooster(rs.getString("tip")))
+            {
+                // Conusmed in the last 24 hours ?
+                ResultSet rss=UTILS.DB.executeQuery("SELECT * "
+                                                + "FROM items_consumed "
+                                               + "WHERE adr='"+adr+"' "
+                                                 + "AND tip='"+rs.getString("tip")+"'");
+            
+                // Has data ?
+                if (!UTILS.DB.hasData(rss))
+                {
+                   // Next    
+                   rss.next();
+                
+                   // Packet
+                   CConsumeItemPacket packet=new CConsumeItemPacket(adr,
+                                                                 adr,
+                                                                 rs.getLong("stocID"));
+                
+                   // Broadcast
+                   UTILS.NETWORK.broadcast(packet);
+                }
+            }
+        }
+    }
+    
+    public void testBuy() throws Exception
+    {
+        // Adr
+        String adr=this.getRandAdr();
+        
+        // Random
+        long num=Math.round(Math.random()*35);
+        
+        // Prod
+        String prod="";
+        
+        // Choose product
+        if (num==2) prod="ID_CIG_CHURCILL";
+        if (num==3) prod="ID_CIG_PANATELA";
+        if (num==4) prod="ID_CIG_TORPEDO";
+        if (num==5) prod="ID_CIG_CORONA";
+        if (num==6) prod="ID_CIG_TORO";
+        if (num==7) prod="ID_SAMPANIE";
+        if (num==8) prod="ID_MARTINI";
+        if (num==9) prod="ID_MOJITO";
+        if (num==10) prod="ID_MARY";
+        if (num==11) prod="ID_SINGAPORE";
+        if (num==12) prod="ID_CROISANT";
+        if (num==13) prod="ID_HOT_DOG";
+        if (num==14) prod="ID_PASTA";
+        if (num==15) prod="ID_BURGER";
+        if (num==16) prod="ID_BIG_BURGER";
+        if (num==17) prod="ID_PIZZA";
+        
+        if (num==18) prod="ID_KNIFE";
+        if (num==19) prod="ID_PISTOL";
+        if (num==20) prod="ID_REVOLVER";
+        if (num==21) prod="ID_SHOTGUN";
+        if (num==22) prod="ID_MACHINE_GUN";
+        if (num==23) prod="ID_SNIPER";
+        if (num==24) prod="ID_GLOVES";
+        if (num==25) prod="ID_GOGGLES";
+        if (num==26) prod="ID_HELMET";
+        if (num==27) prod="ID_BOOTS";
+        if (num==28) prod="ID_VEST";
+        if (num==29) prod="ID_SHIELD";
+        
+        if (num==30) prod="ID_TRAVEL_TICKET_Q1";
+        if (num==31) prod="ID_TRAVEL_TICKET_Q2";
+        if (num==32) prod="ID_TRAVEL_TICKET_Q3";
+        
+        
+        
+        
+        // Has in stock ?
+        if (!prod.equals(""))
+        {
+            ResultSet rs=UTILS.DB.executeQuery("SELECT * "
+                                               + "FROM stocuri "
+                                              + "WHERE adr='"+adr+"' "
+                                                + "AND tip='"+prod+"'");
+            
+            // Has data ?
+            if (!UTILS.DB.hasData(rs))
+            {
+                // Market ID
+                rs=UTILS.DB.executeQuery("SELECT * "
+                                         + "FROM assets_mkts "
+                                        + "WHERE asset='"+prod+"' "
+                                          + "AND cur='CRC'");
+                
+                // Next
+                rs.next();
+                
+                // Mkt ID
+                long mktID=rs.getLong("mktID");
+                
+                // Packet
+                CNewRegMarketPosPacket packet=new CNewRegMarketPosPacket(adr,
+                                                                         adr,
+                                                                         mktID,
+                                                                         "ID_BUY",
+                                                                         6.0,
+                                                                         1.0,
+                                                                         1);
+                
+                
+                
+                UTILS.NETWORK.broadcast(packet);
+            }
+        }
+    }
+    
+    public void testGifts() throws Exception
+    {
+        ResultSet rs=UTILS.DB.executeQuery("SELECT * FROM adr WHERE node_adr='MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAErETk0mzTE+49hOEZ8svUaJ5Qu5zvGJhq13YiaxWOzXPeIoTqwQeuYAj7RcwFBISnArTUX5o/JTgCiEyBm/j/aA==' ORDER BY RAND()");
+        rs.next();
+        
+        // Has gifts ?
+        ResultSet rss=UTILS.DB.executeQuery("SELECT * "
+                                 + "FROM stocuri "
+                                + "WHERE adr='"+rs.getString("adr")+"' "
+                                  + "AND tip='ID_GIFT'");
+        
+        if (!UTILS.DB.hasData(rss))
+        {
+            CDonateItemPacket packet=new CDonateItemPacket("MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEEpn9tcO9qb55dKKTCroSy6fa8mhyhChMYLdJer+WYnVR8Is9l1864vi9Z9eVXTkk3xo1ARNfY+fM0DWI0Wo7+g==",
+                                                           "MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEEpn9tcO9qb55dKKTCroSy6fa8mhyhChMYLdJer+WYnVR8Is9l1864vi9Z9eVXTkk3xo1ARNfY+fM0DWI0Wo7+g==",
+                                                           323222,
+                                                           rs.getString("adr"));
+            
+            UTILS.NETWORK.broadcast(packet);
+        }
+    }
+    
+    public void testAdrEndorse() throws Exception
+    {
+        // Random adr
+        String endorser=this.getRandAdr();
+        
+        // Random party adr
+        ResultSet rs=UTILS.DB.executeQuery("SELECT * "
+                                           + "FROM adr "
+                                          + "WHERE pol_party=1528654998473 "
+                                       + "ORDER BY RAND()");
+        
+        // Next
+        rs.next();
+        
+        // Endorsed
+        String endorsed=rs.getString("adr");
+        
+        // Endorsed ?
+        rs=UTILS.DB.executeQuery("SELECT * "
+                                 + "FROM endorsers "
+                                + "WHERE endorser='"+endorser+"' "
+                                  + "AND endorsed='"+endorsed+"'");
+        
+        // Has data ?
+        if (!UTILS.DB.hasData(rs))
+        {
+            // ALready endorsed 10 adr ?
+            rs=UTILS.DB.executeQuery("SELECT COUNT(*) AS total "
+                                     + "FROM endorsers "
+                                    + "WHERE endorser='"+endorser+"'");
+            
+            // Next
+            rs.next();
+            
+            // Has data ?
+            if (rs.getLong("total")<10)
+            {
+                CEndorsePacket packet=new CEndorsePacket(endorser,
+                                                         endorser,
+                                                         endorsed,
+                                                         "ID_UP");
+                
+                UTILS.NETWORK.broadcast(packet);
+            }
+        }
+    }
+    
     public void start()
     {
         this.started=true;
@@ -1263,14 +1492,21 @@ public class CStressTest
         {
            //this.testTrans();
            
+            if (t%2==0)
+            {
+              this.testArtVotes();
+              this.testComVotes();
+            }
+               
            if (t%10==0)
            {
-               this.testArtVotes();
-               this.testComVotes();
+               this.testConsume();
+               this.testWork();
+               this.testBuy();
+               this.testGifts();
+               this.testAdrEndorse();
            }
-           
-           if (t%5==0)
-               this.StressDonate();
+      
            
         }
     }
