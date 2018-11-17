@@ -135,6 +135,8 @@ public class main
         
         System.out.println("Wallet is up an running...");
         
+        //UTILS.STRESS.start();
+        
         UTILS.CBLOCK.startMiners(1);
     }
     

@@ -1328,7 +1328,7 @@ public class CStressTest
         String adr=this.getRandAdr();
         
         // Random
-        long num=Math.round(Math.random()*35);
+        long num=Math.round(Math.random()*39);
         
         // Prod
         String prod="";
@@ -1367,6 +1367,13 @@ public class CStressTest
         if (num==30) prod="ID_TRAVEL_TICKET_Q1";
         if (num==31) prod="ID_TRAVEL_TICKET_Q2";
         if (num==32) prod="ID_TRAVEL_TICKET_Q3";
+        
+        if (num==33) prod="ID_CAMASA_Q1";
+        if (num==34) prod="ID_GHETE_Q1";
+        if (num==35) prod="ID_PALTON_Q1";
+        if (num==36) prod="ID_PANTALONI_Q1";
+        if (num==37) prod="ID_PULOVER_Q1";
+        if (num==38) prod="ID_SOSETE_Q1";
         
         
         
@@ -1496,13 +1503,13 @@ public class CStressTest
             {
               this.testArtVotes();
               this.testComVotes();
+              this.testBuy();
             }
                
            if (t%10==0)
            {
                this.testConsume();
                this.testWork();
-               this.testBuy();
                this.testGifts();
                this.testAdrEndorse();
            }

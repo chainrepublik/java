@@ -2790,10 +2790,6 @@ public class CUtils
         if (this.hasRecords(adr, "trans", "src"))
             return true;
         
-        // Trans pool
-        if (this.hasRecords(adr, "trans_pool", "src"))
-            return true;
-        
         // Tweets
         if (this.hasRecords(adr, "tweets", "adr"))
             return true;
@@ -2809,11 +2805,6 @@ public class CUtils
         
         // War fighters
         if (this.hasRecords(adr, "wars_fighters", "adr"))
-            return true;
-        
-        // Web ops
-        if (this.hasRecords(adr, "web_ops", "fee_adr") || 
-            this.hasRecords(adr, "web_ops", "target_adr"))
             return true;
         
         // Web sys data

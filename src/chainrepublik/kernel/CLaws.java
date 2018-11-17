@@ -760,10 +760,6 @@ public class CLaws
         // State budget
         double budget=UTILS.BASIC.getBudget(cou, "CRC", null);
                                   
-        // Only 25% of budget can be distributed
-        if (budget/4<amount)
-           return false;
-        
         // Return
         return true;
     }
